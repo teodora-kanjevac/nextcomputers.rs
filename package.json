@@ -1,0 +1,19 @@
+{
+  "name": "next-computers",
+  "version": "1.0.0",
+  "description": "nextcomputers.rs, an e-commerce platform designed to provide a seamless shopping experience for a wide range of tech products. Our web shop offers everything from the latest computer hardware to essential home appliances, ensuring you find what you need, all in one place.",
+  "main": "server.ts",
+  "scripts": {
+    "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
+    "dev:frontend": "start chrome http://localhost:3000 & cd frontend & pnpm nuxt dev",
+    "dev:backend": "tsc -p backend/tsconfig.json && nodemon backend/dist/server.js"
+  },
+  "type": "commonjs",
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "packageManager": "pnpm@9.1.4+sha512.9df9cf27c91715646c7d675d1c9c8e41f6fce88246f1318c1aa6a1ed1aeb3c4f032fcdf4ba63cc69c4fe6d634279176b5358727d8f2cc1e65b65f43ce2f8bfb0"
+}
