@@ -9,7 +9,7 @@
                     </span>
                 </NuxtLink>
                 <div class="flex md:flex-grow md:w-40 md:xl:px-36 md:pl-10 md:order-1">
-                    <button type="button" data-collapse-toggle="navbar-search" aria-controls="navbar-search"
+                    <button type="button" data-collapse-toggle="search" aria-controls="search"
                         aria-expanded="false"
                         class="md:hidden text-gray-500 hover:bg-gray-100 rounded-lg text-sm px-2 me-1">
                         <SearchIcon class="size-5 text-gray-600"></SearchIcon>
@@ -17,16 +17,18 @@
                     <div class="relative md:flex-1 hidden md:block">
                         <SearchBar></SearchBar>
                     </div>
-                    <button data-collapse-toggle="navbar-search" type="button"
+                    <button data-collapse-toggle="navbar" type="button"
                         class="inline-flex items-center px-2 justify-center text-sm text-gray-500 rounded-lg md:hidden"
                         aria-controls="navbar-search" aria-expanded="false">
                         <HamburgerIcon class="size-5 text-gray-600"></HamburgerIcon>
                     </button>
                 </div>
-                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-search">
+                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="search">
                     <div class="relative mt-7 md:hidden">
                         <SearchBar></SearchBar>
                     </div>
+                </div>
+                <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar">
                     <ul
                         class="flex flex-col md:items-center p-4 md:p-0 mt-4 font-medium text-base md:xl:text-lg border border-gray-100 bg-gray-50 md:xl:space-x-8 md:space-x-5 md:flex-row md:mt-0 md:border-0 md:bg-white">
                         <li>
