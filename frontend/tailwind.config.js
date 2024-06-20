@@ -8,7 +8,15 @@ export default {
     "./node_modules/flowbite/**/*.{js,ts}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: {
+          light: '#ba4a66',
+          DEFAULT: '#be123c',
+          dark: '#881337',
+        },
+      },
+    },
   },
   plugins: [
     require('flowbite/plugin')
