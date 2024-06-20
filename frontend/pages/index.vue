@@ -1,8 +1,13 @@
-<script setup>
-</script>
-
 <template>
   <div>
-      <h1 class="text-center text-3xl font-medium">Homepage</h1>
+    <NavBar>
+    </NavBar>
   </div>
 </template>
+
+<script setup>
+import NavBar from "~/layouts/NavBar.vue";
+
+</script>
+
+<style></style>
