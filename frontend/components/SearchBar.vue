@@ -8,6 +8,7 @@
             placeholder="Pretraži..." />
     </div>
 </template>
+
 <script setup>
 import SearchIcon from "~/components/icons/SearchIcon.vue"
 </script>
