@@ -61,6 +61,4 @@
 <script setup>
 import SearchIcon from "~/components/icons/SearchIcon.vue"
 import HamburgerIcon from "~/components/icons/HamburgerIcon.vue"
-import Logo from "~/components/Logo.vue"
-import NavLink from "~/components/NavLink.vue"
 </script>
