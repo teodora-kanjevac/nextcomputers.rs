@@ -8,6 +8,9 @@ importers:
 
   .:
     dependencies:
+      '@fontsource-variable/kumbh-sans':
+        specifier: ^5.0.20
+        version: 5.0.20
       '@nuxt/image':
         specifier: ^1.7.0
         version: 1.7.0(ioredis@5.4.1)(magicast@0.3.4)(rollup@4.18.0)
@@ -562,6 +565,9 @@ packages:
 
   '@floating-ui/utils@0.2.2':
     resolution: {integrity: sha512-J4yDIIthosAsRZ5CPYP/jQvUAQtlZTTD/4suA08/FEnlxqW3sKS9iAhgsa9VYLZ6vDHn/ixJgIqRQPotoBjxIw==}
+
+  '@fontsource-variable/kumbh-sans@5.0.20':
+    resolution: {integrity: sha512-FxeWabIA+8c0gHBQ7Erd5ISd+oLvcDIJ1aaKicQtExJT2lAivP7DbD/FFFpd0zf3cQrn4WBhpDRYmEeitSg4vA==}
 
   '@iconify/types@2.0.0':
     resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
@@ -5042,6 +5048,8 @@ snapshots:
       '@floating-ui/core': 1.6.2
 
   '@floating-ui/utils@0.2.2': {}
+
+  '@fontsource-variable/kumbh-sans@5.0.20': {}
 
   '@iconify/types@2.0.0': {}
 
