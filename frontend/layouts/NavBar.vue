@@ -2,12 +2,7 @@
     <div>
         <nav class="bg-white border-gray-200">
             <div class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto p-4">
-                <NuxtLink to="/" class="flex items-center">
-                    <Logo class="w-14 md:xl:w-16" />
-                    <span class="self-center text-lg md:xl:text-xl font-semibold pl-5">
-                        nextcomputers.rs
-                    </span>
-                </NuxtLink>
+                <Logo class="font-semibold"</Logo>
                 <div class="flex md:flex-grow md:w-40 md:xl:px-36 md:pl-10 md:order-1">
                     <button type="button" data-collapse-toggle="search" aria-controls="search"
                         aria-expanded="false"
