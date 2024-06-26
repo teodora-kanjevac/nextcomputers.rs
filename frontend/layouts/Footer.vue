@@ -4,7 +4,7 @@
             <div class="mx-auto max-w-screen-xl">
                 <div class="md:flex md:justify-between">
                     <div></div>
-                    <div class="grid grid-cols-2 gap-6 sm:gap-12 sm:grid-cols-3">
+                    <div class="grid grid-cols-2 gap-6 gap-y-9 sm:gap-12 sm:grid-cols-3">
                         <div>
                             <h2 class="mb-6 text-sm font-medium tracking-wider text-gray-200 uppercase">Treba Vam pomoć?</h2>
                             <ul class="text-gray-400">
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                <hr class="my-6 border-gray-500 sm:mx-auto lg:my-8" />
+                <hr class="my-6 border-gray-600 sm:mx-auto lg:my-10" />
                 <div class="sm:flex sm:items-center sm:justify-between">
                     <Logo class="hidden md:flex text-gray-200 font-medium"></Logo>
                     <span class="text-sm text-gray-300 sm:text-center">Copyright © 2024 <NuxtLink to="/"
