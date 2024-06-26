@@ -20,6 +20,7 @@
     "tailwindcss": "^3.4.4"
   },
   "dependencies": {
+    "@fontsource-variable/kumbh-sans": "^5.0.20",
     "@nuxt/image": "^1.7.0",
     "flowbite": "^2.3.0",
     "nuxt": "^3.12.2",

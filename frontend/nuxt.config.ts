@@ -5,6 +5,13 @@ export default defineNuxtConfig({
   css: [
     '~/assets/css/base.sass'
   ],
+  vite: {
+    resolve: {
+      alias: {
+        'fonts': '@fontsource-variable'
+      }
+    }
+  },
   modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image'],
   plugins: [
     '~/plugins/flowbite-init.js'

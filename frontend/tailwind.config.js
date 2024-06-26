@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Kumbh Sans Variable', 'sans-serif'],
+      },
       colors: {
         primary: {
           light: '#ba4a66',
