@@ -8,7 +8,7 @@
                     <p class="max-w-2xl mb-6 font-normal text-gray-600 lg:mb-8 md:text-lg lg:text-xl">
                         Istražite naš širok asortiman proizvoda i pronađite ono što najviše odgovara vašim potrebama.</p>
                     <a href="#"
-                        class="inline-flex items-center justify-center px-3 py-3 text-sm sm:px-5 sm:py-3 mr-3 sm:text-base font-medium text-center text-white rounded-lg bg-primary-light active:bg-primary">
+                        class="inline-flex items-center justify-center px-3 py-3 text-sm sm:px-5 sm:py-3 mr-3 sm:text-base font-medium text-center text-white rounded-lg bg-gradient-to-br from-pink-500 to-orange-400 active:bg-gradient-to-bl">
                         Pretražite proizvode
                         <ArrowRightIcon class="size-5 ml-2 -mr-1"></ArrowRightIcon>
                     </a>
