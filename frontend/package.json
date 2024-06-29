@@ -10,7 +10,7 @@
     "postinstall": "nuxt prepare"
   },
   "devDependencies": {
-    "@nuxt/types": "^2.17.4",
+    "@nuxt/types": "^2.18.1",
     "@nuxtjs/tailwindcss": "^6.12.0",
     "autoprefixer": "^10.4.19",
     "postcss": "^8.4.38",
@@ -20,14 +20,14 @@
     "tailwindcss": "^3.4.4"
   },
   "dependencies": {
-    "@fontsource-variable/kumbh-sans": "^5.0.20",
+    "@fontsource-variable/plus-jakarta-sans": "^5.0.21",
     "@nuxt/image": "^1.7.0",
-    "flowbite": "^2.3.0",
+    "flowbite": "^2.4.1",
     "nuxt": "^3.12.2",
     "nuxt-primevue": "^3.0.0",
     "pinia": "^2.1.7",
-    "primevue": "^3.52.0",
-    "vue": "^3.4.30",
+    "primevue": "^3.53.0",
+    "vue": "^3.4.31",
     "vue-router": "^4.4.0"
   }
 }
