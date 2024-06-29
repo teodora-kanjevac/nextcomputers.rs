@@ -111,7 +111,7 @@
 
                 <div class="mt-4 flex items-center justify-between gap-4">
                     <p class="text-2xl font-extrabold leading-tight text-gray-900">
-                        $1,199</p>
+                        34,199 <span class="text-lg">RSD</span></p>
 
                     <button type="button"
                         class="inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-gray-100 bg-primary-light active:bg-primary">
