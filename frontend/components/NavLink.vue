@@ -6,11 +6,15 @@
     </div>
 </template>
 
-<script>
-export default {
-    props: {
+<script setup>
+const props = defineProps({
+    title: {
         title: String,
-        path: String
-    }
-}
+        required: false,
+    },
+    path: {
+        path: String,
+        required: true,
+    },
+});
 </script>
