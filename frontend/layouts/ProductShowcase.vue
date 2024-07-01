@@ -1,22 +1,23 @@
 <template>
     <div>
+        <h3 class="text-center text-2xl font-medium mt-24">Preporučujemo Vam</h3>
         <div id="custom-controls-gallery"
             class="relative mx-auto my-20 max-w-screen-xl px-10 rounded-lg border-2 border-rose-100 bg-white p-6 shadow-sm"
-            data-carousel="static">
+            data-carousel="slide">
             <div class="relative overflow-hidden rounded-lg height">
-                <div class="hidden duration-700 ease-in-out" data-carousel-item="active">
+                <div data-carousel-item>
                     <ProductGrid></ProductGrid>
                 </div>
-                <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <div data-carousel-item>
                     <ProductGrid></ProductGrid>
                 </div>
-                <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <div data-carousel-item>
                     <ProductGrid></ProductGrid>
                 </div>
-                <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <div data-carousel-item>
                     <ProductGrid></ProductGrid>
                 </div>
-                <div class="hidden duration-700 ease-in-out" data-carousel-item>
+                <div data-carousel-item>
                     <ProductGrid></ProductGrid>
                 </div>
             </div>
@@ -49,6 +50,6 @@ import IndicatorRightIcon from '~/components/icons/IndicatorRightIcon.vue';
 
 <style scoped>
 .height {
-    height: 33rem;
+    height: 34rem;
 }
 </style>
