@@ -22,7 +22,7 @@
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "^5.0.21",
     "@nuxt/image": "^1.7.0",
-    "flowbite": "^2.4.1",
+    "flowbite": "^2.3.0",
     "nuxt": "^3.12.2",
     "nuxt-primevue": "^3.0.0",
     "pinia": "^2.1.7",
