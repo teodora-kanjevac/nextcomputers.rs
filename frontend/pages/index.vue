@@ -2,6 +2,7 @@
   <div>
     <NavBar></NavBar>
     <Hero></Hero>
+    <ProductShowcase></ProductShowcase>
     <Footer></Footer>
   </div>
 </template>
@@ -10,6 +11,7 @@
 import NavBar from "~/layouts/NavBar.vue";
 import Hero from "~/layouts/Hero.vue";
 import Footer from "~/layouts/Footer.vue";
+import ProductShowcase from "~/layouts/ProductShowcase.vue";
 </script>
 
 <style></style>

@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Kumbh Sans Variable', 'sans-serif'],
+        sans: ['Plus Jakarta Sans Variable', 'sans-serif'],
       },
       colors: {
         primary: {

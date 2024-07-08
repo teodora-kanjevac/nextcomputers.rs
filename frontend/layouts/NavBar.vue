@@ -25,7 +25,7 @@
                 </div>
                 <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar">
                     <ul
-                        class="flex flex-col md:items-center p-4 md:p-0 mt-4 font-medium text-base md:xl:text-lg border border-gray-100 bg-gray-50 md:xl:space-x-8 md:space-x-5 md:flex-row md:mt-0 md:border-0 md:bg-white">
+                        class="flex flex-col md:items-center p-4 md:p-0 mt-4 font-semibold text-base md:xl:text-lg border border-gray-100 bg-gray-50 md:xl:space-x-8 md:space-x-5 md:flex-row md:mt-0 md:border-0 md:bg-white">
                         <li>
                             <NavLink :path="'/'" :title="'Naslovna'"
                                 class="block md:hidden py-2 px-3 text-gray-900 hover:bg-gray-100 md:hover:bg-transparent md:hover:text-primary md:p-0">
