@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
     "dev:frontend": "start chrome http://localhost:3000 & cd frontend & pnpm nuxt dev",
-    "dev:backend": "tsc -p backend/tsconfig.json && nodemon backend/dist/server.js"
+    "dev:backend": "tsc -p backend/tsconfig.json && npx nodemon backend/dist/server.js"
   },
   "type": "commonjs",
   "keywords": [],
