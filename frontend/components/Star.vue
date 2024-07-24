@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-defineProps({
+const props = defineProps({
   filled: Boolean,
   half: Boolean,
 });
