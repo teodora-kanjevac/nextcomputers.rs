@@ -1,27 +1,26 @@
 <template>
     <div>
-        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-md">
+        <div class="rounded-lg border border-gray-200 bg-white p-6 m-1 shadow-md">
             <div class="h-56 w-full">
                 <NuxtLink to="/">
-                    <img class="mx-auto h-full"
-                        src="https://flowbite.s3.amazonaws.com/blocks/e-commerce/iphone-light.svg" alt="" />
+                    <NuxtImg class="mx-auto h-full"
+                        :src="product.image"
+                        :alt="product.name" />
                 </NuxtLink>
             </div>
             <div class="pt-8">
                 <div class="mb-4 flex items-center justify-between gap-4">
                     <span
                         class="me-2 rounded bg-primary-100 px-2.5 py-1 text-xs font-semibold bg-green-100 text-green-800">
-                        Čak do 15% popusta</span>
-
-                    <button type="button"
-                        class="rounded-lg m-1 p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
-                        <HeartOutlineIcon class="size-6"></HeartOutlineIcon>
-                    </button>
+                        Čak do 15% popusta
+                    </span>
+                    <AddToFavoritesTooltip></AddToFavoritesTooltip>
                 </div>
             </div>
 
-            <NuxtLink to="/" class="text-lg font-semibold leading-tight text-gray-900 hover:underline">Apple
-                iPhone 15 Pro Max, 256GB, Blue Titanium</NuxtLink>
+            <NuxtLink to="/" class="text-lg font-semibold leading-tight line-clamp-1 text-gray-900 hover:underline">
+                {{ product.name }}
+            </NuxtLink>
 
             <StarValue :rating="3.7" :total-reviews="890"></StarValue>
 
@@ -39,8 +38,8 @@
 
             <div class="mt-4 flex items-center justify-between gap-4">
                 <p class="text-2xl font-extrabold leading-tight text-gray-900">
-                    34,199 <span class="text-lg">RSD</span></p>
-
+                    {{ product.price }} <span class="text-lg">RSD</span>
+                </p>
                 <button type="button"
                     class="inline-flex items-center rounded-lg p-2.5 text-gray-100 bg-primary-light active:bg-primary">
                     <AddToCartIcon class="size-6"></AddToCartIcon>
@@ -53,4 +52,11 @@
 <script setup>
 import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import AddToCartIcon from './icons/AddToCartIcon.vue';
+
+const props = defineProps({
+    product: {
+        type: Object,
+        required: true
+    }
+});
 </script>
