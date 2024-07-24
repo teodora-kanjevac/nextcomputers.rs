@@ -5,7 +5,7 @@
         </div>
         <input type="text" id="search-navbar"
             class="placeholder:italic placeholder:text-slate-400 block w-full ps-10 text-base text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-light focus:border-primary-light"
-            placeholder="Pretraži..." />
+            placeholder="Pretraži proizvode..." />
     </div>
 </template>
 
