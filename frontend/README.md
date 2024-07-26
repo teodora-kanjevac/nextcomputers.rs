@@ -1,75 +1,54 @@
 # Nuxt 3 Minimal Starter
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
-
 ## Setup
 
-Make sure to install the dependencies:
+Make sure to install **node.js** from their official [website](https://nodejs.org/en)
+
+
+## Installing Dependencies
+
+First, set Execution Policy to `Remote Signed` in PowerShell
 
 ```bash
-# npm
-npm install
-
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+Set-ExecutionPolicy RemoteSigned
 ```
+
+Next, install `pnpm` with the command:
+
+```bash
+npm install -g pnpm
+```
+
+Run the `pnpm` setup through the command:
+
+```bash
+pnpm setup
+```
+
+Install all the dependencies with this command:
+
+```bash
+pnpm install
+```
+
+- Run this command in both **frontend**, **backend** and the **main project** folder to install all dependencies of the project.
+
 
 ## Development Server
 
 Start the development server on `http://localhost:3000`:
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm run dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+pnpm dev
 ```
-
-## Production
-
-Build the application for production:
+Run scripts in the main project folder (`D:\Next-Computers`) and make sure you have **Chrome** installed to be able to run the scripts properly. 
+<br/>
+If you want to run *frontend* or *backend* only use these commands:
 
 ```bash
-# npm
-npm run build
+# frontend only
+pnpm dev:frontend
 
-# pnpm
-pnpm run build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+# backend only
+pnpm dev:backend
 ```
-
-Locally preview production build:
-
-```bash
-# npm
-npm run preview
-
-# pnpm
-pnpm run preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
