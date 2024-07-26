@@ -43,7 +43,7 @@ pnpm dev
 ```
 Run scripts in the main project folder (`D:\Next-Computers`) and make sure you have **Chrome** installed to be able to run the scripts properly. 
 <br/>
-If you want to run *frontend* or *backend* only use these commands:
+If you want to run *frontend* or *backend* only, use these commands:
 
 ```bash
 # frontend only
