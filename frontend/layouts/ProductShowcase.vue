@@ -2,7 +2,7 @@
     <div>
         <h3 class="text-center text-2xl font-medium mt-24">Preporučujemo Vam</h3>
         <div
-            class="relative mx-auto my-14 max-w-screen-xl px-5 sm:px-9 pt-9 height sm:pt-2 pb-0 lg:pb-14 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
+            class="relative mx-auto my-14 max-w-screen-xl px-5 sm:px-9 pt-9 height sm:pt-2 pb-0 sm:pb-24 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
             <section class="splide">
                 <Splide :options="options">
                     <template v-for="(chunk, index) in productChunks" :key="index">
@@ -83,6 +83,7 @@ const options = {
     speed: 700,
     autoplay: true,
     interval: 5000,
+    pagination: false,
     arrows: true,
     arrowPath: 'M15.483 26.467L21.95 20 15.483 13.533a1.66 1.66 0 1 1 2.35-2.35l7.65 7.65c.65.65.65 1.7 0 2.35l-7.65 7.65a1.66 1.66 0 0 1-2.35 0c-.633-.65-.65-1.717 0-2.35z',
 };
