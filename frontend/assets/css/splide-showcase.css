@@ -120,7 +120,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    top: 37em;
+    top: 36em;
 }
 
 .splide__arrow {
@@ -164,6 +164,64 @@
     margin-inline-start: 2rem
 }
 
+.splide__pagination {
+    -ms-flex-align: center;
+    align-items: center;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-pack: center;
+    justify-content: center;
+    margin: 0;
+    pointer-events: none
+}
+
+.splide__pagination li {
+    display: inline-block;
+    line-height: 1;
+    list-style-type: none;
+    margin: 0;
+    pointer-events: auto
+}
+
+.splide__pagination {
+    bottom: -2em;
+    left: 0;
+    position: absolute;
+    right: 0;
+    z-index: 99
+}
+
+.splide__pagination__page {
+    background: #ba4a66;
+    border: 0;
+    border-radius: 0.75em;
+    display: inline-block;
+    width: 0.5em;
+    height: 0.5em;
+    margin: 0 4px;
+    opacity: .7;
+    padding: 0;
+    position: relative;
+    transition: width 100ms linear;
+}
+
+.splide__pagination__page.is-active {
+    background: #4d0a1e;
+    width: 0.8em;
+}
+
+.splide__pagination__page:hover {
+    cursor: pointer;
+    opacity: .9
+}
+
+.splide__pagination__page:focus-visible {
+    outline: 3px solid transparent;
+    outline-offset: 3px
+}
+
 .splide.is-focus-in .splide__arrow:focus {
     outline: 2px solid transparent;
     outline-offset: 2px;
@@ -205,27 +263,4 @@
     .splide.is-focus-in .splide__track>.splide__list>.splide__slide:focus {
         border-color: transparent
     }
-}
-
-.splide__toggle {
-    cursor: pointer
-}
-
-.splide__toggle:focus-visible {
-    outline: 3px solid transparent;
-    outline-offset: 3px
-}
-
-.splide.is-focus-in .splide__toggle:focus {
-    outline: 3px solid transparent;
-    outline-offset: 3px
-}
-
-.splide__track--nav>.splide__list>.splide__slide {
-    border: 3px solid transparent;
-    cursor: pointer
-}
-
-.splide__track--nav>.splide__list>.splide__slide.is-active {
-    border: 3px solid #000
 }
