@@ -1,29 +1,31 @@
 <template>
     <div>
-        <h3 class="text-center text-2xl font-medium mt-24">Preporučujemo Vam</h3>
-        <div
-            class="relative mx-auto my-14 max-w-screen-xl px-5 sm:px-9 pt-9 height sm:pt-2 pb-0 sm:pb-24 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
-            <section class="splide">
-                <Splide :options="options">
-                    <template v-for="(chunk, index) in productChunks" :key="index">
-                        <SplideSlide>
-                            <ProductGrid class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" :products="chunk">
-                            </ProductGrid>
-                        </SplideSlide>
-                    </template>
-                </Splide>
-                <div class="splide__arrows">
-                    <button class="splide__arrow splide__arrow--prev"></button>
-                    <button class="splide__arrow splide__arrow--next"></button>
-                </div>
-            </section>
+        <div class="mx-auto max-w-screen-xl my-12 px-6 2xl:px-0">
+            <h3 class="text-left text-2xl font-semibold mb-7 mx-2">Preporučujemo Vam</h3>
+            <div
+                class="relative mx-auto mb-14 max-w-screen-xl px-5 sm:px-9 pt-9 height sm:pt-2 pb-0 sm:pb-24 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
+                <section class="splide">
+                    <Splide :options="options">
+                        <template v-for="chunk in productChunks">
+                            <SplideSlide>
+                                <ProductGrid class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" :products="chunk">
+                                </ProductGrid>
+                            </SplideSlide>
+                        </template>
+                    </Splide>
+                    <div class="splide__arrows">
+                        <button class="splide__arrow splide__arrow--prev"></button>
+                        <button class="splide__arrow splide__arrow--next"></button>
+                    </div>
+                </section>
+            </div>
         </div>
     </div>
 </template>
 
 <script setup>
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
-import 'assets/css/splide-showcase.css';
+import 'assets/css/splide.css';
 
 onMounted(() => {
     handleResize();

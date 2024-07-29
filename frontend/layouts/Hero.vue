@@ -3,15 +3,10 @@
     <section class="bg-white pt-5 md:pt-8">
       <div
         class="max-w-screen-xl px-4 py-8 pb-20 lg:py-28 mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-center">
-        <!-- Header Section -->
         <div class="w-full lg:w-1/4 hidden mb-12 pl-5 lg:flex flex-col lg:items-start">
           <PriceTagIcon class="size-10 sm:size-14 text-primary"></PriceTagIcon>
-          <div class="text-left lg:text-left font-semibold text-xl sm:text-3xl mt-3 sm:mt-6">
-            <span class="inline lg:block">Najnovije </span>
-            <span class="inline lg:block">Akcije</span>
-          </div>
+          <h2 class="text-left lg:text-left font-semibold text-xl sm:text-3xl mt-3 sm:mt-6">Najnovije <br> Akcije</h2>
         </div>
-        <!-- Slider Section -->
         <div class="w-full lg:w-3/4">
           <section class="splide">
             <Splide :options="options">
@@ -33,7 +28,7 @@
 <script setup>
 import PriceTagIcon from "~/components/icons/PriceTagIcon.vue"
 import { Splide, SplideSlide } from '@splidejs/vue-splide';
-import 'assets/css/splide-showcase.css';
+import 'assets/css/splide.css';
 
 const screenWidth = ref(null);
 

@@ -51,7 +51,7 @@
 
 <script setup>
 import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
-import AddToCartIcon from './icons/AddToCartIcon.vue';
+import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 
 const props = defineProps({
     product: {
