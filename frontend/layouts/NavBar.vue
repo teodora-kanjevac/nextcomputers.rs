@@ -58,30 +58,28 @@
 import SearchIcon from '~/components/icons/SearchIcon.vue'
 import HamburgerIcon from '~/components/icons/HamburgerIcon.vue'
 
-const isSearchOpen = ref(false)
-const isNavbarOpen = ref(false)
 const search = ref(null)
 const navbar = ref(null)
-
-onMounted(() => {
-    window.addEventListener('resize', handleResize)
-})
-onBeforeUnmount(() => {
-    window.removeEventListener('resize', handleResize)
-})
+const isSearchOpen = ref(false)
+const isNavbarOpen = ref(false)
+const isMobile = ref(false)
 
 const handleResize = () => {
-    if (window.innerWidth >= 768) {
-        isSearchOpen.value = isNavbarOpen.value = true
-        if (search.value) search.value.removeAttribute('style')
-        if (navbar.value) navbar.value.removeAttribute('style')
-    }
-    else {
-        isSearchOpen.value = isNavbarOpen.value = false
+    isMobile.value = window.innerWidth < 768
+    if (!isMobile.value) {
+        removeStyles()
+    } else {
+        isSearchOpen.value = true
+        isNavbarOpen.value = false
     }
 }
 
-const menuStyle = (isOpen) => (isOpen ? openStyle : closedStyle)
+const menuStyle = (isOpen) => (isMobile.value && isOpen ? openStyle : closedStyle)
+
+const removeStyles = () => {
+    if (search.value) search.value.removeAttribute('style')
+    if (navbar.value) navbar.value.removeAttribute('style')
+}
 
 const toggleSearch = () => {
     isSearchOpen.value = !isSearchOpen.value
@@ -89,12 +87,23 @@ const toggleSearch = () => {
         isNavbarOpen.value = false
     }
 }
+
 const toggleNavbar = () => {
     isNavbarOpen.value = !isNavbarOpen.value
     if (isNavbarOpen.value) {
         isSearchOpen.value = false
     }
 }
+
 const openStyle = { maxHeight: '15em' }
 const closedStyle = { maxHeight: '0' }
+
+onMounted(() => {
+    handleResize()
+    window.addEventListener('resize', handleResize)
+})
+
+onBeforeUnmount(() => {
+    window.removeEventListener('resize', handleResize)
+})
 </script>
