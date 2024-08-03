@@ -1,6 +1,6 @@
 <template>
     <div>
-        <footer class="p-7 bg-neutral-800 sm:p-10">
+        <footer class="p-7 bg-gray-800 sm:p-10">
             <div class="mx-auto max-w-screen-xl">
                 <div class="md:flex md:justify-between">
                     <div class="grid grid-cols-2 gap-6 gap-y-9 sm:gap-12 sm:grid-cols-3 lg:grid-cols-5">

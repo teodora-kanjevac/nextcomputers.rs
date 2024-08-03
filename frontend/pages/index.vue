@@ -1,10 +1,10 @@
 <template>
   <div>
-    <NavBar></NavBar>
-    <Hero></Hero>
-    <Categories></Categories>
-    <ProductShowcase></ProductShowcase>
-    <Footer></Footer>
+    <NavBar/>
+    <Hero/>
+    <Categories/>
+    <ProductShowcase/>
+    <Footer/>
   </div>
 </template>
 
@@ -15,5 +15,3 @@ import Footer from "~/layouts/Footer.vue";
 import ProductShowcase from "~/layouts/ProductShowcase.vue";
 import Categories from "~/layouts/Categories.vue";
 </script>
-
-<style></style>
