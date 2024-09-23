@@ -3,7 +3,7 @@
         <div class="mx-auto max-w-screen-xl mt-6 px-6 2xl:px-0">
             <h3 class="text-left text-xl font-semibold mb-7 mx-2 sm:text-2xl">Preporučujemo Vam</h3>
             <div
-                class="relative mx-auto mb-20 max-w-screen-xl px-5 sm:px-9 pt-9 height sm:pt-2 pb-0 sm:pb-24 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
+                class="relative mx-auto mb-20 max-w-screen-xl px-6 sm:px-9 pt-9 height sm:pt-2 pb-0 sm:pb-24 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
                 <section class="splide">
                     <Splide :options="options">
                         <template v-for="chunk in productChunks">
@@ -81,7 +81,7 @@ const options = {
             arrows: false,
         },
     },
-    speed: 700,
+    speed: 1500,
     autoplay: true,
     interval: 5000,
     pagination: false,
@@ -93,7 +93,7 @@ const options = {
 <style scoped>
 @media (max-width: 640px) {
     .height {
-        height: 37rem;
+        height: 36rem;
     }
 }
 </style>
