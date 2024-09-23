@@ -94,7 +94,7 @@ const images = [
 
 const options = {
   type: 'loop',
-  speed: 700,
+  speed: 1500,
   autoplay: true,
   interval: 5000,
   pagination: true,
