@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="text-center xl:hidden">
+        <div class="text-center lg:hidden">
             <button
                 class="text-white bg-primary-light inline-flex items-center text-sm md:text-base font-medium rounded-lg px-3 py-2.5 mb-2"
                 type="button" data-drawer-target="categoryDrawer" data-drawer-show="categoryDrawer"

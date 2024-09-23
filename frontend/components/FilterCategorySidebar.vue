@@ -1,28 +1,28 @@
 <template>
     <aside id="sidebar" class="z-40 xl:w-1/5 2xl:w-1/6" aria-label="Sidebar">
-        <div class="h-full p-4 overflow-y-auto bg-gray-200 tracking-wider hidden xl:block">
+        <div class="h-full p-4 overflow-y-auto bg-gray-200 tracking-wider hidden lg:block">
             <client-only>
-                <ul class="text-base font-medium text-center text-gray-900 rounded-lg shadow sm:flex mb-3"
+                <ul class="text-sm 2xl:text-base font-medium text-center text-gray-900 rounded-lg shadow sm:flex mb-3"
                     id="default-tab" data-tabs-toggle="#tab" role="tablist">
                     <li class="w-full focus-within:z-10 rounded-s-lg" role="presentation">
                         <button :class="{
-                            'inline-block w-full p-4 rounded-s-lg border-r border-gray-200 text-gray-100 bg-primary-light': activeTab === 'filter',
-                            'inline-block w-full p-4 rounded-s-lg border-r border-gray-200 bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'filter'
+                            'inline-block w-full p-3 xl:p-4 rounded-s-lg border-r border-gray-200 text-gray-100 bg-primary-light': activeTab === 'filter',
+                            'inline-block w-full p-3 xl:p-4 rounded-s-lg border-r border-gray-200 bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'filter'
                         }" id="filter-tab" type="button" @click="activeTab = 'filter'">
                             Filteri
                         </button>
                     </li>
                     <li class="w-full focus-within:z-10" role="presentation">
                         <button :class="{
-                            'inline-block w-full p-4 rounded-e-lg border-r border-gray-200 text-gray-100 bg-primary-light': activeTab === 'category',
-                            'inline-block w-full p-4 rounded-e-lg border-r border-gray-200 bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'category'
+                            'inline-block w-full p-3 xl:p-4 rounded-e-lg border-r border-gray-200 text-gray-100 bg-primary-light': activeTab === 'category',
+                            'inline-block w-full p-3 xl:p-4 rounded-e-lg border-r border-gray-200 bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'category'
                         }" id="category-tab" type="button" @click="activeTab = 'category'">
                             Kategorije
                         </button>
                     </li>
                 </ul>
                 <div id="tab">
-                    <div v-if="activeTab === 'filter'" class="px-4 py-7 rounded-lg bg-gray-50">
+                    <div v-if="activeTab === 'filter'" class="px-3 py-5 xl:px-4 xl:py-7 rounded-lg bg-gray-50">
                         <div class="space-y-8">
                             <template v-for="filterCategory in filterCategories" :key="filterCategory.title">
                                 <FilterCategory :filter-category="filterCategory" />

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <section class="bg-white pt-5 md:pt-8">
+    <section class="bg-white">
       <div
         class="max-w-screen-xl px-4 py-8 pb-20 lg:py-28 mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-center">
         <div class="w-full lg:w-1/4 hidden mb-12 pl-5 lg:flex flex-col lg:items-start">

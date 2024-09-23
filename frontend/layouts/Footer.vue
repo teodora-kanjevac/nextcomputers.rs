@@ -33,8 +33,8 @@
                 <hr class="my-6 border-gray-600 sm:mx-auto lg:my-10" />
                 <div class="sm:flex sm:items-center sm:justify-between">
                     <Logo class="hidden lg:flex text-gray-200 font-medium"></Logo>
-                    <span class="text-sm text-gray-300 sm:text-center">Copyright © 2024 <NuxtLink to="/"
-                            class="hover:underline">nextcomputers.rs</NuxtLink>. Sva prava zadržana.
+                    <span class="text-xs text-gray-300 flex justify-center gap-0.5 text-center">Copyright © 2024<NuxtLink to="/"
+                            class="hover:underline">nextcomputers.rs.</NuxtLink>Sva prava zadržana.
                     </span>
                     <div class="flex mt-7 space-x-4 justify-center sm:mt-0">
                         <a href="https://www.instagram.com/nextcomputers.rs" target="_blank">

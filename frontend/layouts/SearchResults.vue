@@ -2,9 +2,9 @@
     <div class="flex flex-col min-h-screen">
         <div class="flex flex-1">
             <FilterCategorySidebar />
-            <div class="flex-1 px-8 pt-8 pb-11 xl:py-11">
-                <h2 class="font-semibold text-2xl ps-1 xl:ps-4 pb-7">Najprodavaniji proizvodi</h2>
-                <div class="flex mx-1 mb-1 mt-3 gap-2">
+            <div class="flex-1 px-5 lg:px-8 pt-8 pb-11 lg:py-11">
+                <h2 class="font-semibold text-2xl ps-2 lg:ps-4 pb-7">Najprodavaniji proizvodi</h2>
+                <div class="flex mx-1.5 mb-1 mt-3 gap-2">
                     <CategoryDrawer />
                     <FilterDrawer />
                 </div>

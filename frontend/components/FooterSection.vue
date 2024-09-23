@@ -2,7 +2,7 @@
     <div>
         <h2 class="mb-6 text-sm font-medium tracking-wider text-gray-200 uppercase">{{ title }}</h2>
         <ul class="text-gray-400">
-            <li v-for="(item, index) in items" :key="index" class="mb-4">
+            <li v-for="(item, index) in items" :key="index" class="mb-3 text-sm">
                 <NuxtLink :to="item.link" class="hover:underline">{{ item.content }}</NuxtLink>
             </li>
         </ul>
