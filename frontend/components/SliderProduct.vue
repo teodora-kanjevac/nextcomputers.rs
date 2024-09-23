@@ -1,24 +1,25 @@
 <template>
     <div>
-        <div class="rounded-lg border border-gray-200 bg-white py-4 px-5 m-1 shadow-md">
-            <div class="h-40 w-full">
+        <div class="rounded-lg border border-gray-200 bg-white p-6 m-1 shadow-md">
+            <div class="h-56 w-full">
                 <NuxtLink to="/">
-                    <NuxtImg class="mx-auto h-full"
-                        :src="product.image"
-                        :alt="product.name" />
+                    <NuxtImg class="mx-auto h-full" :src="product.image" :alt="product.name" />
                 </NuxtLink>
             </div>
             <div class="pt-8">
-                <div class="mb-2 flex items-center justify-between gap-4">
+                <div class="mb-4 flex items-center justify-between gap-4">
                     <span
-                        class="rounded bg-primary-100 px-2 py-1 text-xs font-semibold bg-green-100 text-green-800">
+                        class="me-2 rounded bg-primary-100 px-2.5 py-1 text-xs font-semibold bg-green-100 text-green-800">
                         Čak do 15% popusta
                     </span>
-                    <AddToFavoritesTooltip :productId="product.id"/>
+                    <button :id="`tooltipAddToFavoritesButton-${product.id}`" type="button"
+                        class="rounded-lg m-1 p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
+                        <HeartOutlineIcon class="size-6"/>
+                    </button>
                 </div>
             </div>
 
-            <NuxtLink to="/" class="text-base font-semibold leading-tight line-clamp-2 text-gray-900 hover:underline">
+            <NuxtLink to="/" class="text-lg font-semibold leading-tight line-clamp-1 text-gray-900 hover:underline">
                 {{ product.name }}
             </NuxtLink>
 
@@ -50,6 +51,7 @@
 </template>
 
 <script setup>
+import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 
 const props = defineProps({

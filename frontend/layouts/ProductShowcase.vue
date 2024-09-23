@@ -1,15 +1,14 @@
 <template>
     <div>
-        <div class="mx-auto max-w-screen-xl my-12 px-6 2xl:px-0">
+        <div class="mx-auto max-w-screen-xl mt-6 px-6 2xl:px-0">
             <h3 class="text-left text-xl font-semibold mb-7 mx-2 sm:text-2xl">Preporučujemo Vam</h3>
             <div
-                class="relative mx-auto mb-14 max-w-screen-xl px-5 sm:px-9 pt-9 height sm:pt-2 pb-0 sm:pb-24 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
+                class="relative mx-auto mb-20 max-w-screen-xl px-5 sm:px-9 pt-9 height sm:pt-2 pb-0 sm:pb-24 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
                 <section class="splide">
                     <Splide :options="options">
                         <template v-for="chunk in productChunks">
                             <SplideSlide>
-                                <ProductGrid class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" :products="chunk">
-                                </ProductGrid>
+                                <SliderProductGrid class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" :products="chunk"/>
                             </SplideSlide>
                         </template>
                     </Splide>

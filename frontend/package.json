@@ -12,12 +12,12 @@
   "devDependencies": {
     "@nuxt/types": "^2.18.1",
     "@nuxtjs/tailwindcss": "^6.12.1",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.39",
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.40",
     "postcss-loader": "^8.1.1",
     "sass": "^1.77.8",
     "sass-loader": "^11.1.1",
-    "tailwindcss": "^3.4.6"
+    "tailwindcss": "^3.4.7"
   },
   "dependencies": {
     "@fontsource-variable/plus-jakarta-sans": "^5.0.21",
@@ -27,9 +27,9 @@
     "flowbite": "^2.3.0",
     "nuxt": "^3.12.4",
     "nuxt-primevue": "^3.0.0",
-    "pinia": "^2.1.7",
+    "pinia": "^2.2.0",
     "primevue": "^3.53.0",
-    "vue": "^3.4.33",
-    "vue-router": "^4.4.0"
+    "vue": "^3.4.35",
+    "vue-router": "^4.4.2"
   }
 }

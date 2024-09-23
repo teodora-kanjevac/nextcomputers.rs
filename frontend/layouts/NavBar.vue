@@ -2,7 +2,7 @@
     <div>
         <nav class="bg-gray-800 border-gray-200">
             <div
-                class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto px-4 py-6">
+                class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto p-4">
                 <Logo class="font-semibold text-gray-100" />
                 <div class="flex md:flex-grow md:w-40 md:xl:px-36 md:pl-10 md:order-1">
                     <button type="button" @click="toggleSearch" aria-controls="search" :aria-expanded="isSearchOpen"
@@ -36,7 +36,7 @@
                             </NuxtLink>
                         </li>
                         <li>
-                            <NuxtLink to="/"
+                            <NuxtLink to="proizvodi"
                                 class="block py-2 px-3 text-gray-100 hover:bg-gray-600 rounded md:hover:bg-transparent md:hover:opacity-80 md:p-0">
                                 Proizvodi
                             </NuxtLink>
