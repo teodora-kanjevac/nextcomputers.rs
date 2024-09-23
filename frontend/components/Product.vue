@@ -43,7 +43,7 @@
                     </p>
                 </div>
                 <button type="button"
-                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light active:bg-primary">
+                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary">
                     <AddToCartIcon class="size-6" />
                 </button>
             </div>
