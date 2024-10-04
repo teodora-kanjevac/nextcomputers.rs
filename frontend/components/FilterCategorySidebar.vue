@@ -4,23 +4,32 @@
             <client-only>
                 <ul class="text-sm 2xl:text-base font-medium text-center text-gray-900 rounded-lg shadow sm:flex mb-3"
                     id="default-tab" data-tabs-toggle="#tab" role="tablist">
+
                     <li class="w-full focus-within:z-10 rounded-s-lg" role="presentation">
-                        <button :class="{
-                            'inline-block w-full p-3 xl:p-4 rounded-s-lg border-r border-gray-200 text-gray-100 bg-primary-light': activeTab === 'filter',
-                            'inline-block w-full p-3 xl:p-4 rounded-s-lg border-r border-gray-200 bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'filter'
-                        }" id="filter-tab" type="button" @click="activeTab = 'filter'">
+                        <button :class="[
+                            'inline-block w-full p-3 xl:p-4 rounded-s-lg border-r border-gray-200',
+                            {
+                                'text-gray-100 bg-primary-light': activeTab === 'filter',
+                                'bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'filter'
+                            }
+                        ]" id="filter-tab" type="button" @click="activeTab = 'filter'">
                             Filteri
                         </button>
                     </li>
+
                     <li class="w-full focus-within:z-10" role="presentation">
-                        <button :class="{
-                            'inline-block w-full p-3 xl:p-4 rounded-e-lg border-r border-gray-200 text-gray-100 bg-primary-light': activeTab === 'category',
-                            'inline-block w-full p-3 xl:p-4 rounded-e-lg border-r border-gray-200 bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'category'
-                        }" id="category-tab" type="button" @click="activeTab = 'category'">
+                        <button :class="[
+                            'inline-block w-full p-3 xl:p-4 rounded-e-lg border-r border-gray-200',
+                            {
+                                'text-gray-100 bg-primary-light': activeTab === 'category',
+                                'bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'category'
+                            }
+                        ]" id="category-tab" type="button" @click="activeTab = 'category'">
                             Kategorije
                         </button>
                     </li>
                 </ul>
+
                 <div id="tab">
                     <div v-if="activeTab === 'filter'" class="px-3 py-5 xl:px-4 xl:py-7 rounded-lg bg-gray-50">
                         <div class="space-y-8">

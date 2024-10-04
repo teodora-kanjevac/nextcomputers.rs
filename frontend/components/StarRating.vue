@@ -3,7 +3,7 @@
     <div class="flex items-center">
       <Star v-for="index in 5" :key="index" :filled="index <= filledStars" :half="index === halfStar" />
     </div>
-    <p class="text-sm font-medium text-gray-900">{{ rating }}</p>
+    <p class="text-sm font-medium text-gray-900">{{ rating.toFixed(1) }}</p>
     <p class="text-sm font-medium text-gray-500">({{ totalReviews }})</p>
   </div>
 </template>
