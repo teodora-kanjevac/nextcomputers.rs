@@ -34,8 +34,8 @@
                         <span class="rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-800">
                             Čak do 15% popusta
                         </span>
-                        <p class="text-base line-through font-bold leading-tight text-gray-500 mt-3 -mb-0.5 ms-0.5">
-                            {{ product.price }} <span class="text-base">RSD</span>
+                        <p class="text-base line-through font-semibold leading-tight text-gray-500 mt-3 -mb-0.5 ms-0.5">
+                            {{ product.price }} RSD
                         </p>
                     </div>
                     <p class="text-2xl font-extrabold leading-tight text-gray-900">
