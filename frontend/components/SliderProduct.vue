@@ -2,13 +2,13 @@
     <div>
         <div class="rounded-lg border border-gray-200 bg-white px-6 py-5 m-1 shadow-md">
             <div class="mb-8 h-56 w-full">
-                <NuxtLink to="/">
+                <NuxtLink to="proizvod">
                     <NuxtImg class="mx-auto h-full" :src="product.image" :alt="product.name" />
                 </NuxtLink>
             </div>
 
             <div class="flex items-center justify-between gap-5">
-                <NuxtLink to="/"
+                <NuxtLink to="proizvod"
                     class="text-lg font-semibold ms-0.5 leading-tight line-clamp-2 text-gray-900 hover:underline">
                     {{ product.name }}
                 </NuxtLink>
@@ -18,7 +18,7 @@
                 </button>
             </div>
 
-            <StarValue :rating="3.7" :total-reviews="890" />
+            <StarRating :rating="3.7" :total-reviews="890" />
 
             <div class="mt-2 flex items-center gap-1.5">
                 <svg class="size-4 text-gray-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24"
@@ -36,7 +36,7 @@
                         <span class="rounded px-2.5 py-1 text-xs font-semibold bg-red-100 text-red-800">
                             Čak do 15% popusta
                         </span>
-                        <p class="text-base line-through font-bold leading-tight text-gray-500 mt-3 -mb-0.5 ms-0.5">
+                        <p class="text-base line-through font-semibold leading-tight text-gray-500 mt-3 -mb-0.5 ms-0.5">
                             {{ product.price }} <span class="text-base">RSD</span>
                         </p>
                     </div>

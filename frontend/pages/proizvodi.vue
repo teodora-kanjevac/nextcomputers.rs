@@ -1,8 +1,8 @@
 <template>
     <div>
-        <NavBar/>
-        <SearchResults/>
-        <Footer/>
+        <NavBar />
+        <SearchResults />
+        <Footer />
     </div>
 </template>
 

@@ -1,10 +1,10 @@
 <template>
   <div>
-    <NavBar/>
-    <Hero/>
-    <Categories/>
-    <ProductShowcase/>
-    <Footer/>
+    <NavBar />
+    <Hero />
+    <Categories />
+    <ProductShowcase />
+    <Footer />
   </div>
 </template>
 
