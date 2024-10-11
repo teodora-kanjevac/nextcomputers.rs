@@ -16,7 +16,6 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image'],
   plugins: [
     { src: '~/plugins/flowbite-init.js', mode: 'client' },
-    { src: '~/plugins/scroll-to-top.js', mode: 'client' },
   ],
   devtools: { enabled: true }
 })

@@ -12,10 +12,8 @@
                         <img
                             :src="image"
                             :class="{
-                                'border-2 border-rose-600':
-                                    image === featuredImage,
-                                'border-2 border-gray-200 hover:border-gray-300':
-                                    image !== featuredImage,
+                                'border-2 border-rose-600': image === featuredImage,
+                                'border-2 border-gray-200 hover:border-gray-300': image !== featuredImage,
                             }"
                             class="h-full max-w-full mx-auto rounded-lg cursor-pointer"
                             @click="updateFeatured(image)"
@@ -25,33 +23,33 @@
             </div>
 
             <div class="mt-8 md:mt-0">
-                <span
-                    class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
+                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2.5 py-0.5 rounded">
                     Na stanju
                 </span>
-                <h1
-                    class="mt-2 text-xl font-semibold text-gray-900 sm:text-2xl">
+                <h1 class="mt-2 text-xl font-semibold text-gray-900 sm:text-2xl">
                     {{ product.name }}
                 </h1>
                 <div class="mt-2 sm:items-center sm:gap-4 sm:flex">
-                    <StarRating :rating="4.3" :total-reviews="243" />
+                    <StarRating :rating="product.ratings" />
                 </div>
 
                 <div class="flex items-center justify-between mt-4">
                     <div class="flex-col">
-                        <div class="">
-                            <span
-                                class="rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-800">
+                        <div :class="{ hidden: !product.discountPrice || product.discountPrice === 0 }">
+                            <span class="rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-800">
                                 Čak do 15% popusta
                             </span>
                             <p
-                                class="text-xl line-through font-semibold leading-tight text-gray-500 mt-3 mb-1 ms-0.5">
+                                class="text-xl line-through font-semibold leading-tight text-gray-500 mt-3 mb-1">
                                 {{ product.price }} RSD
                             </p>
                         </div>
-                        <p
-                            class="text-3xl sm:text-4xl font-extrabold leading-tight text-gray-900">
-                            {{ product.price }}
+                        <p class="text-3xl sm:text-4xl font-extrabold leading-tight text-gray-900">
+                            {{
+                                product.discountPrice && product.discountPrice > 0
+                                    ? product.discountPrice
+                                    : product.price
+                            }}
                             <span class="text-xl sm:text-2xl">RSD</span>
                         </p>
                     </div>
@@ -77,8 +75,7 @@
 
                 <hr class="my-6 md:my-8 border-gray-200" />
 
-                <div
-                    class="mt-6 flex flex-col gap-6 sm:flex-row items-start justify-around text-sm">
+                <div class="mt-6 flex flex-col gap-6 sm:flex-row items-start justify-around text-sm">
                     <div class="grid grid-cols-2 gap-x-6 gap-y-2">
                         <span class="font-semibold">Brand:</span>
                         <span>APPLE</span>
@@ -120,14 +117,14 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import { useProductStore } from '~/stores/ProductStore'
+import type { DeclarationDTO, ProductDTO, SpecificationsDTO } from '~/shared/types/ProductDTO';
+import { Product } from '~/shared/classes/Product';
 
-const featuredImage = ref(
-    'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg'
-)
+const featuredImage = ref('https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg')
 
 const galleryImages = ref([
     'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-1.jpg',
@@ -137,18 +134,32 @@ const galleryImages = ref([
     'https://flowbite.s3.amazonaws.com/docs/gallery/square/image-5.jpg',
 ])
 
-const updateFeatured = image => {
+const updateFeatured = (image: string) => {
     featuredImage.value = image
 }
 
-const product = {
-    id: 1,
-    name: 'Apple iMac 24\" All-In-One Computer, Apple M1, 8GB RAM, 256GB SSD, Mac OS, Pink',
-    price: '104.990',
+const product: ProductDTO = {
+    id: '1',
+    name: 'Apple iMac 24" All-In-One Computer, Apple M1, 8GB RAM, 256GB SSD, Mac OS, Pink',
+    price: 104990,
+    discountPrice: 101900,
     image: 'ASUS B550-PLUS TUF.jpg',
+    specifications: {} as SpecificationsDTO,
+    declaration: {} as DeclarationDTO,
+    reviews: [],
+    ratings: {
+        totalReviews: 120,
+        starRatings: [
+            { star: 5, amount: 60 },
+            { star: 4, amount: 40 },
+            { star: 3, amount: 10 },
+            { star: 2, amount: 7 },
+            { star: 1, amount: 3 },
+        ],
+    },
 }
 
 const productStore = useProductStore()
 
-productStore.setProduct(product)
+productStore.setProduct(new Product(product))
 </script>

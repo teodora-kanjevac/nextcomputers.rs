@@ -1,4 +1,4 @@
-import type { Product } from '~/shared/types/product';
+import type { Product } from '~/shared/classes/Product';
 import { defineStore } from 'pinia';
 
 export const useProductStore = defineStore('product', {
