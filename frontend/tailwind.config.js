@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Plus Jakarta Sans Variable', 'sans-serif'],
+        sans: ['Manrope Variable', 'sans-serif'],
       },
       colors: {
         primary: {
