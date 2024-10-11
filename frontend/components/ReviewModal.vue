@@ -6,12 +6,8 @@
         class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
         <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
             <div class="relative p-4 bg-white rounded-lg shadow sm:p-5">
-                <div
-                    class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5">
-                    <h3
-                        class="text-lg font-semibold text-gray-900 line-clamp-1">
-                        Napiši recenziju
-                    </h3>
+                <div class="flex justify-between items-center pb-4 mb-4 rounded-t border-b sm:mb-5">
+                    <h3 class="text-lg font-semibold text-gray-900">Napiši recenziju</h3>
                     <button
                         type="button"
                         class="text-gray-600 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center"
@@ -24,16 +20,14 @@
                         <label class="text-sm font-medium">
                             Proizvod:
                             <br />
-                            <span class="font-normal italic">
+                            <span class="font-medium italic">
                                 {{ product?.name }}
                             </span>
                         </label>
                     </div>
                     <div class="grid gap-y-4 gap-x-8 mb-4 sm:grid-cols-2">
                         <div>
-                            <label
-                                for="name"
-                                class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
+                            <label for="name" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
                                 Ime
                                 <span class="text-red-600">*</span>
                             </label>
@@ -46,21 +40,14 @@
                                 required="true" />
                         </div>
                         <div>
-                            <label
-                                for="brand"
-                                class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
+                            <label for="brand" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
                                 Ocena
                                 <span class="text-red-600">*</span>
                             </label>
-                            <RatingInput
-                                :rating="rating"
-                                @update:rating="handleRatingUpdate"
-                                class="mt-3" />
+                            <RatingInput :rating="rating" @update:rating="handleRatingUpdate" class="mt-3" />
                         </div>
                         <div class="sm:col-span-2">
-                            <label
-                                for="comment"
-                                class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
+                            <label for="comment" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
                                 Komentar
                                 <span class="text-red-600">*</span>
                             </label>
@@ -87,57 +74,32 @@
 import CloseIcon from './icons/CloseIcon.vue'
 import PenIcon from './icons/PenIcon.vue'
 import { useProductStore } from '~/stores/ProductStore'
+import { destroyComponent } from '~/composables/useDestroy'
 import { Modal } from 'flowbite'
-import type { ModalOptions, ModalInterface } from 'flowbite'
-import type { InstanceOptions } from 'flowbite'
+import type { ModalOptions } from 'flowbite'
+import { initializeModal } from '~/composables/useModal'
 
-const initializeModal = () => {
+let modal: Modal | null = null
+
+const initializeReviewModal = () => {
     useFlowbite(() => {
-        const modalElement: HTMLElement = document.getElementById(
-            'createReview'
-        ) as HTMLElement
-
         const modalOptions: ModalOptions = {
             placement: 'top-center',
             backdrop: 'static',
-            backdropClasses:
-                'bg-gray-900/50 fixed inset-0 z-40',
+            backdropClasses: 'bg-gray-900/50 fixed inset-0 z-40',
             closable: true,
         }
 
-        const instanceOptions: InstanceOptions = {
-            id: 'createReview',
-            override: true,
-        }
-
-        const modal: ModalInterface = new Modal(
-            modalElement,
-            modalOptions,
-            instanceOptions
-        )
-
-        const modalButton = document.querySelector(
-            '[data-modal-target="createReview"]'
-        )
-        if (modalButton) {
-            modalButton.addEventListener('click', () => {
-                modal.show()
-            })
-        }
-
-        const closeButton = document.querySelector(
-            '[data-modal-hide="createReview"]'
-        )
-        if (closeButton) {
-            closeButton.addEventListener('click', () => {
-                modal.hide()
-            })
-        }
+        modal = initializeModal('createReview', modalOptions)
     })
 }
 
 onMounted(() => {
-    initializeModal()
+    initializeReviewModal()
+})
+
+onBeforeUnmount(() => {
+    destroyComponent(modal)
 })
 
 const rating = ref<number>(0)
@@ -147,6 +109,5 @@ const handleRatingUpdate = (newRating: number) => {
 }
 
 const productStore = useProductStore()
-
 const product = productStore.currentProduct
 </script>

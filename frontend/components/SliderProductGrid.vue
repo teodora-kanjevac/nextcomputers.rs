@@ -4,11 +4,10 @@
     </div>
 </template>
 
-<script setup>
-const props = defineProps({
-    products: {
-        type: Array,
-        required: true,
-    },
-});
+<script setup lang="ts">
+import type { ProductDTO } from '~/shared/types/ProductDTO';
+
+defineProps<{
+    products: ProductDTO[]
+}>()
 </script>

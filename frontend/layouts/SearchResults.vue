@@ -8,23 +8,197 @@
                     <CategoryDrawer />
                     <FilterDrawer />
                 </div>
-                <ProductGrid class="grid gap-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5"
-                    :products="products" />
+                <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                    <Product v-for="product in products" :key="product.id" :product="product" />
+                </div>
             </div>
         </div>
     </div>
 </template>
 
-<script setup>
-const products = [
-    { id: 1, name: 'ASUS B550-PLUS TUFASUS B550-PLUS TUF', price: '104990', image: 'ASUS B550-PLUS TUF.jpg' },
-    { id: 2, name: 'Kingston 3600mhz 8gbASUS B550-PLUS TUF', price: '29990', image: 'Kingston 3600mhz 8gb.jpg' },
-    { id: 3, name: 'GIGABYTE A520MASUS B550-PLUS TUF', price: '55990', image: 'GIGABYTE A520M.jpg' },
-    { id: 4, name: 'Intel 14900kASUS B550-PLUS TUF', price: '15990', image: 'Intel 14900k.jpg' },
-    { id: 5, name: 'R5 5500 RX 6600ASUS B550-PLUS TUF', price: '38990', image: 'R5 5500 RX 6600.jpg' },
-    { id: 6, name: 'RTX 3050 VENTUS2ASUS B550-PLUS TUF', price: '77990', image: 'RTX 3050 VENTUS2.jpg' },
-    { id: 7, name: 'RTX 4060 TI AEROASUS B550-PLUS TUF', price: '79990', image: 'RTX 4060 TI AERO.jpg' },
-    { id: 8, name: 'RTX 4070 TUFASUS B550-PLUS TUF', price: '23990', image: 'RTX 4070 TUF.jpg' },
-    { id: 9, name: 'Ryzen 5 5600xASUS B550-PLUS TUF', price: '51990', image: 'Ryzen 5 5600x.jpg' },
-];
+<script setup lang="ts">
+import type { DeclarationDTO, ProductDTO, SpecificationsDTO } from '~/shared/types/ProductDTO'
+
+const products: ProductDTO[] = [
+    {
+        id: '1',
+        name: 'ASUS B550-PLUS TUF',
+        price: 104990,
+        discountPrice: 99990,
+        image: 'ASUS B550-PLUS TUF.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 120,
+            starRatings: [
+                { star: 5, amount: 60 },
+                { star: 4, amount: 40 },
+                { star: 3, amount: 10 },
+                { star: 2, amount: 7 },
+                { star: 1, amount: 3 },
+            ],
+        },
+    },
+    {
+        id: '2',
+        name: 'Kingston 3600mhz 8gb',
+        price: 29990,
+        discountPrice: 27990,
+        image: 'Kingston 3600mhz 8gb.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 95,
+            starRatings: [
+                { star: 5, amount: 55 },
+                { star: 4, amount: 20 },
+                { star: 3, amount: 10 },
+                { star: 2, amount: 5 },
+                { star: 1, amount: 5 },
+            ],
+        },
+    },
+    {
+        id: '3',
+        name: 'GIGABYTE A520M',
+        price: 55990,
+        discountPrice: 49990,
+        image: 'GIGABYTE A520M.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 85,
+            starRatings: [
+                { star: 5, amount: 40 },
+                { star: 4, amount: 30 },
+                { star: 3, amount: 10 },
+                { star: 2, amount: 3 },
+                { star: 1, amount: 2 },
+            ],
+        },
+    },
+    {
+        id: '4',
+        name: 'Intel 14900k',
+        price: 15990,
+        discountPrice: 0,
+        image: 'Intel 14900k.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 150,
+            starRatings: [
+                { star: 5, amount: 90 },
+                { star: 4, amount: 30 },
+                { star: 3, amount: 20 },
+                { star: 2, amount: 5 },
+                { star: 1, amount: 5 },
+            ],
+        },
+    },
+    {
+        id: '5',
+        name: 'R5 5500 RX 6600',
+        price: 38990,
+        discountPrice: 35990,
+        image: 'R5 5500 RX 6600.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 110,
+            starRatings: [
+                { star: 5, amount: 65 },
+                { star: 4, amount: 25 },
+                { star: 3, amount: 10 },
+                { star: 2, amount: 5 },
+                { star: 1, amount: 5 },
+            ],
+        },
+    },
+    {
+        id: '6',
+        name: 'RTX 3050 VENTUS2',
+        price: 77990,
+        discountPrice: 74990,
+        image: 'RTX 3050 VENTUS2.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 140,
+            starRatings: [
+                { star: 5, amount: 75 },
+                { star: 4, amount: 40 },
+                { star: 3, amount: 15 },
+                { star: 2, amount: 5 },
+                { star: 1, amount: 5 },
+            ],
+        },
+    },
+    {
+        id: '7',
+        name: 'RTX 4060 TI AERO',
+        price: 79990,
+        discountPrice: 0,
+        image: 'RTX 4060 TI AERO.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 105,
+            starRatings: [
+                { star: 5, amount: 50 },
+                { star: 4, amount: 30 },
+                { star: 3, amount: 15 },
+                { star: 2, amount: 5 },
+                { star: 1, amount: 5 },
+            ],
+        },
+    },
+    {
+        id: '8',
+        name: 'RTX 4070 TUF',
+        price: 23990,
+        discountPrice: 21990,
+        image: 'RTX 4070 TUF.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 80,
+            starRatings: [
+                { star: 5, amount: 30 },
+                { star: 4, amount: 25 },
+                { star: 3, amount: 15 },
+                { star: 2, amount: 5 },
+                { star: 1, amount: 5 },
+            ],
+        },
+    },
+    {
+        id: '9',
+        name: 'Ryzen 5 5600x',
+        price: 51990,
+        discountPrice: 48990,
+        image: 'Ryzen 5 5600x.jpg',
+        specifications: {} as SpecificationsDTO,
+        declaration: {} as DeclarationDTO,
+        reviews: [],
+        ratings: {
+            totalReviews: 110,
+            starRatings: [
+                { star: 5, amount: 30 },
+                { star: 4, amount: 25 },
+                { star: 3, amount: 20 },
+                { star: 2, amount: 25 },
+                { star: 1, amount: 10 },
+            ],
+        },
+    },
+]
 </script>

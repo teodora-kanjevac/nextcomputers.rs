@@ -4,52 +4,47 @@
     </div>
 </template>
 
-<script setup>
-import { onMounted } from 'vue';
-import { Accordion } from 'flowbite';
-import { useFlowbite } from '~/composables/useFlowbite';
-import { sanitizeId } from '~/composables/utils';
-import CategoryAccordionItem from './CategoryAccordionItem.vue';
+<script setup lang="ts">
+import type { CategoryDTO } from '~/shared/types/CategoryDTO'
+import { useFlowbite } from '~/composables/useFlowbite'
+import { sanitizeId } from '~/composables/utils'
+import { initializeAccordion } from '~/composables/useAccordion'
+import { destroyComponent } from '~/composables/useDestroy'
+import type { AccordionOptions, AccordionItem, Accordion } from 'flowbite'
 
-const props = defineProps({
-    categories: {
-        type: Array,
-        required: true,
-        validator(value) {
-            return Array.isArray(value) && value.every(category =>
-                typeof category.name === 'string' &&
-                Array.isArray(category.subcategories) &&
-                category.subcategories.every(subcategory =>
-                    typeof subcategory.name === 'string' && typeof subcategory.id === 'number'
-                )
-            );
-        }
-    }
-});
+const props = defineProps<{
+    categories: CategoryDTO[]
+}>()
 
-const initializeAccordion = () => {
+let accordion: Accordion | null = null
+
+const initializeAccordionItems = (): AccordionItem[] => {
+    return props.categories.map(category => ({
+        id: `heading-${sanitizeId(category.name)}`,
+        triggerEl: document.querySelector(`#heading-${sanitizeId(category.name)}`) as HTMLElement,
+        targetEl: document.querySelector(`#body-${sanitizeId(category.name)}`) as HTMLElement,
+        active: false,
+    }))
+}
+
+const initializeCategoryAccordion = () => {
     useFlowbite(() => {
-        const accordionElement = document.getElementById('categoryAccordion');
-        const accordionItems = props.categories.map(category => ({
-            id: `heading-${sanitizeId(category.name)}`,
-            triggerEl: document.querySelector(`#heading-${sanitizeId(category.name)}`),
-            targetEl: document.querySelector(`#body-${sanitizeId(category.name)}`),
-            active: false
-        }));
-
-        if (accordionElement) {
-            const options = {
-                alwaysOpen: true,
-                activeClasses: 'bg-primary-light rounded text-gray-100',
-                inactiveClasses: 'text-gray-900',
-            };
-
-            const accordion = new Accordion(accordionElement, accordionItems, options);
+        const accordionItems = initializeAccordionItems()
+        const options: AccordionOptions = {
+            alwaysOpen: true,
+            activeClasses: 'bg-primary-light rounded text-gray-100',
+            inactiveClasses: 'text-gray-900',
         }
-    });
-};
+
+        accordion = initializeAccordion('categoryAccordion', accordionItems, options)
+    })
+}
 
 onMounted(() => {
-    initializeAccordion();
-});
+    initializeCategoryAccordion()
+})
+
+onBeforeUnmount(() => {
+    destroyComponent(accordion)
+})
 </script>

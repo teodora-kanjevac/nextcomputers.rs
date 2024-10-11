@@ -4,7 +4,6 @@
 
 Make sure to install **node.js** from their official [website](https://nodejs.org/en)
 
-
 ## Installing Dependencies
 
 First, set Execution Policy to `Remote Signed` in PowerShell
@@ -31,8 +30,7 @@ Install all the dependencies with this command:
 pnpm install
 ```
 
-- Run this command in both **frontend**, **backend** and the **main project** folder to install all dependencies of the project.
-
+-   Run this command in both **frontend**, **backend** and the **main project** folder to install all dependencies of the project.
 
 ## Development Server
 
@@ -41,9 +39,10 @@ Start the development server on `http://localhost:3000`:
 ```bash
 pnpm dev
 ```
-Run scripts in the main project folder (`D:\Next-Computers`) and make sure you have **Chrome** installed to be able to run the scripts properly. 
+
+Run scripts in the main project folder (`D:\Next-Computers`) and make sure you have **Chrome** installed to be able to run the scripts properly.
 <br/>
-If you want to run *frontend* or *backend* only, use these commands:
+If you want to run _frontend_ or _backend_ only, use these commands:
 
 ```bash
 # frontend only
@@ -51,4 +50,16 @@ pnpm dev:frontend
 
 # backend only
 pnpm dev:backend
+```
+
+### TypeScript Configuration for Splide
+
+To avoid TypeScript errors for `@splidejs/vue-splide`, add the following to your `tsconfig.json`:
+
+```json
+{
+    "compilerOptions": {
+        "typeRoots": ["./custom-types", "./node_modules/@types"]
+    }
+}
 ```

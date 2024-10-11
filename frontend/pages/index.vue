@@ -2,7 +2,7 @@
   <div>
     <NavBar />
     <Hero />
-    <Categories />
+    <ShowcaseCategories />
     <ProductShowcase />
     <Footer />
   </div>
@@ -13,5 +13,5 @@ import NavBar from "~/layouts/NavBar.vue";
 import Hero from "~/layouts/Hero.vue";
 import Footer from "~/layouts/Footer.vue";
 import ProductShowcase from "~/layouts/ProductShowcase.vue";
-import Categories from "~/layouts/Categories.vue";
+import ShowcaseCategories from "~/layouts/ShowcaseCategories.vue";
 </script>

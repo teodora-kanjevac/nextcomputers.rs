@@ -7,11 +7,7 @@
             @mouseleave="hoveredRating = null"
             @click="setRating(index)"
             class="cursor-pointer">
-            <StarFilledIcon
-                v-if="
-                    index <= (hoveredRating !== null ? hoveredRating : rating)
-                "
-                class="size-8" />
+            <StarFilledIcon v-if="index <= (hoveredRating !== null ? hoveredRating : rating)" class="size-8" />
             <StarEmptyIcon v-else class="size-8" />
         </span>
     </div>
@@ -21,17 +17,17 @@
 import StarFilledIcon from './icons/StarFilledIcon.vue'
 import StarEmptyIcon from './icons/StarEmptyIcon.vue'
 
-const emit = defineEmits<{
-    (event: 'update:rating', rating: number): void
-}>()
-
-const props = defineProps({
+defineProps({
     rating: {
         type: Number,
         required: true,
         default: 0,
     },
 })
+
+const emit = defineEmits<{
+    (event: 'update:rating', rating: number): void
+}>()
 
 const hoveredRating = ref<number | null>(null)
 
