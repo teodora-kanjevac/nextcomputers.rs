@@ -12,8 +12,8 @@
 </template>
 
 <script setup>
-import NavBar from '~/layouts/NavBar.vue';
-import Footer from '~/layouts/Footer.vue';
-import ProductDetails from '~/layouts/ProductDetails.vue';
-import ProductDetailsTabs from '~/layouts/ProductDetailsTabs.vue';
+import NavBar from '~/layouts/NavBar.vue'
+import Footer from '~/layouts/Footer.vue'
+import ProductDetails from '~/layouts/ProductDetails.vue'
+import ProductDetailsTabs from '~/layouts/ProductDetailsTabs.vue'
 </script>
