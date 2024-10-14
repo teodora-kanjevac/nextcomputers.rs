@@ -33,14 +33,14 @@
                     <StarRating :rating="product.ratings" />
                 </div>
 
-                <div class="flex items-center justify-between mt-4">
+                <div class="flex items-center justify-between mt-3">
                     <div class="flex-col">
+                        <div class="mb-4 font-medium">Maloprodajna cena: {{ product.retailPrice }} <span class="text-sm">RSD</span></div>
                         <div :class="{ hidden: !product.discountPrice || product.discountPrice === 0 }">
                             <span class="rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-800">
                                 Čak do 15% popusta
                             </span>
-                            <p
-                                class="text-xl line-through font-semibold leading-tight text-gray-500 mt-3 mb-1">
+                            <p class="text-xl line-through font-semibold leading-tight text-gray-500 mt-3 mb-1">
                                 {{ product.price }} RSD
                             </p>
                         </div>
@@ -121,8 +121,8 @@
 import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import { useProductStore } from '~/stores/ProductStore'
-import type { DeclarationDTO, ProductDTO, SpecificationsDTO } from '~/shared/types/ProductDTO';
-import { Product } from '~/shared/classes/Product';
+import type { DeclarationDTO, ProductDTO, SpecificationsDTO } from '~/shared/types/ProductDTO'
+import { Product } from '~/shared/classes/Product'
 
 const featuredImage = ref('https://flowbite.s3.amazonaws.com/docs/gallery/square/image-4.jpg')
 
@@ -142,7 +142,8 @@ const product: ProductDTO = {
     id: '1',
     name: 'Apple iMac 24" All-In-One Computer, Apple M1, 8GB RAM, 256GB SSD, Mac OS, Pink',
     price: 104990,
-    discountPrice: 101900,
+    discountPrice: 0,
+    retailPrice: 119990,
     image: 'ASUS B550-PLUS TUF.jpg',
     specifications: {} as SpecificationsDTO,
     declaration: {} as DeclarationDTO,

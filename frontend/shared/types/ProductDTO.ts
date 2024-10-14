@@ -6,6 +6,7 @@ export interface ProductDTO {
     name: string
     price: number
     discountPrice?: number
+    retailPrice: number
     image: string
     specifications: SpecificationsDTO
     declaration: DeclarationDTO
