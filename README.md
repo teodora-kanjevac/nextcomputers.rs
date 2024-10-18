@@ -11,25 +11,25 @@ Make sure to install **node.js** from their official [website](https://nodejs.or
 First, set Execution Policy to `Remote Signed` in PowerShell
 
 ```bash
-Set-ExecutionPolicy  RemoteSigned
+Set-ExecutionPolicy RemoteSigned
 ```
 
 Next, install `pnpm` with the command:
 
 ```bash
-npm  install  -g  pnpm
+npm install -g pnpm
 ```
 
 Run the `pnpm` setup through the command:
 
 ```bash
-pnpm  setup
+pnpm setup
 ```
 
 Install all the dependencies with this command:
 
 ```bash
-pnpm  install
+pnpm install
 ```
 
 -   Run this command in both **frontend**, **backend** and the **main project** folder to install all dependencies of the project.
@@ -39,7 +39,7 @@ pnpm  install
 Start the development server on `http://localhost:3000`:
 
 ```bash
-pnpm  dev
+pnpm dev
 ```
 
 Run scripts in the main project folder (`D:\Next-Computers`) and make sure you have **Chrome** installed to be able to run the scripts properly.
@@ -50,10 +50,42 @@ If you want to run _frontend_ or _backend_ only, use these commands:
 
 ```bash
 # frontend only
-pnpm  dev:frontend
+pnpm dev:frontend
 
 # backend only
-pnpm  dev:backend
+pnpm dev:backend
+```
+
+## Running Prisma Mirgrate and Pull
+
+To **push** changes from `schema.prisma` to the Database use the `migrate` command int backend folder (put the migration name after the `--name`):
+
+```bash
+cd backend
+↓
+npx prisma migrate dev --name 'name'
+```
+
+Then use the `generate` command to generate the Prisma Client:
+
+```bash
+npx prisma generate
+```
+
+<br/>
+
+To **pull** changes made in the Database use this command:
+
+```bash
+cd backend
+↓
+npx prisma db pull
+```
+
+Then use the `generate` command to generate the Prisma Client:
+
+```bash
+npx prisma generate
 ```
 
 ## TypeScript Configuration for Splide
