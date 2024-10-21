@@ -1,6 +1,7 @@
 import { fetchApiProducts } from '~/scraper/handlers/EWEApiRequestHandler'
 import { storeCategoriesAndSubcategories } from '~/scraper/services/categoryService'
 import { CategoryfromAPI, ProductfromAPI } from '~/scraper/services/mapperService'
+import { storeProducts } from '~/scraper/services/productService'
 
 export const fetchCategories = async (): Promise<void> => {
     try {
@@ -20,10 +21,10 @@ export const fetchProducts = async (): Promise<void> => {
         const apiProducts = await fetchApiProducts()
 
         const products = apiProducts.map(ProductfromAPI)
-        console.log(products[0])
 
+        await storeProducts(await Promise.all(products))
     } catch (error) {
-        console.error('Error processing categories:', error)
-        throw new Error('Failed to process categories')
+        console.error('Error processing products:', error)
+        throw new Error('Failed to process products')
     }
 }
