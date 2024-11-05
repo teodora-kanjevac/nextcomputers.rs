@@ -1,5 +1,6 @@
 import express, { Application } from 'express'
 import dotenv from 'dotenv'
+import scraperRoutes from '~/src/routes/scraperRoutes'
 import categoryRoutes from '~/src/routes/categoryRoutes'
 import productRoutes from '~/src/routes/productRoutes'
 
@@ -10,6 +11,7 @@ const PORT = process.env.PORT || 3000
 app.use(express.json())
 
 app.use('/api', categoryRoutes, productRoutes)
+app.use('/scraper', scraperRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

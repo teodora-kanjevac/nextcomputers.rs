@@ -3,7 +3,7 @@ import { storeCategoriesAndSubcategories } from '~/scraper/services/categoryServ
 import { CategoryfromAPI, ProductfromAPI } from '~/scraper/services/mapperService'
 import { storeProducts } from '~/scraper/services/productService'
 
-export const fetchCategories = async (): Promise<void> => {
+export const scrapeCategories = async (): Promise<void> => {
     try {
         const apiProducts = await fetchApiProducts()
 
@@ -16,7 +16,7 @@ export const fetchCategories = async (): Promise<void> => {
     }
 }
 
-export const fetchProducts = async (): Promise<void> => {
+export const scrapeProducts = async (): Promise<void> => {
     try {
         const apiProducts = await fetchApiProducts()
 

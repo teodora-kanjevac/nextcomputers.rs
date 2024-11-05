@@ -1,7 +1,7 @@
 import { Category } from '~/scraper/types/Category'
 import { Product } from '~/scraper/types/Product'
 import { processSpecifications, processImages } from '~/scraper/utils/productUtils'
-import { getSubcategoryId } from './categoryService'
+import { getSubcategoryId } from '~/scraper/services/categoryService'
 
 export function CategoryfromAPI(data: { acMainCategory: string; acCategory: string }): Category {
     return new Category(data.acMainCategory, data.acCategory)
