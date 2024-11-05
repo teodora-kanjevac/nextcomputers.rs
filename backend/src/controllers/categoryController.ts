@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { fetchCategories } from '~/scraper/services/scraperService'
+import { fetchCategories } from '~/src/services/categoryService'
 
 export const getCategories = async (req: Request, res: Response): Promise<void> => {
     try {

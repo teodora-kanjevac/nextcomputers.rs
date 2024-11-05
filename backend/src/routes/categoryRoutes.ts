@@ -3,6 +3,6 @@ import { getCategories } from '~/src/controllers/categoryController'
 
 const router: Router = Router()
 
-router.get('/categories', getCategories)
+router.get('/', getCategories)
 
 export default router

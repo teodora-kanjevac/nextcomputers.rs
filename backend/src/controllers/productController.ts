@@ -1,9 +1,9 @@
 import { Request, Response } from 'express'
-import { fetchProducts } from '~/scraper/services/scraperService'
+import { getAllProducts } from '~/src/services/productService'
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
     try {
-        const products = await fetchProducts()
+        const products = await getAllProducts()
         res.status(200).json(products)
     } catch (error) {
         console.error('Controller Error:', error)
