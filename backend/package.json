@@ -1,9 +1,9 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "main": "server.ts",
+  "main": "app.ts",
   "scripts": {
-    "start": "tsc -p backend/tsconfig.json && nodemon backend/dist/server.js"
+    "start": "tsc -p tsconfig.json && resolve-tspaths && nodemon dist/app.js"
   },
   "type": "module",
   "keywords": [],
@@ -12,16 +12,21 @@
   "description": "",
   "devDependencies": {
     "@types/express": "^4.17.21",
-    "@types/node": "^20.16.11",
+    "@types/node": "^20.17.6",
     "nodemon": "^3.1.7",
+    "prisma": "5.21.1",
+    "resolve-tspaths": "^0.8.22",
     "ts-node": "^10.9.2",
     "typescript": "^5.6.3"
   },
   "dependencies": {
+    "@prisma/client": "5.21.1",
+    "axios": "^1.7.7",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "fast-deep-equal": "^3.1.3",
     "helmet": "^7.2.0",
     "jsonwebtoken": "^9.0.2"
   }

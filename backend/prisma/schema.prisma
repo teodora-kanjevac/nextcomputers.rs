@@ -1,0 +1,137 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model cart {
+  cart_id    Int        @id @default(autoincrement()) @db.UnsignedInt
+  user_id    String?    @db.Char(36)
+  created_at DateTime   @default(dbgenerated("(now())")) @db.Timestamp(0)
+  user       user?      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_cart_FK")
+  cartitem   cartitem[]
+
+  @@index([user_id], map: "user_id_cart_FK")
+}
+
+model cartitem {
+  cart_item_id Int      @id @default(autoincrement()) @db.UnsignedInt
+  cart_id      Int      @db.UnsignedInt
+  product_id   Int      @db.UnsignedInt
+  quantity     Int      @default(0) @db.UnsignedTinyInt
+  added_at     DateTime @default(dbgenerated("(now())")) @db.Timestamp(0)
+  cart         cart     @relation(fields: [cart_id], references: [cart_id], onDelete: Cascade, onUpdate: NoAction, map: "cart_id_cartitem_FK")
+  product      product  @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "product_id_cartitem_FK")
+
+  @@index([cart_id], map: "cart_id_cartitem_FK")
+  @@index([product_id], map: "product_id_cartitem_FK")
+}
+
+model category {
+  category_id Int           @id @default(autoincrement()) @db.UnsignedInt
+  name        String        @unique(map: "name") @default("") @db.VarChar(100)
+  subcategory subcategory[]
+}
+
+model order {
+  order_id     BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  user_id      String         @default("") @db.Char(36)
+  total_price  Decimal        @db.Decimal(10, 2)
+  order_status String?        @db.VarChar(20)
+  created_at   DateTime       @default(dbgenerated("(now())")) @db.Timestamp(0)
+  user         user           @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_order_FK")
+  orderdetails orderdetails[]
+
+  @@index([user_id], map: "user_id_order_FK")
+}
+
+model orderdetails {
+  order_detail_id Int     @id @default(autoincrement()) @db.UnsignedInt
+  order_id        BigInt  @db.UnsignedBigInt
+  product_id      Int     @db.UnsignedInt
+  quantity        Int     @default(0) @db.UnsignedTinyInt
+  order           order   @relation(fields: [order_id], references: [order_id], onDelete: Cascade, onUpdate: NoAction, map: "order_id_orderdetails_FK")
+  product         product @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "product_id_orderdetails_FK")
+
+  @@index([order_id], map: "order_id_orderdetails_FK")
+  @@index([product_id], map: "product_id_orderdetails_FK")
+}
+
+model product {
+  product_id     Int            @id @default(autoincrement()) @db.UnsignedInt
+  image_url      Json?
+  name           String         @default("") @db.VarChar(255)
+  stock          Int            @default(0) @db.UnsignedSmallInt
+  created_at     DateTime       @default(dbgenerated("(now())")) @db.Timestamp(0)
+  brand          String         @default("") @db.VarChar(100)
+  specification  Json?
+  ean            String         @unique(map: "ean") @default("") @db.VarChar(100)
+  country        String?        @default("") @db.VarChar(100)
+  supplier       String?        @default("") @db.VarChar(100)
+  price          Decimal        @default(0) @db.Decimal(10, 2)
+  discount_price Decimal?       @db.Decimal(10, 2)
+  retail_price   Decimal        @default(0) @db.Decimal(10, 2)
+  subcategory_id Int?           @db.UnsignedInt
+  cartitem       cartitem[]
+  orderdetails   orderdetails[]
+  subcategory    subcategory?   @relation(fields: [subcategory_id], references: [subcategory_id], onUpdate: NoAction, map: "subcategory_id_FK")
+  promotion      promotion[]
+  review         review[]
+
+  @@index([subcategory_id], map: "subcategory_id_FK")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model promotion {
+  promotion_id        Int       @id @default(autoincrement()) @db.UnsignedInt
+  product_id          Int       @db.UnsignedInt
+  discount_percentage Int       @default(0) @db.UnsignedTinyInt
+  start_date          DateTime? @db.Timestamp(0)
+  end_date            DateTime  @db.Timestamp(0)
+  product             product   @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "product_id_promotion_FK")
+
+  @@index([product_id], map: "product_id_promotion_FK")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model review {
+  review_id  Int      @id @default(autoincrement()) @db.UnsignedInt
+  created_at DateTime @default(dbgenerated("(now())")) @db.Timestamp(0)
+  product_id Int      @default(0) @db.UnsignedInt
+  user_id    String   @default("") @db.Char(36)
+  rating     Int      @db.UnsignedTinyInt
+  comment    String   @db.MediumText
+  product    product  @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "product_id_review_FK")
+  user       user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_FK")
+
+  @@index([product_id], map: "product_id_review_FK")
+  @@index([user_id], map: "user_id_FK")
+}
+
+model subcategory {
+  subcategory_id Int       @id @default(autoincrement()) @db.UnsignedInt
+  name           String    @unique(map: "name") @default("") @db.VarChar(100)
+  category_id    Int       @db.UnsignedInt
+  product        product[]
+  category       category  @relation(fields: [category_id], references: [category_id], onDelete: NoAction, onUpdate: NoAction, map: "category_id_FK")
+
+  @@index([category_id], map: "category_id_FK")
+}
+
+model user {
+  user_id       String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  username      String   @unique(map: "username") @default("") @db.VarChar(100)
+  email         String   @unique(map: "email") @default("") @db.VarChar(100)
+  first_name    String?  @default("") @db.VarChar(50)
+  last_name     String?  @default("") @db.VarChar(50)
+  address       String?  @db.VarChar(255)
+  phone_number  String?  @db.VarChar(50)
+  created_at    DateTime @default(now()) @db.Timestamp(0)
+  password_hash String   @default("") @db.VarChar(255)
+  cart          cart[]
+  order         order[]
+  review        review[]
+}
