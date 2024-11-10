@@ -1,5 +1,5 @@
 export class Product {
-    public productId?: number
+    public id?: number
     public imageUrl?: any
     public name: string
     public stock: number
@@ -15,7 +15,7 @@ export class Product {
     public subcategoryId?: number
 
     constructor(product: any) {
-        this.productId = product.product_id
+        this.id = product.product_id
         this.name = product.name
         this.stock = product.stock
         this.createdAt = product.created_at

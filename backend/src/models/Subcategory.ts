@@ -1,11 +1,11 @@
 export class Subcategory {
-    public id?: number
+    public id: number
     public name: string
-    public categoryId?: number
+    public categoryId: number
 
-    constructor(id: number | undefined, name: string, categoryId: number | undefined) {
-        this.id = id
-        this.name = name,
-        this.categoryId = categoryId
+    constructor(subcategory: any) {
+        this.id = subcategory.subcategory_id
+        this.name = subcategory.name
+        this.categoryId = subcategory.category_id
     }
 }
