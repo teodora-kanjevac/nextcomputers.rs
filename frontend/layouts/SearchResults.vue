@@ -3,7 +3,7 @@
         <div class="flex flex-1">
             <FilterCategorySidebar />
             <div class="flex-1 px-5 lg:px-8 pt-8 pb-11 lg:py-11">
-                <h2 class="font-semibold text-2xl ps-2 lg:ps-4 pb-7">Najprodavaniji proizvodi</h2>
+                <h2 class="font-semibold text-2xl ps-2 lg:ps-0.5 pb-4">Najprodavaniji proizvodi</h2>
                 <div class="flex mx-1.5 mb-1 mt-3 gap-2">
                     <CategoryDrawer />
                     <FilterDrawer />
@@ -39,6 +39,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 3 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '2',
@@ -59,6 +60,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '3',
@@ -79,6 +81,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 2 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '4',
@@ -99,6 +102,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '5',
@@ -119,6 +123,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '6',
@@ -139,6 +144,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '7',
@@ -159,6 +165,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '8',
@@ -179,6 +186,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '9',
@@ -199,6 +207,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 10 },
             ],
         },
+        retailPrice: 0
     },
 ]
 </script>

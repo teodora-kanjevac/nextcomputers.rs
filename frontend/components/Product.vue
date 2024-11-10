@@ -17,14 +17,14 @@
                 </div>
             </div>
 
-            <StarRating :rating="product.ratings" class="mt-1"/>
+            <StarRating :rating="product.ratings" class="mt-2" />
 
-            <div class="mt-2 flex items-center text-gray-500 gap-1.5">
+            <div class="mt-3 flex items-center text-gray-600 gap-1.5">
                 <TruckDeliveryIcon class="size-5" />
                 <p class="text-sm font-medium">Brza dostava</p>
             </div>
 
-            <div class="flex items-center justify-between mt-3">
+            <div class="flex items-center justify-between mt-2">
                 <div class="flex-col">
                     <div :class="{ invisible: !product.discountPrice || product.discountPrice === 0 }">
                         <span class="rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-800">
@@ -34,7 +34,7 @@
                             {{ product.price }} RSD
                         </p>
                     </div>
-                    <p class="text-2xl font-extrabold leading-tight text-gray-900">
+                    <p class="text-2xl font-bold leading-tight text-gray-900">
                         {{ product.discountPrice && product.discountPrice > 0 ? product.discountPrice : product.price }}
                         <span class="text-lg">RSD</span>
                     </p>

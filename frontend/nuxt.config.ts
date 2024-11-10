@@ -11,7 +11,7 @@ export default defineNuxtConfig({
       alias: {
         'fonts': '@fontsource-variable'
       }
-    }
+    },
   },
   modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image'],
   plugins: [
