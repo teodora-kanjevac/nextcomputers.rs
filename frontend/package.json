@@ -11,25 +11,29 @@
   },
   "devDependencies": {
     "@nuxt/types": "^2.18.1",
-    "@nuxtjs/tailwindcss": "^6.12.1",
+    "@nuxtjs/tailwindcss": "^6.12.2",
+    "@types/http-proxy": "^1.17.15",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.47",
     "postcss-loader": "^8.1.1",
-    "sass": "^1.79.5",
+    "sass": "^1.80.6",
     "sass-loader": "^11.1.1",
-    "tailwindcss": "^3.4.13"
+    "tailwindcss": "^3.4.14"
   },
   "dependencies": {
-    "@fontsource-variable/manrope": "^5.1.0",
+    "@fontsource-variable/montserrat": "^5.1.0",
     "@nuxt/image": "^1.8.1",
     "@splidejs/splide": "^4.1.4",
     "@splidejs/vue-splide": "^0.6.12",
+    "axios": "^1.7.7",
     "dayjs": "^1.11.13",
     "flowbite": "^2.3.0",
-    "nuxt": "^3.13.2",
+    "http-proxy": "1.18.1",
+    "nuxt": "^3.14.159",
     "nuxt-primevue": "^3.0.0",
-    "pinia": "^2.2.4",
+    "pinia": "^2.2.6",
     "primevue": "^3.53.0",
+    "ufo": "^1.5.4",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"
   }

@@ -4,9 +4,9 @@ export class Category {
     public name: string
     public subcategories: Subcategory[]
 
-    constructor({ name, subcategories }: CategoryDTO) {
-        this.name = name
-        this.subcategories = subcategories.map(subcategory => new Subcategory(subcategory))
+    constructor(category: CategoryDTO) {
+        this.name = category.name
+        this.subcategories = category.subcategories.map(subcategory => new Subcategory(subcategory))
     }
 }
 
@@ -14,8 +14,8 @@ export class Subcategory {
     public id: number
     public name: string
 
-    constructor({ id, name }: SubcategoryDTO) {
-        this.id = id
-        this.name = name
+    constructor(subcategory: SubcategoryDTO) {
+        this.id = subcategory.id
+        this.name = subcategory.name
     }
 }

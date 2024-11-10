@@ -1,4 +1,4 @@
-import { isExcluded } from '~/scraper/utils/excludeCategory'
+import { isExcluded, renameCategory } from '~/scraper/utils/excludeCategory'
 
 export class Category {
     public category: string
@@ -6,7 +6,7 @@ export class Category {
 
     constructor(category: string, subcategory: string) {
         this.category = category
-        this.subcategory = subcategory
+        this.subcategory = renameCategory(subcategory)
     }
 
     public isExcluded(): boolean {

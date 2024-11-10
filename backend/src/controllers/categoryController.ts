@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { fetchCategories } from '~/src/services/categoryService'
+import { fetchCategories, fetchCategoryById } from '~/src/services/categoryService'
 
 export const getCategories = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -8,5 +8,21 @@ export const getCategories = async (req: Request, res: Response): Promise<void> 
     } catch (error) {
         console.error('Controller Error:', error)
         res.status(500).json({ error: 'Failed to fetch categories' })
+    }
+}
+
+export const getCategoryById = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const categoryId = parseInt(req.params.id)
+
+        const category = await fetchCategoryById(categoryId)
+
+        res.status(200).json(category)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message });
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' });
+        }
     }
 }

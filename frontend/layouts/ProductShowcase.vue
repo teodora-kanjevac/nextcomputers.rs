@@ -52,6 +52,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 3 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '2',
@@ -72,6 +73,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '3',
@@ -92,6 +94,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 2 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '4',
@@ -112,6 +115,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '5',
@@ -132,6 +136,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '6',
@@ -152,6 +157,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '7',
@@ -172,6 +178,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '8',
@@ -192,6 +199,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
+        retailPrice: 0
     },
     {
         id: '9',
@@ -212,6 +220,7 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 10 },
             ],
         },
+        retailPrice: 0
     },
 ]
 

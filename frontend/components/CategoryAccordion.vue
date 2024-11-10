@@ -20,7 +20,7 @@ let accordion: Accordion | null = null
 
 const initializeAccordionItems = (): AccordionItem[] => {
     return props.categories.map(category => ({
-        id: `heading-${sanitizeId(category.name)}`,
+        id: `#heading-${sanitizeId(category.name)}`,
         triggerEl: document.querySelector(`#heading-${sanitizeId(category.name)}`) as HTMLElement,
         targetEl: document.querySelector(`#body-${sanitizeId(category.name)}`) as HTMLElement,
         active: false,
@@ -39,6 +39,15 @@ const initializeCategoryAccordion = () => {
         accordion = initializeAccordion('categoryAccordion', accordionItems, options)
     })
 }
+
+const categoriesRef = ref<CategoryDTO[]>(props.categories)
+
+watch(() => props.categories, (newCategories) => {
+    categoriesRef.value = newCategories
+    nextTick(() => {
+        initializeCategoryAccordion()
+    })
+})
 
 onMounted(() => {
     initializeCategoryAccordion()

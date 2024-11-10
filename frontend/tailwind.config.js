@@ -10,7 +10,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Manrope Variable', 'sans-serif'],
+        sans: ['Montserrat Variable', 'sans-serif'],
       },
       colors: {
         primary: {

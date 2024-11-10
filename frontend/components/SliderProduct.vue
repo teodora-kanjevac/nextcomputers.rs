@@ -23,7 +23,7 @@
 
             <StarRating :rating="product.ratings" class="mt-1"/>
 
-            <div class="mt-3 flex items-center text-gray-500 gap-1.5">
+            <div class="mt-3 flex items-center text-gray-600 gap-1.5">
                 <TruckDeliveryIcon class="size-5" />
                 <p class="text-sm font-medium">Brza dostava</p>
             </div>
@@ -38,7 +38,7 @@
                             {{ product.price }} RSD
                         </p>
                     </div>
-                    <p class="text-2xl font-extrabold leading-tight text-gray-900">
+                    <p class="text-2xl font-bold leading-tight text-gray-900">
                         {{ product.discountPrice && product.discountPrice > 0 ? product.discountPrice : product.price }}
                         <span class="text-xl">RSD</span>
                     </p>

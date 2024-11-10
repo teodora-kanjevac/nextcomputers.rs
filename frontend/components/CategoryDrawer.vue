@@ -42,6 +42,8 @@ import { initializeDrawer } from '~/composables/useDrawer'
 import { useFlowbite } from '~/composables/useFlowbite'
 import { Drawer } from 'flowbite'
 import type { DrawerOptions } from 'flowbite'
+import { useCategoryStore } from '~/stores/CategoryStore'
+import type { CategoryDTO } from '~/shared/types/CategoryDTO'
 
 let drawer = ref<Drawer | null>(null)
 const isDrawerOpen = ref(false)
@@ -61,94 +63,16 @@ const initializeCategoryDrawer = () => {
     })
 }
 
+const categoryStore = useCategoryStore()
+
 onMounted(() => {
     initializeCategoryDrawer()
+    categoryStore.fetchCategories()
 })
 
 onBeforeUnmount(() => {
     destroyComponent(drawer.value)
 })
 
-const categories = [
-    {
-        name: 'Electronics',
-        subcategories: [
-            { id: 1, name: 'Mobile Phones' },
-            { id: 2, name: 'Laptops' },
-            { id: 3, name: 'Cameras' },
-        ],
-    },
-    {
-        name: 'Home Appliances',
-        subcategories: [
-            { id: 4, name: 'Refrigerators' },
-            { id: 5, name: 'Washing Machines' },
-            { id: 6, name: 'Microwaves' },
-        ],
-    },
-    {
-        name: 'Fashion',
-        subcategories: [
-            { id: 7, name: "Men's Clothing" },
-            { id: 8, name: "Women's Clothing" },
-            { id: 9, name: 'Accessories' },
-        ],
-    },
-    {
-        name: 'Books',
-        subcategories: [
-            { id: 10, name: 'Fiction' },
-            { id: 11, name: 'Non-Fiction' },
-            { id: 12, name: "Children's Books" },
-        ],
-    },
-    {
-        name: 'Sports',
-        subcategories: [
-            { id: 13, name: 'Fitness Equipment' },
-            { id: 14, name: 'Outdoor Gear' },
-            { id: 15, name: 'Sportswear' },
-        ],
-    },
-    {
-        name: 'Toys',
-        subcategories: [
-            { id: 16, name: 'Action Figures' },
-            { id: 17, name: 'Dolls' },
-            { id: 18, name: 'Educational Toys' },
-        ],
-    },
-    {
-        name: 'Office Supplies',
-        subcategories: [
-            { id: 19, name: 'Printers' },
-            { id: 20, name: 'Stationery' },
-            { id: 21, name: 'Office Furniture' },
-        ],
-    },
-    {
-        name: 'Garden',
-        subcategories: [
-            { id: 22, name: 'Plants' },
-            { id: 23, name: 'Tools' },
-            { id: 24, name: 'Outdoor Furniture' },
-        ],
-    },
-    {
-        name: 'Automotive',
-        subcategories: [
-            { id: 25, name: 'Car Accessories' },
-            { id: 26, name: 'Motorcycle Gear' },
-            { id: 27, name: 'Tools & Equipment' },
-        ],
-    },
-    {
-        name: 'Health & Beauty',
-        subcategories: [
-            { id: 28, name: 'Skincare' },
-            { id: 29, name: 'Haircare' },
-            { id: 30, name: 'Health Supplements' },
-        ],
-    },
-]
+const categories = computed<CategoryDTO[]>(() => categoryStore.categories)
 </script>

@@ -1,6 +1,6 @@
 <template>
     <ul
-        class="text-sm 2xl:text-base font-semibold text-center text-gray-900 rounded-lg shadow sm:flex mb-3"
+        class="text-sm 2xl:text-base font-medium text-center text-gray-900 rounded-lg shadow sm:flex mb-3"
         id="default-tab"
         data-tabs-toggle="#tab"
         role="tablist">
