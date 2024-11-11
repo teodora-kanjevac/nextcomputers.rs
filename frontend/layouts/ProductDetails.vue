@@ -144,7 +144,7 @@ const product: ProductDTO = {
     price: 104990,
     discountPrice: 0,
     retailPrice: 119990,
-    image: 'ASUS B550-PLUS TUF.jpg',
+    images: 'ASUS B550-PLUS TUF.jpg',
     specifications: {} as SpecificationsDTO,
     declaration: {} as DeclarationDTO,
     reviews: [],

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { Category } from '~/shared/classes/Category'
 
-export const useCategoryStore = defineStore('categoryStore', {
+export const useCategoryStore = defineStore('category', {
     state: () => ({
         categories: [] as Category[],
     }),
