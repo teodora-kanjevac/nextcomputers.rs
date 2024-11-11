@@ -1,15 +1,13 @@
-import type { DeclarationDTO } from '../types/ProductDTO'
-
 export class Declaration {
     public productName: string
-    public supplier: string
-    public originCountry: string
+    public supplier?: string
+    public originCountry?: string
     public ean: string
 
-    constructor({ productName, supplier, originCountry, ean }: DeclarationDTO) {
-        this.productName = productName
-        this.supplier = supplier
-        this.originCountry = originCountry
-        this.ean = ean
+    constructor(product: any) {
+        this.productName = product.name
+        this.supplier = product.supplier
+        this.originCountry = product.country
+        this.ean = product.ean
     }
 }

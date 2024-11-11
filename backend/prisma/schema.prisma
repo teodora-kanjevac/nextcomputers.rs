@@ -24,7 +24,7 @@ model cartitem {
   quantity     Int      @default(0) @db.UnsignedTinyInt
   added_at     DateTime @default(dbgenerated("(now())")) @db.Timestamp(0)
   cart         cart     @relation(fields: [cart_id], references: [cart_id], onDelete: Cascade, onUpdate: NoAction, map: "cart_id_cartitem_FK")
-  product      product  @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "product_id_cartitem_FK")
+  product      product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "product_id_cartitem_FK")
 
   @@index([cart_id], map: "cart_id_cartitem_FK")
   @@index([product_id], map: "product_id_cartitem_FK")
@@ -54,32 +54,34 @@ model orderdetails {
   product_id      Int     @db.UnsignedInt
   quantity        Int     @default(0) @db.UnsignedTinyInt
   order           order   @relation(fields: [order_id], references: [order_id], onDelete: Cascade, onUpdate: NoAction, map: "order_id_orderdetails_FK")
-  product         product @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "product_id_orderdetails_FK")
+  product         product @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "product_id_orderdetails_FK")
 
   @@index([order_id], map: "order_id_orderdetails_FK")
   @@index([product_id], map: "product_id_orderdetails_FK")
 }
 
 model product {
-  product_id     Int            @id @default(autoincrement()) @db.UnsignedInt
-  image_url      Json?
-  name           String         @default("") @db.VarChar(255)
-  stock          Int            @default(0) @db.UnsignedSmallInt
-  created_at     DateTime       @default(dbgenerated("(now())")) @db.Timestamp(0)
-  brand          String         @default("") @db.VarChar(100)
-  specification  Json?
-  ean            String         @unique(map: "ean") @default("") @db.VarChar(100)
-  country        String?        @default("") @db.VarChar(100)
-  supplier       String?        @default("") @db.VarChar(100)
-  price          Decimal        @default(0) @db.Decimal(10, 2)
-  discount_price Decimal?       @db.Decimal(10, 2)
-  retail_price   Decimal        @default(0) @db.Decimal(10, 2)
-  subcategory_id Int?           @db.UnsignedInt
-  cartitem       cartitem[]
-  orderdetails   orderdetails[]
-  subcategory    subcategory?   @relation(fields: [subcategory_id], references: [subcategory_id], onUpdate: NoAction, map: "subcategory_id_FK")
-  promotion      promotion[]
-  review         review[]
+  product_id      Int            @id @default(autoincrement()) @db.UnsignedInt
+  image_url       Json?
+  name            String         @default("") @db.VarChar(255)
+  stock           Int            @default(0) @db.UnsignedSmallInt
+  created_at      DateTime       @default(dbgenerated("(now())")) @db.Timestamp(0)
+  brand           String         @default("") @db.VarChar(100)
+  specification   Json?
+  ean             String         @unique(map: "ean") @default("") @db.VarChar(100)
+  country         String?        @default("") @db.VarChar(100)
+  supplier        String?        @default("") @db.VarChar(100)
+  price           Decimal        @default(0) @db.Decimal(10, 2)
+  retail_price    Decimal        @default(0) @db.Decimal(10, 2)
+  sale_price      Decimal        @default(0) @db.Decimal(10, 2)
+  discount_price  Decimal?       @db.Decimal(10, 2)
+  payment_advance Int            @default(0) @db.SmallInt
+  subcategory_id  Int?           @db.UnsignedInt
+  cartitem        cartitem[]
+  orderdetails    orderdetails[]
+  subcategory     subcategory?   @relation(fields: [subcategory_id], references: [subcategory_id], onUpdate: NoAction, map: "subcategory_id_FK")
+  promotion       promotion[]
+  review          review[]
 
   @@index([subcategory_id], map: "subcategory_id_FK")
 }
@@ -91,7 +93,7 @@ model promotion {
   discount_percentage Int       @default(0) @db.UnsignedTinyInt
   start_date          DateTime? @db.Timestamp(0)
   end_date            DateTime  @db.Timestamp(0)
-  product             product   @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "product_id_promotion_FK")
+  product             product   @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "product_id_promotion_FK")
 
   @@index([product_id], map: "product_id_promotion_FK")
 }
@@ -104,8 +106,8 @@ model review {
   user_id    String   @default("") @db.Char(36)
   rating     Int      @db.UnsignedTinyInt
   comment    String   @db.MediumText
-  product    product  @relation(fields: [product_id], references: [product_id], onDelete: NoAction, onUpdate: NoAction, map: "product_id_review_FK")
-  user       user     @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_FK")
+  product    product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "product_id_review_FK")
+  user       user     @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "user_id_FK")
 
   @@index([product_id], map: "product_id_review_FK")
   @@index([user_id], map: "user_id_FK")

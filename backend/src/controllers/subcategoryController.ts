@@ -3,8 +3,9 @@ import { fetchSubcategories, fetchSubcategoriesByCategory, fetchSubcategoryById 
 
 export const getSubcategories = async (req: Request, res: Response): Promise<void> => {
     try {
-        const categories = await fetchSubcategories()
-        res.status(200).json(categories)
+        const subcategories = await fetchSubcategories()
+
+        res.status(200).json(subcategories)
     } catch (error) {
         res.status(500).json({ error: 'Failed to fetch subcategories' })
     }

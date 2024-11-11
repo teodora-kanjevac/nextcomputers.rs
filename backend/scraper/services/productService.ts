@@ -64,6 +64,8 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     stock: product.stock,
                     price: product.price,
                     retail_price: product.retailPrice,
+                    sale_price: product.salePrice,
+                    payment_advance: product.paymentAdvance,
                     brand: product.brand,
                     supplier: product.supplier,
                     country: product.country,
