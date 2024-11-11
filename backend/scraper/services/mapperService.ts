@@ -1,6 +1,6 @@
 import { Category } from '~/scraper/types/Category'
 import { Product } from '~/scraper/types/Product'
-import { processSpecifications, processImages } from '~/scraper/utils/productUtils'
+import { processSpecifications, processImages, calculateSalePrice } from '~/scraper/utils/productUtils'
 import { getSubcategoryId } from '~/scraper/services/categoryService'
 import { renameCategory } from '~/scraper/utils/excludeCategory';
 
@@ -13,6 +13,7 @@ export async function ProductfromAPI(data: any): Promise<Product> {
     const productSpecs = processSpecifications(data.specification)
     const subcategoryName = renameCategory(data.acCategory)
     const subcategoryId = await getSubcategoryId(subcategoryName)
+    const salePrice = calculateSalePrice(data.anPrice, data.anPaymentAdvance)
 
     return new Product(
         undefined,
@@ -22,6 +23,8 @@ export async function ProductfromAPI(data: any): Promise<Product> {
         data.acDept,
         data.anPrice,
         data.anRetailPrice,
+        salePrice,
+        data.anPaymentAdvance,
         subcategoryName,
         data.acEan,
         processedImages,

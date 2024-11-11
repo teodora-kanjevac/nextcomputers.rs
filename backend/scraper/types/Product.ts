@@ -14,6 +14,8 @@ export class Product {
     public price: number
     public discountPrice?: number
     public retailPrice: number
+    public salePrice: number
+    public paymentAdvance: number
     public subcategoryName: string
     public subcategoryId?: number
 
@@ -25,6 +27,8 @@ export class Product {
         brand: string,
         price: number,
         retailPrice: number,
+        salePrice: number,
+        paymentAdvance: number,
         subcategoryName: string,
         ean: string,
         imageUrl?: any,
@@ -41,6 +45,8 @@ export class Product {
         this.brand = brand
         this.price = price
         this.retailPrice = retailPrice
+        this.salePrice = salePrice
+        this.paymentAdvance = paymentAdvance
         this.imageUrl = imageUrl
         this.specification = specification
         this.ean = ean

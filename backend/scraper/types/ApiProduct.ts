@@ -6,6 +6,7 @@ export interface ApiProduct{
     anPrice: number,
     anStock: number,
     anRetailPrice: number,
+    anPaymentAdvance: number,
     acCountry: string,
     acSupplier: string,
     acMainCategory: string,

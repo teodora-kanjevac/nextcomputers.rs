@@ -47,3 +47,16 @@ export const processImages = (imageUrl: any[]): ProcessedImage[] => {
             thumbnail: imageObj.acThumbnail,
         }))
 }
+
+export const calculateSalePrice = (price: number, paymentAdvance: number): number => {
+    const markupPercentage =
+        price < 10000 ? 10 :
+        price < 20000 ? 8 :
+        price < 40000 ? 6 :
+        price < 100000 ? 5 : 4
+
+    const salePrice = (price - price * (paymentAdvance / 100)) * (1 + markupPercentage / 100)
+    const remainder = salePrice % 1000
+
+    return salePrice - remainder + (remainder < 490 ? 490 : 990)
+}
