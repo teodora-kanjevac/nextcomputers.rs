@@ -25,7 +25,7 @@ import { Tooltip } from 'flowbite'
 import type { TooltipOptions } from 'flowbite'
 
 const props = defineProps<{
-    productId: string
+    productId: number
 }>()
 
 let tooltip: Tooltip | null = null

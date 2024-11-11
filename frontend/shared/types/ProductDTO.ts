@@ -7,7 +7,7 @@ export interface ProductDTO {
     price: number
     discountPrice?: number
     retailPrice: number
-    image: string
+    images: any
     specifications: SpecificationsDTO
     declaration: DeclarationDTO
     reviews: ReviewDTO[]
@@ -20,7 +20,7 @@ export interface SpecificationsDTO {
 
 export interface DeclarationDTO {
     productName: string
-    supplier: string
-    originCountry: string
+    supplier?: string
+    originCountry?: string
     ean: string
 }
