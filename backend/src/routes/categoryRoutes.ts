@@ -3,7 +3,7 @@ import { getCategories, getCategoryById } from '~/src/controllers/categoryContro
 
 const router: Router = Router()
 
-router.get('/', getCategories)
 router.get('/:id', getCategoryById)
+router.get('/', getCategories)
 
 export default router

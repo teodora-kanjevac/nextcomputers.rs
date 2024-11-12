@@ -25,6 +25,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     stock: true,
                     price: true,
                     retail_price: true,
+                    sale_price: true,
                     image_url: true,
                 },
             })
@@ -39,6 +40,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     (existingProduct.stock !== product.stock ||
                         existingProduct.price.toNumber() !== parseFloat(product.price.toFixed(2)) ||
                         existingProduct.retail_price.toNumber() !== parseFloat(product.retailPrice.toFixed(2)) ||
+                        existingProduct.sale_price.toNumber() !== parseFloat(product.salePrice.toFixed(2)) ||
                         !IsEqual(existingProduct.image_url, product.imageUrl))
                 )
             })
@@ -53,6 +55,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                         stock: product.stock,
                         price: product.price,
                         retail_price: product.retailPrice,
+                        sale_price: product.salePrice,
                         image_url: product.imageUrl,
                     },
                 })

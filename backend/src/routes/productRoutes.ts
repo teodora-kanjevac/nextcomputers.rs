@@ -1,10 +1,11 @@
 import { Router } from 'express'
-import { getProducts, getProductsWithRatings, getProductsWithReviews } from '~/src/controllers/productController'
+import { getProductDetails, getProducts, getProductsWithRatings, getProductsWithRatingsForCategory,  } from '~/src/controllers/productController'
 
 const router: Router = Router()
 
-router.get('/', getProducts)
-router.get('/reviews', getProductsWithReviews)
+router.get('/ratings/:subcategoryId', getProductsWithRatingsForCategory)
 router.get('/ratings', getProductsWithRatings)
+router.get('/:productId', getProductDetails)
+router.get('/', getProducts)
 
 export default router

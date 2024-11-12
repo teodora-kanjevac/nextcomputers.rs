@@ -3,8 +3,8 @@ import { getSubcategories, getSubcategoriesByCategory, getSubcategoryById } from
 
 const router: Router = Router()
 
-router.get('/', getSubcategories)
-router.get('/:id', getSubcategoryById)
 router.get('/category/:categoryId', getSubcategoriesByCategory)
+router.get('/:id', getSubcategoryById)
+router.get('/', getSubcategories)
 
 export default router
