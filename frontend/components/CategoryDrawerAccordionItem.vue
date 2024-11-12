@@ -13,9 +13,9 @@
         </h2>
         <div :id="drawerBodyId" class="hidden" :aria-labelledby="drawerHeadingId">
             <template v-for="subcategory in category.subcategories" :key="subcategory.id">
-                <NuxtLink to="/" @click="closeDrawer" class="p-2 ps-6 rounded block border-b border-gray-200 font-medium text-sm text-gray-800 hover:bg-gray-200">
+                <a :href="`/proizvodi/${subcategory.id}`" @click="closeDrawer" class="p-2 ps-6 rounded block border-b border-gray-200 font-medium text-sm text-gray-800 hover:bg-gray-200">
                     {{ subcategory.name }}
-                </NuxtLink>
+                </a>
             </template>
         </div>
     </div>

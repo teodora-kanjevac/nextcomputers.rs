@@ -33,7 +33,6 @@ const handleScroll = () => {
 
 onMounted(() => {
     window.addEventListener('scroll', handleScroll)
-    productStore.fetchProductsWithRatings()
 })
 
 onBeforeUnmount(() => {

@@ -13,9 +13,9 @@
         </h2>
         <div :id="bodyId" class="hidden" :aria-labelledby="headingId">
             <template v-for="subcategory in category.subcategories" :key="subcategory.id">
-                <NuxtLink to="/" class="p-2 ps-6 rounded block border-b border-gray-200 font-medium text-xs xl:text-sm text-gray-800 hover:bg-gray-200">
+                <a :href="`/proizvodi/${subcategory.id}`" class="p-2 ps-6 rounded block border-b border-gray-200 font-medium text-xs xl:text-sm text-gray-800 hover:bg-gray-200">
                     {{ subcategory.name }}
-                </NuxtLink>
+                </a>
             </template>
         </div>
     </div>

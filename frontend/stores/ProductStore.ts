@@ -36,5 +36,26 @@ export const useProductStore = defineStore('product', {
                 this.loading = false
             }
         },
+        async fetchProductsWithRatingsForCategories(subcategoryId: number) {
+            if (this.loading) return
+            this.loading = true
+
+            try {
+                const { data } = await axios.get(`/api/products/ratings/${subcategoryId}`, {
+                    params: {
+                        page: this.page,
+                        pageSize: this.pageSize,
+                    },
+                })
+
+                this.productCards.push(...data.map((product: any) => new ProductCard(product)))
+
+                this.page++
+            } catch (error) {
+                console.error('Failed to fetch products:', error)
+            } finally {
+                this.loading = false
+            }
+        },
     },
 })
