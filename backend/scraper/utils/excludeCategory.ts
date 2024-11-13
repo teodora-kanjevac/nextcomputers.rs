@@ -4,7 +4,10 @@ export const isExcluded = (name: string): boolean => {
     return name === excludedName
 }
 
-const renameMap: Map<string, string> = new Map([['Računari EWE', 'Računari']])
+const renameMap: Map<string, string> = new Map([
+    ['Računari EWE', 'Računari'],
+    ['IT', 'Računari i komponente'],
+])
 
 export const renameCategory = (name: string): string => {
     if (renameMap.has(name)) {

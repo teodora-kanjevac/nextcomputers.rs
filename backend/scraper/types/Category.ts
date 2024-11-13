@@ -5,7 +5,7 @@ export class Category {
     public subcategory: string
 
     constructor(category: string, subcategory: string) {
-        this.category = category
+        this.category = renameCategory(category)
         this.subcategory = renameCategory(subcategory)
     }
 

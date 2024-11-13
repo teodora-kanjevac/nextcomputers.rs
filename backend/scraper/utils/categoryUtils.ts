@@ -1,11 +1,12 @@
 import { Category } from '~/scraper/types/Category'
-import { renameCategory } from '~/scraper/utils/excludeCategory';
+import { renameCategory } from '~/scraper/utils/excludeCategory'
 
 export const filterUniqueCategories = (categories: Category[]): Category[] => {
     const uniquePairs = new Set<string>()
     return categories.filter(category => {
-        const renamedSubcategory = renameCategory(category.subcategory);
-        const pair = `${category.category}-${renamedSubcategory}`
+        const renamedCategory = renameCategory(category.category)
+        const renamedSubcategory = renameCategory(category.subcategory)
+        const pair = `${renamedCategory}-${renamedSubcategory}`
         if (category.isExcluded() || uniquePairs.has(pair)) {
             return false
         }
