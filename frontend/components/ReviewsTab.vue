@@ -91,10 +91,10 @@ const averageRating = new Rating(rating).getAverageRating()
 
 const calculatePercentage = useRatings(rating.totalReviews)
 
-const numberOfVisibleReviews = ref(4)
+const numberOfVisibleReviews = ref(5)
 const visibleReviews = computed(() => userReviews.slice(0, numberOfVisibleReviews.value))
 
 const loadMoreReviews = () => {
-    numberOfVisibleReviews.value += 4
+    numberOfVisibleReviews.value += 5
 }
 </script>
