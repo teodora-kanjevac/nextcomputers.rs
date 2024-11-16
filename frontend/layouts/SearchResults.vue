@@ -24,10 +24,12 @@ const productStore = useProductStore()
 const productCards = computed<ProductCardDTO[]>(() => productStore.productCards)
 
 const handleScroll = () => {
-    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500
+    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200
 
-    if (nearBottom && !productStore.loading) {
+    if (nearBottom && !productStore.loading && !productStore.allProductsFetched) {
         productStore.fetchProductsWithRatings()
+    } else if (productStore.allProductsFetched) {
+        window.removeEventListener('scroll', handleScroll)
     }
 }
 

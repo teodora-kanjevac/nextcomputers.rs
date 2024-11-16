@@ -5,16 +5,14 @@ import { ProductCard } from '~/shared/classes/ProductCard'
 
 export const useProductStore = defineStore('product', {
     state: () => ({
-        currentProduct: null as Product | null,
+        product: null as Product | null,
         productCards: [] as ProductCard[],
+        allProductsFetched: false,
         loading: false,
         page: 1,
         pageSize: 20,
     }),
     actions: {
-        setProduct(product: Product) {
-            this.currentProduct = product
-        },
         async fetchProductsWithRatings() {
             if (this.loading) return
             this.loading = true
@@ -37,7 +35,7 @@ export const useProductStore = defineStore('product', {
             }
         },
         async fetchProductsWithRatingsForCategories(subcategoryId: number) {
-            if (this.loading) return
+            if (this.loading || this.allProductsFetched) return;
             this.loading = true
 
             try {
@@ -50,11 +48,25 @@ export const useProductStore = defineStore('product', {
 
                 this.productCards.push(...data.map((product: any) => new ProductCard(product)))
 
+                if (data.length === 0) {
+                    this.allProductsFetched = true;
+                }
+
                 this.page++
             } catch (error) {
                 console.error('Failed to fetch products:', error)
             } finally {
                 this.loading = false
+            }
+        },
+        async fetchProductDetails(productId: number) {
+            try {
+                const { data } = await axios.get(`/api/products/${productId}`)
+
+                this.product = new Product(data)
+
+            } catch (error) {
+                console.error('Failed to fetch products:', error)
             }
         },
     },

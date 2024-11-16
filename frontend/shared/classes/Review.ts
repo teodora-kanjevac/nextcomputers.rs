@@ -8,11 +8,11 @@ export class Review {
     public date: Date
 
     constructor(review: any) {
-        this.id = review.reviewId
-        this.name = review.userId
+        this.id = review.id
+        this.name = review.user
         this.comment = review.comment
         this.rating = review.rating
-        this.date = new Date(review.createdAt)
+        this.date = dayjs(review.createdAt).toDate()
     }
 
     formatDate(): string {

@@ -2,14 +2,14 @@
     <div>
         <div class="flex flex-col flex-grow h-full rounded-lg border border-gray-200 bg-white py-4 px-5 shadow-md">
             <div class="h-40 w-full">
-                <NuxtLink to="proizvod">
+                <NuxtLink :to="`/proizvod/${product.id}`">
                     <NuxtImg class="mx-auto h-full" :src="product.thumbnail" :alt="product.name" />
                 </NuxtLink>
             </div>
             <div class="pt-9">
                 <div class="flex items-center justify-between gap-1">
                     <NuxtLink
-                        to="proizvod"
+                        :to="`/proizvod/${product.id}`"
                         class="text-base font-semibold ms-1 leading-tight line-clamp-2 text-gray-900 hover:underline">
                         {{ product.name }}
                     </NuxtLink>
@@ -35,7 +35,11 @@
                         </p>
                     </div>
                     <p class="text-2xl font-bold leading-tight text-gray-900">
-                        {{ product.discountPrice && product.discountPrice > 0 ? product.discountPrice : formatPrice(product.price) }}
+                        {{
+                            product.discountPrice && product.discountPrice > 0
+                                ? formatPrice(product.discountPrice)
+                                : formatPrice(product.price)
+                        }}
                         <span class="text-lg">RSD</span>
                     </p>
                 </div>
@@ -50,10 +54,10 @@
 </template>
 
 <script setup lang="ts">
-import { formatPrice } from '~/composables/utils';
+import { formatPrice } from '~/composables/utils'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import TruckDeliveryIcon from './icons/TruckDeliveryIcon.vue'
-import type { ProductCardDTO } from '~/shared/types/ProductCardDTO';
+import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 
 defineProps<{
     product: ProductCardDTO

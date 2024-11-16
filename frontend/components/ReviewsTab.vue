@@ -4,9 +4,7 @@
             <div class="mx-auto max-w-screen-xl">
                 <div class="sm:flex items-center gap-3">
                     <h2 class="text-2xl font-semibold text-gray-900">Recenzije</h2>
-                    <StarRating
-                        :rating="rating"
-                        class="mt-2 -ms-1 sm:ms-0 sm:pt-0 sm:pb-1" />
+                    <StarRating :rating="rating" class="mt-2 -ms-1 sm:ms-0 sm:pt-0 sm:pb-1" />
                 </div>
 
                 <div class="my-6 gap-8 sm:flex sm:items-start md:my-8">
@@ -25,22 +23,24 @@
                         <ReviewModal />
                     </div>
 
-                    <div class="mt-6 min-w-0 flex-1 space-y-3 sm:mt-0">
-                        <div
-                            v-for="(star, index) in rating.starRatings"
-                            :key="index"
-                            class="flex items-center gap-1.5">
+                    <div class="mt-8 min-w-0 flex-1 space-y-3 sm:mt-0">
+                        <div v-for="(star, index) in rating.starRatings" :key="index" class="flex items-center gap-1.5">
                             <p class="w-2 shrink-0 text-start text-sm font-medium leading-none text-gray-900">
                                 {{ star.star }}
                             </p>
                             <StarFilledIcon class="size-5 shrink-0" />
                             <div class="h-1.5 w-80 rounded-full bg-gray-200">
                                 <div
-                                    class="h-1.5 rounded-full bg-yellow-300"
+                                    class="h-1.5 rounded-full"
+                                    :class="calculatePercentage(star.amount) > 0 ? 'bg-yellow-300' : 'bg-gray-200'"
                                     :style="{
-                                        width: calculatePercentage(star.amount) + '%',
+                                        width:
+                                            calculatePercentage(star.amount) > 0
+                                                ? calculatePercentage(star.amount) + '%'
+                                                : '0%',
                                     }"></div>
                             </div>
+
                             <a
                                 href="#"
                                 class="w-8 shrink-0 ps-1 text-right text-sm font-medium leading-none hover:text-primary sm:w-auto sm:text-left">
@@ -51,12 +51,14 @@
                     </div>
                 </div>
 
-                <div class="mt-10 sm:mt-20 divide-y divide-gray-200">
-                    <Review v-for="(userReview, index) in visibleReviews" 
-                        :key="index" 
-                        :review="userReview" />
+                <div class="mt-8 sm:mt-16 divide-y divide-gray-200">
+                    <Review v-if="visibleReviews.length > 0" v-for="(userReview, index) in visibleReviews" :key="index" :review="userReview" />
+                    <div class="text-gray-600 text-center" v-else>
+                        <p class="font-semibold py-5">Trenutno nema recenzija</p>
+                        <p class="font-medium ">Budite prvi koji će ostaviti recenziju!</p>
+                    </div>
                 </div>
-                <div class="mt-6 text-center" v-if="numberOfVisibleReviews < userReviews.length">
+                <div class="text-center" v-if="numberOfVisibleReviews < userReviews.length">
                     <button
                         type="button"
                         @click="loadMoreReviews"

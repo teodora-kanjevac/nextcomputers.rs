@@ -14,7 +14,9 @@
                     Ucitavanje proizvoda...
                 </div>
 
-                <div v-if="!productStore.loading && productCards.length === 0" class="text-center font-semibold text-xl text-gray-500 mt-20">
+                <div
+                    v-if="!productStore.loading && productCards.length === 0"
+                    class="text-center font-semibold text-xl text-gray-500 mt-20">
                     Nema proizvoda za ovu pretragu.
                 </div>
 
@@ -43,10 +45,12 @@ const subcategory = computed<SubcategoryDTO | null>(() => categoryStore.subcateg
 const productCards = computed<ProductCardDTO[]>(() => productStore.productCards)
 
 const handleScroll = () => {
-    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500
+    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200
 
-    if (nearBottom && !productStore.loading) {
+    if (nearBottom && !productStore.loading && !productStore.allProductsFetched) {
         productStore.fetchProductsWithRatingsForCategories(props.subcategoryId)
+    } else if (productStore.allProductsFetched) {
+        window.removeEventListener('scroll', handleScroll)
     }
 }
 
