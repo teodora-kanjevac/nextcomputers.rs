@@ -24,7 +24,7 @@ import { destroyComponent } from '~/composables/useDestroy'
 import { Tooltip } from 'flowbite'
 import type { TooltipOptions } from 'flowbite'
 
-const props = defineProps<{
+const { productId } = defineProps<{
     productId: number
 }>()
 
@@ -32,8 +32,8 @@ let tooltip: Tooltip | null = null
 
 const initializeFavoritesTooltip = () => {
     useFlowbite(() => {
-        const tooltipElement = `tooltipAddToFavoritesContent-${props.productId}`
-        const tooltipTrigger = `tooltipAddToFavoritesButton-${props.productId}`
+        const tooltipElement = `tooltipAddToFavoritesContent-${productId}`
+        const tooltipTrigger = `tooltipAddToFavoritesButton-${productId}`
         const options: TooltipOptions = {
             placement: 'top',
             triggerType: 'hover',

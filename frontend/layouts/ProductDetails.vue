@@ -23,9 +23,7 @@
             </div>
 
             <div class="mt-8 md:mt-0">
-                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2 py-0.5 rounded">
-                    Na stanju
-                </span>
+                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2 py-0.5 rounded">Na stanju</span>
                 <h1 class="mt-2 text-xl font-semibold text-gray-900 sm:text-2xl">
                     {{ product?.name }}
                 </h1>
@@ -39,20 +37,16 @@
                             Maloprodajna cena: {{ formatPrice(product?.retailPrice) }}
                             <span class="text-sm">RSD</span>
                         </div>
-                        <div :class="{ hidden: !product?.discountPrice || product?.discountPrice === 0 }">
+                        <div :class="{ hidden: !isDiscounted }">
                             <span class="rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-800">
-                                Čak do 15% popusta
+                                {{ discountPercentage }}% POPUSTA
                             </span>
                             <p class="text-xl line-through font-semibold leading-tight text-gray-500 mt-3 mb-1">
                                 {{ formatPrice(product?.price) }} RSD
                             </p>
                         </div>
                         <p class="text-3xl sm:text-4xl font-bold leading-tight text-gray-900">
-                            {{
-                                product?.discountPrice && product?.discountPrice > 0
-                                    ? formatPrice(product?.discountPrice)
-                                    : formatPrice(product?.price)
-                            }}
+                            {{ formattedPrice }}
                             <span class="text-xl sm:text-2xl">RSD</span>
                         </p>
                     </div>
@@ -110,26 +104,32 @@ import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import { useProductStore } from '~/stores/ProductStore'
 import type { ProductDTO } from '~/shared/types/ProductDTO'
-import { formatPrice } from '~/composables/utils'
+import { formatPrice, calculateDiscountPercentage } from '~/composables/utils'
 import type { ImageDTO } from '~/shared/types/ImageDTO'
 
 const productStore = useProductStore()
 
 const product = computed<ProductDTO | null>(() => productStore.product)
 
-const featuredImage = ref<string>();
-const galleryImages = ref<ImageDTO[]>([]);
+const featuredImage = ref<string>()
+const galleryImages = ref<ImageDTO[]>([])
+
+const formattedPrice = computed(() => formatPrice(product.value?.discountPrice || product.value!.price))
+const isDiscounted = computed(() => product.value?.discountPrice && product.value.discountPrice > 0)
+const discountPercentage = computed(() =>
+    calculateDiscountPercentage(product.value!.price, product.value?.discountPrice)
+)
 
 watch(
-  product,
-  (newProduct) => {
-    if (newProduct) {
-      featuredImage.value = newProduct.images[0]?.image;
-      galleryImages.value = newProduct.images;
-    }
-  },
-  { immediate: true }
-);
+    product,
+    newProduct => {
+        if (newProduct) {
+            featuredImage.value = newProduct.images[0]?.image
+            galleryImages.value = newProduct.images
+        }
+    },
+    { immediate: true }
+)
 
 const updateFeatured = (imageUrl: string) => {
     featuredImage.value = imageUrl

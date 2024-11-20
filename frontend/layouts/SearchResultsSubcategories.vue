@@ -34,7 +34,7 @@ import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useCategoryStore } from '~/stores/CategoryStore'
 import { useProductStore } from '~/stores/ProductStore'
 
-const props = defineProps<{
+const { subcategoryId } = defineProps<{
     subcategoryId: number
 }>()
 
@@ -48,7 +48,7 @@ const handleScroll = () => {
     const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200
 
     if (nearBottom && !productStore.loading && !productStore.allProductsFetched) {
-        productStore.fetchProductsWithRatingsForCategories(props.subcategoryId)
+        productStore.fetchProductsWithRatingsForCategories(subcategoryId)
     } else if (productStore.allProductsFetched) {
         window.removeEventListener('scroll', handleScroll)
     }
@@ -56,7 +56,7 @@ const handleScroll = () => {
 
 onMounted(() => {
     window.addEventListener('scroll', handleScroll)
-    categoryStore.fetchSubcategoryById(props.subcategoryId)
+    categoryStore.fetchSubcategoryById(subcategoryId)
 })
 
 onBeforeUnmount(() => {

@@ -3,21 +3,19 @@
         <div class="flex items-center">
             <Star v-for="index in 5" :key="index" :filled="index <= filledStars" :half="index === halfStar" />
         </div>
-        <p class="text-sm font-medium text-gray-900">{{ RoundDecimal(averageRating) }}</p>
+        <p class="text-sm font-medium text-gray-900">{{ roundDecimal(averageRating) }}</p>
         <p class="text-sm font-medium text-gray-600">({{ rating.totalReviews }})</p>
     </div>
 </template>
 
 <script setup lang="ts">
-import { RoundDecimal } from '~/composables/utils'
+import { roundDecimal } from '~/composables/utils'
 import { Rating } from '~/shared/classes/Rating'
 import type { RatingDTO } from '~/shared/types/RatingDTO'
 
-const props = defineProps<{
+const { rating } = defineProps<{
     rating: RatingDTO
 }>()
-
-const { rating } = props
 
 const averageRating = new Rating(rating).getAverageRating()
 

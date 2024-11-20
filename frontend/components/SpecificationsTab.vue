@@ -3,11 +3,7 @@
         <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
             <table class="w-full text-sm text-left">
                 <tbody>
-                    <DetailTabRow
-                    v-for="(item, index) in row"
-                    :key="index" 
-                    :label="item.label" 
-                    :value="item.value" />
+                    <DetailTabRow v-for="(item, index) in row" :key="index" :label="item.label" :value="item.value" />
                 </tbody>
             </table>
         </div>
@@ -15,14 +11,14 @@
 </template>
 
 <script setup lang="ts">
-import type { SpecificationsDTO } from '~/shared/types/ProductDTO'; 
+import type { SpecificationsDTO } from '~/shared/types/ProductDTO'
 
-const props = defineProps<{
+const { specs } = defineProps<{
     specs: SpecificationsDTO
 }>()
 
-const row = Object.keys(props.specs).map(key => ({
+const row = Object.keys(specs).map(key => ({
     label: key,
-    value: props.specs[key],
-}));
+    value: specs[key],
+}))
 </script>

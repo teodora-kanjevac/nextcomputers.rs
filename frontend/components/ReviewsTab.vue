@@ -24,7 +24,7 @@
                     </div>
 
                     <div class="mt-8 min-w-0 flex-1 space-y-3 sm:mt-0">
-                        <div v-for="(star, index) in rating.starRatings" :key="index" class="flex items-center gap-1.5">
+                        <div v-for="(star, index) in percentageForStars" :key="index" class="flex items-center gap-1.5">
                             <p class="w-2 shrink-0 text-start text-sm font-medium leading-none text-gray-900">
                                 {{ star.star }}
                             </p>
@@ -32,15 +32,9 @@
                             <div class="h-1.5 w-80 rounded-full bg-gray-200">
                                 <div
                                     class="h-1.5 rounded-full"
-                                    :class="calculatePercentage(star.amount) > 0 ? 'bg-yellow-300' : 'bg-gray-200'"
-                                    :style="{
-                                        width:
-                                            calculatePercentage(star.amount) > 0
-                                                ? calculatePercentage(star.amount) + '%'
-                                                : '0%',
-                                    }"></div>
+                                    :class="star.percentage > 0 ? 'bg-yellow-300' : 'bg-gray-200'"
+                                    :style="{ width: star.percentage + '%' }"></div>
                             </div>
-
                             <a
                                 href="#"
                                 class="w-8 shrink-0 ps-1 text-right text-sm font-medium leading-none hover:text-primary sm:w-auto sm:text-left">
@@ -52,10 +46,12 @@
                 </div>
 
                 <div class="mt-8 sm:mt-16 divide-y divide-gray-200">
-                    <Review v-if="visibleReviews.length > 0" v-for="(userReview, index) in visibleReviews" :key="index" :review="userReview" />
+                    <template v-if="visibleReviews.length > 0">
+                        <Review v-for="(userReview, index) in visibleReviews" :key="index" :review="userReview" />
+                    </template>
                     <div class="text-gray-600 text-center" v-else>
                         <p class="font-semibold py-5">Trenutno nema recenzija</p>
-                        <p class="font-medium ">Budite prvi koji će ostaviti recenziju!</p>
+                        <p class="font-medium">Budite prvi koji će ostaviti recenziju!</p>
                     </div>
                 </div>
                 <div class="text-center" v-if="numberOfVisibleReviews < userReviews.length">
@@ -81,15 +77,20 @@ import type { RatingDTO } from '~/shared/types/RatingDTO'
 import type { ReviewDTO } from '~/shared/types/ReviewDTO'
 import { Rating } from '~/shared/classes/Rating'
 
-const props = defineProps<{
+const { rating, userReviews } = defineProps<{
     rating: RatingDTO
     userReviews: ReviewDTO[]
 }>()
-const { rating, userReviews } = props
 
 const averageRating = new Rating(rating).getAverageRating()
 
-const calculatePercentage = useRatings(rating.totalReviews)
+const calculateStarPercentage = useRatings(rating.totalReviews)
+const percentageForStars = computed(() => {
+    return rating.starRatings.map(star => ({
+        ...star,
+        percentage: calculateStarPercentage(star.amount),
+    }))
+})
 
 const numberOfVisibleReviews = ref(5)
 const visibleReviews = computed(() => userReviews.slice(0, numberOfVisibleReviews.value))

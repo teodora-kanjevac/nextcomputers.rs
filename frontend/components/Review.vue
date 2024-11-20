@@ -25,9 +25,9 @@
 import type { ReviewDTO } from '~/shared/types/ReviewDTO'
 import { Review } from '~/shared/classes/Review'
 
-const props = defineProps<{
+const { review } = defineProps<{
     review: ReviewDTO
 }>()
 
-const formatedDate = new Review(props.review).formatDate()
+const formatedDate = new Review(review).formatDate()
 </script>
