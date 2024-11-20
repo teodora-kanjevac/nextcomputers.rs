@@ -14,11 +14,11 @@
     "@nuxtjs/tailwindcss": "^6.12.2",
     "@types/http-proxy": "^1.17.15",
     "autoprefixer": "^10.4.20",
-    "postcss": "^8.4.47",
+    "postcss": "^8.4.49",
     "postcss-loader": "^8.1.1",
-    "sass": "^1.80.6",
+    "sass": "^1.81.0",
     "sass-loader": "^11.1.1",
-    "tailwindcss": "^3.4.14"
+    "tailwindcss": "^3.4.15"
   },
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.1.0",
@@ -34,7 +34,7 @@
     "pinia": "^2.2.6",
     "primevue": "^3.53.0",
     "ufo": "^1.5.4",
-    "vue": "^3.5.12",
+    "vue": "^3.5.13",
     "vue-router": "^4.4.5"
   }
 }

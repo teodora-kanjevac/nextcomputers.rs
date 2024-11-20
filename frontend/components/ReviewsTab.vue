@@ -4,9 +4,7 @@
             <div class="mx-auto max-w-screen-xl">
                 <div class="sm:flex items-center gap-3">
                     <h2 class="text-2xl font-semibold text-gray-900">Recenzije</h2>
-                    <StarRating
-                        :rating="rating"
-                        class="mt-2 -ms-1 sm:ms-0 sm:pt-0 sm:pb-1" />
+                    <StarRating :rating="rating" class="mt-2 -ms-1 sm:ms-0 sm:pt-0 sm:pb-1" />
                 </div>
 
                 <div class="my-6 gap-8 sm:flex sm:items-start md:my-8">
@@ -25,21 +23,17 @@
                         <ReviewModal />
                     </div>
 
-                    <div class="mt-6 min-w-0 flex-1 space-y-3 sm:mt-0">
-                        <div
-                            v-for="(star, index) in rating.starRatings"
-                            :key="index"
-                            class="flex items-center gap-1.5">
+                    <div class="mt-8 min-w-0 flex-1 space-y-3 sm:mt-0">
+                        <div v-for="(star, index) in percentageForStars" :key="index" class="flex items-center gap-1.5">
                             <p class="w-2 shrink-0 text-start text-sm font-medium leading-none text-gray-900">
                                 {{ star.star }}
                             </p>
                             <StarFilledIcon class="size-5 shrink-0" />
                             <div class="h-1.5 w-80 rounded-full bg-gray-200">
                                 <div
-                                    class="h-1.5 rounded-full bg-yellow-300"
-                                    :style="{
-                                        width: calculatePercentage(star.amount) + '%',
-                                    }"></div>
+                                    class="h-1.5 rounded-full"
+                                    :class="star.percentage > 0 ? 'bg-yellow-300' : 'bg-gray-200'"
+                                    :style="{ width: star.percentage + '%' }"></div>
                             </div>
                             <a
                                 href="#"
@@ -51,12 +45,16 @@
                     </div>
                 </div>
 
-                <div class="mt-10 sm:mt-20 divide-y divide-gray-200">
-                    <Review v-for="(userReview, index) in visibleReviews" 
-                        :key="index" 
-                        :review="userReview" />
+                <div class="mt-8 sm:mt-16 divide-y divide-gray-200">
+                    <template v-if="visibleReviews.length > 0">
+                        <Review v-for="(userReview, index) in visibleReviews" :key="index" :review="userReview" />
+                    </template>
+                    <div class="text-gray-600 text-center" v-else>
+                        <p class="font-semibold py-5">Trenutno nema recenzija</p>
+                        <p class="font-medium">Budite prvi koji će ostaviti recenziju!</p>
+                    </div>
                 </div>
-                <div class="mt-6 text-center" v-if="numberOfVisibleReviews < userReviews.length">
+                <div class="text-center" v-if="numberOfVisibleReviews < userReviews.length">
                     <button
                         type="button"
                         @click="loadMoreReviews"
@@ -79,20 +77,25 @@ import type { RatingDTO } from '~/shared/types/RatingDTO'
 import type { ReviewDTO } from '~/shared/types/ReviewDTO'
 import { Rating } from '~/shared/classes/Rating'
 
-const props = defineProps<{
+const { rating, userReviews } = defineProps<{
     rating: RatingDTO
     userReviews: ReviewDTO[]
 }>()
-const { rating, userReviews } = props
 
 const averageRating = new Rating(rating).getAverageRating()
 
-const calculatePercentage = useRatings(rating.totalReviews)
+const calculateStarPercentage = useRatings(rating.totalReviews)
+const percentageForStars = computed(() => {
+    return rating.starRatings.map(star => ({
+        ...star,
+        percentage: calculateStarPercentage(star.amount),
+    }))
+})
 
-const numberOfVisibleReviews = ref(4)
+const numberOfVisibleReviews = ref(5)
 const visibleReviews = computed(() => userReviews.slice(0, numberOfVisibleReviews.value))
 
 const loadMoreReviews = () => {
-    numberOfVisibleReviews.value += 4
+    numberOfVisibleReviews.value += 5
 }
 </script>

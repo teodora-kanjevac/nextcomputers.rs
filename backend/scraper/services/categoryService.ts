@@ -1,6 +1,7 @@
 import prisma from '~/src/utils/prisma'
 import { Category } from '~/scraper/types/Category'
 import { filterUniqueCategories, getCategoryIdMap } from '~/scraper/utils/categoryUtils'
+import { renameCategory } from '~/scraper/utils/excludeCategory'
 
 export const getSubcategoryId = async (subcategoryName: string): Promise<number | undefined> => {
     try {

@@ -109,5 +109,5 @@ const handleRatingUpdate = (newRating: number) => {
 }
 
 const productStore = useProductStore()
-const product = productStore.currentProduct
+const product = productStore.product
 </script>

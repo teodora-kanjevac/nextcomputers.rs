@@ -3,8 +3,8 @@ import { getReviews, getReviewsForProduct, getReviewsFromUser } from '~/src/cont
 
 const router: Router = Router()
 
-router.get('/', getReviews)
-router.get('/user/:userId', getReviewsFromUser)
 router.get('/product/:productId', getReviewsForProduct)
+router.get('/user/:userId', getReviewsFromUser)
+router.get('/', getReviews)
 
 export default router

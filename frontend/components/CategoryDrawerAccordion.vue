@@ -12,14 +12,14 @@ import { initializeAccordion } from '~/composables/useAccordion'
 import { destroyComponent } from '~/composables/useDestroy'
 import type { AccordionOptions, AccordionItem, Accordion } from 'flowbite'
 
-const props = defineProps<{
+const { categories } = defineProps<{
     categories: CategoryDTO[]
 }>()
 
 let drawerAccordion: Accordion | null = null
 
 const initializeAccordionItems = (): AccordionItem[] => {
-    return props.categories.map(category => ({
+    return categories.map(category => ({
         id: `#drawer-heading-${sanitizeId(category.name)}`,
         triggerEl: document.querySelector(`#drawer-heading-${sanitizeId(category.name)}`) as HTMLElement,
         targetEl: document.querySelector(`#drawer-body-${sanitizeId(category.name)}`) as HTMLElement,

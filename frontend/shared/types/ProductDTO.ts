@@ -1,13 +1,15 @@
 import type { ReviewDTO } from './ReviewDTO'
 import type { RatingDTO } from './RatingDTO'
+import type { ImageDTO } from './ImageDTO'
 
 export interface ProductDTO {
     id: string
     name: string
+    brand: string
     price: number
     discountPrice?: number
     retailPrice: number
-    images: any
+    images: ImageDTO[]
     specifications: SpecificationsDTO
     declaration: DeclarationDTO
     reviews: ReviewDTO[]

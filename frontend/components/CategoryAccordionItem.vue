@@ -13,9 +13,11 @@
         </h2>
         <div :id="bodyId" class="hidden" :aria-labelledby="headingId">
             <template v-for="subcategory in category.subcategories" :key="subcategory.id">
-                <NuxtLink to="/" class="p-2 ps-6 rounded block border-b border-gray-200 font-medium text-xs xl:text-sm text-gray-800 hover:bg-gray-200">
+                <a
+                    :href="`/proizvodi/${subcategory.id}`"
+                    class="p-2 ps-6 rounded block border-b border-gray-200 font-medium text-xs xl:text-sm text-gray-800 hover:bg-gray-200">
                     {{ subcategory.name }}
-                </NuxtLink>
+                </a>
             </template>
         </div>
     </div>
@@ -26,10 +28,10 @@ import IndicatorDownIcon from './icons/IndicatorDownIcon.vue'
 import type { CategoryDTO } from '~/shared/types/CategoryDTO'
 import { sanitizeId } from '~/composables/utils'
 
-const props = defineProps<{
+const { category } = defineProps<{
     category: CategoryDTO
 }>()
 
-const headingId = computed(() => `heading-${sanitizeId(props.category.name)}`)
-const bodyId = computed(() => `body-${sanitizeId(props.category.name)}`)
+const headingId = computed(() => `heading-${sanitizeId(category.name)}`)
+const bodyId = computed(() => `body-${sanitizeId(category.name)}`)
 </script>

@@ -2,7 +2,7 @@
     <div>
         <client-only>
             <ul
-                class="flex-wrap flex mx-auto gap-3 mb-2 text-sm sm:text-base font-semibold text-gray-600"
+                class="flex-wrap flex mx-auto gap-3 mb-2 text-sm sm:text-base font-medium text-gray-600"
                 id="default-tab"
                 data-tabs-toggle="#tab"
                 role="tablist">
@@ -59,15 +59,15 @@
                     </button>
                 </li>
             </ul>
-            <div id="tab" class="px-3 py-4 rounded-lg bg-gray-50">
+            <div v-if="product" id="tab" class="px-1 py-1 sm:px-3 sm:py-4 rounded-lg bg-gray-50">
                 <div v-if="activeTab === 'specs'">
-                    <SpecificationsTab :specs="productSpecs" />
+                    <SpecificationsTab :specs="product?.specifications" />
                 </div>
                 <div v-if="activeTab === 'declaration'">
-                    <DeclarationTab :declaration="productDeclaration" />
+                    <DeclarationTab :declaration="product?.declaration" />
                 </div>
                 <div v-if="activeTab === 'reviews'">
-                    <ReviewsTab :user-reviews="ratingsResponse.userReviews" :rating="ratingsResponse.rating" />
+                    <ReviewsTab :user-reviews="product?.reviews" :rating="product?.ratings" />
                 </div>
             </div>
         </client-only>
@@ -78,73 +78,13 @@
 import InfoIcon from '~/components/icons/InfoIcon.vue'
 import ListIcon from '~/components/icons/ListIcon.vue'
 import StarOutlinedIcon from '~/components/icons/StarOutlinedIcon.vue'
-import type { DeclarationDTO, SpecificationsDTO } from '~/shared/types/ProductDTO'
+import type { ProductDTO } from '~/shared/types/ProductDTO'
+import { useProductStore } from '~/stores/ProductStore';
 
 const activeTab = ref('specs')
 
-const productDeclaration: DeclarationDTO = {
-    productName: 'Apple MacBook Pro 17"',
-    supplier: 'Tech Solutions Ltd.',
-    originCountry: 'USA',
-    ean: '8806084194343',
-}
+const productStore = useProductStore()
 
-const productSpecs: SpecificationsDTO = {
-    Processor: 'Apple M1 Chip',
-    RAM: '16GB',
-    Storage: '512GB SSD',
-    Display: '17-inch Retina Display',
-    Resolution: '2340 x 1440 px',
-    'Battery Life': 'Up to 11 hours',
-}
+const product = computed<ProductDTO | null>(() => productStore.product)
 
-const ratingsResponse = {
-    rating: {
-        totalReviews: 110,
-        starRatings: [
-            { star: 5, amount: 40 },
-            { star: 4, amount: 25 },
-            { star: 3, amount: 20 },
-            { star: 2, amount: 15 },
-            { star: 1, amount: 10 },
-        ],
-    },
-    userReviews: [
-        {
-            rating: 4,
-            name: 'Alice Johnson',
-            createdAt: new Date('2024-09-25'),
-            comment: 'Absolutely love this product! It exceeded my expectations and the customer service was fantastic.',
-            id: 0
-        },
-        {
-            rating: 3,
-            name: 'Michael Brown',
-            createdAt: new Date('2024-08-12'),
-            comment: 'The product is good, but the delivery took longer than expected. Overall, happy with the purchase.',
-            id: 0
-        },
-        {
-            rating: 5,
-            name: 'Samantha Lee',
-            createdAt: new Date('2024-10-02'),
-            comment: 'Perfect! Exactly what I was looking for. Would definitely recommend to anyone!',
-            id: 0
-        },
-        {
-            rating: 2,
-            name: 'David Williams',
-            createdAt: new Date('2024-07-30'),
-            comment: 'The product has some issues with durability, and I had to return it. The return process was smooth though.',
-            id: 0
-        },
-        {
-            rating: 4,
-            name: 'Emily Davis',
-            createdAt: new Date('2024-09-18'),
-            comment: 'Good quality overall. The design is sleek and fits well with my needs.',
-            id: 0
-        },
-    ],
-}
 </script>

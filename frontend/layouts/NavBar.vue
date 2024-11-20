@@ -47,11 +47,11 @@
                             </NuxtLink>
                         </li>
                         <li>
-                            <NuxtLink
-                                to="proizvodi"
+                            <a
+                                :href="`/proizvodi`"
                                 class="block py-2 px-3 text-gray-100 hover:bg-gray-600 rounded md:hover:bg-transparent md:hover:opacity-80 md:p-0">
                                 Proizvodi
-                            </NuxtLink>
+                            </a>
                         </li>
                         <li>
                             <NuxtLink

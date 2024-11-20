@@ -5,9 +5,9 @@
 </template>
 
 <script setup lang="ts">
-import type { ProductDTO } from '~/shared/types/ProductDTO';
+import type { ProductCardDTO } from '~/shared/types/ProductCardDTO';
 
 defineProps<{
-    products: ProductDTO[]
+    products: ProductCardDTO[]
 }>()
 </script>

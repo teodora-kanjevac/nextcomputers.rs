@@ -16,4 +16,14 @@ import NavBar from '~/layouts/NavBar.vue'
 import Footer from '~/layouts/Footer.vue'
 import ProductDetails from '~/layouts/ProductDetails.vue'
 import ProductDetailsTabs from '~/layouts/ProductDetailsTabs.vue'
+import { useProductStore } from '~/stores/ProductStore'
+
+const route = useRoute()
+const productStore = useProductStore()
+
+const productId = parseInt(route.params.productId)
+
+onMounted(() => {
+    productStore.fetchProductDetails(productId)
+})
 </script>

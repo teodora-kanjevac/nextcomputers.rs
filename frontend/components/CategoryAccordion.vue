@@ -12,14 +12,14 @@ import { initializeAccordion } from '~/composables/useAccordion'
 import { destroyComponent } from '~/composables/useDestroy'
 import type { AccordionOptions, AccordionItem, Accordion } from 'flowbite'
 
-const props = defineProps<{
+const { categories } = defineProps<{
     categories: CategoryDTO[]
 }>()
 
 let accordion: Accordion | null = null
 
 const initializeAccordionItems = (): AccordionItem[] => {
-    return props.categories.map(category => ({
+    return categories.map(category => ({
         id: `#heading-${sanitizeId(category.name)}`,
         triggerEl: document.querySelector(`#heading-${sanitizeId(category.name)}`) as HTMLElement,
         targetEl: document.querySelector(`#body-${sanitizeId(category.name)}`) as HTMLElement,
@@ -40,14 +40,17 @@ const initializeCategoryAccordion = () => {
     })
 }
 
-const categoriesRef = ref<CategoryDTO[]>(props.categories)
+const categoriesRef = ref<CategoryDTO[]>(categories)
 
-watch(() => props.categories, (newCategories) => {
-    categoriesRef.value = newCategories
-    nextTick(() => {
-        initializeCategoryAccordion()
-    })
-})
+watch(
+    () => categories,
+    newCategories => {
+        categoriesRef.value = newCategories
+        nextTick(() => {
+            initializeCategoryAccordion()
+        })
+    }
+)
 
 onMounted(() => {
     initializeCategoryAccordion()

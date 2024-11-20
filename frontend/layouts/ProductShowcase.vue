@@ -25,23 +25,20 @@
 <script setup lang="ts">
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import 'assets/css/splide.css'
-import type { DeclarationDTO, ProductDTO, SpecificationsDTO } from '~/shared/types/ProductDTO'
+import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 
 onMounted(() => {
     handleResize()
     window.addEventListener('resize', handleResize)
 })
 
-const products: ProductDTO[] = [
+const products: ProductCardDTO[] = [
     {
-        id: '1',
-        name: 'ASUS B550-PLUS TUF',
+        id: 1,
+        name: 'ASUS B550-PLUS TUF ASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUF',
         price: 104990,
         discountPrice: 99990,
-        image: 'ASUS B550-PLUS TUF.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'ASUS B550-PLUS TUF.jpg',
         ratings: {
             totalReviews: 120,
             starRatings: [
@@ -52,17 +49,13 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 3 },
             ],
         },
-        retailPrice: 0
     },
     {
-        id: '2',
+        id: 2,
         name: 'Kingston 3600mhz 8gb',
         price: 29990,
         discountPrice: 27990,
-        image: 'Kingston 3600mhz 8gb.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'Kingston 3600mhz 8gb.jpg',
         ratings: {
             totalReviews: 95,
             starRatings: [
@@ -73,17 +66,13 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
-        retailPrice: 0
     },
     {
-        id: '3',
+        id: 3,
         name: 'GIGABYTE A520M',
         price: 55990,
         discountPrice: 49990,
-        image: 'GIGABYTE A520M.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'GIGABYTE A520M.jpg',
         ratings: {
             totalReviews: 85,
             starRatings: [
@@ -94,17 +83,13 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 2 },
             ],
         },
-        retailPrice: 0
     },
     {
-        id: '4',
+        id: 4,
         name: 'Intel 14900k',
         price: 15990,
         discountPrice: 0,
-        image: 'Intel 14900k.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'Intel 14900k.jpg',
         ratings: {
             totalReviews: 150,
             starRatings: [
@@ -115,17 +100,13 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
-        retailPrice: 0
     },
     {
-        id: '5',
+        id: 5,
         name: 'R5 5500 RX 6600',
         price: 38990,
         discountPrice: 35990,
-        image: 'R5 5500 RX 6600.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'R5 5500 RX 6600.jpg',
         ratings: {
             totalReviews: 110,
             starRatings: [
@@ -136,17 +117,13 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
-        retailPrice: 0
     },
     {
-        id: '6',
+        id: 6,
         name: 'RTX 3050 VENTUS2',
         price: 77990,
         discountPrice: 74990,
-        image: 'RTX 3050 VENTUS2.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'RTX 3050 VENTUS2.jpg',
         ratings: {
             totalReviews: 140,
             starRatings: [
@@ -157,17 +134,13 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
-        retailPrice: 0
     },
     {
-        id: '7',
+        id: 7,
         name: 'RTX 4060 TI AERO',
         price: 79990,
         discountPrice: 0,
-        image: 'RTX 4060 TI AERO.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'RTX 4060 TI AERO.jpg',
         ratings: {
             totalReviews: 105,
             starRatings: [
@@ -178,17 +151,13 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
-        retailPrice: 0
     },
     {
-        id: '8',
+        id: 8,
         name: 'RTX 4070 TUF',
         price: 23990,
         discountPrice: 21990,
-        image: 'RTX 4070 TUF.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'RTX 4070 TUF.jpg',
         ratings: {
             totalReviews: 80,
             starRatings: [
@@ -199,17 +168,13 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 5 },
             ],
         },
-        retailPrice: 0
     },
     {
-        id: '9',
+        id: 9,
         name: 'Ryzen 5 5600x',
         price: 51990,
         discountPrice: 48990,
-        image: 'Ryzen 5 5600x.jpg',
-        specifications: {} as SpecificationsDTO,
-        declaration: {} as DeclarationDTO,
-        reviews: [],
+        thumbnail: 'Ryzen 5 5600x.jpg',
         ratings: {
             totalReviews: 110,
             starRatings: [
@@ -220,15 +185,14 @@ const products: ProductDTO[] = [
                 { star: 1, amount: 10 },
             ],
         },
-        retailPrice: 0
     },
 ]
 
 const chunkSize = ref(3)
-const productChunks = ref<ProductDTO[][]>([])
+const productChunks = ref<ProductCardDTO[][]>([])
 
-const chunkProducts = (products: ProductDTO[], chunkSize: number): ProductDTO[][] => {
-    const chunks: ProductDTO[][] = []
+const chunkProducts = (products: ProductCardDTO[], chunkSize: number): ProductCardDTO[][] => {
+    const chunks: ProductCardDTO[][] = []
     for (let i = 0; i < products.length; i += chunkSize) {
         chunks.push(products.slice(i, i + chunkSize))
     }

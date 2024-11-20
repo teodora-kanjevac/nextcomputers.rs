@@ -64,15 +64,13 @@ const initializeCategoryDrawer = () => {
 }
 
 const categoryStore = useCategoryStore()
+const categories = computed<CategoryDTO[]>(() => categoryStore.categories)
 
 onMounted(() => {
     initializeCategoryDrawer()
-    categoryStore.fetchCategories()
 })
 
 onBeforeUnmount(() => {
     destroyComponent(drawer.value)
 })
-
-const categories = computed<CategoryDTO[]>(() => categoryStore.categories)
 </script>

@@ -30,10 +30,6 @@ const activeTab = ref('category')
 
 const categoryStore = useCategoryStore()
 
-onMounted(() => {
-    categoryStore.fetchCategories()
-})
-
 const categories = computed<CategoryDTO[]>(() => categoryStore.categories)
 
 const filterCategories: FilterCategoryDTO[] = [

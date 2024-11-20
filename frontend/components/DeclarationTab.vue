@@ -13,16 +13,14 @@
 <script setup lang="ts">
 import type { DeclarationDTO } from '~/shared/types/ProductDTO'
 
-const props = defineProps<{
+const { declaration } = defineProps<{
     declaration: DeclarationDTO
 }>()
 
-const { productName, supplier, originCountry, ean } = props.declaration
-
 const row = [
-    { label: 'Naziv Artikla', value: productName },
-    { label: 'Uvoznik', value: supplier },
-    { label: 'Zemlja porekla', value: originCountry },
-    { label: 'EAN', value: ean },
+    { label: 'Naziv Artikla', value: declaration.productName },
+    { label: 'Uvoznik', value: declaration.supplier },
+    { label: 'Zemlja porekla', value: declaration.originCountry },
+    { label: 'EAN', value: declaration.ean },
 ]
 </script>
