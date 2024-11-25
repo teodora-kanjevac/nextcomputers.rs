@@ -6,14 +6,18 @@
         <template v-for="filter in filterCategory.filters" :key="filter.name">
             <div class="flex items-center mb-2 px-2">
                 <input
-                    :id="filter.name"
+                    :id="`${filterCategory.name}-${filter.name}`"
                     type="checkbox"
-                    value=""
-                    class="w-4 h-4 flex-shrink-0 text-primary no-focus-ring bg-gray-100 rounded" />
-                <label :for="filter.name" class="flex-1 ms-2 text-sm font-semibold text-gray-900">
+                    :value="filter.name"
+                    class="w-4 h-4 flex-shrink-0 text-primary-light no-focus-ring bg-gray-100 rounded"
+                    :checked="isChecked(filterCategory.name, filter.name)"
+                    @change="onFilterChange(filterCategory.name, filter.name)" />
+                <label
+                    :for="`${filterCategory.name}-${filter.name}`"
+                    class="flex-1 ms-2 text-sm font-medium text-gray-900">
                     {{ filter.name }}
                 </label>
-                <span class="inline-flex items-center justify-center ms-3 text-xs font-semibold text-gray-900">
+                <span class="inline-flex items-center justify-center ms-3 text-xs font-medium text-gray-900">
                     {{ filter.amount }}
                 </span>
             </div>
@@ -23,10 +27,23 @@
 
 <script setup lang="ts">
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
+import { useFilterStore } from '~/stores/FilterStore';
 
-defineProps<{
+const { filterCategory } = defineProps<{
     filterCategory: FilterCategoryDTO
 }>()
+
+const route = useRoute()
+const filterStore = useFilterStore()
+
+const isChecked = (category: string, value: string): boolean => {
+    return filterStore.selectedFilters[category]?.includes(value) || false
+}
+
+const onFilterChange = (category: string, value: string): void => {
+    filterStore.updateFilter(category, value)
+    filterStore.fetchFilteredProducts(parseInt(route.params.subcategoryId as string))
+}
 </script>
 
 <style>

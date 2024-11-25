@@ -32,6 +32,7 @@
 import type { SubcategoryDTO } from '~/shared/types/CategoryDTO'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useCategoryStore } from '~/stores/CategoryStore'
+import { useFilterStore } from '~/stores/FilterStore';
 import { useProductStore } from '~/stores/ProductStore'
 
 const { subcategoryId } = defineProps<{
@@ -40,9 +41,18 @@ const { subcategoryId } = defineProps<{
 
 const productStore = useProductStore()
 const categoryStore = useCategoryStore()
+const filterStore = useFilterStore()
 
 const subcategory = computed<SubcategoryDTO | null>(() => categoryStore.subcategory)
-const productCards = computed<ProductCardDTO[]>(() => productStore.productCards)
+const productCards = computed<ProductCardDTO[]>(() => filterStore.filteredProducts)
+
+watch(
+    () => filterStore.selectedFilters,
+    async () => {
+        await filterStore.fetchFilteredProducts(subcategoryId)
+    },
+    { deep: true }
+)
 
 const handleScroll = () => {
     const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200
