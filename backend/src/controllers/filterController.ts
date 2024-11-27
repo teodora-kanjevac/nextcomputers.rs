@@ -19,11 +19,11 @@ export const getFilters = async (req: Request, res: Response): Promise<void> => 
 
 export const getFilteredProducts = async (req: Request, res: Response): Promise<void> => {
     try {
+        const { page = 1, pageSize = 15 } = req.body.params || {}
+        const filters: Record<string, string[]> = req.body.filters || {}
         const subcategoryId = parseInt(req.params.subcategoryId)
 
-        const filters: Record<string, string[]> = req.body.filters || {};
-
-        const products = await fetchFilteredProducts(subcategoryId, filters)
+        const products = await fetchFilteredProducts(subcategoryId, filters, Number(page), Number(pageSize))
 
         res.status(200).json(products)
     } catch (error) {

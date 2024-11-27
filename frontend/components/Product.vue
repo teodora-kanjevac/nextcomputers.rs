@@ -12,8 +12,8 @@
                         :href="`/proizvod/${product.id}`"
                         class="text-base font-semibold ms-1 leading-tight text-gray-900 hover:underline"
                         :title="isOverflowing ? product.name : ''">
-                        <span ref="productName" class="line-clamp-2">
-                            {{ product.name }}
+                        <span ref="productName" class="line-clamp-2 text-ellipsis overflow-hidden">
+                            {{ truncateName(product.name) }}
                         </span>
                     </a>
                     <AddToFavoritesTooltip :productId="product.id" />
@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts">
-import { useClamping } from '~/composables/useClamping'
+import { useClamping, truncateName } from '~/composables/useClamping'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import TruckDeliveryIcon from './icons/TruckDeliveryIcon.vue'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
@@ -51,4 +51,5 @@ const { product } = defineProps<{
 }>()
 
 const { element: productName, isOverflowing } = useClamping()
+
 </script>

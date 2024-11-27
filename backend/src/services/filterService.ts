@@ -10,7 +10,7 @@ import {
 import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import { isNaNObject } from '~/src/utils/ErrorHandling'
 import { Prisma } from '@prisma/client'
-import { mapRatingsToProducts } from '../utils/product/ratingMapper'
+import { mapRatingsToProductCards } from '../utils/product/ratingMapper'
 
 export const fetchFilters = async (subcategoryId: number): Promise<FilterCategory[]> => {
     isNaNObject('subcategory', subcategoryId)
@@ -93,9 +93,13 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
 
 export const fetchFilteredProducts = async (
     subcategoryId: number,
-    filters: Record<string, string[]>
+    filters: Record<string, string[]>,
+    page: number = 1, 
+    pageSize: number = 15
 ): Promise<any[]> => {
     isNaNObject('subcategory', subcategoryId)
+
+    const offset = (page - 1) * pageSize
 
     if (!filters || typeof filters !== 'object') {
         throw new Error('Invalid filters')
@@ -128,6 +132,8 @@ export const fetchFilteredProducts = async (
         WHERE ${subcategoryCondition}
         ${brandCondition}
         ${specificationCondition}
+        LIMIT ${pageSize}
+        OFFSET ${offset}
     `
 
     const products = await prisma.$queryRaw<ProductCardDTO[]>(query)
@@ -140,5 +146,5 @@ export const fetchFilteredProducts = async (
         )
     )
 
-    return mapRatingsToProducts(mappedProducts)
+    return mapRatingsToProductCards(mappedProducts)
 }

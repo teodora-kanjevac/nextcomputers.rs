@@ -33,7 +33,6 @@ const { filterCategory } = defineProps<{
     filterCategory: FilterCategoryDTO
 }>()
 
-const route = useRoute()
 const filterStore = useFilterStore()
 
 const isChecked = (category: string, value: string): boolean => {
@@ -42,7 +41,6 @@ const isChecked = (category: string, value: string): boolean => {
 
 const onFilterChange = (category: string, value: string): void => {
     filterStore.updateFilter(category, value)
-    filterStore.fetchFilteredProducts(parseInt(route.params.subcategoryId as string))
 }
 </script>
 

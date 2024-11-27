@@ -23,6 +23,7 @@
                 <div v-else class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                     <Product v-for="product in productCards" :key="product.id" :product="product" />
                 </div>
+                <ScrollToTopButton />
             </div>
         </div>
     </div>
@@ -32,7 +33,7 @@
 import type { SubcategoryDTO } from '~/shared/types/CategoryDTO'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useCategoryStore } from '~/stores/CategoryStore'
-import { useFilterStore } from '~/stores/FilterStore';
+import { useFilterStore } from '~/stores/FilterStore'
 import { useProductStore } from '~/stores/ProductStore'
 
 const { subcategoryId } = defineProps<{
@@ -49,18 +50,16 @@ const productCards = computed<ProductCardDTO[]>(() => filterStore.filteredProduc
 watch(
     () => filterStore.selectedFilters,
     async () => {
-        await filterStore.fetchFilteredProducts(subcategoryId)
+        await filterStore.fetchFilteredProducts(subcategoryId, true)
     },
     { deep: true }
 )
 
-const handleScroll = () => {
-    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200
+const handleScroll = async () => {
+    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500
 
-    if (nearBottom && !productStore.loading && !productStore.allProductsFetched) {
-        productStore.fetchProductsWithRatingsForCategories(subcategoryId)
-    } else if (productStore.allProductsFetched) {
-        window.removeEventListener('scroll', handleScroll)
+    if (nearBottom && !filterStore.loading && !filterStore.allProductsFetched) {
+        await filterStore.fetchFilteredProducts(subcategoryId)
     }
 }
 

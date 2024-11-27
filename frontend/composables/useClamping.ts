@@ -18,3 +18,11 @@ export function useClamping() {
         isOverflowing,
     }
 }
+
+export function truncateName(name: string) {
+    let modifiedName = name.replace(/[-/]/g, ' ');
+    if (modifiedName.length > 50) {
+        modifiedName = modifiedName.slice(0, 50) + '...';
+    }
+    return modifiedName;
+}

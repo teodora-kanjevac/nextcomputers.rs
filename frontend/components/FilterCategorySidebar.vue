@@ -7,7 +7,8 @@
                 <div id="tab">
                     <div v-if="activeTab === 'filter'" class="rounded-lg bg-gray-50">
                         <template v-if="filterCategories.length > 0">
-                            <div class="space-y-8 px-2 py-4">
+                            <ResetFiltersButton />
+                            <div class="space-y-8 p-2 pb-4">
                                 <FilterCategory
                                     v-for="(filterCategory, index) in filterCategories"
                                     :key="index"

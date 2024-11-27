@@ -8,6 +8,10 @@ export const useFilterStore = defineStore('filter', {
         categoryFilters: [] as FilterCategory[],
         filteredProducts: [] as ProductCard[],
         selectedFilters: {} as Record<string, string[]>,
+        allProductsFetched: false,
+        loading: false,
+        page: 1,
+        pageSize: 20,
     }),
     actions: {
         async fetchFilters(subcategoryId: number) {
@@ -19,28 +23,47 @@ export const useFilterStore = defineStore('filter', {
                 console.error('Failed to fetch filters:', error)
             }
         },
-        async fetchFilteredProducts(subcategoryId: number) {
-            try {
-                const filterKeyMap: Record<string, string> = {
-                    Brend: 'brand',
-                }
+        async fetchFilteredProducts(subcategoryId: number, reset: boolean = false) {
+            if (this.loading) return
 
-                const transformedFilters = Object.entries(this.selectedFilters).reduce(
-                    (acc, [key, value]) => {
-                        const backendKey = filterKeyMap[key] || key
-                        acc[backendKey] = value
-                        return acc
-                    },
-                    {} as Record<string, string[]>
-                )
+            if (reset) {
+                this.page = 1
+                this.filteredProducts = []
+                this.allProductsFetched = false
+            }
+
+            if (this.allProductsFetched) return
+
+            this.loading = true
+
+            try {
+                const filterKeyMap: Record<string, string> = { Brend: 'brand' }
+
+                const transformedFilters = Object.entries(this.selectedFilters).reduce((acc, [key, value]) => {
+                    const backendKey = filterKeyMap[key] || key
+                    acc[backendKey] = value
+                    return acc
+                }, {} as Record<string, string[]>)
 
                 const { data } = await axios.post(`/api/filters/filteredProducts/${subcategoryId}`, {
                     filters: transformedFilters,
+                    params: {
+                        page: this.page,
+                        pageSize: this.pageSize,
+                    },
                 })
 
-                this.filteredProducts = data.map((product: any) => new ProductCard(product))
+                this.filteredProducts.push(...data.map((product: any) => new ProductCard(product)))
+
+                if (data.length === 0) {
+                    this.allProductsFetched = true
+                }
+
+                this.page++
             } catch (error) {
                 console.error('Failed to fetch products:', error)
+            } finally {
+                this.loading = false
             }
         },
         updateFilter(filterCategory: string, value: string) {
@@ -52,6 +75,9 @@ export const useFilterStore = defineStore('filter', {
             } else {
                 this.selectedFilters[filterCategory].push(value)
             }
+        },
+        resetFilters() {
+            this.selectedFilters = {}
         },
     },
 })
