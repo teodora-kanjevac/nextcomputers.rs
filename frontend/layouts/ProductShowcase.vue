@@ -27,11 +27,6 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import 'assets/css/splide.css'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 
-onMounted(() => {
-    handleResize()
-    window.addEventListener('resize', handleResize)
-})
-
 const products: ProductCardDTO[] = [
     {
         id: 1,
@@ -203,17 +198,23 @@ const updateProductChunks = () => {
     productChunks.value = chunkProducts(products, chunkSize.value)
 }
 
-watch(chunkSize, updateProductChunks, { immediate: true })
+const { width } = useWindowSize()
 
-const handleResize = () => {
-    if (window.innerWidth >= 1024) {
-        chunkSize.value = 3
-    } else if (window.innerWidth >= 640) {
-        chunkSize.value = 2
-    } else {
-        chunkSize.value = 1
-    }
-}
+watch(
+    width,
+    newWidth => {
+        if (newWidth >= 1024) {
+            chunkSize.value = 3
+        } else if (newWidth >= 640) {
+            chunkSize.value = 2
+        } else {
+            chunkSize.value = 1
+        }
+    },
+    { immediate: true }
+)
+
+watch(chunkSize, updateProductChunks, { immediate: true })
 
 const options = {
     type: 'loop',

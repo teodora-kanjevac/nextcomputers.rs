@@ -2,7 +2,7 @@
     <div>
         <section class="bg-white">
             <div
-                class="max-w-screen-xl px-4 py-8 pb-20 lg:py-28 mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-center">
+                class="max-w-screen-xl px-4 py-6 pb-20 lg:py-28 mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-center">
                 <div class="w-full lg:w-1/4 hidden mb-12 pl-5 lg:flex flex-col lg:items-start">
                     <PriceTagIcon class="size-10 sm:size-14 text-primary" />
                     <h2 class="text-left lg:text-left font-semibold text-xl sm:text-3xl mt-3 sm:mt-6">
@@ -35,21 +35,13 @@
 <script setup>
 import PriceTagIcon from '~/components/icons/PriceTagIcon.vue'
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
+import { useMediaQuery } from '@vueuse/core'
 import 'assets/css/splide.css'
 
-const screenWidth = ref(null)
-
-onMounted(() => {
-    screenWidth.value = window.innerWidth
-    window.addEventListener('resize', handleResize)
-})
-
-const handleResize = () => {
-    screenWidth.value = window.innerWidth
-}
+const isSmallScreen = useMediaQuery('(max-width: 640px)')
 
 const getResponsiveImageUrl = image => {
-    return screenWidth.value < 640 ? image.imageSmallUrl : image.imageBigUrl
+    return isSmallScreen.value ? image.imageSmallUrl : image.imageBigUrl
 }
 
 const images = [

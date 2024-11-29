@@ -1,8 +1,9 @@
 <template>
     <div class="flex">
         <button
-            class="w-full p-2 m-3 text-gray-50 font-medium bg-primary-light hover:bg-primary-dark rounded-lg"
-            @click="resetFilters">
+            class="w-full p-2 m-3 text-gray-50 font-medium border border-zinc-300 bg-primary-light hover:bg-primary-dark rounded-lg"
+            @click="resetFilters"
+            aria-label="Resetuj filtere">
             Resetuj filtere
         </button>
     </div>

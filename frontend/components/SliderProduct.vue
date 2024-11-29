@@ -3,7 +3,7 @@
         <div class="rounded-lg border border-gray-200 bg-white px-5 py-4 m-1 shadow-md">
             <div class="mb-8 h-56 w-full">
                 <a :href="`/proizvod/${product.id}`">
-                    <NuxtImg class="mx-auto h-full" :src="product.thumbnail" :alt="product.name" />
+                    <NuxtImg class="mx-auto h-full object-cover" :src="product.thumbnail" :alt="product.name" />
                 </a>
             </div>
 
@@ -36,7 +36,8 @@
 
                 <button
                     type="button"
-                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary">
+                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary"
+                    aria-label="Dodaj u korpu">
                     <AddToCartIcon class="size-6" />
                 </button>
             </div>

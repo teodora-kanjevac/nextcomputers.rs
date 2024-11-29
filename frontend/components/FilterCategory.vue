@@ -3,48 +3,66 @@
         <h2 class="text-gray-900 text-base 2xl:text-lg font-medium px-2 pb-2 mb-4 border-b-2 border-primary">
             {{ filterCategory.name }}
         </h2>
-        <template v-for="filter in filterCategory.filters" :key="filter.name">
-            <div class="flex items-center mb-2 px-2">
-                <input
-                    :id="`${filterCategory.name}-${filter.name}`"
-                    type="checkbox"
-                    :value="filter.name"
-                    class="w-4 h-4 flex-shrink-0 text-primary-light no-focus-ring bg-gray-100 rounded"
-                    :checked="isChecked(filterCategory.name, filter.name)"
-                    @change="onFilterChange(filterCategory.name, filter.name)" />
-                <label
-                    :for="`${filterCategory.name}-${filter.name}`"
-                    class="flex-1 ms-2 text-sm font-medium text-gray-900">
-                    {{ filter.name }}
-                </label>
-                <span class="inline-flex items-center justify-center ms-3 text-xs font-medium text-gray-900">
-                    {{ filter.amount }}
-                </span>
-            </div>
-        </template>
+
+        <div>
+            <template v-for="filter in alwaysShownFilters" :key="filter.name">
+                <FilterItem :filter-category="filterCategory" :filter="filter" />
+            </template>
+        </div>
+
+        <div ref="filterRef" id="filter" class="overflow-hidden">
+            <template v-for="filter in remainingFilters" :key="filter.name">
+                <FilterItem :filter-category="filterCategory" :filter="filter" />
+            </template>
+        </div>
+
+        <div v-if="showMoreAvailable" class="px-2 mt-2">
+            <button @click="toggleShowMoreFilters" class="flex text-primary text-sm font-semibold hover:underline">
+                <template v-if="!isExpanded">
+                    <span>Prikaži više</span>
+                    <PlusIcon class="size-4 ms-0.5 mt-0.5" />
+                </template>
+                <template v-else>
+                    <span>Prikaži manje</span>
+                    <MinusIcon class="size-4 ms-0.5 mt-0.5" />
+                </template>
+            </button>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
-import { useFilterStore } from '~/stores/FilterStore';
+import PlusIcon from './icons/PlusIcon.vue'
+import MinusIcon from './icons/MinusIcon.vue'
 
 const { filterCategory } = defineProps<{
     filterCategory: FilterCategoryDTO
 }>()
 
-const filterStore = useFilterStore()
+const isExpanded = ref(false)
+const filterRef = ref<HTMLElement | null>(null)
 
-const isChecked = (category: string, value: string): boolean => {
-    return filterStore.selectedFilters[category]?.includes(value) || false
-}
+const showMoreAvailable = computed(() => filterCategory.filters.length > 4)
+const alwaysShownFilters = computed(() => filterCategory.filters.slice(0, 4))
+const remainingFilters = computed(() => filterCategory.filters.slice(4))
 
-const onFilterChange = (category: string, value: string): void => {
-    filterStore.updateFilter(category, value)
+const toggleShowMoreFilters = async () => {
+    isExpanded.value = !isExpanded.value
+
+    if (filterRef.value) {
+        const toHeight = isExpanded.value ? filterRef.value.scrollHeight : 0
+        const fromHeight = isExpanded.value ? 0 : filterRef.value.scrollHeight
+        slideFilters(filterRef.value, fromHeight, toHeight, 0.25)
+    }
 }
 </script>
 
 <style>
+#filter{
+    height: 0;
+}
+
 .no-focus-ring:focus {
     outline: none;
     box-shadow: none;

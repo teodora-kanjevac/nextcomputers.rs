@@ -29,9 +29,10 @@
                 <CloseIcon class="size-6" />
             </button>
 
-            <div class="mt-4">
+            <div>
                 <template v-if="filterCategories.length > 0">
-                    <div class="space-y-8">
+                    <ResetFiltersButton />
+                    <div class="space-y-8 mt-3">
                         <FilterCategory
                             v-for="(filterCategory, index) in filterCategories"
                             :key="index"

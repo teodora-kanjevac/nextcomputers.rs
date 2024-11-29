@@ -1,7 +1,7 @@
 <template>
     <button
-        v-if="showButton"
-        class="fixed bottom-5 right-5 p-2 bg-primary-light text-gray-100 border-2 border-primary hover:bg-primary rounded-full cursor-pointer animate-fade-in"
+        ref="scrollButton"
+        class="fixed bottom-5 right-5 p-2 bg-primary-light text-gray-100 border-2 border-primary hover:bg-primary rounded-full cursor-pointer"
         @click="scrollToTop">
         <ArrowUpIcon class="size-6" />
     </button>
@@ -9,12 +9,12 @@
 
 <script setup lang="ts">
 import ArrowUpIcon from './icons/ArrowUpIcon.vue'
+import { useScroll } from '@vueuse/core'
 
-const showButton = ref(false)
+const { y } = useScroll(window)
 
-const checkScrollPosition = () => {
-    showButton.value = window.scrollY > 300
-}
+const scrollButton = ref<HTMLElement | null>(null)
+const showButton = computed(() => y.value > 300)
 
 const scrollToTop = () => {
     window.scrollTo({
@@ -23,26 +23,19 @@ const scrollToTop = () => {
     })
 }
 
-onMounted(() => {
-    window.addEventListener('scroll', checkScrollPosition)
-})
-
-onUnmounted(() => {
-    window.removeEventListener('scroll', checkScrollPosition)
+watch(showButton, newValue => {
+    if (newValue) {
+        nextTick(() => {
+            fadeIn(scrollButton.value)
+        })
+    } else {
+        fadeOut(scrollButton.value)
+    }
 })
 </script>
 
 <style scoped>
-@keyframes fade-in {
-  0% {
+button {
     opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.2s ease-in-out;
 }
 </style>

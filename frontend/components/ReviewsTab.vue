@@ -14,6 +14,7 @@
                         </p>
                         <button
                             type="button"
+                            aria-label="Otvori formu za ostavljanje recenzije"
                             data-modal-target="createReview"
                             data-modal-toggle="createReview"
                             class="mb-2 me-2 flex items-center rounded-lg px-5 py-2.5 text-sm font-medium text-white bg-primary-light hover:bg-rose-800 active:bg-primary">
@@ -39,7 +40,7 @@
                                 href="#"
                                 class="w-8 shrink-0 ps-1 text-right text-sm font-medium leading-none hover:text-primary sm:w-auto sm:text-left">
                                 {{ star.amount }}
-                                <span class="hidden sm:inline">recenzije</span>
+                                <span class="hidden sm:inline">{{ getReviewWord(star.amount) }}</span>
                             </a>
                         </div>
                     </div>
@@ -47,7 +48,7 @@
 
                 <div class="mt-8 sm:mt-16 divide-y divide-gray-200">
                     <template v-if="visibleReviews.length > 0">
-                        <Review v-for="(userReview, index) in visibleReviews" :key="index" :review="userReview" />
+                        <Review v-for="userReview in visibleReviews" :key="userReview.id" :review="userReview" />
                     </template>
                     <div class="text-gray-600 text-center" v-else>
                         <p class="font-semibold py-5">Trenutno nema recenzija</p>
@@ -82,7 +83,7 @@ const { rating, userReviews } = defineProps<{
     userReviews: ReviewDTO[]
 }>()
 
-const averageRating = new Rating(rating).getAverageRating()
+const averageRating = computed(() => new Rating(rating).getAverageRating())
 
 const calculateStarPercentage = useRatings(rating.totalReviews)
 const percentageForStars = computed(() => {
@@ -92,10 +93,22 @@ const percentageForStars = computed(() => {
     }))
 })
 
-const numberOfVisibleReviews = ref(5)
+const pageCount = ref(0)
+const reviewsPerPage = 5
+const numberOfVisibleReviews = computed(() => Math.min(userReviews.length, reviewsPerPage * (pageCount.value + 1)))
 const visibleReviews = computed(() => userReviews.slice(0, numberOfVisibleReviews.value))
 
 const loadMoreReviews = () => {
-    numberOfVisibleReviews.value += 5
+    pageCount.value++
+}
+
+const getReviewWord = (num: number) => {
+    const lastDigit = num % 10
+
+    if (lastDigit >= 2 && lastDigit <= 4) {
+        return 'recenzije'
+    } else {
+        return 'recenzija'
+    }
 }
 </script>

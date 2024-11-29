@@ -1,8 +1,14 @@
 <template>
-    <aside id="sidebar" class="bg-gray-200 z-40 lg:w-1/4 xl:w-1/5 2xl:w-1/6" aria-label="Sidebar">
+    <aside
+        id="sidebar"
+        class="bg-gray-200 z-40 lg:w-1/4 xl:w-1/5 2xl:w-1/6"
+        aria-label="Sidebar za filtriranje proizvoda">
         <div class="h-[150vh] p-4 overflow-y-auto tracking-wider hidden lg:block">
             <client-only>
-                <FilterCategoryTabs v-model:active-tab="activeTab" />
+                <FilterCategoryTabs
+                    v-model:active-tab="activeTab"
+                    :aria-selected="activeTab === 'filter'"
+                    aria-controls="{{ activeTab }}-tab" />
 
                 <div id="tab">
                     <div v-if="activeTab === 'filter'" class="rounded-lg bg-gray-50">
@@ -15,10 +21,11 @@
                                     :filter-category="filterCategory" />
                             </div>
                         </template>
-                        <div class="text-gray-700 text-center px-3 py-7" v-else>
+                        <div v-else class="text-gray-700 text-center px-3 py-7">
                             <p class="font-semibold">Izaberite kategoriju kako biste započeli sa filtriranjem</p>
                         </div>
                     </div>
+
                     <div v-if="activeTab === 'category'" class="px-2 py-1 rounded-lg bg-gray-50">
                         <CategoryAccordion :categories="categories" />
                     </div>
@@ -36,9 +43,14 @@ import { useFilterStore } from '~/stores/FilterStore'
 
 const route = useRoute()
 const activeTab = ref('category')
-if (route.params.subcategoryId) {
-    activeTab.value = 'filter'
-}
+
+watchEffect(() => {
+    if (route.params.subcategoryId) {
+        activeTab.value = 'filter'
+    } else {
+        activeTab.value = 'category'
+    }
+})
 
 const categoryStore = useCategoryStore()
 const filterStore = useFilterStore()
