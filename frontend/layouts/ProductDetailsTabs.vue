@@ -79,12 +79,11 @@ import InfoIcon from '~/components/icons/InfoIcon.vue'
 import ListIcon from '~/components/icons/ListIcon.vue'
 import StarOutlinedIcon from '~/components/icons/StarOutlinedIcon.vue'
 import type { ProductDTO } from '~/shared/types/ProductDTO'
-import { useProductStore } from '~/stores/ProductStore';
+import { useProductStore } from '~/stores/ProductStore'
 
 const activeTab = ref('specs')
 
 const productStore = useProductStore()
 
 const product = computed<ProductDTO | null>(() => productStore.product)
-
 </script>

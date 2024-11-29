@@ -5,7 +5,7 @@
                 <img
                     :src="featuredImage"
                     class="h-auto max-w-full mx-auto rounded-lg mb-3 sm:mb-5"
-                    alt="Featured Image" />
+                    :alt="product.name" />
 
                 <div class="grid grid-cols-6 gap-2 sm:gap-3">
                     <div v-for="(imageUrl, index) in galleryImages" :key="index">
@@ -17,7 +17,7 @@
                             }"
                             class="max-h-20 mx-auto rounded-lg cursor-pointer"
                             @click="updateFeatured(imageUrl.image)"
-                            alt="Gallery Image" />
+                            :alt="imageUrl.image" />
                     </div>
                 </div>
             </div>

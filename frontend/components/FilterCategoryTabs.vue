@@ -13,7 +13,9 @@
                         'bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'filter',
                     },
                 ]"
-                id="filter-tab"
+                :id="'filter-tab'"
+                :aria-selected="activeTab === 'filter'"
+                :aria-controls="'filter-tab'"
                 type="button"
                 @click="() => emit('update:activeTab', 'filter')">
                 Filteri
@@ -29,8 +31,10 @@
                         'bg-white hover:text-gray-700 hover:bg-gray-100': activeTab !== 'category',
                     },
                 ]"
-                id="category-tab"
+                :id="'category-tab'"
                 type="button"
+                :aria-selected="activeTab === 'category'"
+                :aria-controls="'category-tab'"
                 @click="() => emit('update:activeTab', 'category')">
                 Kategorije
             </button>

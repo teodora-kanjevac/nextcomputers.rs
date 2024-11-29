@@ -1,10 +1,9 @@
 import prisma from '~/src/utils/prisma'
 import { Product } from '~/src/models/Product'
-import { ProductRatingDTO } from '~/src/DTOs/ProductRating.dto'
 import { ProductDetailsDTO } from '~/src/DTOs/ProductDetails.dto'
-import { buildRatingsByProduct, fetchRatingsData, getDefaultProductRatings } from '~/src/utils/productRatingUtils'
 import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import { fetchUserFullName } from '~/src/services/userService'
+import { mapRatingsToProduct, mapRatingsToProductCards } from '~/src/utils/product/ratingMapper'
 
 export const fetchProducts = async (): Promise<Product[]> => {
     const product = await prisma.product.findMany()
@@ -29,10 +28,6 @@ export const fetchProductDetails = async (productId: number): Promise<ProductDet
         throw new Error(`Product with ID = ${productId} not found`)
     }
 
-    const ratingsData = await fetchRatingsData()
-    const ratingsByProduct = buildRatingsByProduct(ratingsData)
-    const productRatings = ratingsByProduct[product.product_id] ?? getDefaultProductRatings()
-
     if (product?.review) {
         product.review = await Promise.all(
             product.review.map(async (review: any) => {
@@ -43,10 +38,7 @@ export const fetchProductDetails = async (productId: number): Promise<ProductDet
         )
     }
 
-    return {
-        ...new ProductDetailsDTO(product),
-        ratings: new ProductRatingDTO(productRatings),
-    }
+    return mapRatingsToProduct(product)
 }
 
 export const fetchProductsWithRatings = async (page: number = 1, pageSize: number = 15): Promise<ProductCardDTO[]> => {
@@ -63,16 +55,8 @@ export const fetchProductsWithRatings = async (page: number = 1, pageSize: numbe
             image_url: true,
         },
     })
-    const ratingsData = await fetchRatingsData()
-    const ratingsByProduct = buildRatingsByProduct(ratingsData)
-
-    return products.map(product => {
-        const productRatings = ratingsByProduct[product.product_id] || getDefaultProductRatings()
-        return {
-            ...new ProductCardDTO(product),
-            ratings: new ProductRatingDTO(productRatings),
-        }
-    })
+    
+    return mapRatingsToProductCards(products)
 }
 
 export const fetchProductsWithRatingsForCategory = async (subcategoryId: number, page: number = 1, pageSize: number = 15): Promise<ProductCardDTO[]> => {
@@ -97,14 +81,5 @@ export const fetchProductsWithRatingsForCategory = async (subcategoryId: number,
         },
     })
 
-    const ratingsData = await fetchRatingsData()
-    const ratingsByProduct = buildRatingsByProduct(ratingsData)
-
-    return products.map(product => {
-        const productRatings = ratingsByProduct[product.product_id] || getDefaultProductRatings()
-        return {
-            ...new ProductCardDTO(product),
-            ratings: new ProductRatingDTO(productRatings),
-        }
-    })
+    return mapRatingsToProductCards(products)
 }

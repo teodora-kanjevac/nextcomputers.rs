@@ -4,10 +4,14 @@ import { fetchCategories, fetchCategoryById } from '~/src/services/categoryServi
 export const getCategories = async (req: Request, res: Response): Promise<void> => {
     try {
         const categories = await fetchCategories()
+
         res.status(200).json(categories)
     } catch (error) {
-        console.error('Controller Error:', error)
-        res.status(500).json({ error: 'Failed to fetch categories' })
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
     }
 }
 
@@ -20,9 +24,9 @@ export const getCategoryById = async (req: Request, res: Response): Promise<void
         res.status(200).json(category)
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: error.message })
         } else {
-            res.status(500).json({ error: 'Unexpected error occurred' });
+            res.status(500).json({ error: 'Unexpected error occurred' })
         }
     }
 }

@@ -11,6 +11,7 @@
                 <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                     <Product v-for="product in productCards" :key="product.id" :product="product" />
                 </div>
+                <ScrollToTopButton/>
             </div>
         </div>
     </div>
@@ -19,25 +20,22 @@
 <script setup lang="ts">
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useProductStore } from '~/stores/ProductStore'
+import { useScroll } from '@vueuse/core'
 
 const productStore = useProductStore()
 const productCards = computed<ProductCardDTO[]>(() => productStore.productCards)
 
-const handleScroll = () => {
-    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200
+const { y } = useScroll(window)
 
-    if (nearBottom && !productStore.loading && !productStore.allProductsFetched) {
-        productStore.fetchProductsWithRatings()
-    } else if (productStore.allProductsFetched) {
-        window.removeEventListener('scroll', handleScroll)
-    }
-}
-
-onMounted(() => {
-    window.addEventListener('scroll', handleScroll)
+const nearBottom = computed(() => {
+    return y.value + window.innerHeight >= document.documentElement.scrollHeight - 300
 })
 
-onBeforeUnmount(() => {
-    window.removeEventListener('scroll', handleScroll)
+onMounted(() => {
+    watch(nearBottom, (isNearBottom) => {
+        if (isNearBottom && !productStore.loading && !productStore.allProductsFetched) {
+            productStore.fetchProductsWithRatings()
+        }
+    })
 })
 </script>

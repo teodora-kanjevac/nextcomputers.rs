@@ -3,7 +3,7 @@
         <div class="rounded-lg border border-gray-200 bg-white px-5 py-4 m-1 shadow-md">
             <div class="mb-8 h-56 w-full">
                 <a :href="`/proizvod/${product.id}`">
-                    <NuxtImg class="mx-auto h-full" :src="product.thumbnail" :alt="product.name" />
+                    <NuxtImg class="mx-auto h-full object-cover" :src="product.thumbnail" :alt="product.name" />
                 </a>
             </div>
 
@@ -12,8 +12,8 @@
                     :href="`/proizvod/${product.id}`"
                     class="text-lg font-semibold ms-0.5 pb-0.5 leading-tight text-gray-900 hover:underline"
                     :title="isOverflowing ? product.name : ''">
-                    <span ref="productName" class="line-clamp-1">
-                        {{ product.name }}
+                    <span ref="productName" class="line-clamp-1 text-ellipsis overflow-hidden">
+                        {{ truncateName(product.name) }}
                     </span>
                 </a>
                 <button
@@ -36,7 +36,8 @@
 
                 <button
                     type="button"
-                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary">
+                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary"
+                    aria-label="Dodaj u korpu">
                     <AddToCartIcon class="size-6" />
                 </button>
             </div>
@@ -45,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { useClamping } from '~/composables/useClamping'
+import { useClamping, truncateName } from '~/composables/useClamping'
 import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import TruckDeliveryIcon from './icons/TruckDeliveryIcon.vue'

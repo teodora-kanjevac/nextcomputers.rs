@@ -29,10 +29,20 @@
                 <CloseIcon class="size-6" />
             </button>
 
-            <div class="space-y-8 mt-4">
-                <template v-for="filterCategory in filterCategories" :key="filterCategory.name">
-                    <FilterCategory :filter-category="filterCategory" />
+            <div>
+                <template v-if="filterCategories.length > 0">
+                    <ResetFiltersButton />
+                    <div class="space-y-8 mt-3">
+                        <FilterCategory
+                            v-for="(filterCategory, index) in filterCategories"
+                            :key="index"
+                            :filter-category="filterCategory"
+                            v-model:selected-filters="selectedFilters[filterCategory.name]" />
+                    </div>
                 </template>
+                <div class="text-gray-700 text-center px-3 py-7 border-2 border-rose-300 bg-rose-100 rounded-lg" v-else>
+                    <p class="font-semibold">Izaberite kategoriju kako biste započeli sa filtriranjem</p>
+                </div>
             </div>
         </div>
     </div>
@@ -46,6 +56,7 @@ import { destroyComponent } from '~/composables/useDestroy'
 import { Drawer } from 'flowbite'
 import type { DrawerOptions } from 'flowbite'
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
+import { useFilterStore } from '~/stores/FilterStore'
 
 let drawer = ref<Drawer | null>(null)
 const isDrawerOpen = ref(false)
@@ -65,6 +76,11 @@ const initializeFilterDrawer = () => {
     })
 }
 
+const filterStore = useFilterStore()
+const filterCategories = computed<FilterCategoryDTO[]>(() => filterStore.categoryFilters)
+
+const selectedFilters = reactive<Record<string, string[]>>({})
+
 onMounted(() => {
     initializeFilterDrawer()
 })
@@ -72,36 +88,4 @@ onMounted(() => {
 onBeforeUnmount(() => {
     destroyComponent(drawer.value)
 })
-
-const filterCategories: FilterCategoryDTO[] = [
-    {
-        name: 'Brend',
-        filters: [
-            { name: 'AMD', amount: 25 },
-            { name: 'Intel', amount: 15 },
-        ],
-    },
-    {
-        name: 'Brzina memorije',
-        filters: [
-            { name: '3200MHz', amount: 20 },
-            { name: '4800MHz', amount: 12 },
-        ],
-    },
-    {
-        name: 'Kapacitet',
-        filters: [
-            { name: '8GB', amount: 30 },
-            { name: '16GB', amount: 25 },
-            { name: '32GB', amount: 20 },
-        ],
-    },
-    {
-        name: 'Tip memorije',
-        filters: [
-            { name: 'DDR4', amount: 40 },
-            { name: 'DDR5', amount: 30 },
-        ],
-    },
-]
 </script>

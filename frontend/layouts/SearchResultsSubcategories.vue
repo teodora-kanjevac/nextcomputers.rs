@@ -10,12 +10,12 @@
                     <CategoryDrawer />
                     <FilterDrawer />
                 </div>
-                <div v-if="productStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
+                <div v-if="filterStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
                     Ucitavanje proizvoda...
                 </div>
 
                 <div
-                    v-if="!productStore.loading && productCards.length === 0"
+                    v-if="!filterStore.loading && productCards.length === 0"
                     class="text-center font-semibold text-xl text-gray-500 mt-20">
                     Nema proizvoda za ovu pretragu.
                 </div>
@@ -23,6 +23,7 @@
                 <div v-else class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
                     <Product v-for="product in productCards" :key="product.id" :product="product" />
                 </div>
+                <ScrollToTopButton />
             </div>
         </div>
     </div>
@@ -32,34 +33,39 @@
 import type { SubcategoryDTO } from '~/shared/types/CategoryDTO'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useCategoryStore } from '~/stores/CategoryStore'
-import { useProductStore } from '~/stores/ProductStore'
+import { useFilterStore } from '~/stores/FilterStore'
+import { useScroll } from '@vueuse/core'
 
 const { subcategoryId } = defineProps<{
     subcategoryId: number
 }>()
 
-const productStore = useProductStore()
 const categoryStore = useCategoryStore()
+const filterStore = useFilterStore()
 
 const subcategory = computed<SubcategoryDTO | null>(() => categoryStore.subcategory)
-const productCards = computed<ProductCardDTO[]>(() => productStore.productCards)
+const productCards = computed<ProductCardDTO[]>(() => filterStore.filteredProducts)
 
-const handleScroll = () => {
-    const nearBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 200
+const { y } = useScroll(window)
 
-    if (nearBottom && !productStore.loading && !productStore.allProductsFetched) {
-        productStore.fetchProductsWithRatingsForCategories(subcategoryId)
-    } else if (productStore.allProductsFetched) {
-        window.removeEventListener('scroll', handleScroll)
-    }
-}
+watch(
+    () => filterStore.selectedFilters,
+    async () => {
+        await filterStore.fetchFilteredProducts(subcategoryId, true)
+    },
+    { deep: true }
+)
 
-onMounted(() => {
-    window.addEventListener('scroll', handleScroll)
-    categoryStore.fetchSubcategoryById(subcategoryId)
+const nearBottom = computed(() => {
+    return y.value + window.innerHeight >= document.documentElement.scrollHeight - 300
 })
 
-onBeforeUnmount(() => {
-    window.removeEventListener('scroll', handleScroll)
+onMounted(() => {
+    categoryStore.fetchSubcategoryById(subcategoryId)
+    watch(nearBottom, (isNearBottom) => {
+        if (isNearBottom && !filterStore.loading && !filterStore.allProductsFetched) {
+            filterStore.fetchFilteredProducts(subcategoryId)
+        }
+    })
 })
 </script>

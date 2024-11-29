@@ -3,7 +3,7 @@
         <div class="flex flex-col flex-grow h-full rounded-lg border border-gray-200 bg-white py-4 px-5 shadow-md">
             <div class="h-40 w-full">
                 <a :href="`/proizvod/${product.id}`">
-                    <NuxtImg class="mx-auto h-full" :src="product.thumbnail" :alt="product.name" loading="lazy" />
+                    <NuxtImg class="mx-auto h-full object-cover" :src="product.thumbnail" :alt="product.name" loading="lazy" />
                 </a>
             </div>
             <div class="pt-9">
@@ -12,8 +12,8 @@
                         :href="`/proizvod/${product.id}`"
                         class="text-base font-semibold ms-1 leading-tight text-gray-900 hover:underline"
                         :title="isOverflowing ? product.name : ''">
-                        <span ref="productName" class="line-clamp-2">
-                            {{ product.name }}
+                        <span ref="productName" class="line-clamp-2 text-ellipsis overflow-hidden">
+                            {{ truncateName(product.name) }}
                         </span>
                     </a>
                     <AddToFavoritesTooltip :productId="product.id" />
@@ -32,7 +32,8 @@
 
                 <button
                     type="button"
-                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary">
+                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary"
+                    aria-label="Dodaj u korpu">
                     <AddToCartIcon class="size-6" />
                 </button>
             </div>
@@ -41,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { useClamping } from '~/composables/useClamping'
+import { useClamping, truncateName } from '~/composables/useClamping'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import TruckDeliveryIcon from './icons/TruckDeliveryIcon.vue'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
@@ -51,4 +52,5 @@ const { product } = defineProps<{
 }>()
 
 const { element: productName, isOverflowing } = useClamping()
+
 </script>
