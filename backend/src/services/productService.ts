@@ -4,6 +4,7 @@ import { ProductDetailsDTO } from '~/src/DTOs/ProductDetails.dto'
 import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import { fetchUserFullName } from '~/src/services/userService'
 import { mapRatingsToProduct, mapRatingsToProductCards } from '~/src/utils/product/ratingMapper'
+import { isNaNObject, isNullObject } from '~/src/utils/ErrorHandling'
 
 export const fetchProducts = async (): Promise<Product[]> => {
     const product = await prisma.product.findMany()
@@ -11,9 +12,7 @@ export const fetchProducts = async (): Promise<Product[]> => {
 }
 
 export const fetchProductDetails = async (productId: number): Promise<ProductDetailsDTO> => {
-    if (isNaN(productId)) {
-        throw new Error('Invalid product ID')
-    }
+    isNaNObject('product', productId)
 
     const product = await prisma.product.findUnique({
         where: {
@@ -24,9 +23,7 @@ export const fetchProductDetails = async (productId: number): Promise<ProductDet
         },
     })
 
-    if (!product) {
-        throw new Error(`Product with ID = ${productId} not found`)
-    }
+    isNullObject('product', productId, product)
 
     if (product?.review) {
         product.review = await Promise.all(
@@ -62,9 +59,7 @@ export const fetchProductsWithRatings = async (page: number = 1, pageSize: numbe
 export const fetchProductsWithRatingsForCategory = async (subcategoryId: number, page: number = 1, pageSize: number = 15): Promise<ProductCardDTO[]> => {
     const offset = (page - 1) * pageSize
 
-    if (isNaN(subcategoryId)) {
-        throw new Error('Invalid subcategory ID')
-    }
+    isNaNObject('subcategory', subcategoryId)
 
     const products = await prisma.product.findMany({
         skip: offset,

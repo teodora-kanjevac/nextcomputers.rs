@@ -1,6 +1,7 @@
 import prisma from '~/src/utils/prisma'
 import { Subcategory } from '~/src/models/Subcategory'
 import { SubcategoryDTO } from '~/src/DTOs/Subcategory.dto'
+import { isNaNObject, isNullObject } from '~/src/utils/ErrorHandling'
 
 export const fetchSubcategories = async () => {
     const subcategories = await prisma.subcategory.findMany()
@@ -8,9 +9,7 @@ export const fetchSubcategories = async () => {
 }
 
 export const fetchSubcategoryById = async (subcategoryId: number) => {
-    if (isNaN(subcategoryId)) {
-        throw new Error('Invalid subcategory ID')
-    }
+    isNaNObject('subcategory', subcategoryId)
 
     const subcategory = await prisma.subcategory.findUnique({
         where: {
@@ -18,17 +17,13 @@ export const fetchSubcategoryById = async (subcategoryId: number) => {
         },
     })
 
-    if (!subcategory) {
-        throw new Error(`Subcategory with ID = ${subcategoryId} not found`)
-    }
+    isNullObject('subcategory', subcategoryId, subcategory)
 
     return new Subcategory(subcategory)
 }
 
 export const fetchSubcategoriesByCategory = async (categoryId: number) => {
-    if (isNaN(categoryId)) {
-        throw new Error('Invalid category ID')
-    }
+    isNaNObject('category', categoryId)
 
     const subcategories = await prisma.subcategory.findMany({
         where: {

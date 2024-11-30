@@ -1,5 +1,6 @@
 import prisma from '~/src/utils/prisma'
 import { User } from '~/src/models/User'
+import { isNaNObject } from '~/src/utils/ErrorHandling'
 
 export const fetchUsers = async (): Promise<User[]> => {
     const user = await prisma.user.findMany()
@@ -7,6 +8,8 @@ export const fetchUsers = async (): Promise<User[]> => {
 }
 
 export const fetchUserFullName = async (userId: string): Promise<User> => {
+    isNaNObject('user', userId)
+
     const user = await prisma.user.findUnique({
         where:{
             user_id: userId

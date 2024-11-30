@@ -10,7 +10,7 @@ import {
 import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import { isNaNObject } from '~/src/utils/ErrorHandling'
 import { Prisma } from '@prisma/client'
-import { mapRatingsToProductCards } from '../utils/product/ratingMapper'
+import { mapRatingsToProductCards } from '~/src/utils/product/ratingMapper'
 
 export const fetchFilters = async (subcategoryId: number): Promise<FilterCategory[]> => {
     isNaNObject('subcategory', subcategoryId)
@@ -82,10 +82,17 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
 
     const filterCategories = Object.entries(filterMap).map(([key, values]) => ({
         name: key === 'brand' ? 'Brend' : key,
-        filters: Array.from(values.entries()).map(([name, amount]) => ({
-            name,
-            amount,
-        })),
+        filters: Array.from(values.entries())
+            .map(([name, amount]) => ({
+                name,
+                amount,
+            }))
+            .sort((a, b) => {
+                const numA = parseInt(a.name.match(/\d+/)?.[0] || '0', 10)
+                const numB = parseInt(b.name.match(/\d+/)?.[0] || '0', 10)
+
+                return numA - numB || a.name.localeCompare(b.name)
+            }),
     }))
 
     return filterCategories
@@ -94,7 +101,7 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
 export const fetchFilteredProducts = async (
     subcategoryId: number,
     filters: Record<string, string[]>,
-    page: number = 1, 
+    page: number = 1,
     pageSize: number = 15
 ): Promise<any[]> => {
     isNaNObject('subcategory', subcategoryId)
