@@ -8,6 +8,7 @@ export interface ProductDTO {
     brand: string
     price: number
     discountPrice?: number
+    discountPercentage?: number
     retailPrice: number
     images: ImageDTO[]
     specifications: SpecificationsDTO

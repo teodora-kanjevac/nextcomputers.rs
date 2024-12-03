@@ -32,7 +32,10 @@
             </div>
 
             <div class="flex items-center justify-between mt-3">
-                <ProductPrice :discount-price="product.discountPrice" :price="product.price" />
+                <ProductPrice
+                    :price="product.price"
+                    :discount-price="product.discountPrice"
+                    :discount-percentage="product.discountPercentage" />
 
                 <button
                     type="button"

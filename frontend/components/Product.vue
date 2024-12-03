@@ -3,7 +3,11 @@
         <div class="flex flex-col flex-grow h-full rounded-lg border border-gray-200 bg-white py-4 px-5 shadow-md">
             <div class="h-40 w-full">
                 <a :href="`/proizvod/${product.id}`">
-                    <NuxtImg class="mx-auto h-full object-cover" :src="product.thumbnail" :alt="product.name" loading="lazy" />
+                    <NuxtImg
+                        class="mx-auto h-full object-cover"
+                        :src="product.thumbnail"
+                        :alt="product.name"
+                        loading="lazy" />
                 </a>
             </div>
             <div class="pt-9">
@@ -28,8 +32,10 @@
             </div>
 
             <div class="flex items-center justify-between mt-3">
-                <ProductPrice :discountPrice="product.discountPrice" :price="product.price" />
-
+                <ProductPrice
+                    :price="product.price"
+                    :discountPrice="product.discountPrice"
+                    :discount-percentage="product.discountPercentage" />
                 <button
                     type="button"
                     class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary"
@@ -52,5 +58,4 @@ const { product } = defineProps<{
 }>()
 
 const { element: productName, isOverflowing } = useClamping()
-
 </script>

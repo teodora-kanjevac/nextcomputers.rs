@@ -39,7 +39,7 @@
                         </div>
                         <div :class="{ hidden: !isDiscounted }">
                             <span class="rounded px-2 py-1 text-xs font-semibold bg-red-100 text-red-800">
-                                {{ discountPercentage }}% POPUSTA
+                                {{ product.discountPercentage }}% POPUSTA
                             </span>
                             <p class="text-xl line-through font-semibold leading-tight text-gray-500 mt-3 mb-1">
                                 {{ formatPrice(product?.price) }} RSD
@@ -104,7 +104,7 @@ import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import { useProductStore } from '~/stores/ProductStore'
 import type { ProductDTO } from '~/shared/types/ProductDTO'
-import { formatPrice, calculateDiscountPercentage } from '~/composables/utils'
+import { formatPrice } from '~/composables/utils'
 import type { ImageDTO } from '~/shared/types/ImageDTO'
 
 const productStore = useProductStore()
@@ -116,9 +116,6 @@ const galleryImages = ref<ImageDTO[]>([])
 
 const formattedPrice = computed(() => formatPrice(product.value?.discountPrice || product.value!.price))
 const isDiscounted = computed(() => product.value?.discountPrice && product.value.discountPrice > 0)
-const discountPercentage = computed(() =>
-    calculateDiscountPercentage(product.value!.price, product.value?.discountPrice)
-)
 
 watch(
     product,

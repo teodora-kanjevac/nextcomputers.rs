@@ -1,10 +1,12 @@
-import { IProductCardDTO } from './interfaces/IProductCard.dto'
+import { calculateDiscountPercentage } from '~/src/utils/product/productPriceUtils'
+import { IProductCardDTO } from '~/src/DTOs/interfaces/IProductCard.dto'
 
 export class ProductCardDTO implements IProductCardDTO {
     id: number
     name: string
     salePrice: number
     discountPrice?: number
+    discountPercentage?: number
     thumbnail: string
 
     constructor(product: any) {
@@ -12,6 +14,7 @@ export class ProductCardDTO implements IProductCardDTO {
         this.name = product.name
         this.salePrice = product.sale_price
         this.discountPrice = product.discount_price
+        this.discountPercentage = calculateDiscountPercentage(this.salePrice, this.discountPrice)
         this.thumbnail = product.image_url[0].thumbnail
     }
 }

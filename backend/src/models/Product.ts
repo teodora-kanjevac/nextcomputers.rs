@@ -12,6 +12,7 @@ export class Product {
     public price: number
     public discountPrice?: number
     public retailPrice: number
+    public salePrice: number
     public subcategoryId?: number
 
     constructor(product: any) {
@@ -22,6 +23,7 @@ export class Product {
         this.brand = product.brand
         this.price = product.price
         this.retailPrice = product.retail_price
+        this.salePrice = product.sale_price
         this.imageUrl = product.image_url
         this.specification = product.specification
         this.ean = product.ean

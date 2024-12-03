@@ -9,6 +9,8 @@ export const useFilterStore = defineStore('filter', {
         filteredProducts: [] as ProductCard[],
         selectedFilters: {} as Record<string, string[]>,
         allProductsFetched: false,
+        sortBy: null as string | null,
+        order: null as string | null,
         loading: false,
         page: 1,
         pageSize: 20,
@@ -48,6 +50,8 @@ export const useFilterStore = defineStore('filter', {
                 const { data } = await axios.post(`/api/filters/filteredProducts/${subcategoryId}`, {
                     filters: transformedFilters,
                     params: {
+                        sortBy: this.sortBy,
+                        order: this.order,
                         page: this.page,
                         pageSize: this.pageSize,
                     },

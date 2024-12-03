@@ -5,6 +5,7 @@ export interface ProductCardDTO {
     name: string
     price: number
     discountPrice?: number
+    discountPercentage?: number
     thumbnail: string
     ratings: RatingDTO
 }

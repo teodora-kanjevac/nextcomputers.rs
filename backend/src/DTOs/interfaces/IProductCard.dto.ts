@@ -4,4 +4,5 @@ export interface IProductCardDTO {
     thumbnail: string
     salePrice: number
     discountPrice?: number
+    discountPercentage?: number
 }

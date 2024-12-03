@@ -17,14 +17,14 @@
     </div>
 </template>
 <script setup lang="ts">
-import { formatPrice, calculateDiscountPercentage } from '~/composables/utils'
+import { formatPrice } from '~/composables/utils'
 
 const { discountPrice, price } = defineProps<{
     discountPrice: number | undefined
+    discountPercentage: number | undefined
     price: number
 }>()
 
 const formattedPrice = computed(() => formatPrice(discountPrice || price))
 const isDiscounted = computed(() => discountPrice && discountPrice > 0)
-const discountPercentage = computed(() => calculateDiscountPercentage(price, discountPrice))
 </script>

@@ -10,6 +10,7 @@ export class Product {
     public brand: string
     public price: number
     public discountPrice?: number
+    public discountPercentage?: number
     public retailPrice: number
     public images: Image[]
     public specifications: Specifications
@@ -23,6 +24,7 @@ export class Product {
         this.brand = product.brand
         this.price = parseInt(product.salePrice)
         this.discountPrice = parseInt(product.discountPrice)
+        this.discountPercentage = parseInt(product.discountPercentage)
         this.retailPrice = parseInt(product.retailPrice)
         this.images = product.imageUrl.map((image: any) => new Image(image))
         this.specifications = new Specifications(product.specification)

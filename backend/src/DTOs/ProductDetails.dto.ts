@@ -1,6 +1,7 @@
 import { IProductDetailsDTO } from '~/src/DTOs/interfaces/IProductDetails.dto'
 import { ReviewDTO } from '~/src/DTOs/Review.dto'
 import { ProductRatingDTO } from '~/src/DTOs/ProductRating.dto'
+import { calculateDiscountPercentage } from '~/src/utils/product/productPriceUtils'
 
 export class ProductDetailsDTO implements IProductDetailsDTO {
     id: number
@@ -14,6 +15,7 @@ export class ProductDetailsDTO implements IProductDetailsDTO {
     salePrice: number
     retailPrice: number
     discountPrice?: number
+    discountPercentage?: number
     reviews?: ReviewDTO[]
     ratings?: ProductRatingDTO
 
@@ -29,6 +31,7 @@ export class ProductDetailsDTO implements IProductDetailsDTO {
         this.salePrice = product.sale_price
         this.retailPrice = product.retail_price
         this.discountPrice = product.discount_price
+        this.discountPercentage = calculateDiscountPercentage(this.salePrice, this.discountPrice)
         this.reviews = product.review?.map((review: any) => new ReviewDTO(review))
         this.ratings = product.ratings;
     }

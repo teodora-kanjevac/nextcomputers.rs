@@ -10,7 +10,9 @@ import {
 import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import { isNaNObject } from '~/src/utils/ErrorHandling'
 import { Prisma } from '@prisma/client'
-import { mapRatingsToProductCards } from '~/src/utils/product/ratingMapper'
+import { mapRatingsToProductCards } from '~/src/utils/mapper/ratingMapper'
+import { mapBigInt } from '~/src/utils/mapper/bigIntMapper'
+import { fetchFilteredProductsSortedByDiscount, fetchFilteredProductsSortedByRating, fetchProductsSortedByDiscount } from '~/src/utils/sort/sortingUtils'
 
 export const fetchFilters = async (subcategoryId: number): Promise<FilterCategory[]> => {
     isNaNObject('subcategory', subcategoryId)
@@ -100,6 +102,8 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
 
 export const fetchFilteredProducts = async (
     subcategoryId: number,
+    sortBy: string = 'name',
+    order: string = 'asc',
     filters: Record<string, string[]>,
     page: number = 1,
     pageSize: number = 15
@@ -110,6 +114,17 @@ export const fetchFilteredProducts = async (
 
     if (!filters || typeof filters !== 'object') {
         throw new Error('Invalid filters')
+    }
+
+    const allowedSortBy = ['name', 'discountPercentage', 'sale_price', 'rating']
+    const allowedOrder = ['asc', 'desc']
+
+    if (!allowedSortBy.includes(sortBy) || !sortBy.trim()) {
+        sortBy = 'name'
+    }
+
+    if (!allowedOrder.includes(order) || !order.trim()) {
+        order = 'asc'
     }
 
     const subcategoryCondition = Prisma.sql`subcategory_id = ${subcategoryId}`
@@ -134,24 +149,43 @@ export const fetchFilteredProducts = async (
             ? Prisma.sql`AND (${Prisma.join(specificationConditions, ' AND ')})`
             : Prisma.sql``
 
+    if (sortBy === 'discountPercentage') {
+        const products: any = await fetchFilteredProductsSortedByDiscount(
+            pageSize,
+            offset,
+            subcategoryCondition,
+            brandCondition,
+            specificationCondition
+        )
+        return mapRatingsToProductCards(products)
+    }
+
+    if (sortBy === 'rating') {
+        const products: any = await fetchFilteredProductsSortedByRating(
+            pageSize,
+            offset,
+            subcategoryCondition,
+            brandCondition,
+            specificationCondition
+        )
+        return mapRatingsToProductCards(products)
+    }
+
+    const orderByCondition = Prisma.sql`ORDER BY ${Prisma.raw(sortBy)} ${Prisma.raw(order)}`
+
     const query = Prisma.sql`
         SELECT * FROM product
         WHERE ${subcategoryCondition}
         ${brandCondition}
         ${specificationCondition}
+        ${orderByCondition}
         LIMIT ${pageSize}
         OFFSET ${offset}
     `
 
     const products = await prisma.$queryRaw<ProductCardDTO[]>(query)
 
-    const mappedProducts = products.map(product =>
-        Object.fromEntries(
-            Object.entries(product).map(([key, value]) =>
-                typeof value === 'bigint' ? [key, Number(value)] : [key, value]
-            )
-        )
-    )
+    const mappedProducts = await mapBigInt(products)
 
     return mapRatingsToProductCards(mappedProducts)
 }
