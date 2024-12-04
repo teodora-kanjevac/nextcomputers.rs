@@ -2,10 +2,11 @@ import prisma from '~/src/utils/prisma'
 import { Product } from '~/src/models/Product'
 import { ProductDetailsDTO } from '~/src/DTOs/ProductDetails.dto'
 import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
-import { fetchUserFullName } from '~/src/services/userService'
 import { mapRatingsToProduct, mapRatingsToProductCards } from '~/src/utils/mapper/ratingMapper'
 import { isNaNObject, isNullObject } from '~/src/utils/ErrorHandling'
-import { fetchProductsSortedByDiscount, fetchProductsSortedByRating } from '~/src/utils/sort/sortingUtils'
+import { fetchSortedProducts } from '~/src/utils/product/productSortingUtils'
+import { fetchUsersFullNames } from '~/src/utils/user/userFullName'
+import { calculateOffset } from '~/src/utils/utils'
 
 export const fetchProducts = async (): Promise<Product[]> => {
     const product = await prisma.product.findMany()
@@ -16,24 +17,20 @@ export const fetchProductDetails = async (productId: number): Promise<ProductDet
     isNaNObject('product', productId)
 
     const product = await prisma.product.findUnique({
-        where: {
-            product_id: productId,
-        },
-        include: {
-            review: true,
-        },
+        where: { product_id: productId },
+        include: { review: true },
     })
 
     isNullObject('product', productId, product)
 
-    if (product?.review) {
-        product.review = await Promise.all(
-            product.review.map(async (review: any) => {
-                const user = await fetchUserFullName(review.user_id)
-                review.fullName = `${user.firstName} ${user.lastName}`
-                return review
-            })
-        )
+    if (product?.review?.length) {
+        const userIds = product.review.map(review => review.user_id)
+        const userMap = await fetchUsersFullNames(userIds)
+
+        product.review = product.review.map(review => ({
+            ...review,
+            fullName: `${userMap[review.user_id]?.firstName || ''} ${userMap[review.user_id]?.lastName || ''}`,
+        }))
     }
 
     return mapRatingsToProduct(product)
@@ -45,31 +42,11 @@ export const fetchProductsWithRatings = async (
     page: number = 1,
     pageSize: number = 15
 ): Promise<ProductCardDTO[]> => {
-    const offset = (page - 1) * pageSize
+    const offset = calculateOffset(page, pageSize)
 
-    if (sortBy === 'discountPercentage') {
-        const products: ProductCardDTO[] = await fetchProductsSortedByDiscount(pageSize, offset)
-        return mapRatingsToProductCards(products)
-    } else if (sortBy === 'rating') {
-        const products: ProductCardDTO[] = await fetchProductsSortedByRating(pageSize, offset)
-        return mapRatingsToProductCards(products)
-    } else {
-        const products = await prisma.product.findMany({
-            skip: offset,
-            take: pageSize,
-            select: {
-                product_id: true,
-                name: true,
-                sale_price: true,
-                discount_price: true,
-                image_url: true,
-            },
-            orderBy: {
-                [sortBy]: order,
-            },
-        })
-        return mapRatingsToProductCards(products)
-    }
+    const products = await fetchSortedProducts(sortBy, order, pageSize, offset)
+
+    return mapRatingsToProductCards(products)
 }
 
 export const fetchProductsWithRatingsForCategory = async (
@@ -79,34 +56,11 @@ export const fetchProductsWithRatingsForCategory = async (
     page: number = 1,
     pageSize: number = 15
 ): Promise<ProductCardDTO[]> => {
-    const offset = (page - 1) * pageSize
+    const offset = calculateOffset(page, pageSize)
 
     isNaNObject('subcategory', subcategoryId)
 
-    if (sortBy === 'discountPercentage') {
-        const products: ProductCardDTO[] = await fetchProductsSortedByDiscount(pageSize, offset, subcategoryId)
-        return mapRatingsToProductCards(products)
-    } else if (sortBy === 'rating') {
-        const products: ProductCardDTO[] = await fetchProductsSortedByRating(pageSize, offset, subcategoryId)
-        return mapRatingsToProductCards(products)
-    } else {
-        const products = await prisma.product.findMany({
-            skip: offset,
-            take: pageSize,
-            where: {
-                subcategory_id: subcategoryId,
-            },
-            select: {
-                product_id: true,
-                name: true,
-                sale_price: true,
-                discount_price: true,
-                image_url: true,
-            },
-            orderBy: {
-                [sortBy]: order,
-            },
-        })
-        return mapRatingsToProductCards(products)
-    }
+    const products = await fetchSortedProducts(sortBy, order, pageSize, offset, subcategoryId)
+
+    return mapRatingsToProductCards(products)
 }
