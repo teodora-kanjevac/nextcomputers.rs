@@ -1,5 +1,6 @@
 import prisma from '~/src/utils/prisma'
 import { Review } from '~/src/models/Review'
+import { isNaNObject } from '~/src/utils/ErrorHandling'
 
 export const fetchAllReviews = async (): Promise<Review[]> => {
     const reviews = await prisma.review.findMany()
@@ -7,9 +8,7 @@ export const fetchAllReviews = async (): Promise<Review[]> => {
 }
 
 export const fetchAllReviewsForProduct = async (productId: number): Promise<Review[]> => {
-    if (isNaN(productId)) {
-        throw new Error('Invalid product ID')
-    }
+    isNaNObject('product', productId)
 
     const reviews = await prisma.review.findMany({
         where: {
@@ -20,6 +19,7 @@ export const fetchAllReviewsForProduct = async (productId: number): Promise<Revi
     if (reviews.length === 0) {
         throw new Error(`Reviews for product ${productId} not found`)
     }
+    
     return reviews.map(review => new Review(review))
 }
 

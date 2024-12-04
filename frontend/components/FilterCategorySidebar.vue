@@ -21,8 +21,15 @@
                                     :filter-category="filterCategory" />
                             </div>
                         </template>
-                        <div v-else class="text-gray-700 text-center px-3 py-7">
-                            <p class="font-semibold">Izaberite kategoriju kako biste započeli sa filtriranjem</p>
+                        <div v-else-if="!route.params.subcategoryId" class="text-gray-900 text-center px-3 py-7">
+                            <h2 class="text-sm font-medium">
+                                Izaberite kategoriju kako biste započeli sa filtriranjem
+                            </h2>
+                        </div>
+                        <div v-else class="text-gray-900 text-center px-3 py-7">
+                            <h2 class="text-sm font-medium">
+                                Nema dostupnih filtera
+                            </h2>
                         </div>
                     </div>
 

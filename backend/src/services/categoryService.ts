@@ -1,5 +1,6 @@
 import prisma from '~/src/utils/prisma'
 import { Category } from '~/src/models/Category'
+import { isNaNObject, isNullObject } from '~/src/utils/ErrorHandling'
 
 export const fetchCategories = async () => {
     const category = await prisma.category.findMany({
@@ -11,9 +12,7 @@ export const fetchCategories = async () => {
 }
 
 export const fetchCategoryById = async (categoryId: number) => {
-    if (isNaN(categoryId)) {
-        throw new Error('Invalid category ID')
-    }
+    isNaNObject('category', categoryId)
 
     const category = await prisma.category.findUnique({
         where: {
@@ -24,9 +23,7 @@ export const fetchCategoryById = async (categoryId: number) => {
         }
     })
 
-    if (!category) {
-        throw new Error(`Category with ID = ${categoryId} not found`)
-    }
+    isNullObject('category', categoryId, category)
 
     return new Category(category)
 }

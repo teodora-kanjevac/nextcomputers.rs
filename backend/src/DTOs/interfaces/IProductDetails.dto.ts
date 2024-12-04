@@ -13,6 +13,7 @@ export interface IProductDetailsDTO {
     salePrice: number
     retailPrice: number
     discountPrice?: number
+    discountPercentage?: number
     reviews?: ReviewDTO[]
     ratings?: ProductRatingDTO
 }

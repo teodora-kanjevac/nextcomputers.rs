@@ -1,16 +1,20 @@
 import prisma from '~/src/utils/prisma'
 import { FilterCategory } from '~/src/models/FilterCategory'
-import {
-    GLOBAL_FILTERS_TO_EXCLUDE,
-    SUBCATEGORY_FILTER_MAP,
-    SINGLE_PRODUCT_VALUE_THRESHOLD,
-    USAGE_THRESHOLD_PERCENT,
-    VALUE_DIVERSITY_THRESHOLD,
-} from '~/src/utils/filter/globalFilterSettings'
+import { GLOBAL_FILTERS_TO_EXCLUDE, SUBCATEGORY_FILTER_MAP } from '~/src/utils/filter/globalFilterSettings'
 import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import { isNaNObject } from '~/src/utils/ErrorHandling'
 import { Prisma } from '@prisma/client'
-import { mapRatingsToProductCards } from '../utils/product/ratingMapper'
+import { mapRatingsToProductCards } from '~/src/utils/mapper/ratingMapper'
+import { mapBigInt } from '~/src/utils/mapper/bigIntMapper'
+import { fetchSortedByRating, fetchSortedByDiscount } from '~/src/utils/sort/sortingUtils'
+import { calculateOffset } from '~/src/utils/utils'
+import { buildQueryConditions } from '~/src/utils/filter/queryConditions'
+import { handleFilterValidation } from '~/src/utils/filter/validateFilters'
+import {
+    filterMapFilterCriteria,
+    mapFiltersToCategories,
+    processSpecifications,
+} from '~/src/utils/filter/filterFetchingUtils'
 
 export const fetchFilters = async (subcategoryId: number): Promise<FilterCategory[]> => {
     isNaNObject('subcategory', subcategoryId)
@@ -30,20 +34,11 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
     }
 
     products.forEach(product => {
-        const brand = product.brand
-        if (brand) {
-            const currentCount = filterMap.brand.get(brand) || 0
-            filterMap.brand.set(brand, currentCount + 1)
+        if (product.brand) {
+            const currentCount = filterMap.brand.get(product.brand) || 0
+            filterMap.brand.set(product.brand, currentCount + 1)
         }
-
-        const specifications = product.specification as Record<string, string>
-        Object.entries(specifications).forEach(([key, value]) => {
-            if (!filterMap[key]) {
-                filterMap[key] = new Map()
-            }
-            const currentCount = filterMap[key].get(value) || 0
-            filterMap[key].set(value, currentCount + 1)
-        })
+        processSpecifications(product.specification as Record<string, string>, filterMap)
     })
 
     GLOBAL_FILTERS_TO_EXCLUDE.forEach(filter => delete filterMap[filter])
@@ -56,95 +51,59 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
             }
         })
     } else {
-        Object.entries(filterMap).forEach(([key, values]) => {
-            const totalOccurrences = Array.from(values.values()).reduce((sum, count) => sum + count, 0)
-            const distinctValueCount = values.size
-
-            if (totalOccurrences < products.length * USAGE_THRESHOLD_PERCENT) {
-                delete filterMap[key]
-                return
-            }
-
-            if (distinctValueCount > VALUE_DIVERSITY_THRESHOLD) {
-                delete filterMap[key]
-                return
-            }
-
-            const singleProductValues = Array.from(values.values()).filter(count => count === 1).length
-            const singleProductPercentage = singleProductValues / distinctValueCount
-
-            if (singleProductPercentage > SINGLE_PRODUCT_VALUE_THRESHOLD) {
-                delete filterMap[key]
-                return
-            }
-        })
+        filterMapFilterCriteria(filterMap, products)
     }
 
-    const filterCategories = Object.entries(filterMap).map(([key, values]) => ({
-        name: key === 'brand' ? 'Brend' : key,
-        filters: Array.from(values.entries()).map(([name, amount]) => ({
-            name,
-            amount,
-        })),
-    }))
-
-    return filterCategories
+    return mapFiltersToCategories(filterMap)
 }
 
 export const fetchFilteredProducts = async (
     subcategoryId: number,
-    filters: Record<string, string[]>,
-    page: number = 1, 
+    initSortBy: string,
+    initOrder: string,
+    initFilters: Record<string, string[]>,
+    page: number = 1,
     pageSize: number = 15
 ): Promise<any[]> => {
     isNaNObject('subcategory', subcategoryId)
 
-    const offset = (page - 1) * pageSize
+    const offset = calculateOffset(page, pageSize)
 
-    if (!filters || typeof filters !== 'object') {
-        throw new Error('Invalid filters')
+    const { filters, sortBy, order } = handleFilterValidation(initFilters, initSortBy, initOrder)
+
+    const { subcategoryCondition, brandCondition, specificationCondition } = buildQueryConditions(
+        subcategoryId,
+        filters
+    )
+
+    if (['discountPercentage', 'rating'].includes(sortBy)) {
+        const sortFunction =
+            sortBy === 'discountPercentage' ? fetchSortedByDiscount : fetchSortedByRating
+        const products = await sortFunction(
+            pageSize,
+            offset,
+            subcategoryId,
+            brandCondition,
+            specificationCondition
+        )
+        return mapRatingsToProductCards(products)
     }
 
-    const subcategoryCondition = Prisma.sql`subcategory_id = ${subcategoryId}`
-
-    let brandCondition = Prisma.sql``
-    if (filters.brand && filters.brand.length > 0) {
-        brandCondition = Prisma.sql`AND brand IN (${Prisma.join(filters.brand)})`
-    }
-
-    const specificationConditions: Prisma.Sql[] = []
-    Object.entries(filters).forEach(([key, values]) => {
-        if (key === 'brand') return
-        if (values.length > 0) {
-            specificationConditions.push(
-                Prisma.sql`JSON_EXTRACT(specification, '$."${Prisma.raw(key)}"') IN (${Prisma.join(values)})`
-            )
-        }
-    })
-
-    const specificationCondition =
-        specificationConditions.length > 0
-            ? Prisma.sql`AND (${Prisma.join(specificationConditions, ' AND ')})`
-            : Prisma.sql``
+    const orderByCondition = Prisma.sql`ORDER BY ${Prisma.raw(sortBy)} ${Prisma.raw(order)}`
 
     const query = Prisma.sql`
         SELECT * FROM product
         WHERE ${subcategoryCondition}
         ${brandCondition}
         ${specificationCondition}
+        ${orderByCondition}
         LIMIT ${pageSize}
         OFFSET ${offset}
     `
 
     const products = await prisma.$queryRaw<ProductCardDTO[]>(query)
 
-    const mappedProducts = products.map(product =>
-        Object.fromEntries(
-            Object.entries(product).map(([key, value]) =>
-                typeof value === 'bigint' ? [key, Number(value)] : [key, value]
-            )
-        )
-    )
+    const mappedProducts = await mapBigInt(products)
 
     return mapRatingsToProductCards(mappedProducts)
 }

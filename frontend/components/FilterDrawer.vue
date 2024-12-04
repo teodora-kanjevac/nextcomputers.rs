@@ -2,7 +2,7 @@
     <div>
         <div class="text-center lg:hidden">
             <button
-                class="text-white bg-primary-light inline-flex items-center text-sm md:text-base font-medium rounded-lg px-3 py-2.5 mb-2"
+                class="text-white bg-primary-light inline-flex items-center text-sm md:text-base font-medium rounded-lg px-3 py-2.5"
                 type="button"
                 data-drawer-target="filterDrawer"
                 data-drawer-show="filterDrawer"
@@ -40,8 +40,11 @@
                             v-model:selected-filters="selectedFilters[filterCategory.name]" />
                     </div>
                 </template>
-                <div class="text-gray-700 text-center px-3 py-7 border-2 border-rose-300 bg-rose-100 rounded-lg" v-else>
-                    <p class="font-semibold">Izaberite kategoriju kako biste započeli sa filtriranjem</p>
+                <div class="text-gray-900 text-center mt-3 px-3 py-7 border-2 border-rose-300 bg-rose-100 rounded-lg">
+                    <p v-if="!route.params.subcategoryId" class="font-medium">
+                        Izaberite kategoriju kako biste započeli sa filtriranjem
+                    </p>
+                    <p v-else class="font-medium">Nema dostupnih filtera</p>
                 </div>
             </div>
         </div>
@@ -58,6 +61,7 @@ import type { DrawerOptions } from 'flowbite'
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
 import { useFilterStore } from '~/stores/FilterStore'
 
+const route = useRoute()
 let drawer = ref<Drawer | null>(null)
 const isDrawerOpen = ref(false)
 

@@ -5,6 +5,7 @@ export class ProductCard {
     public name: string
     public price: number
     public discountPrice?: number
+    public discountPercentage?: number
     public thumbnail: string
     public ratings: Rating
 
@@ -13,6 +14,7 @@ export class ProductCard {
         this.name = product.name
         this.price = parseInt(product.salePrice)
         this.discountPrice = parseInt(product.discountPrice)
+        this.discountPercentage = parseInt(product.discountPercentage)
         this.thumbnail = product.thumbnail
         this.ratings = new Rating(product.ratings)
     }
