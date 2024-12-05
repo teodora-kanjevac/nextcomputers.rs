@@ -7,6 +7,7 @@ import subcategoryRoutes from '~/src/routes/subcategoryRoutes'
 import productRoutes from '~/src/routes/productRoutes'
 import reviewRoutes from '~/src/routes/reviewRoutes'
 import filterRoutes from '~/src/routes/filterRoutes'
+import searchRoutes from '~/src/routes/searchRoutes'
 
 dotenv.config()
 const app: Application = express()
@@ -25,6 +26,7 @@ app.use('/api/subcategories', subcategoryRoutes)
 app.use('/api/products', productRoutes)
 app.use('/api/reviews', reviewRoutes)
 app.use('/api/filters', filterRoutes)
+app.use('/api/search', searchRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

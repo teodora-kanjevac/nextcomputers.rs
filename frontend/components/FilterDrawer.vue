@@ -41,7 +41,7 @@
                     </div>
                 </template>
                 <div class="text-gray-900 text-center mt-3 px-3 py-7 border-2 border-rose-300 bg-rose-100 rounded-lg">
-                    <p v-if="!route.params.subcategoryId" class="font-medium">
+                    <p v-if="!$isCategory" class="font-medium">
                         Izaberite kategoriju kako biste započeli sa filtriranjem
                     </p>
                     <p v-else class="font-medium">Nema dostupnih filtera</p>
@@ -61,7 +61,8 @@ import type { DrawerOptions } from 'flowbite'
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
 import { useFilterStore } from '~/stores/FilterStore'
 
-const route = useRoute()
+const { $isCategory } = useNuxtApp()
+
 let drawer = ref<Drawer | null>(null)
 const isDrawerOpen = ref(false)
 

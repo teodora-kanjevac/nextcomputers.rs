@@ -1,7 +1,7 @@
 <template>
     <div>
         <NavBar />
-        <SearchResultsSubcategories :subcategory-id="subcategoryId" />
+        <ProductsBySubcategory :subcategory-id="subcategoryId" />
         <Footer />
     </div>
 </template>
@@ -9,15 +9,13 @@
 <script setup>
 import NavBar from '~/layouts/NavBar.vue'
 import Footer from '~/layouts/Footer.vue'
-import SearchResultsSubcategories from '~/layouts/SearchResultsSubcategories.vue'
-import { useProductStore } from '~/stores/ProductStore'
+import ProductsBySubcategory from '~/layouts/ProductsBySubcategory.vue'
 import { useCategoryStore } from '~/stores/CategoryStore';
 import { useFilterStore } from '~/stores/FilterStore';
 
 const route = useRoute()
 const categoryStore = useCategoryStore()
 const filterStore = useFilterStore()
-const productStore = useProductStore()
 
 const subcategoryId = parseInt(route.params.subcategoryId)
 

@@ -8,7 +8,7 @@ import { mapRatingsToProductCards } from '~/src/utils/mapper/ratingMapper'
 import { mapBigInt } from '~/src/utils/mapper/bigIntMapper'
 import { fetchSortedByRating, fetchSortedByDiscount } from '~/src/utils/sort/sortingUtils'
 import { calculateOffset } from '~/src/utils/utils'
-import { buildQueryConditions } from '~/src/utils/filter/queryConditions'
+import { buildSubcategoryQueryConditions } from '~/src/utils/filter/queryConditions'
 import { handleFilterValidation } from '~/src/utils/filter/validateFilters'
 import {
     filterMapFilterCriteria,
@@ -57,6 +57,63 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
     return mapFiltersToCategories(filterMap)
 }
 
+export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCategory[]> => {
+    if (!searchTerm) return []
+
+    const products = await prisma.product.findMany({
+        where: {
+            OR: [
+                { name: { contains: searchTerm } },
+                { product_id: parseInt(searchTerm, 10) || undefined },
+                { ean: searchTerm },
+            ],
+        },
+        select: {
+            brand: true,
+            subcategory: {
+                select: {
+                    subcategory_id: true,
+                    name: true,
+                },
+            },
+        },
+    })
+
+    const filterMap: Record<string, Map<string, number>> = {
+        brand: new Map(),
+    }
+    const subcategoryMap: Record<string, { name: string, productCount: number }> = {}
+
+    products.forEach(product => {
+        if (product.subcategory) {
+            const subcategoryId = product.subcategory.name
+            if (!subcategoryMap[subcategoryId]) {
+                subcategoryMap[subcategoryId] = {
+                    name: product.subcategory.name,
+                    productCount: 0,
+                }
+            }
+            subcategoryMap[subcategoryId].productCount += 1
+        }
+        if (product.brand) {
+            const currentCount = filterMap.brand.get(product.brand) || 0
+            filterMap.brand.set(product.brand, currentCount + 1)
+        }
+    })
+
+    const filters = mapFiltersToCategories(filterMap)
+
+    filters.push({
+        name: 'Kategorija',
+        filters: Object.entries(subcategoryMap).map(([key, value]) => ({
+            name: value.name,
+            amount: value.productCount,
+        }))
+    })
+
+    return filters
+}
+
 export const fetchFilteredProducts = async (
     subcategoryId: number,
     initSortBy: string,
@@ -71,21 +128,14 @@ export const fetchFilteredProducts = async (
 
     const { filters, sortBy, order } = handleFilterValidation(initFilters, initSortBy, initOrder)
 
-    const { subcategoryCondition, brandCondition, specificationCondition } = buildQueryConditions(
+    const { subcategoryCondition, brandCondition, specificationCondition } = buildSubcategoryQueryConditions(
         subcategoryId,
         filters
     )
 
     if (['discountPercentage', 'rating'].includes(sortBy)) {
-        const sortFunction =
-            sortBy === 'discountPercentage' ? fetchSortedByDiscount : fetchSortedByRating
-        const products = await sortFunction(
-            pageSize,
-            offset,
-            subcategoryId,
-            brandCondition,
-            specificationCondition
-        )
+        const sortFunction = sortBy === 'discountPercentage' ? fetchSortedByDiscount : fetchSortedByRating
+        const products = await sortFunction(pageSize, offset, subcategoryId, brandCondition, specificationCondition)
         return mapRatingsToProductCards(products)
     }
 

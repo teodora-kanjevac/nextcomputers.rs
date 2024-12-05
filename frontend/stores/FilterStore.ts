@@ -25,6 +25,15 @@ export const useFilterStore = defineStore('filter', {
                 console.error('Failed to fetch filters:', error)
             }
         },
+        async fetchSearchFilters(searchTerm: string) {
+            try {
+                const { data } = await axios.get(`/api/filters/search/${searchTerm}`)
+
+                this.categoryFilters = data.map((filter: any) => new FilterCategory(filter))
+            } catch (error) {
+                console.error('Failed to fetch filters:', error)
+            }
+        },
         async fetchFilteredProducts(subcategoryId: number, reset: boolean = false) {
             if (this.loading) return
 

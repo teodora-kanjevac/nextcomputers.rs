@@ -30,18 +30,22 @@ import SortDescendingIcon from './icons/SortDescendingIcon.vue'
 import { destroyComponent } from '~/composables/useDestroy'
 import { initializeDropdown } from '~/composables/useDropdown'
 import { useFilterStore } from '~/stores/FilterStore'
+import { useSearchStore } from '~/stores/SearchStore'
 import { useProductStore } from '~/stores/ProductStore'
 import { options } from '~/assets/static/sortOptions'
+
+const { $isSearchPage, $isCategory } = useNuxtApp()
 
 const selectedOption = ref({ label: 'Izaberite opciju', sortBy: '', order: '' })
 
 let dropdown = ref<Dropdown | null>(null)
 
 const filterStore = useFilterStore()
+const searchStore = useSearchStore()
 const productStore = useProductStore()
 const route = useRoute()
 
-const subcategoryId = parseInt(route.params.subcategoryId as string) || null
+const subcategoryId = parseInt(route.params.subcategoryId as string)
 
 const initializeSortDropdown = () => {
     useFlowbite(() => {
@@ -56,7 +60,12 @@ const initializeSortDropdown = () => {
 }
 
 function selectOption(option: any) {
-    if (subcategoryId) {
+    if ($isSearchPage) {
+        searchStore.sortBy = option.sortBy
+        searchStore.order = option.order
+        searchStore.fetchSearchResults(true)
+    }
+    if ($isCategory) {
         filterStore.sortBy = option.sortBy
         filterStore.order = option.order
         filterStore.fetchFilteredProducts(subcategoryId, true)
