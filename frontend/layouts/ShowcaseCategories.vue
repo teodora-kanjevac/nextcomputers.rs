@@ -4,7 +4,7 @@
             <div class="mx-auto max-w-screen-xl px-6 2xl:px-0">
                 <div class="flex flex-col gap-4">
                     <div class="mb-2 mx-1 flex items-center justify-between gap-4">
-                        <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl">Pretražite po kategorijama</h2>
+                        <p class="text-xl font-semibold text-gray-900 sm:text-2xl">Pretražite po kategorijama</p>
                         <SeeAllCategoriesLink class="hidden sm:flex mt-2"/>
                     </div>
 

@@ -1,5 +1,5 @@
 <template>
-    <div class="mx-3">
+    <div class="lg:mx-3">
         <h2 class="text-gray-900 text-base 2xl:text-lg font-medium px-2 pb-2 mb-4 border-b-2 border-primary">
             {{ filterCategory.name }}
         </h2>
@@ -59,7 +59,7 @@ const toggleShowMoreFilters = async () => {
 </script>
 
 <style>
-#filter{
+#filter {
     height: 0;
 }
 

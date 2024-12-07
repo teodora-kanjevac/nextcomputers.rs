@@ -14,11 +14,11 @@
                     <span class="font-medium flex items-center me-3">Sortiraj po</span>
                     <SortDropdown />
                 </div>
-                <div v-if="filterStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
+                <div v-if="sharedStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
                     Ucitavanje proizvoda...
                 </div>
                 <div
-                    v-if="!filterStore.loading && productCards.length === 0"
+                    v-if="!sharedStore.loading && productCards.length === 0"
                     class="text-center font-semibold text-xl text-gray-500 mt-20">
                     Nema proizvoda za ovu pretragu.
                 </div>
@@ -39,11 +39,13 @@ import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useCategoryStore } from '~/stores/CategoryStore'
 import { useFilterStore } from '~/stores/FilterStore'
 import { useScroll } from '@vueuse/core'
+import { useSharedStore } from '~/stores/SharedStore'
 
 const { subcategoryId } = defineProps<{
     subcategoryId: number
 }>()
 
+const sharedStore = useSharedStore()
 const categoryStore = useCategoryStore()
 const filterStore = useFilterStore()
 
@@ -67,7 +69,7 @@ const nearBottom = computed(() => {
 onMounted(() => {
     categoryStore.fetchSubcategoryById(subcategoryId)
     watch(nearBottom, isNearBottom => {
-        if (isNearBottom && !filterStore.loading && !filterStore.allProductsFetched) {
+        if (isNearBottom && !sharedStore.loading && !sharedStore.allProductsFetched) {
             filterStore.fetchFilteredProducts(subcategoryId)
         }
     })

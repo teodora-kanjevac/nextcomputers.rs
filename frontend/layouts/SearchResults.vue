@@ -14,11 +14,11 @@
                     <span class="font-medium flex items-center me-3">Sortiraj po</span>
                     <SortDropdown />
                 </div>
-                <div v-if="searchStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
+                <div v-if="shareStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
                     Ucitavanje proizvoda...
                 </div>
                 <div
-                    v-if="!searchStore.loading && productCards.length === 0"
+                    v-if="!shareStore.loading && productCards.length === 0"
                     class="text-center font-semibold text-xl text-gray-500 mt-20">
                     Nema proizvoda za ovu pretragu.
                 </div>
@@ -38,7 +38,9 @@ import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useSearchStore } from '~/stores/SearchStore'
 import { useFilterStore } from '~/stores/FilterStore'
 import { useScroll } from '@vueuse/core'
+import { useSharedStore } from '~/stores/SharedStore';
 
+const shareStore = useSharedStore()
 const searchStore = useSearchStore()
 const filterStore = useFilterStore()
 
@@ -56,15 +58,16 @@ watch(
         }
         searchStore.query = query as string
         filterStore.fetchSearchFilters(query as string)
-        searchStore.fetchSearchResults(true)
+        searchStore.fetchFilteredSearchResults(true)
     },
     { immediate: true }
 )
 
 watch(
-    () => searchStore.selectedFilters,
+    () => filterStore.selectedFilters,
     async () => {
-        await searchStore.fetchFilteredSearchProducts(true)
+        searchStore.selectedFilters = filterStore.selectedFilters
+        await searchStore.fetchFilteredSearchResults(true)
     },
     { deep: true }
 )
@@ -75,8 +78,8 @@ const nearBottom = computed(() => {
 
 onMounted(() => {
     watch(nearBottom, isNearBottom => {
-        if (isNearBottom && !searchStore.loading && !searchStore.allProductsFetched) {
-            searchStore.fetchSearchResults()
+        if (isNearBottom && !shareStore.loading && !shareStore.allProductsFetched) {
+            searchStore.fetchFilteredSearchResults()
         }
     })
 })

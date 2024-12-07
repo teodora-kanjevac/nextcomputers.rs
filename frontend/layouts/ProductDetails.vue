@@ -31,9 +31,9 @@
                     <StarRating :rating="product?.ratings" />
                 </div>
 
-                <div class="flex items-center justify-between mt-3">
+                <div class="flex items-center justify-between mt-5">
                     <div class="flex-col">
-                        <div v-if="product?.retailPrice" class="mb-4 text-sm sm:text-base font-medium">
+                        <div v-if="product?.retailPrice && product.retailPrice > product.price" class="mb-4 text-sm sm:text-base font-medium">
                             Maloprodajna cena: {{ formatPrice(product?.retailPrice) }}
                             <span class="text-sm">RSD</span>
                         </div>

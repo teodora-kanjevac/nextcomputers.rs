@@ -44,7 +44,7 @@ export const filterMapFilterCriteria = (filterMap: Record<string, Map<string, nu
 
 export const mapFiltersToCategories = (filterMap: Record<string, Map<string, number>>): FilterCategory[] => {
     return Object.entries(filterMap).map(([key, values]) => ({
-        name: key === 'brand' ? 'Brend' : key,
+        name: key === 'brand' ? 'Brend' : key === 'subcategory' ? 'Kategorija' : key,
         filters: Array.from(values.entries())
             .map(([name, amount]) => ({ name, amount }))
             .sort((a, b) => sortFilterValues(a, b)),

@@ -1,7 +1,7 @@
 <template>
     <div>
         <nav class="bg-gray-800 border-gray-200">
-            <div class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto p-4">
+            <div class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto p-3 sm:p-4">
                 <Logo class="font-medium text-gray-100" />
 
                 <div class="flex md:flex-grow md:w-40 md:xl:px-20 md:pl-5">

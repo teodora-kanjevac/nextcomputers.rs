@@ -1,8 +1,5 @@
 export default defineNuxtConfig({
     ssr: true,
-    generate: {
-        routes: ['/'],
-    },
     app: {
         head: {
             htmlAttrs: {

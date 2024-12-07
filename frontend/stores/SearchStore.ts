@@ -1,70 +1,69 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
+import { useSharedStore } from '~/stores/SharedStore'
 import { ProductCard } from '~/shared/classes/ProductCard'
 
 export const useSearchStore = defineStore('search', {
     state: () => ({
         query: null as string | null,
         searchResults: [] as ProductCard[],
-        filteredProducts: [] as ProductCard[],
         selectedFilters: {} as Record<string, string[]>,
-        allProductsFetched: false,
-        sortBy: null as string | null,
-        order: null as string | null,
-        loading: false,
-        page: 1,
-        pageSize: 20,
     }),
     actions: {
         async fetchSearchResults(reset: boolean = false) {
-            if (this.loading) return
-            this.loading = true
+            const sharedStore = useSharedStore()
+            if (sharedStore.loading) return
+            sharedStore.setLoading(true)
 
             if (reset) {
-                this.page = 1
+                sharedStore.resetPagination()
                 this.searchResults = []
-                this.allProductsFetched = false
+                sharedStore.setFetchedProducts(false)
             }
 
             try {
                 const { data } = await axios.get('/api/search', {
                     params: {
                         q: this.query,
-                        sortBy: this.sortBy,
-                        order: this.order,
-                        page: this.page,
-                        pageSize: this.pageSize,
+                        sortBy: sharedStore.sortBy,
+                        order: sharedStore.order,
+                        page: sharedStore.page,
+                        pageSize: sharedStore.pageSize,
                     },
                 })
 
                 this.searchResults.push(...data.map((product: any) => new ProductCard(product)))
 
                 if (data.length === 0) {
-                    this.allProductsFetched = true
+                    sharedStore.setFetchedProducts(true)
                 }
 
-                this.page++
+                sharedStore.incrementPage()
             } catch (error) {
                 console.error('Failed to fetch products:', error)
             } finally {
-                this.loading = false
+                sharedStore.setLoading(false)
             }
         },
-        async fetchFilteredSearchProducts(reset: boolean = false) {
-            if (this.loading) return
+        async fetchFilteredSearchResults(reset: boolean = false) {
+            const sharedStore = useSharedStore()
+            if (sharedStore.loading) return
 
             if (reset) {
-                this.page = 1
-                this.filteredProducts = []
-                this.allProductsFetched = false
+                this.searchResults = []
+                sharedStore.resetPagination()
+                sharedStore.setFetchedProducts(false)
             }
 
-            if (this.allProductsFetched) return
+            if (sharedStore.allProductsFetched) return
 
-            this.loading = true
+            sharedStore.setLoading(true)
 
             try {
-                const filterKeyMap: Record<string, string> = { Brend: 'brand' }
+                const filterKeyMap: Record<string, string> = {
+                    Brend: 'brand',
+                    Kategorija: 'subcategory',
+                }
 
                 const transformedFilters = Object.entries(this.selectedFilters).reduce((acc, [key, value]) => {
                     const backendKey = filterKeyMap[key] || key
@@ -75,29 +74,25 @@ export const useSearchStore = defineStore('search', {
                 const { data } = await axios.post(`/api/search/filteredProducts?q=${this.query}`, {
                     filters: transformedFilters,
                     params: {
-                        sortBy: this.sortBy,
-                        order: this.order,
-                        page: this.page,
-                        pageSize: this.pageSize,
+                        sortBy: sharedStore.sortBy,
+                        order: sharedStore.order,
+                        page: sharedStore.page,
+                        pageSize: sharedStore.pageSize,
                     },
                 })
 
-                this.filteredProducts.push(...data.map((product: any) => new ProductCard(product)))
+                this.searchResults.push(...data.map((product: any) => new ProductCard(product)))
 
                 if (data.length === 0) {
-                    this.allProductsFetched = true
+                    sharedStore.setFetchedProducts(true)
                 }
 
-                this.page++
+                sharedStore.incrementPage()
             } catch (error) {
                 console.error('Failed to fetch products:', error)
             } finally {
-                this.loading = false
+                sharedStore.setLoading(false)
             }
-        },
-        clearSearch() {
-            this.query = null
-            this.searchResults = []
-        },
+        }
     },
 })

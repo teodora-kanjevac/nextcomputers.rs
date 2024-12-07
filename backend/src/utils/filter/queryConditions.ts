@@ -43,7 +43,6 @@ export const buildSearchResultsQueryConditions = async (
         acc[subcategory.name] = subcategory.subcategory_id
         return acc
     }, {} as Record<string, number>)
-
     const brandCondition = filters.brand?.length
         ? Prisma.sql`AND brand IN (${Prisma.join(filters.brand)})`
         : Prisma.sql``
@@ -51,7 +50,7 @@ export const buildSearchResultsQueryConditions = async (
     const categoryCondition = filters.subcategory?.length
         ? Prisma.sql`AND subcategory_id IN (${Prisma.join(filters.subcategory.map(name => subcategoryMap[name]))})`
         : Prisma.sql``
-
+        
     const searchCondition = searchTerm
         ? Prisma.sql`(name LIKE CONCAT('%', ${searchTerm}, '%') OR
                  product_id = ${isNaN(parseInt(searchTerm, 10)) ? null : parseInt(searchTerm, 10)} OR

@@ -116,9 +116,9 @@ export const fetchSearchResultsSortedByRating = async (
     categoryFilter?: Prisma.Sql
 ): Promise<any[]> => {
     const searchCondition = searchTerm
-        ? Prisma.sql`(name LIKE CONCAT('%', ${searchTerm}, '%') OR
-                     product_id = ${isNaN(parseInt(searchTerm, 10)) ? null : parseInt(searchTerm, 10)} OR
-                     ean = ${searchTerm})`
+        ? Prisma.sql`(p.name LIKE CONCAT('%', ${searchTerm}, '%') OR
+                     p.product_id = ${isNaN(parseInt(searchTerm, 10)) ? null : parseInt(searchTerm, 10)} OR
+                     p.ean = ${searchTerm})`
         : Prisma.sql`TRUE`
     const categoryCondition = categoryFilter ? Prisma.sql`${categoryFilter}` : Prisma.sql``
     const brandCondition = brandFilter ? Prisma.sql`${brandFilter}` : Prisma.sql``

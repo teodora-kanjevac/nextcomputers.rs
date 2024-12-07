@@ -21,6 +21,6 @@ const searchStore = useSearchStore()
 onMounted(() => {
     categoryStore.fetchCategories()
     filterStore.fetchSearchFilters(searchStore.query)
-    searchStore.fetchSearchResults(true)
+    searchStore.fetchFilteredSearchResults(true)
 })
 </script>

@@ -27,7 +27,9 @@
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useProductStore } from '~/stores/ProductStore'
 import { useScroll } from '@vueuse/core'
+import { useSharedStore } from '~/stores/SharedStore';
 
+const sharedStore = useSharedStore()
 const productStore = useProductStore()
 const productCards = computed<ProductCardDTO[]>(() => productStore.productCards)
 
@@ -39,7 +41,7 @@ const nearBottom = computed(() => {
 
 onMounted(() => {
     watch(nearBottom, (isNearBottom) => {
-        if (isNearBottom && !productStore.loading && !productStore.allProductsFetched) {
+        if (isNearBottom && !sharedStore.loading && !sharedStore.allProductsFetched) {
             productStore.fetchProductsWithRatings()
         }
     })

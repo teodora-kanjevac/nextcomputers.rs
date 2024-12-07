@@ -2,83 +2,80 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { Product } from '~/shared/classes/Product'
 import { ProductCard } from '~/shared/classes/ProductCard'
+import { useSharedStore } from './SharedStore'
 
 export const useProductStore = defineStore('product', {
     state: () => ({
         product: null as Product | null,
         productCards: [] as ProductCard[],
-        allProductsFetched: false,
-        sortBy: null as string | null,
-        order: null as string | null,
-        loading: false,
-        page: 1,
-        pageSize: 20,
     }),
     actions: {
         async fetchProductsWithRatings(reset: boolean = false) {
-            if (this.loading) return
-            this.loading = true
+            const sharedStore = useSharedStore()
+            if (sharedStore.loading) return
+            sharedStore.setLoading(true)
 
             if (reset) {
-                this.page = 1
                 this.productCards = []
-                this.allProductsFetched = false
+                sharedStore.resetPagination()
+                sharedStore.setFetchedProducts(false)
             }
 
             try {
                 const { data } = await axios.get('/api/products/ratings', {
                     params: {
-                        sortBy: this.sortBy,
-                        order: this.order,
-                        page: this.page,
-                        pageSize: this.pageSize,
+                        sortBy: sharedStore.sortBy,
+                        order: sharedStore.order,
+                        page: sharedStore.page,
+                        pageSize: sharedStore.pageSize,
                     },
                 })
 
                 this.productCards.push(...data.map((product: any) => new ProductCard(product)))
 
                 if (data.length === 0) {
-                    this.allProductsFetched = true
+                    sharedStore.setFetchedProducts(true)
                 }
 
-                this.page++
+                sharedStore.incrementPage()
             } catch (error) {
                 console.error('Failed to fetch products:', error)
             } finally {
-                this.loading = false
+                sharedStore.setLoading(false)
             }
         },
         async fetchProductsWithRatingsForCategories(subcategoryId: number, reset: boolean = false) {
-            if (this.loading || this.allProductsFetched) return
-            this.loading = true
+            const sharedStore = useSharedStore()
+            if (sharedStore.loading) return
+            sharedStore.setLoading(true)
 
             if (reset) {
-                this.page = 1
                 this.productCards = []
-                this.allProductsFetched = false
+                sharedStore.resetPagination()
+                sharedStore.setFetchedProducts(false)
             }
 
             try {
                 const { data } = await axios.get(`/api/products/ratings/${subcategoryId}`, {
                     params: {
-                        sortBy: this.sortBy,
-                        order: this.order,
-                        page: this.page,
-                        pageSize: this.pageSize,
+                        sortBy: sharedStore.sortBy,
+                        order: sharedStore.order,
+                        page: sharedStore.page,
+                        pageSize: sharedStore.pageSize,
                     },
                 })
 
                 this.productCards.push(...data.map((product: any) => new ProductCard(product)))
 
                 if (data.length === 0) {
-                    this.allProductsFetched = true
+                    sharedStore.setFetchedProducts(true)
                 }
 
-                this.page++
+                sharedStore.incrementPage()
             } catch (error) {
                 console.error('Failed to fetch products:', error)
             } finally {
-                this.loading = false
+                sharedStore.setLoading(false)
             }
         },
         async fetchProductDetails(productId: number) {

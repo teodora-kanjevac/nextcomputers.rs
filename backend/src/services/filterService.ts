@@ -81,19 +81,14 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
 
     const filterMap: Record<string, Map<string, number>> = {
         brand: new Map(),
+        subcategory: new Map(),
     }
-    const subcategoryMap: Record<string, { name: string, productCount: number }> = {}
 
     products.forEach(product => {
         if (product.subcategory) {
-            const subcategoryId = product.subcategory.name
-            if (!subcategoryMap[subcategoryId]) {
-                subcategoryMap[subcategoryId] = {
-                    name: product.subcategory.name,
-                    productCount: 0,
-                }
-            }
-            subcategoryMap[subcategoryId].productCount += 1
+            const subcategoryName = product.subcategory.name
+            const currentCount = filterMap.subcategory.get(subcategoryName) || 0
+            filterMap.subcategory.set(subcategoryName, currentCount + 1)
         }
         if (product.brand) {
             const currentCount = filterMap.brand.get(product.brand) || 0
@@ -101,17 +96,7 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
         }
     })
 
-    const filters = mapFiltersToCategories(filterMap)
-
-    filters.push({
-        name: 'Kategorija',
-        filters: Object.entries(subcategoryMap).map(([key, value]) => ({
-            name: value.name,
-            amount: value.productCount,
-        }))
-    })
-
-    return filters
+    return mapFiltersToCategories(filterMap)
 }
 
 export const fetchFilteredProducts = async (

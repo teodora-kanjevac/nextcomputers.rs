@@ -2,12 +2,7 @@ import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import prisma from '~/src/utils/prisma'
 import { mapRatingsToProductCards } from '~/src/utils/mapper/ratingMapper'
 import { calculateOffset } from '~/src/utils/utils'
-import {
-    fetchSearchResultsSortedByDiscount,
-    fetchSearchResultsSortedByRating,
-    fetchSortedByDiscount,
-    fetchSortedByRating,
-} from '~/src/utils/sort/sortingUtils'
+import { fetchSearchResultsSortedByDiscount, fetchSearchResultsSortedByRating } from '~/src/utils/sort/sortingUtils'
 import { Prisma } from '@prisma/client'
 import { mapBigInt } from '~/src/utils/mapper/bigIntMapper'
 import { handleFilterValidation } from '~/src/utils/filter/validateFilters'
@@ -102,6 +97,20 @@ export const fetchFilteredSearchResults = async (
     const products = await prisma.$queryRaw<ProductCardDTO[]>(query)
 
     const mappedProducts = await mapBigInt(products)
+
+    if (!initSortBy) {
+        const sortedProducts = mappedProducts.sort((a, b) => {
+            const aStartsWithQuery = a.name.toLowerCase().startsWith(searchTerm.toLowerCase())
+            const bStartsWithQuery = b.name.toLowerCase().startsWith(searchTerm.toLowerCase())
+
+            if (aStartsWithQuery && !bStartsWithQuery) return -1
+            if (!aStartsWithQuery && bStartsWithQuery) return 1
+
+            return a.name.localeCompare(b.name)
+        })
+
+        return mapRatingsToProductCards(sortedProducts)
+    }
 
     return mapRatingsToProductCards(mappedProducts)
 }
