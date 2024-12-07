@@ -4,7 +4,7 @@
   "main": "app.ts",
   "scripts": {
     "build": "tsc -p tsconfig.json && resolve-tspaths",
-    "start": "pnpm run build && node dist/app.js",
+    "start": "node dist/app.js",
     "dev": "tsc -p tsconfig.json && resolve-tspaths && nodemon dist/app.js"
   },
   "type": "module",
