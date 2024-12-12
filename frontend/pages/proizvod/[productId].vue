@@ -11,17 +11,29 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import NavBar from '~/layouts/NavBar.vue'
 import Footer from '~/layouts/Footer.vue'
 import ProductDetails from '~/layouts/ProductDetails.vue'
 import ProductDetailsTabs from '~/layouts/ProductDetailsTabs.vue'
 import { useProductStore } from '~/stores/ProductStore'
+import { usePageTitle } from '~/composables/useTitle'
 
 const route = useRoute()
 const productStore = useProductStore()
+const { updateTitle } = usePageTitle()
 
-const productId = parseInt(route.params.productId)
+watch(
+    () => productStore.product,
+    newProduct => {
+        if (newProduct) {
+            updateTitle(newProduct.name)
+        }
+    },
+    { immediate: true }
+)
+
+const productId = parseInt(route.params.productId as string)
 
 onMounted(() => {
     productStore.fetchProductDetails(productId)

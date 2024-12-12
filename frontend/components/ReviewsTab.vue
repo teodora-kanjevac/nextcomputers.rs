@@ -12,7 +12,7 @@
                         <p class="ms-0.5 text-2xl font-semibold leading-none text-gray-900">
                             {{ averageRating.toFixed(2) }} od 5
                         </p>
-                        <button
+                        <button disabled
                             type="button"
                             aria-label="Otvori formu za ostavljanje recenzije"
                             data-modal-target="createReview"

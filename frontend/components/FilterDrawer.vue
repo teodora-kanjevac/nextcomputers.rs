@@ -32,19 +32,18 @@
             <div>
                 <template v-if="filterCategories.length > 0">
                     <ResetFiltersButton />
-                    <div class="space-y-8 mt-3">
+                    <div class="space-y-8 p-2 pb-4">
                         <FilterCategory
-                            v-for="(filterCategory, index) in filterCategories"
-                            :key="index"
+                            v-for="filterCategory in filterCategories"
+                            :key="filterCategory.name"
                             :filter-category="filterCategory"
                             v-model:selected-filters="selectedFilters[filterCategory.name]" />
                     </div>
                 </template>
-                <div class="text-gray-900 text-center mt-3 px-3 py-7 border-2 border-rose-300 bg-rose-100 rounded-lg">
-                    <p v-if="!route.params.subcategoryId" class="font-medium">
-                        Izaberite kategoriju kako biste započeli sa filtriranjem
-                    </p>
-                    <p v-else class="font-medium">Nema dostupnih filtera</p>
+                <div v-else class="text-gray-900 text-center mt-3 px-3 py-7 border-2 border-rose-300 bg-rose-100 rounded-lg">
+                    <h2 class="text-sm font-medium">
+                        {{ filterErrorMessage }}
+                    </h2>
                 </div>
             </div>
         </div>
@@ -61,7 +60,8 @@ import type { DrawerOptions } from 'flowbite'
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
 import { useFilterStore } from '~/stores/FilterStore'
 
-const route = useRoute()
+const { $isCategory } = useNuxtApp()
+
 let drawer = ref<Drawer | null>(null)
 const isDrawerOpen = ref(false)
 
@@ -84,6 +84,10 @@ const filterStore = useFilterStore()
 const filterCategories = computed<FilterCategoryDTO[]>(() => filterStore.categoryFilters)
 
 const selectedFilters = reactive<Record<string, string[]>>({})
+
+const filterErrorMessage = computed(() => {
+    return $isCategory.value ? 'Nema dostupnih filtera' : 'Izaberite kategoriju kako biste započeli sa filtriranjem'
+})
 
 onMounted(() => {
     initializeFilterDrawer()

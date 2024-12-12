@@ -4,11 +4,26 @@ import {
     fetchProductsWithRatings,
     fetchProductsWithRatingsForCategory,
     fetchProductDetails,
+    fetchShowcaseProducts,
 } from '~/src/services/productService'
 
 export const getProducts = async (req: Request, res: Response): Promise<void> => {
     try {
         const products = await fetchProducts()
+
+        res.status(200).json(products)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const getShowcaseProducts = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const products = await fetchShowcaseProducts()
 
         res.status(200).json(products)
     } catch (error) {

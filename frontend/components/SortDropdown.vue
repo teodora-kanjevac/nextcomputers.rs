@@ -29,19 +29,25 @@ import IndicatorDownIcon from './icons/IndicatorDownIcon.vue'
 import SortDescendingIcon from './icons/SortDescendingIcon.vue'
 import { destroyComponent } from '~/composables/useDestroy'
 import { initializeDropdown } from '~/composables/useDropdown'
+import { useSharedStore } from '~/stores/SharedStore'
 import { useFilterStore } from '~/stores/FilterStore'
+import { useSearchStore } from '~/stores/SearchStore'
 import { useProductStore } from '~/stores/ProductStore'
 import { options } from '~/assets/static/sortOptions'
+
+const { $isSearchPage, $isCategory } = useNuxtApp()
 
 const selectedOption = ref({ label: 'Izaberite opciju', sortBy: '', order: '' })
 
 let dropdown = ref<Dropdown | null>(null)
 
+const sharedStore = useSharedStore()
 const filterStore = useFilterStore()
+const searchStore = useSearchStore()
 const productStore = useProductStore()
 const route = useRoute()
 
-const subcategoryId = parseInt(route.params.subcategoryId as string) || null
+const subcategoryId = parseInt(route.params.subcategoryId as string)
 
 const initializeSortDropdown = () => {
     useFlowbite(() => {
@@ -56,14 +62,14 @@ const initializeSortDropdown = () => {
 }
 
 function selectOption(option: any) {
-    if (subcategoryId) {
-        filterStore.sortBy = option.sortBy
-        filterStore.order = option.order
+    sharedStore.setSortBy(option.sortBy)
+    sharedStore.setOrder(option.order)
+
+    if ($isSearchPage.value) {
+        searchStore.fetchFilteredSearchResults(true)
+    } else if ($isCategory.value) {
         filterStore.fetchFilteredProducts(subcategoryId, true)
     } else {
-        productStore.sortBy = option.sortBy
-        productStore.order = option.order
-        productStore.productCards = []
         productStore.fetchProductsWithRatings(true)
     }
     selectedOption.value = option

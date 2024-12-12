@@ -1,6 +1,7 @@
 import { Prisma } from '@prisma/client'
+import prisma from '~/src/utils/prisma';
 
-export const buildQueryConditions = (
+export const buildSubcategoryQueryConditions = (
     subcategoryId: number,
     filters: Record<string, string[]>
 ): { subcategoryCondition: Prisma.Sql; brandCondition: Prisma.Sql; specificationCondition: Prisma.Sql } => {
@@ -25,4 +26,36 @@ export const buildQueryConditions = (
             : Prisma.sql``
 
     return { subcategoryCondition, brandCondition, specificationCondition }
+}
+
+export const buildSearchResultsQueryConditions = async (
+    searchTerm: string,
+    filters: Record<string, string[]>
+): Promise<{ searchCondition: Prisma.Sql; categoryCondition: Prisma.Sql; brandCondition: Prisma.Sql; }> => {
+    const subcategories = await prisma.subcategory.findMany({
+        select: {
+            name: true,
+            subcategory_id: true,
+        },
+    })
+
+    const subcategoryMap = subcategories.reduce((acc, subcategory) => {
+        acc[subcategory.name] = subcategory.subcategory_id
+        return acc
+    }, {} as Record<string, number>)
+    const brandCondition = filters.brand?.length
+        ? Prisma.sql`AND brand IN (${Prisma.join(filters.brand)})`
+        : Prisma.sql``
+
+    const categoryCondition = filters.subcategory?.length
+        ? Prisma.sql`AND subcategory_id IN (${Prisma.join(filters.subcategory.map(name => subcategoryMap[name]))})`
+        : Prisma.sql``
+        
+    const searchCondition = searchTerm
+        ? Prisma.sql`(name LIKE CONCAT('%', ${searchTerm}, '%') OR
+                 product_id = ${isNaN(parseInt(searchTerm, 10)) ? null : parseInt(searchTerm, 10)} OR
+                 ean = ${searchTerm})`
+        : Prisma.sql`TRUE`
+
+    return { searchCondition, categoryCondition, brandCondition }
 }

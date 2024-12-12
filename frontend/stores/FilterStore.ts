@@ -2,18 +2,13 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import { FilterCategory } from '~/shared/classes/Filter'
 import { ProductCard } from '~/shared/classes/ProductCard'
+import { useSharedStore } from './SharedStore'
 
 export const useFilterStore = defineStore('filter', {
     state: () => ({
         categoryFilters: [] as FilterCategory[],
         filteredProducts: [] as ProductCard[],
         selectedFilters: {} as Record<string, string[]>,
-        allProductsFetched: false,
-        sortBy: null as string | null,
-        order: null as string | null,
-        loading: false,
-        page: 1,
-        pageSize: 20,
     }),
     actions: {
         async fetchFilters(subcategoryId: number) {
@@ -25,19 +20,28 @@ export const useFilterStore = defineStore('filter', {
                 console.error('Failed to fetch filters:', error)
             }
         },
+        async fetchSearchFilters(searchTerm: string) {
+            try {
+                const { data } = await axios.get(`/api/filters/search/${searchTerm}`)
+
+                this.categoryFilters = data.map((filter: any) => new FilterCategory(filter))
+            } catch (error) {
+                console.error('Failed to fetch filters:', error)
+            }
+        },
         async fetchFilteredProducts(subcategoryId: number, reset: boolean = false) {
-            if (this.loading) return
+            const sharedStore = useSharedStore()
+            if (sharedStore.loading) return
 
             if (reset) {
-                this.page = 1
+                sharedStore.resetPagination()
                 this.filteredProducts = []
-                this.allProductsFetched = false
+                sharedStore.setFetchedProducts(false)
             }
 
-            if (this.allProductsFetched) return
+            if (sharedStore.allProductsFetched) return
 
-            this.loading = true
-
+            sharedStore.setLoading(true)
             try {
                 const filterKeyMap: Record<string, string> = { Brend: 'brand' }
 
@@ -50,24 +54,24 @@ export const useFilterStore = defineStore('filter', {
                 const { data } = await axios.post(`/api/filters/filteredProducts/${subcategoryId}`, {
                     filters: transformedFilters,
                     params: {
-                        sortBy: this.sortBy,
-                        order: this.order,
-                        page: this.page,
-                        pageSize: this.pageSize,
+                        sortBy: sharedStore.sortBy,
+                        order: sharedStore.order,
+                        page: sharedStore.page,
+                        pageSize: sharedStore.pageSize,
                     },
                 })
 
                 this.filteredProducts.push(...data.map((product: any) => new ProductCard(product)))
 
                 if (data.length === 0) {
-                    this.allProductsFetched = true
+                    sharedStore.setFetchedProducts(true)
                 }
 
-                this.page++
+                sharedStore.incrementPage()
             } catch (error) {
                 console.error('Failed to fetch products:', error)
             } finally {
-                this.loading = false
+                sharedStore.setLoading(false)
             }
         },
         updateFilter(filterCategory: string, value: string) {

@@ -100,13 +100,10 @@ const submitReview = () => {
     formSubmitted.value = true
 
     if (isNameValid.value && isRatingValid.value && isCommentValid.value) {
-        console.log('Review submitted:', reviewForm.value)
         reviewForm.value.name = ''
         reviewForm.value.comment = ''
         rating.value = 0
         formSubmitted.value = false
-    } else {
-        console.log('Form is not valid!')
     }
 }
 </script>

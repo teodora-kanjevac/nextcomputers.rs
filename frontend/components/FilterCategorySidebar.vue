@@ -16,19 +16,14 @@
                             <ResetFiltersButton />
                             <div class="space-y-8 p-2 pb-4">
                                 <FilterCategory
-                                    v-for="(filterCategory, index) in filterCategories"
-                                    :key="index"
+                                    v-for="filterCategory in filterCategories"
+                                    :key="filterCategory.name"
                                     :filter-category="filterCategory" />
                             </div>
                         </template>
-                        <div v-else-if="!route.params.subcategoryId" class="text-gray-900 text-center px-3 py-7">
-                            <h2 class="text-sm font-medium">
-                                Izaberite kategoriju kako biste započeli sa filtriranjem
-                            </h2>
-                        </div>
                         <div v-else class="text-gray-900 text-center px-3 py-7">
                             <h2 class="text-sm font-medium">
-                                Nema dostupnih filtera
+                                {{ filterErrorMessage }}
                             </h2>
                         </div>
                     </div>
@@ -48,11 +43,16 @@ import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
 import { useCategoryStore } from '~/stores/CategoryStore'
 import { useFilterStore } from '~/stores/FilterStore'
 
-const route = useRoute()
+const { $isSearchPage, $isCategory } = useNuxtApp()
+
 const activeTab = ref('category')
 
+const filterErrorMessage = computed(() => {
+    return $isCategory.value ? 'Nema dostupnih filtera' : 'Izaberite kategoriju kako biste započeli sa filtriranjem'
+})
+
 watchEffect(() => {
-    if (route.params.subcategoryId) {
+    if ($isCategory.value || $isSearchPage.value) {
         activeTab.value = 'filter'
     } else {
         activeTab.value = 'category'

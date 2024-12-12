@@ -1,8 +1,5 @@
 export default defineNuxtConfig({
     ssr: true,
-    generate: {
-        routes: ['/'],
-    },
     app: {
         head: {
             htmlAttrs: {
@@ -20,9 +17,6 @@ export default defineNuxtConfig({
         },
     },
     compatibilityDate: '2024-07-22',
-    image: {
-        dir: 'assets/images',
-    },
     css: ['~/assets/css/base.sass'],
     vite: {
         resolve: {
@@ -32,6 +26,6 @@ export default defineNuxtConfig({
         },
     },
     modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image', '@vueuse/nuxt'],
-    plugins: [{ src: '~/plugins/flowbite-init.js', mode: 'client' }],
+    plugins: [{ src: '~/plugins/flowbite-init.js', mode: 'client' }, '~/plugins/routeInfo.ts'],
     devtools: { enabled: true },
 })
