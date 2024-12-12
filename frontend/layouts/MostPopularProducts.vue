@@ -4,7 +4,7 @@
             <FilterCategorySidebar />
             <div class="flex-1 px-5 lg:px-8 pt-8 pb-11 lg:py-11">
                 <h2 class="font-semibold text-xl sm:text-2xl uppercase ps-0.5 pb-2 sm:pb-4 border-b-2 border-gray-200">
-                    Najprodavaniji proizvodi
+                    Svi proizvodi
                 </h2>
                 <div class="flex lg:hidden mx-0.5 py-3 mb-1 gap-2 border-b-2 border-gray-200">
                     <CategoryDrawer />
@@ -14,7 +14,7 @@
                     <span class="font-medium flex items-center me-3">Sortiraj po</span>
                     <SortDropdown />
                 </div>
-                <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[2000px]:grid-cols-6">
                     <Product v-for="product in productCards" :key="product.id" :product="product" />
                 </div>
                 <ScrollToTopButton/>

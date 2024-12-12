@@ -14,7 +14,7 @@
                 <div class="w-full lg:w-3/4">
                     <section class="splide">
                         <Splide :options="options">
-                            <template v-for="image in images" :key="image.id">
+                            <template v-for="image in heroImages" :key="image.id">
                                 <SplideSlide>
                                     <NuxtLink to="/">
                                         <img
@@ -32,62 +32,18 @@
     </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import PriceTagIcon from '~/components/icons/PriceTagIcon.vue'
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import { useMediaQuery } from '@vueuse/core'
+import { heroImages } from '~/assets/static/heroImages'
 import 'assets/css/splide.css'
 
 const isSmallScreen = useMediaQuery('(max-width: 640px)')
 
-const getResponsiveImageUrl = image => {
+const getResponsiveImageUrl = (image: { imageSmallUrl: any; imageBigUrl: any }) => {
     return isSmallScreen.value ? image.imageSmallUrl : image.imageBigUrl
 }
-
-const images = [
-    {
-        id: 1,
-        name: 'DELL G15',
-        imageBigUrl: '/assets/images/DELL G15 BIG.webp',
-        imageSmallUrl: '/assets/images/DELL G15 SMALL.webp',
-        link: '',
-    },
-    {
-        id: 2,
-        name: 'DELL VOSTRO',
-        imageBigUrl: '/assets/images/DELL VOSTRO BIG.webp',
-        imageSmallUrl: '/assets/images/DELL VOSTRO SMALL.webp',
-        link: '',
-    },
-    {
-        id: 3,
-        name: 'GIGABYTE G5',
-        imageBigUrl: '/assets/images/GIGABYTE G5 BIG.webp',
-        imageSmallUrl: '/assets/images/GIGABYTE G5 SMALL.webp',
-        link: '',
-    },
-    {
-        id: 4,
-        name: 'DELL INSPIRON BIG',
-        imageBigUrl: '/assets/images/DELL INSPIRON BIG.webp',
-        imageSmallUrl: '/assets/images/DELL INSPIRON SMALL.webp',
-        link: '',
-    },
-    {
-        id: 5,
-        name: 'GIGABYTE AORUS',
-        imageBigUrl: '/assets/images/GIGABYTE AORUS BIG.webp',
-        imageSmallUrl: '/assets/images/GIGABYTE AORUS SMALL.webp',
-        link: '',
-    },
-    {
-        id: 6,
-        name: 'GIGABYTE AERO',
-        imageBigUrl: '/assets/images/GIGABYTE AERO BIG.webp',
-        imageSmallUrl: '/assets/images/GIGABYTE AERO SMALL.webp',
-        link: '',
-    },
-]
 
 const options = {
     type: 'loop',

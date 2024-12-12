@@ -7,10 +7,23 @@ import { isNaNObject, isNullObject } from '~/src/utils/ErrorHandling'
 import { fetchSortedProducts } from '~/src/utils/product/productSortingUtils'
 import { fetchUsersFullNames } from '~/src/utils/user/userFullName'
 import { calculateOffset } from '~/src/utils/utils'
+import { productEans } from '~/src/utils/product/productShowcaseEans'
 
 export const fetchProducts = async (): Promise<Product[]> => {
     const product = await prisma.product.findMany()
     return product.map(product => new Product(product))
+}
+
+export const fetchShowcaseProducts = async (): Promise<ProductCardDTO[]> => {
+    const products = await prisma.product.findMany({
+        where: {
+            ean: {
+                in: productEans,
+            },
+        },
+    })
+
+    return mapRatingsToProductCards(products)
 }
 
 export const fetchProductDetails = async (productId: number): Promise<ProductDetailsDTO> => {

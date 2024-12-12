@@ -6,7 +6,7 @@ import { fetchSearchResultsSortedByDiscount, fetchSearchResultsSortedByRating } 
 import { Prisma } from '@prisma/client'
 import { mapBigInt } from '~/src/utils/mapper/bigIntMapper'
 import { handleFilterValidation } from '~/src/utils/filter/validateFilters'
-import { buildSearchResultsQueryConditions } from '../utils/filter/queryConditions'
+import { buildSearchResultsQueryConditions } from '~/src/utils/filter/queryConditions'
 
 export const fetchProductSearchResults = async (
     searchTerm: string,
