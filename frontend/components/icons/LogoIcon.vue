@@ -1,6 +1,6 @@
 <template>
     <div>
-        <NuxtImg class="rounded-lg" src="/assets/images/logo.webp" alt="logo" />
+        <img class="rounded-lg" src="/assets/images/logo.webp" alt="logo" />
     </div>
 </template>
 

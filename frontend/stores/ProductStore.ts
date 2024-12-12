@@ -8,8 +8,18 @@ export const useProductStore = defineStore('product', {
     state: () => ({
         product: null as Product | null,
         productCards: [] as ProductCard[],
+        showcaseProductCards: [] as ProductCard[],
     }),
     actions: {
+        async fetchShowcaseProducts() {
+            try {
+                const { data } = await axios.get('/api/products/showcase')
+
+                this.showcaseProductCards = data.map((product: any) => new ProductCard(product))
+            } catch (error) {
+                console.error('Failed to fetch products:', error)
+            }
+        },
         async fetchProductsWithRatings(reset: boolean = false) {
             const sharedStore = useSharedStore()
             if (sharedStore.loading) return
