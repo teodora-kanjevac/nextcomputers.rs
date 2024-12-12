@@ -30,10 +30,10 @@ import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 const products: ProductCardDTO[] = [
     {
         id: 1,
-        name: 'ASUS B550-PLUS TUF ASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUFASUS B550-PLUS TUF',
+        name: 'ASUS B550-PLUS TUF',
         price: 104990,
         discountPrice: 99990,
-        thumbnail: 'ASUS B550-PLUS TUF.jpg',
+        thumbnail: '/assets/images/ASUS B550-PLUS TUF.jpg',
         ratings: {
             totalReviews: 120,
             starRatings: [
@@ -50,7 +50,7 @@ const products: ProductCardDTO[] = [
         name: 'Kingston 3600mhz 8gb',
         price: 29990,
         discountPrice: 27990,
-        thumbnail: 'Kingston 3600mhz 8gb.jpg',
+        thumbnail: '/assets/images/Kingston 3600mhz 8gb.jpg',
         ratings: {
             totalReviews: 95,
             starRatings: [
@@ -67,7 +67,7 @@ const products: ProductCardDTO[] = [
         name: 'GIGABYTE A520M',
         price: 55990,
         discountPrice: 49990,
-        thumbnail: 'GIGABYTE A520M.jpg',
+        thumbnail: '/assets/images/GIGABYTE A520M.jpg',
         ratings: {
             totalReviews: 85,
             starRatings: [
@@ -84,7 +84,7 @@ const products: ProductCardDTO[] = [
         name: 'Intel 14900k',
         price: 15990,
         discountPrice: 0,
-        thumbnail: 'Intel 14900k.jpg',
+        thumbnail: '/assets/images/Intel 14900k.jpg',
         ratings: {
             totalReviews: 150,
             starRatings: [
@@ -101,7 +101,7 @@ const products: ProductCardDTO[] = [
         name: 'R5 5500 RX 6600',
         price: 38990,
         discountPrice: 35990,
-        thumbnail: 'R5 5500 RX 6600.jpg',
+        thumbnail: '/assets/images/R5 5500 RX 6600.jpg',
         ratings: {
             totalReviews: 110,
             starRatings: [
@@ -118,7 +118,7 @@ const products: ProductCardDTO[] = [
         name: 'RTX 3050 VENTUS2',
         price: 77990,
         discountPrice: 74990,
-        thumbnail: 'RTX 3050 VENTUS2.jpg',
+        thumbnail: '/assets/images/RTX 3050 VENTUS2.jpg',
         ratings: {
             totalReviews: 140,
             starRatings: [
@@ -135,7 +135,7 @@ const products: ProductCardDTO[] = [
         name: 'RTX 4060 TI AERO',
         price: 79990,
         discountPrice: 0,
-        thumbnail: 'RTX 4060 TI AERO.jpg',
+        thumbnail: '/assets/images/RTX 4060 TI AERO.jpg',
         ratings: {
             totalReviews: 105,
             starRatings: [
@@ -152,7 +152,7 @@ const products: ProductCardDTO[] = [
         name: 'RTX 4070 TUF',
         price: 23990,
         discountPrice: 21990,
-        thumbnail: 'RTX 4070 TUF.jpg',
+        thumbnail: '/assets/images/RTX 4070 TUF.jpg',
         ratings: {
             totalReviews: 80,
             starRatings: [
@@ -169,7 +169,7 @@ const products: ProductCardDTO[] = [
         name: 'Ryzen 5 5600x',
         price: 51990,
         discountPrice: 48990,
-        thumbnail: 'Ryzen 5 5600x.jpg',
+        thumbnail: '/assets/images/Ryzen 5 5600x.jpg',
         ratings: {
             totalReviews: 110,
             starRatings: [
