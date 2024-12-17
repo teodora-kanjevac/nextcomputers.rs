@@ -24,7 +24,7 @@
                 </div>
                 <div
                     v-if="productCards.length > 0"
-                    class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+                    class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[2000px]:grid-cols-6">
                     <Product v-for="product in productCards" :key="product.id" :product="product" />
                 </div>
                 <ScrollToTopButton />

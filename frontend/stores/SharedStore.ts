@@ -2,8 +2,8 @@ import { defineStore } from 'pinia'
 
 export const useSharedStore = defineStore('shared', {
     state: () => ({
-        sortBy: null as string | null,
-        order: null as string | null,
+        sortBy: ref<string | null>(null),
+        order: ref<string | null>(null),
         allProductsFetched: false,
         loading: false,
         page: 1,

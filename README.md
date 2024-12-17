@@ -72,6 +72,12 @@ Then use the `generate` command to generate the Prisma Client:
 npx prisma generate
 ```
 
+On the server, use the `deploy` command to deploy the migration changes:
+
+```bash
+npx prisma migrate deploy
+```
+
 <br/>
 
 To **pull** changes made in the Database use this command:

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <SearchIcon @click="onSearch" class="size-4 text-gray-700" />
+            <SearchIcon class="size-4 text-gray-700" />
         </div>
         <input
             type="text"
