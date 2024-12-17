@@ -17,7 +17,7 @@ export async function ProductfromAPI(data: any): Promise<Product> {
 
     return new Product(
         undefined,
-        data.acName,
+        `${data.acDept} ${data.acName}`,
         data.anStock,
         undefined,
         data.acDept,
