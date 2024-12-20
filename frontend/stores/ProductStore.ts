@@ -6,7 +6,7 @@ import { useSharedStore } from './SharedStore'
 
 export const useProductStore = defineStore('product', {
     state: () => ({
-        product: null as Product | null,
+        product: ref<Product | null>(null),
         productCards: [] as ProductCard[],
         showcaseProductCards: [] as ProductCard[],
     }),

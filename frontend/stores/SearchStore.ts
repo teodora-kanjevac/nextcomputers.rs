@@ -5,7 +5,7 @@ import { ProductCard } from '~/shared/classes/ProductCard'
 
 export const useSearchStore = defineStore('search', {
     state: () => ({
-        query: null as string | null,
+        query: ref<string | null>(null),
         searchResults: [] as ProductCard[],
         selectedFilters: {} as Record<string, string[]>,
     }),

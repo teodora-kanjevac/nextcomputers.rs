@@ -8,6 +8,8 @@ import productRoutes from '~/src/routes/productRoutes'
 import reviewRoutes from '~/src/routes/reviewRoutes'
 import filterRoutes from '~/src/routes/filterRoutes'
 import searchRoutes from '~/src/routes/searchRoutes'
+import cartRoutes from '~/src/routes/cartRoutes'
+import '~/src/jobs/cron-jobs'
 
 dotenv.config()
 const app: Application = express()
@@ -27,6 +29,7 @@ app.use('/api/products', productRoutes)
 app.use('/api/reviews', reviewRoutes)
 app.use('/api/filters', filterRoutes)
 app.use('/api/search', searchRoutes)
+app.use('/api/cart', cartRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

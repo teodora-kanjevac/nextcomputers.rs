@@ -14,6 +14,16 @@ export const fetchProducts = async (): Promise<Product[]> => {
     return product.map(product => new Product(product))
 }
 
+export const fetchProductById = async (productId: number): Promise<Product> => {
+    const product = await prisma.product.findUnique({
+        where: { product_id: productId },
+    })
+
+    isNullObject('product', productId, product)
+
+    return new Product(product)
+}
+
 export const fetchShowcaseProducts = async (): Promise<ProductCardDTO[]> => {
     const products = await prisma.product.findMany({
         where: {

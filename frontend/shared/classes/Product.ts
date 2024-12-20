@@ -5,7 +5,7 @@ import { Review } from './Review'
 import { Image } from './Image'
 
 export class Product {
-    public id: string
+    public id: number
     public name: string
     public brand: string
     public price: number

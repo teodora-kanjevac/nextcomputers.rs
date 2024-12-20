@@ -1,6 +1,7 @@
 <template>
     <div>
-        <ul class="flex flex-row text-sm font-medium ps-5 xl:ps-0 xl:text-sm space-x-4 tracking-wide justify-center items-center">
+        <ul
+            class="flex flex-row text-sm font-medium ps-5 xl:ps-0 xl:text-sm space-x-4 tracking-wide justify-center items-center">
             <a
                 :href="`/proizvodi`"
                 class="py-2 px-3 text-gray-50 hover:text-gray-300 flex flex-col items-center"
@@ -9,10 +10,10 @@
                 <h1>Proizvodi</h1>
             </a>
             <a
-                href="#"
+                :href="`/korpa`"
                 class="py-2 px-3 text-gray-50 hover:text-gray-300 flex flex-col items-center"
                 aria-current="page">
-                <CartIcon class="size-7 mb-0.5" />
+                <CartWithBadge class="size-7 mb-0.5" />
                 Vaša korpa
             </a>
             <a
@@ -27,6 +28,5 @@
 </template>
 <script setup>
 import LogInIcon from '~/components/icons/LogInIcon.vue'
-import CartIcon from '~/components/icons/CartIcon.vue'
 import ProductsIcon from '~/components/icons/ProductsIcon.vue'
 </script>

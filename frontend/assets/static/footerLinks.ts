@@ -1,6 +1,5 @@
 import InstagramIcon from '~/components/icons/InstagramIcon.vue'
 import FacebookIcon from '~/components/icons/FacebookIcon.vue'
-import TwitterIcon from '~/components/icons/TwitterIcon.vue'
 import LinkedInIcon from '~/components/icons/LinkedInIcon.vue'
 
 export const footerSections = [
@@ -48,6 +47,5 @@ export const footerSections = [
 export const socialIcons = [
     { componentIcon: FacebookIcon, link: 'https://www.instagram.com/nextcomputers.rs' },
     { componentIcon: InstagramIcon, link: 'https://www.instagram.com/nextcomputers.rs' },
-    { componentIcon: TwitterIcon, link: 'https://www.instagram.com/nextcomputers.rs' },
     { componentIcon: LinkedInIcon, link: 'https://www.instagram.com/nextcomputers.rs' },
 ]

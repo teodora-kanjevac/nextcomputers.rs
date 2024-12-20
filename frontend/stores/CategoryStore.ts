@@ -5,7 +5,7 @@ import { Category, Subcategory } from '~/shared/classes/Category'
 export const useCategoryStore = defineStore('category', {
     state: () => ({
         categories: [] as Category[],
-        subcategory: null as Subcategory | null,
+        subcategory: ref<Subcategory | null>(null),
     }),
     actions: {
         async fetchCategories() {

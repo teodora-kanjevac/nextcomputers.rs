@@ -9,7 +9,7 @@ datasource db {
 }
 
 model cart {
-  cart_id    Int        @id @default(autoincrement()) @db.UnsignedInt
+  cart_id    String     @id @default(dbgenerated("(uuid())")) @db.Char(36)
   user_id    String?    @db.Char(36)
   created_at DateTime   @default(dbgenerated("(now())")) @db.Timestamp(0)
   user       user?      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_cart_FK")
@@ -19,8 +19,8 @@ model cart {
 }
 
 model cartitem {
-  cart_item_id Int      @id @default(autoincrement()) @db.UnsignedInt
-  cart_id      Int      @db.UnsignedInt
+  cart_item_id String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  cart_id      String   @db.Char(36)
   product_id   Int      @db.UnsignedInt
   quantity     Int      @default(0) @db.UnsignedTinyInt
   added_at     DateTime @default(dbgenerated("(now())")) @db.Timestamp(0)
@@ -29,6 +29,7 @@ model cartitem {
 
   @@index([cart_id], map: "cart_id_cartitem_FK")
   @@index([product_id], map: "product_id_cartitem_FK")
+  @@unique([cart_id, product_id], map: "unique_cart_product")
 }
 
 model category {
@@ -38,7 +39,7 @@ model category {
 }
 
 model order {
-  order_id     BigInt         @id @default(autoincrement()) @db.UnsignedBigInt
+  order_id     String         @id @default(dbgenerated("(uuid())")) @db.Char(36)
   user_id      String         @default("") @db.Char(36)
   total_price  Decimal        @db.Decimal(10, 2)
   order_status String?        @db.VarChar(20)
@@ -50,8 +51,8 @@ model order {
 }
 
 model orderdetails {
-  order_detail_id Int     @id @default(autoincrement()) @db.UnsignedInt
-  order_id        BigInt  @db.UnsignedBigInt
+  order_detail_id String  @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  order_id        String  @db.Char(36)
   product_id      Int     @db.UnsignedInt
   quantity        Int     @default(0) @db.UnsignedTinyInt
   order           order   @relation(fields: [order_id], references: [order_id], onDelete: Cascade, onUpdate: NoAction, map: "order_id_orderdetails_FK")

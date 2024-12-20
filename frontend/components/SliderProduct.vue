@@ -37,12 +37,7 @@
                     :discount-price="product.discountPrice"
                     :discount-percentage="product.discountPercentage" />
 
-                <button
-                    type="button"
-                    class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary"
-                    aria-label="Dodaj u korpu">
-                    <AddToCartIcon class="size-6" />
-                </button>
+                <AddToCartButton :product-id="product.id" />
             </div>
         </div>
     </div>
@@ -51,7 +46,6 @@
 <script setup lang="ts">
 import { useClamping, truncateName } from '~/composables/useClamping'
 import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
-import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
 import TruckDeliveryIcon from './icons/TruckDeliveryIcon.vue'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 

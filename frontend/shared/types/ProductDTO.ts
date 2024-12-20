@@ -3,7 +3,7 @@ import type { RatingDTO } from './RatingDTO'
 import type { ImageDTO } from './ImageDTO'
 
 export interface ProductDTO {
-    id: string
+    id: number
     name: string
     brand: string
     price: number
