@@ -53,21 +53,20 @@
                 </div>
 
                 <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
-                    <NuxtLink
-                        to=""
+                    <a
                         class="flex items-center justify-center py-3 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
                         role="button">
                         <HeartOutlineIcon class="size-5 -ms-2 me-2" />
                         Sačuvaj proizvod
-                    </NuxtLink>
+                    </a>
 
-                    <button
+                    <a
                         @click="addToCart"
                         class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-lg text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
                         role="button">
                         <AddToCartIcon class="size-5 -ms-2 me-2" />
                         Dodaj u korpu
-                    </button>
+                    </a>
                 </div>
 
                 <hr class="my-6 md:my-8 border-gray-200" />

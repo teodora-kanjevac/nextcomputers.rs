@@ -36,7 +36,7 @@
                                     <p>
                                         Plaćanje gotovinom pri pouzeću
                                         <span class="font-semibold">ne dobijate</span>
-                                        dodatan popust od 1% na ceo račun.
+                                        dodatan popust od 1% na ukupnu cenu proizvoda.
                                     </p>
                                     <p>Nakon slanja narudžbine ćete biti kontaktirani radi potvrde kupovine.</p>
                                     <p>

@@ -15,7 +15,7 @@
                             </div>
                             <div class="my-12">
                                 <h4 class="text-lg font-semibold text-gray-800 border-b border-gray-100 pb-2">
-                                    Informacije o isporuci
+                                    Informacije o dostavi
                                 </h4>
                                 <div class="mt-6 text-base font-medium text-gray-800 grid grid-cols-2 md:grid-cols-3 gap-y-3">
                                     <template v-for="item in userDetails">
