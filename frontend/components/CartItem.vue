@@ -1,8 +1,8 @@
 <template>
     <div class="rounded-lg border border-gray-200 bg-white px-4 py-5 shadow-sm md:px-6">
         <div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
-            <a :href="`/proizvod/`" class="shrink-0 md:order-1">
-                <img class="h-24 w-24" :src="cartItem.product.thumbnail" :alt="cartItem.product.name" />
+            <a :href="`/proizvod/${cartItem.product.id}`" class="shrink-0 md:order-1">
+                <img class="size-24" :src="cartItem.product.thumbnail" :alt="cartItem.product.name" />
             </a>
 
             <div class="w-full min-w-0 flex-1 space-y-3 md:order-2 md:max-w-md">

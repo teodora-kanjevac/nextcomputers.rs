@@ -270,7 +270,26 @@
                     </div>
 
                     <div class="mx-auto mt-6 max-w-4xl flex-1 space-y-6 lg:mt-0 lg:w-full">
-                        <OrderCheckout />
+                        <div class="space-y-4 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
+                            <CheckoutPrice :selectedPaymentMethod="selectedPaymentMethod" />
+
+                            <button
+                                type="submit"
+                                class="flex w-full items-center justify-center rounded-lg bg-primary-light px-5 py-2.5 text-sm font-medium text-white active:bg-primary"
+                                @click.prevent="goToNextStep">
+                                Nastavi dalje
+                            </button>
+
+                            <div class="flex items-center justify-center gap-2">
+                                <span class="text-sm font-normal text-gray-500">ili</span>
+                                <a
+                                    href="/"
+                                    class="inline-flex items-center gap-1 text-sm font-medium text-primary-light underline hover:no-underline">
+                                    Nastavi sa kupovinom
+                                    <ArrowRightIcon class="size-4 mt-0.5" />
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -280,8 +299,16 @@
 
 <script setup lang="ts">
 import TrashCanIcon from '~/components/icons/TrashCanIcon.vue'
+import ArrowRightIcon from '~/components/icons/ArrowRightIcon.vue'
 import type { CartItemDTO } from '~/shared/types/CartDTO'
 import { useCartStore } from '~/stores/CartStore'
+import { useCheckoutStore } from '~/stores/CheckoutStore'
+
+const emit = defineEmits(['nextStep'])
+
+function goToNextStep() {
+    emit('nextStep')
+}
 
 const cartStore = useCartStore()
 const cartItems = computed<CartItemDTO[]>(() => cartStore.cart.cartItems)
@@ -289,4 +316,6 @@ const cartItems = computed<CartItemDTO[]>(() => cartStore.cart.cartItems)
 const emptyCart = () => {
     cartStore.clearCart()
 }
+const checkoutStore = useCheckoutStore()
+const selectedPaymentMethod = computed(() => checkoutStore.paymentMethod)
 </script>
