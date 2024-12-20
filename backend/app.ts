@@ -9,6 +9,7 @@ import reviewRoutes from '~/src/routes/reviewRoutes'
 import filterRoutes from '~/src/routes/filterRoutes'
 import searchRoutes from '~/src/routes/searchRoutes'
 import cartRoutes from '~/src/routes/cartRoutes'
+import '~/src/jobs/cron-jobs'
 
 dotenv.config()
 const app: Application = express()
