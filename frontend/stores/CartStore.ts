@@ -17,7 +17,7 @@ export const useCartStore = defineStore('cart', {
                 this.cart.id = data
                 return data
             } catch (error) {
-                console.error('Failed to fetch cart:', error)
+                console.error('Failed to create cart:', error)
             }
         },
         async fetchCart(cartId: string) {
