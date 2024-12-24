@@ -80,6 +80,7 @@ import { useProductStore } from '~/stores/ProductStore'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import 'assets/css/splide.css'
+import { updateProductChunks, productChunks } from '~/composables/useSliderChunks'
 
 const emit = defineEmits(['nextStep'])
 
@@ -99,23 +100,8 @@ const emptyCart = () => {
 const checkoutStore = useCheckoutStore()
 const selectedPaymentMethod = computed(() => checkoutStore.paymentMethod)
 
-const chunkSize = ref(3)
-const productChunks = ref<ProductCardDTO[][]>([])
-
-const chunkProducts = (products: ProductCardDTO[], chunkSize: number): ProductCardDTO[][] => {
-    const chunks: ProductCardDTO[][] = []
-    for (let i = 0; i < products.length; i += chunkSize) {
-        chunks.push(products.slice(i, i + chunkSize))
-    }
-    return chunks
-}
-
-const updateProductChunks = () => {
-    productChunks.value = chunkProducts(productCards.value, chunkSize.value)
-}
-
 onMounted(() => {
-    updateProductChunks()
+    updateProductChunks(productCards.value)
     watch(productCards, updateProductChunks, { immediate: true })
     productStore.fetchShowcaseProducts()
 })

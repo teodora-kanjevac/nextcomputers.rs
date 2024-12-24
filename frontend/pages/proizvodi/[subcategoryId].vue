@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Toast position="bottom-right" />
         <NavBar />
         <ProductsBySubcategory :subcategory-id="subcategoryId" />
         <Footer />

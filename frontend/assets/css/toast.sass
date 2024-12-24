@@ -1,0 +1,48 @@
+.p-toast
+  z-index: 9999 !important
+  opacity: 1 !important
+  width: 400px !important
+
+  &-message
+    color: white
+    border-width: 2px
+    border-radius: 8px
+
+  &-summary
+    font-weight: 500
+
+  &-detail
+    font-size: 14px
+
+.p-toast-message-success
+  background-color: #16a34a !important
+  border-color: #4ade80 !important
+
+.p-toast-message-info
+  background-color: #0284c7 !important
+  border-color: #38bdf8 !important
+
+.p-toast-message-error
+  background-color: #b91c1c !important
+  border-color: #ef4444 !important
+
+.p-toast-message-warn
+  background-color: #ca8a04 !important
+  border-color: #facc15 !important
+
+.p-toast-message-icon
+  height: 25px !important
+  color: white !important
+
+.p-toast-icon-close
+  color: #ffffff !important
+
+.p-toast-message-content
+  padding: 17px 15px !important
+
+@media (max-width: 640px)
+  .p-toast
+    width: 90% !important
+
+  .p-toast-message-content
+    padding: 12px 10px !important

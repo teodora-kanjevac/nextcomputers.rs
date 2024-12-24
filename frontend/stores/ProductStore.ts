@@ -89,12 +89,18 @@ export const useProductStore = defineStore('product', {
             }
         },
         async fetchProductDetails(productId: number) {
+            const sharedStore = useSharedStore()
+            if (sharedStore.loading) return
+            sharedStore.setLoading(true)
+
             try {
                 const { data } = await axios.get(`/api/products/${productId}`)
 
                 this.product = new Product(data)
             } catch (error) {
                 console.error('Failed to fetch products:', error)
+            } finally {
+                sharedStore.setLoading(false)
             }
         },
     },

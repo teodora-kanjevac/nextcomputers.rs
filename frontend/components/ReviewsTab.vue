@@ -12,7 +12,15 @@
                         <p class="ms-0.5 text-2xl font-semibold leading-none text-gray-900">
                             {{ averageRating.toFixed(2) }} od 5
                         </p>
-                        <button disabled
+                        <button
+                            @click="info"
+                            type="button"
+                            aria-label="Otvori formu za ostavljanje recenzije"
+                            class="mb-2 me-2 flex items-center rounded-lg px-5 py-2.5 text-sm font-medium text-white bg-primary-light hover:bg-rose-800 active:bg-primary">
+                            <PenIcon class="size-5 me-2 -ms-1" />
+                            Napiši recenziju
+                        </button>
+                        <!-- <button
                             type="button"
                             aria-label="Otvori formu za ostavljanje recenzije"
                             data-modal-target="createReview"
@@ -21,7 +29,7 @@
                             <PenIcon class="size-5 me-2 -ms-1" />
                             Napiši recenziju
                         </button>
-                        <ReviewModal />
+                        <ReviewModal /> -->
                     </div>
 
                     <div class="mt-8 min-w-0 flex-1 space-y-3 sm:mt-0">
@@ -83,6 +91,8 @@ const { rating, userReviews } = defineProps<{
     userReviews: ReviewDTO[]
 }>()
 
+const toast = useToast()
+
 const averageRating = computed(() => new Rating(rating).getAverageRating())
 
 const calculateStarPercentage = useRatings(rating.totalReviews)
@@ -110,5 +120,14 @@ const getReviewWord = (num: number) => {
     } else {
         return 'recenzija'
     }
+}
+
+const info = () => {
+    toast.add({
+        severity: 'info',
+        summary: 'Info',
+        detail: 'Funkcionalnost je u pripremi – biće dostupna uskoro. Hvala na razumevanju!',
+        life: 5000,
+    })
 }
 </script>

@@ -43,14 +43,16 @@
                         <div class="space-y-3">
                             <button
                                 @click="handleOrder"
+                                :disabled="sharedStore.loading"
                                 class="flex w-full items-center justify-center rounded-lg bg-primary-light px-5 py-2.5 text-sm font-medium text-white active:bg-primary">
-                                Pošalji narudžbinu
+                                <Spinner v-if="sharedStore.loading" class="size-5" />
+                                <span v-if="!sharedStore.loading">Pošalji narudžbinu</span>
                             </button>
                             <p class="text-xs mx-1 text-justify">
                                 Klikom na ovo dugme potvrđujete da ste saglasni sa našom
                                 <a href="#" class="text-primary hover:underline">Politikom privatnosti</a>
                                 i
-                                <a href="#" class="text-primary hover:underline">Uslovima korišćenja</a>
+                                <a href="/uslovi-koriscenja" class="text-primary hover:underline">Uslovima korišćenja</a>
                             </p>
                         </div>
                     </div>
@@ -67,12 +69,18 @@ import { useCartStore } from '~/stores/CartStore'
 import { useCheckoutStore } from '~/stores/CheckoutStore'
 import { useOrderStore } from '~/stores/OrderStore'
 import { useMailStore } from '~/stores/MailStore'
+import { useSharedStore } from '~/stores/SharedStore'
 
 const router = useRouter()
 const cartStore = useCartStore()
 const checkoutStore = useCheckoutStore()
 const orderStore = useOrderStore()
 const mailStore = useMailStore()
+const sharedStore = useSharedStore()
+const toast = useToast()
+
+sharedStore.loading = false
+
 const cartItems = computed<CartItemDTO[]>(() => cartStore.cart.cartItems)
 
 const userDetails = computed(() => [
@@ -87,6 +95,7 @@ const userDetails = computed(() => [
 const paymentMethod = computed(() => checkoutStore.paymentMethodText)
 
 const handleOrder = async () => {
+    sharedStore.loading = true
     try {
         orderStore.orderData = {
             orderId: '',
@@ -121,7 +130,15 @@ const handleOrder = async () => {
 
         router.push({ path: '/potvrdjena-kupovina', query: { redirected: 'true' } })
     } catch (error) {
-        console.error('Failed to create order:', error)
+        console.error('Error:', error)
+        toast.add({
+            severity: 'error',
+            summary: 'Greška pri slanju narudžbine!',
+            detail: 'Došlo je do problema pri slanju narudžbine. Pokušajte ponovo.',
+            life: 5000,
+        })
+    } finally {
+        sharedStore.loading = false
     }
 }
 </script>

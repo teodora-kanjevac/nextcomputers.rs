@@ -12,7 +12,7 @@
 
                 <div id="tab">
                     <div v-if="activeTab === 'filter'" class="rounded-lg bg-gray-50">
-                        <template v-if="filterCategories.length > 0">
+                        <template v-if="hasFilters">
                             <ResetFiltersButton />
                             <div class="space-y-8 p-2 pb-4">
                                 <FilterCategory
@@ -47,8 +47,27 @@ const { $isSearchPage, $isCategory } = useNuxtApp()
 
 const activeTab = ref('category')
 
+const categoryStore = useCategoryStore()
+const filterStore = useFilterStore()
+
+const categories = computed<CategoryDTO[]>(() => categoryStore.categories)
+const filterCategories = computed<FilterCategoryDTO[]>(() => filterStore.categoryFilters)
+
+const hasFilters = computed(() => {
+    return (
+        filterCategories.value.length > 0 &&
+        filterCategories.value.some(category => category.filters && category.filters.length > 0)
+    )
+})
+
 const filterErrorMessage = computed(() => {
-    return $isCategory.value ? 'Nema dostupnih filtera' : 'Izaberite kategoriju kako biste započeli sa filtriranjem'
+    if ($isCategory.value || $isSearchPage.value) {
+        if (!hasFilters.value) {
+            return 'Nema dostupnih filtera'
+        }
+    } else {
+        return 'Izaberite kategoriju kako biste započeli sa filtriranjem'
+    }
 })
 
 watchEffect(() => {
@@ -58,10 +77,4 @@ watchEffect(() => {
         activeTab.value = 'category'
     }
 })
-
-const categoryStore = useCategoryStore()
-const filterStore = useFilterStore()
-
-const categories = computed<CategoryDTO[]>(() => categoryStore.categories)
-const filterCategories = computed<FilterCategoryDTO[]>(() => filterStore.categoryFilters)
 </script>

@@ -14,18 +14,12 @@
                     <span class="font-medium flex items-center me-3">Sortiraj po</span>
                     <SortDropdown />
                 </div>
-                <div v-if="sharedStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
-                    Ucitavanje proizvoda...
-                </div>
-                <div
-                    v-if="!sharedStore.loading && productCards.length === 0"
-                    class="text-center font-semibold text-xl text-gray-500 mt-20">
-                    Nema proizvoda za ovu pretragu.
-                </div>
-                <div
-                    v-if="productCards.length > 0"
-                    class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[2000px]:grid-cols-6">
-                    <Product v-for="product in productCards" :key="product.id" :product="product" />
+                <div>
+                    <Spinner class="mt-32" v-if="!sharedStore.loading && productCards.length === 0" />
+                    <div
+                        class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[2000px]:grid-cols-6">
+                        <Product v-for="product in productCards" :key="product.id" :product="product" />
+                    </div>
                 </div>
                 <ScrollToTopButton />
             </div>

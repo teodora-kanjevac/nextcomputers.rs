@@ -30,7 +30,7 @@
             </button>
 
             <div>
-                <template v-if="filterCategories.length > 0">
+                <template v-if="hasFilters">
                     <ResetFiltersButton />
                     <div class="space-y-8 p-2 pb-4">
                         <FilterCategory
@@ -60,7 +60,7 @@ import type { DrawerOptions } from 'flowbite'
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
 import { useFilterStore } from '~/stores/FilterStore'
 
-const { $isCategory } = useNuxtApp()
+const { $isCategory, $isSearchPage } = useNuxtApp()
 
 let drawer = ref<Drawer | null>(null)
 const isDrawerOpen = ref(false)
@@ -85,8 +85,21 @@ const filterCategories = computed<FilterCategoryDTO[]>(() => filterStore.categor
 
 const selectedFilters = reactive<Record<string, string[]>>({})
 
+const hasFilters = computed(() => {
+    return (
+        filterCategories.value.length > 0 &&
+        filterCategories.value.some(category => category.filters && category.filters.length > 0)
+    )
+})
+
 const filterErrorMessage = computed(() => {
-    return $isCategory.value ? 'Nema dostupnih filtera' : 'Izaberite kategoriju kako biste započeli sa filtriranjem'
+    if ($isCategory.value || $isSearchPage.value) {
+        if (!hasFilters.value) {
+            return 'Nema dostupnih filtera'
+        }
+    } else {
+        return 'Izaberite kategoriju kako biste započeli sa filtriranjem'
+    }
 })
 
 onMounted(() => {

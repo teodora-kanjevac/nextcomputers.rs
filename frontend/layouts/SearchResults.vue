@@ -14,12 +14,12 @@
                     <span class="font-medium flex items-center me-3">Sortiraj po</span>
                     <SortDropdown />
                 </div>
-                <div v-if="shareStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
-                    Ucitavanje proizvoda...
+                <div v-if="sharedStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
+                    <Spinner class="mt-32" />
                 </div>
                 <div
-                    v-if="!shareStore.loading && productCards.length === 0"
-                    class="text-center font-semibold text-xl text-gray-500 mt-20">
+                    v-if="!sharedStore.loading && productCards.length === 0"
+                    class="text-center font-semibold text-xl text-gray-500 mt-32">
                     Nema proizvoda za ovu pretragu.
                 </div>
                 <div
@@ -38,9 +38,9 @@ import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useSearchStore } from '~/stores/SearchStore'
 import { useFilterStore } from '~/stores/FilterStore'
 import { useScroll } from '@vueuse/core'
-import { useSharedStore } from '~/stores/SharedStore';
+import { useSharedStore } from '~/stores/SharedStore'
 
-const shareStore = useSharedStore()
+const sharedStore = useSharedStore()
 const searchStore = useSearchStore()
 const filterStore = useFilterStore()
 
@@ -78,7 +78,7 @@ const nearBottom = computed(() => {
 
 onMounted(() => {
     watch(nearBottom, isNearBottom => {
-        if (isNearBottom && !shareStore.loading && !shareStore.allProductsFetched) {
+        if (isNearBottom && !sharedStore.loading && !sharedStore.allProductsFetched) {
             searchStore.fetchFilteredSearchResults()
         }
     })

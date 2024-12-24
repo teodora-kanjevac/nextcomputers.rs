@@ -18,7 +18,7 @@
             </a>
             <a
                 href="#"
-                class="py-1.5 px-3 text-gray-50 rounded-md bg-primary-light active:bg-primary flex flex-col items-center"
+                class="hidden py-1.5 px-3 text-gray-50 rounded-md bg-primary-light active:bg-primary flex-col items-center"
                 aria-current="page">
                 <LogInIcon class="size-7 mb-0.5" />
                 Prijavite se

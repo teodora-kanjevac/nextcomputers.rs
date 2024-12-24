@@ -11,12 +11,12 @@ import { IPSOptionsDTO } from '~/src/DTOs/IPSOptions.dto'
 dotenv.config()
 
 const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST_TEST as string,
-    port: Number(process.env.MAIL_PORT_TEST),
+    host: process.env.MAIL_HOST as string,
+    port: Number(process.env.MAIL_PORT),
     secure: false,
     auth: {
-        user: process.env.MAIL_USER_TEST as string,
-        pass: process.env.MAIL_PASS_TEST as string,
+        user: process.env.MAIL_USER as string,
+        pass: process.env.MAIL_PASS as string,
     },
 })
 
