@@ -99,6 +99,7 @@ export const useProductStore = defineStore('product', {
                 this.product = new Product(data)
             } catch (error) {
                 console.error('Failed to fetch products:', error)
+                useRouter().replace('/proizvod/404')
             } finally {
                 sharedStore.setLoading(false)
             }
