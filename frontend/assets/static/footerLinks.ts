@@ -7,9 +7,8 @@ export const footerSections = [
         title: 'Kupovina',
         items: [
             { link: '/', content: 'Politika privatnosti' },
-            { link: '/', content: 'Uslovi korišćenja' },
+            { link: '/uslovi-koriscenja', content: 'Uslovi korišćenja' },
             { link: '/', content: 'Reklamacije' },
-            { link: '/', content: 'Prava i obaveze kupaca' },
         ],
     },
     {

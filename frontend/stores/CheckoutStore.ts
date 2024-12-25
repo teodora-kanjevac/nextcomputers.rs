@@ -8,15 +8,21 @@ export const useCheckoutStore = defineStore('checkout', {
             address: '',
             city: '',
             zipcode: '',
-            phone: ''
+            phone: '',
         },
-        paymentMethod: undefined as string | undefined,
-        paymentMethodDiscount: 1 as number
+        paymentMethod: '',
+        paymentMethodText: '',
+        paymentMethodDiscount: 1 as number,
+        prices: {
+            productsPrice: 0,
+            discountPrice: 0,
+            shippingPrice: 0,
+            totalPrice: 0,
+        },
     }),
     actions: {
         setPaymentMethod(method: string) {
             this.paymentMethod = method
-        }
+        },
     },
 })
-

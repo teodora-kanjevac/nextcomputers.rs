@@ -1,6 +1,6 @@
-import { CartProduct } from "./CartProduct"
+import { CartProduct } from './CartProduct'
 
-export class Cart{
+export class Cart {
     public id: string
     public userId?: string
     public cartItems: CartItem[]

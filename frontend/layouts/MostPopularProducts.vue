@@ -14,10 +14,14 @@
                     <span class="font-medium flex items-center me-3">Sortiraj po</span>
                     <SortDropdown />
                 </div>
-                <div class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[2000px]:grid-cols-6">
-                    <Product v-for="product in productCards" :key="product.id" :product="product" />
+                <div>
+                    <Spinner class="mt-32" v-if="!sharedStore.loading && productCards.length === 0" />
+                    <div
+                        class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 min-[2000px]:grid-cols-6">
+                        <Product v-for="product in productCards" :key="product.id" :product="product" />
+                    </div>
                 </div>
-                <ScrollToTopButton/>
+                <ScrollToTopButton />
             </div>
         </div>
     </div>
@@ -27,7 +31,7 @@
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useProductStore } from '~/stores/ProductStore'
 import { useScroll } from '@vueuse/core'
-import { useSharedStore } from '~/stores/SharedStore';
+import { useSharedStore } from '~/stores/SharedStore'
 
 const sharedStore = useSharedStore()
 const productStore = useProductStore()
@@ -40,7 +44,7 @@ const nearBottom = computed(() => {
 })
 
 onMounted(() => {
-    watch(nearBottom, (isNearBottom) => {
+    watch(nearBottom, isNearBottom => {
         if (isNearBottom && !sharedStore.loading && !sharedStore.allProductsFetched) {
             productStore.fetchProductsWithRatings()
         }

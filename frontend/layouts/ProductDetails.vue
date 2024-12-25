@@ -33,7 +33,9 @@
 
                 <div class="flex items-center justify-between mt-5">
                     <div class="flex-col">
-                        <div v-if="product?.retailPrice && product.retailPrice > product.price" class="mb-4 text-sm sm:text-base font-medium">
+                        <div
+                            v-if="product?.retailPrice && product.retailPrice > product.price"
+                            class="mb-4 text-sm sm:text-base font-medium">
                             Maloprodajna cena: {{ formatPrice(product?.retailPrice) }}
                             <span class="text-sm">RSD</span>
                         </div>
@@ -54,6 +56,7 @@
 
                 <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
                     <a
+                        @click="info"
                         class="flex items-center justify-center py-3 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
                         role="button">
                         <HeartOutlineIcon class="size-5 -ms-2 me-2" />
@@ -107,6 +110,7 @@ import { formatPrice } from '~/composables/utils'
 import type { ImageDTO } from '~/shared/types/ImageDTO'
 import { useCartStore } from '~/stores/CartStore'
 
+const toast = useToast()
 const productStore = useProductStore()
 const cartStore = useCartStore()
 
@@ -133,8 +137,31 @@ const updateFeatured = (imageUrl: string) => {
     featuredImage.value = imageUrl
 }
 
-
 const addToCart = async () => {
-    await cartStore.addToCart(product.value!.id, 1)
+    if (product.value?.id !== undefined) {
+        await cartStore.addToCart(product.value.id, 1)
+    } else {
+        toast.add({
+            severity: 'error',
+            summary: 'Greška pri dodavanju u korpu!',
+            detail: 'Došlo je do problema pri dodavanju proizvoda u korpu.',
+            life: 5000,
+        })
+    }
+    toast.add({
+        severity: 'success',
+        summary: 'Proizvod dodat u korpu!',
+        detail: 'Ovaj proizvod je uspešno dodat u korpu.',
+        life: 4000,
+    })
+}
+
+const info = () => {
+    toast.add({
+        severity: 'info',
+        summary: 'Info',
+        detail: 'Funkcionalnost je u pripremi – biće dostupna uskoro. Hvala na razumevanju!',
+        life: 5000,
+    })
 }
 </script>

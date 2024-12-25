@@ -5,7 +5,7 @@ generator client {
 
 datasource db {
   provider = "mysql"
-  url      = env("DATABASE_URL_DEV")
+  url      = env("DATABASE_URL_PROD")
 }
 
 model cart {
@@ -39,12 +39,12 @@ model category {
 }
 
 model order {
-  order_id     String         @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  user_id      String         @default("") @db.Char(36)
+  order_id     String         @id @db.VarChar(12)
+  user_id      String?        @db.Char(36)
   total_price  Decimal        @db.Decimal(10, 2)
   order_status String?        @db.VarChar(20)
   created_at   DateTime       @default(dbgenerated("(now())")) @db.Timestamp(0)
-  user         user           @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_order_FK")
+  user         user?           @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_order_FK")
   orderdetails orderdetails[]
 
   @@index([user_id], map: "user_id_order_FK")
@@ -52,7 +52,7 @@ model order {
 
 model orderdetails {
   order_detail_id String  @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  order_id        String  @db.Char(36)
+  order_id        String  @db.VarChar(12)
   product_id      Int     @db.UnsignedInt
   quantity        Int     @default(0) @db.UnsignedTinyInt
   order           order   @relation(fields: [order_id], references: [order_id], onDelete: Cascade, onUpdate: NoAction, map: "order_id_orderdetails_FK")

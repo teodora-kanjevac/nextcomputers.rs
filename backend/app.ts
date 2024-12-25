@@ -9,6 +9,9 @@ import reviewRoutes from '~/src/routes/reviewRoutes'
 import filterRoutes from '~/src/routes/filterRoutes'
 import searchRoutes from '~/src/routes/searchRoutes'
 import cartRoutes from '~/src/routes/cartRoutes'
+import orderRoutes from '~/src/routes/orderRoutes'
+import mailRoutes from '~/src/routes/mailRoutes'
+import ipsRoutes from '~/src/routes/ipsRoutes'
 import '~/src/jobs/cron-jobs'
 
 dotenv.config()
@@ -30,6 +33,9 @@ app.use('/api/reviews', reviewRoutes)
 app.use('/api/filters', filterRoutes)
 app.use('/api/search', searchRoutes)
 app.use('/api/cart', cartRoutes)
+app.use('/api/order', orderRoutes)
+app.use('/api/mail', mailRoutes)
+app.use('/api/ips', ipsRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

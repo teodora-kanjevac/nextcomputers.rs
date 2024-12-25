@@ -74,12 +74,19 @@ const checkoutStore = useCheckoutStore()
 const emit = defineEmits(['nextStep'])
 
 const selectedPaymentMethod = ref<string | undefined>(checkoutStore.paymentMethod)
+const paymentMethodMap = {
+    advance: 'Uplatom na račun',
+    cash: 'Plaćanje gotovinom pri pouzeću',
+}
 const formSubmitted = ref(false)
 
 function handleSubmit() {
     formSubmitted.value = true
     if (selectedPaymentMethod.value) {
         checkoutStore.paymentMethod = selectedPaymentMethod.value
+        checkoutStore.paymentMethodText =
+            paymentMethodMap[selectedPaymentMethod.value as keyof typeof paymentMethodMap] ||
+            'Nije izabran način plaćanja'
         goToNextStep()
     }
 }

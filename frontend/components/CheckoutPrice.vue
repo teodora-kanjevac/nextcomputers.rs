@@ -40,6 +40,7 @@
 <script setup lang="ts">
 import { useCartStore } from '~/stores/CartStore'
 import { useCheckoutStore } from '~/stores/CheckoutStore'
+import { useOrderStore } from '~/stores/OrderStore'
 import { formatPrice } from '~/composables/utils'
 
 const { selectedPaymentMethod } = defineProps<{
@@ -48,6 +49,7 @@ const { selectedPaymentMethod } = defineProps<{
 
 const cartStore = useCartStore()
 const checkoutStore = useCheckoutStore()
+const orderStore = useOrderStore()
 
 const totalProductPrice = computed(() => {
     return cartStore.cart.cartItems.reduce((sum, item) => {
@@ -78,6 +80,11 @@ const shippingPrice = computed(() => {
 const totalPrice = computed(() => {
     return totalProductPrice.value + shippingPrice.value - totalDiscount.value
 })
+
+checkoutStore.prices.productsPrice = totalProductPrice.value
+checkoutStore.prices.discountPrice = totalDiscount.value
+checkoutStore.prices.shippingPrice = shippingPrice.value
+checkoutStore.prices.totalPrice = totalPrice.value
 
 watch(
     () => selectedPaymentMethod,

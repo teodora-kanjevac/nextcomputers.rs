@@ -16,9 +16,25 @@ const { productId } = defineProps<{
     productId: number
 }>()
 
+const toast = useToast()
 const cartStore = useCartStore()
 
 const addToCart = async () => {
-    await cartStore.addToCart(productId, 1)
+    try {
+        await cartStore.addToCart(productId, 1)
+        toast.add({
+            severity: 'success',
+            summary: 'Proizvod dodat u korpu!',
+            detail: 'Ovaj proizvod je uspešno dodat u korpu.',
+            life: 4000,
+        })
+    } catch (error) {
+        toast.add({
+            severity: 'error',
+            summary: 'Greška pri dodavanju u korpu!',
+            detail: 'Došlo je do problema pri dodavanju proizvoda u korpu.',
+            life: 5000,
+        })
+    }
 }
 </script>
