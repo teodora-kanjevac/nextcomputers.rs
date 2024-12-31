@@ -79,6 +79,7 @@ model product {
   discount_price  Decimal?       @db.Decimal(10, 2)
   payment_advance Int            @default(0) @db.SmallInt
   subcategory_id  Int?           @db.UnsignedInt
+  available       Boolean        @default(false)
   cartitem        cartitem[]
   orderdetails    orderdetails[]
   subcategory     subcategory?   @relation(fields: [subcategory_id], references: [subcategory_id], onUpdate: NoAction, map: "subcategory_id_FK")

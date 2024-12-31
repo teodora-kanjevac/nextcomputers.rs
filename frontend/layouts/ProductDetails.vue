@@ -23,7 +23,14 @@
             </div>
 
             <div class="mt-8 md:mt-0">
-                <span class="bg-green-100 text-green-800 text-xs font-medium me-2 px-2 py-0.5 rounded">Na stanju</span>
+                <span
+                    :class="{
+                        'bg-green-100 text-green-800': product.available,
+                        'bg-red-100 text-red-800': !product.available,
+                    }"
+                    class="text-xs font-medium me-2 px-2 py-0.5 rounded">
+                    {{ product.available ? 'Na stanju' : 'Trenutno nije dostupno' }}
+                </span>
                 <h1 class="mt-2 text-xl font-semibold text-gray-900 sm:text-2xl">
                     {{ product?.name }}
                 </h1>
@@ -59,16 +66,25 @@
                         @click="info"
                         class="flex items-center justify-center py-3 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
                         role="button">
-                        <HeartOutlineIcon class="size-5 -ms-2 me-2" />
+                        <HeartOutlineIcon class="size-5 -ms-2 me-2 shrink-0" />
                         Sačuvaj proizvod
                     </a>
 
                     <a
+                        v-if="product.available"
                         @click="addToCart"
                         class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-lg text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
                         role="button">
-                        <AddToCartIcon class="size-5 -ms-2 me-2" />
+                        <AddToCartIcon class="size-5 -ms-2 me-2 shrink-0" />
                         Dodaj u korpu
+                    </a>
+                    <a
+                        v-else
+                        :href="`/proizvodi/${product.subcategoryId}`"
+                        class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-lg text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
+                        role="button">
+                        Pretraži proizvode iz ove kategorije
+                        <ArrowRightIcon class="size-4 ms-2 me-2 shrink-0" />
                     </a>
                 </div>
 
@@ -104,6 +120,7 @@
 <script setup lang="ts">
 import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
+import ArrowRightIcon from '~/components/icons/ArrowRightIcon.vue'
 import { useProductStore } from '~/stores/ProductStore'
 import type { ProductDTO } from '~/shared/types/ProductDTO'
 import { formatPrice } from '~/composables/utils'

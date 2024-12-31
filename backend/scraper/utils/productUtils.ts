@@ -9,22 +9,21 @@ export const filterProducts = (products: Product[]): Product[] => {
     })
 }
 
-export const deleteNonExistantProducts = async (validEans: any): Promise<number> => {
+export const hideNonExistantProducts = async (identifiers: any): Promise<number> => {
     const allDatabaseProducts = await prisma.product.findMany({
         select: { ean: true },
     })
 
-    const productsToDelete = allDatabaseProducts.filter(product => !validEans.has(product.ean))
+    const productsToHide = allDatabaseProducts.filter(product => !identifiers.has(product.ean))
 
-    const deleteOperations = productsToDelete.map(product =>
-        prisma.product.delete({
-            where: { ean: product.ean },
-        })
-    )
+    await prisma.product.updateMany({
+        where: {
+            ean: { in: productsToHide.map(product => product.ean) },
+        },
+        data: { available: false },
+    })
 
-    await Promise.all(deleteOperations)
-
-    return productsToDelete.length
+    return productsToHide.length
 }
 
 export const processSpecifications = (specification: any[]): Specifications => {
@@ -64,10 +63,10 @@ export const processImages = (imageUrl: any[]): ProcessedImage[] => {
 
 export const calculateSalePrice = (price: number, paymentAdvance: number): number => {
     const markupPercentage = 
-        price < 10000 ? 10 : 
-        price < 20000 ? 8 : 
-        price < 40000 ? 6 : 
-        price < 100000 ? 4 : 3
+            price < 10000 ? 10 : 
+            price < 20000 ? 8 : 
+            price < 40000 ? 6 : 
+            price < 100000 ? 4 : 3
 
     const salePrice = (price - price * (paymentAdvance / 100)) * (1 + markupPercentage / 100)
     const remainder = salePrice % 1000

@@ -32,6 +32,7 @@ export const fetchProductSearchResults = async (
         skip: offset,
         take: pageSize,
         where: {
+            available: true,
             OR: [
                 { name: { contains: searchTerm } },
                 { product_id: parseInt(searchTerm, 10) || undefined },
@@ -86,7 +87,8 @@ export const fetchFilteredSearchResults = async (
 
     const query = Prisma.sql`
         SELECT * FROM product
-        WHERE ${searchCondition}
+        WHERE available = TRUE
+        AND ${searchCondition}
         ${categoryCondition}
         ${brandCondition}
         ${orderByCondition}

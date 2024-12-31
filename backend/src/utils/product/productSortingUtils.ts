@@ -16,11 +16,15 @@ export const fetchSortedProducts = async (
     return prisma.product.findMany({
         skip: offset,
         take: pageSize,
-        where: subcategoryId ? { subcategory_id: subcategoryId } : undefined,
+        where: {
+            available: true,
+            ...(subcategoryId ? { subcategory_id: subcategoryId } : undefined)
+        },
         select: {
             product_id: true,
             name: true,
             sale_price: true,
+            available: true,
             discount_price: true,
             image_url: true,
         },

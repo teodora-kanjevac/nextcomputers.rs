@@ -8,6 +8,7 @@ export class ProductCardDTO implements IProductCardDTO {
     salePrice: number
     discountPrice?: number
     discountPercentage?: number
+    available: boolean
     thumbnail: string
 
     constructor(product: any) {
@@ -17,6 +18,7 @@ export class ProductCardDTO implements IProductCardDTO {
         this.salePrice = product.sale_price
         this.discountPrice = product.discount_price
         this.discountPercentage = calculateDiscountPercentage(this.salePrice, this.discountPrice)
+        this.available = product.available
         this.thumbnail = product.image_url[0].thumbnail
     }
 }

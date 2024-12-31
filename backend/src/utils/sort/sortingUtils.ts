@@ -23,7 +23,8 @@ export const fetchSortedByDiscount = async (
             image_url, 
             ((sale_price - discount_price) / sale_price) * 100 AS discountPercentage
         FROM product
-        WHERE ${subcategoryCondition}
+        WHERE available = TRUE
+        AND ${subcategoryCondition}
         ${brandCondition}
         ${specificationCondition}
         ORDER BY discountPercentage DESC
@@ -57,7 +58,8 @@ export const fetchSortedByRating = async (
             COALESCE(AVG(r.rating), 0) AS avgRating
         FROM product p
         LEFT JOIN review r ON p.product_id = r.product_id
-        WHERE ${subcategoryCondition}
+        WHERE available = TRUE
+        AND ${subcategoryCondition}
         ${brandCondition}
         ${specificationCondition}
         GROUP BY p.product_id
@@ -95,7 +97,8 @@ export const fetchSearchResultsSortedByDiscount = async (
             image_url, 
             ((sale_price - discount_price) / sale_price) * 100 AS discountPercentage
         FROM product
-        WHERE ${searchCondition}
+        WHERE available = TRUE
+        AND ${searchCondition}
         ${categoryCondition}
         ${brandCondition}
         ORDER BY discountPercentage DESC
@@ -133,7 +136,8 @@ export const fetchSearchResultsSortedByRating = async (
             COALESCE(AVG(r.rating), 0) AS avgRating
         FROM product p
         LEFT JOIN review r ON p.product_id = r.product_id
-        WHERE ${searchCondition}
+        WHERE available = TRUE
+        AND ${searchCondition}
         ${categoryCondition}
         ${brandCondition}
         GROUP BY p.product_id

@@ -14,6 +14,8 @@ export interface IProductDetailsDTO {
     retailPrice: number
     discountPrice?: number
     discountPercentage?: number
+    available: boolean
+    subcategoryId: number
     reviews?: ReviewDTO[]
     ratings?: ProductRatingDTO
 }
