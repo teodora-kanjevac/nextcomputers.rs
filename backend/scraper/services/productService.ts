@@ -1,27 +1,30 @@
 import prisma from '~/src/utils/prisma'
 import IsEqual from 'fast-deep-equal'
 import { Product } from '~/scraper/types/Product'
-import { deleteNonExistantProducts, filterProducts } from '~/scraper/utils/productUtils'
+import { filterProducts, hideNonExistantProducts } from '~/scraper/utils/productUtils'
 
 const BATCH_SIZE = 100
 
 export const storeProducts = async (products: Product[]): Promise<void> => {
     try {
         const validProducts = filterProducts(products)
-        const validEans = new Set(validProducts.map(product => product.ean))
+        const validIdentifiers = new Set(validProducts.map(product => product.ean ?? product.name))
 
         let inserted = 0
         let updated = 0
+        let markedUnavailable = 0
 
         for (let i = 0; i < validProducts.length; i += BATCH_SIZE) {
             const batch = validProducts.slice(i, i + BATCH_SIZE)
-
-            const eanList = batch.map(product => product.ean).filter((ean): ean is string => ean !== undefined)
+            const identifiers = batch.map(product => product.ean ?? product.name)
 
             const existingProducts = await prisma.product.findMany({
-                where: { ean: { in: eanList } },
+                where: { OR: [{ ean: { in: identifiers } }, { name: { in: identifiers } }] },
                 select: {
+                    product_id: true,
                     ean: true,
+                    name: true,
+                    available: true,
                     stock: true,
                     price: true,
                     retail_price: true,
@@ -30,14 +33,17 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                 },
             })
 
-            const existingProductsMap = Object.fromEntries(existingProducts.map(product => [product.ean, product]))
+            const existingProductsMap = Object.fromEntries(
+                existingProducts.map(product => [product.ean ?? product.name, product])
+            )
 
-            const productsToInsert = batch.filter(product => !existingProductsMap[product.ean])
+            const productsToInsert = batch.filter(product => !existingProductsMap[product.ean ?? product.name])
             const productsToUpdate = batch.filter(product => {
-                const existingProduct = existingProductsMap[product.ean]
+                const existingProduct = existingProductsMap[product.ean ?? product.name]
                 return (
                     existingProduct &&
-                    (existingProduct.stock !== product.stock ||
+                    (!existingProduct.available ||
+                        existingProduct.stock !== product.stock ||
                         existingProduct.price.toNumber() !== parseFloat(product.price.toFixed(2)) ||
                         existingProduct.retail_price.toNumber() !== parseFloat(product.retailPrice.toFixed(2)) ||
                         existingProduct.sale_price.toNumber() !== parseFloat(product.salePrice.toFixed(2)) ||
@@ -50,8 +56,9 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
 
             const updateOperations = productsToUpdate.map(product =>
                 prisma.product.update({
-                    where: { ean: product.ean },
+                    where: { product_id: existingProductsMap[product.ean ?? product.name].product_id },
                     data: {
+                        available: true,
                         stock: product.stock,
                         price: product.price,
                         retail_price: product.retailPrice,
@@ -76,6 +83,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     ean: product.ean,
                     image_url: product.imageUrl,
                     specification: product.specification,
+                    available: true,
                 })),
                 skipDuplicates: true,
             })
@@ -83,12 +91,11 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
             await prisma.$transaction([insertOperations, ...updateOperations])
         }
 
-        const deleted = await deleteNonExistantProducts(validEans)
+        markedUnavailable = await hideNonExistantProducts(validIdentifiers)
 
-        console.log('Products stored successfully.')
         console.log('Total products inserted:', inserted)
         console.log('Total products updated:', updated)
-        console.log('Total products deleted:', deleted)
+        console.log('Total products marked unavailable:', markedUnavailable)
     } catch (error) {
         console.error('Error storing products:', error)
         throw error

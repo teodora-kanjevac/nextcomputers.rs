@@ -6,4 +6,5 @@ export interface IProductCardDTO {
     salePrice: number
     discountPrice?: number
     discountPercentage?: number
+    available: boolean
 }

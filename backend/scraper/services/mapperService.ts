@@ -27,6 +27,7 @@ export async function ProductfromAPI(data: any): Promise<Product> {
         data.anPaymentAdvance,
         subcategoryName,
         data.acEan,
+        true,
         processedImages,
         productSpecs,
         data.acCountry,

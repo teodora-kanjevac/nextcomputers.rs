@@ -13,6 +13,7 @@ export class Product {
     public discountPrice?: number
     public retailPrice: number
     public salePrice: number
+    public available: boolean
     public subcategoryId?: number
 
     constructor(product: any) {
@@ -30,6 +31,7 @@ export class Product {
         this.country = product.country
         this.supplier = product.supplier
         this.discountPrice = product.discount_price
+        this.available = product.available
         this.subcategoryId = product.subcategory_id
     }
 }

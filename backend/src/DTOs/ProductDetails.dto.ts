@@ -16,6 +16,8 @@ export class ProductDetailsDTO implements IProductDetailsDTO {
     retailPrice: number
     discountPrice?: number
     discountPercentage?: number
+    available: boolean
+    subcategoryId: number
     reviews?: ReviewDTO[]
     ratings?: ProductRatingDTO
 
@@ -32,7 +34,9 @@ export class ProductDetailsDTO implements IProductDetailsDTO {
         this.retailPrice = product.retail_price
         this.discountPrice = product.discount_price
         this.discountPercentage = calculateDiscountPercentage(this.salePrice, this.discountPrice)
+        this.available = product.available
+        this.subcategoryId = product.subcategory_id
         this.reviews = product.review?.map((review: any) => new ReviewDTO(review))
-        this.ratings = product.ratings;
+        this.ratings = product.ratings
     }
 }

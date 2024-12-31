@@ -10,6 +10,8 @@ export interface ProductDTO {
     discountPrice?: number
     discountPercentage?: number
     retailPrice: number
+    subcategoryId: number
+    available: boolean
     images: ImageDTO[]
     specifications: SpecificationsDTO
     declaration: DeclarationDTO

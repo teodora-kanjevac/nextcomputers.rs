@@ -16,6 +16,7 @@ export class Product {
     public retailPrice: number
     public salePrice: number
     public paymentAdvance: number
+    public available: boolean
     public subcategoryName: string
     public subcategoryId?: number
 
@@ -31,6 +32,7 @@ export class Product {
         paymentAdvance: number,
         subcategoryName: string,
         ean: string,
+        available: boolean,
         imageUrl?: any,
         specification?: any,
         country?: string,
@@ -53,6 +55,7 @@ export class Product {
         this.country = country
         this.supplier = supplier
         this.discountPrice = discountPrice
+        this.available = available
         this.subcategoryName = subcategoryName
         this.subcategoryId = subcategoryId
     }

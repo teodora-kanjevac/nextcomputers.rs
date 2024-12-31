@@ -62,6 +62,7 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
 
     const products = await prisma.product.findMany({
         where: {
+            available: true,
             OR: [
                 { name: { contains: searchTerm } },
                 { product_id: parseInt(searchTerm, 10) || undefined },
@@ -128,7 +129,8 @@ export const fetchFilteredProducts = async (
 
     const query = Prisma.sql`
         SELECT * FROM product
-        WHERE ${subcategoryCondition}
+        WHERE available = TRUE
+        AND ${subcategoryCondition}
         ${brandCondition}
         ${specificationCondition}
         ${orderByCondition}
