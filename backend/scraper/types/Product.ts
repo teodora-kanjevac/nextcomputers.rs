@@ -17,7 +17,6 @@ export class Product {
     public salePrice: number
     public paymentAdvance: number
     public available: boolean
-    public subcategoryName: string
     public subcategoryId?: number
 
     constructor(
@@ -30,7 +29,6 @@ export class Product {
         retailPrice: number,
         salePrice: number,
         paymentAdvance: number,
-        subcategoryName: string,
         ean: string,
         available: boolean,
         imageUrl?: any,
@@ -56,11 +54,10 @@ export class Product {
         this.supplier = supplier
         this.discountPrice = discountPrice
         this.available = available
-        this.subcategoryName = subcategoryName
         this.subcategoryId = subcategoryId
     }
 
     public isExcluded(): boolean {
-        return isExcluded(this.subcategoryName)
+        return isExcluded(this.name)
     }
 }
