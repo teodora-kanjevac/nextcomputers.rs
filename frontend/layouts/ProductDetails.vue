@@ -91,12 +91,12 @@
                 <hr class="my-6 md:my-8 border-gray-200" />
 
                 <div class="mt-6 px-1 lg:px-10 grid sm:gap-14 gap-5 sm:grid-flow-col items-start text-sm">
-                    <div class="grid grid-cols-2 gap-y-2">
+                    <div v-if="Object.keys(product.specifications).length > 0" class="grid grid-cols-2 gap-y-2">
                         <template
                             v-for="([key, value], index) in Object.entries(product.specifications).slice(0, 6)"
                             :key="index">
                             <span class="font-semibold">{{ key }}:</span>
-                            <span>{{ value }}</span>
+                            <span class="line-clamp-3">{{ value }}</span>
                         </template>
                     </div>
                     <div class="grid grid-cols-2 gap-y-2">
