@@ -20,15 +20,16 @@ export const scrapeCategories = async (): Promise<void> => {
 
 export const scrapeProducts = async (): Promise<void> => {
     try {
-        // const eweapiProducts = await fetchApiProducts()
-        const usponapiProducts = await fetchUsponApiProducts()
+        const eweapiProducts = await fetchApiProducts()
+        // const usponapiProducts = await fetchUsponApiProducts()
 
-        // const eweproducts = eweapiProducts.map(ProductfromEWEAPI)
-        const usponproducts = (await Promise.all(usponapiProducts.map(ProductfromUsponAPI))).filter(
+        // const usponproducts = (await Promise.all(usponapiProducts.map(ProductfromUsponAPI))).filter(
+        //     (product): product is Product => product !== null
+        // )
+        const eweproducts = (await Promise.all(eweapiProducts.map(ProductfromEWEAPI))).filter(
             (product): product is Product => product !== null
         )
-
-        await storeProducts(usponproducts)
+        await storeProducts(eweproducts)
     } catch (error) {
         console.error('Error processing products:', error)
         throw new Error('Failed to process products')

@@ -11,5 +11,6 @@ export interface EWEApiProduct{
     acSupplier: string,
     acMainCategory: string,
     acCategory: string,
+    acSubCategory: string,
     urlImages: any
 }

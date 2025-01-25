@@ -16,11 +16,12 @@ export function CategoryfromAPI(data: { acMainCategory: string; acCategory: stri
     return new Category(data.acMainCategory, data.acCategory)
 }
 
-export async function ProductfromEWEAPI(data: any): Promise<Product> {
+export async function ProductfromEWEAPI(data: any): Promise<Product | null> {
     const processedImages = processImages(data.urlImages)
     const productSpecs = processSpecifications(data.specification)
-    const subcategoryName = renameCategory(data.acCategory)
-    const subcategoryId = await getSubcategoryId(subcategoryName)
+    const processedSubcategory = await processSubcategory(data.acSubCategory, data.acCategory, data.acName)
+    if (!processedSubcategory) return null
+    const subcategoryId = await getSubcategoryId(processedSubcategory)
     const salePrice = calculateSalePrice(data.anPrice, data.anPaymentAdvance)
 
     return new Product(
