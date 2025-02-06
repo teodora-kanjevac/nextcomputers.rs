@@ -1,28 +1,28 @@
 import { Category } from '~/scraper/types/Category'
 import { Product } from '~/scraper/types/Product'
-import {
-    processSpecifications,
-    processImages,
-    calculateSalePrice,
-    calculateAdvance,
-    parseDeclaration,
-    parseSpecifications,
-} from '~/scraper/utils/productUtils'
+import { calculateSalePrice, parseImages } from '~/scraper/utils/productUtils'
 import { getSubcategoryId } from '~/scraper/services/categoryService'
-import { renameCategory } from '~/scraper/utils/excludeCategory'
 import { processSubcategory } from '~/scraper/utils/usponAPI/subcategoryMapper'
+import { calculateEWEB2BPrice, parseEWESpecifications } from '~/scraper/utils/eweAPI/parseUtils'
+import {
+    calculateAdvance,
+    calculateUsponB2BPrice,
+    parseUsponDeclaration,
+    parseUsponSpecifications,
+} from '~/scraper/utils/usponAPI/parseUtils'
 
 export function CategoryfromAPI(data: { acMainCategory: string; acCategory: string }): Category {
     return new Category(data.acMainCategory, data.acCategory)
 }
 
 export async function ProductfromEWEAPI(data: any): Promise<Product | null> {
-    const processedImages = processImages(data.urlImages)
-    const productSpecs = processSpecifications(data.specification)
+    const processedImages = parseImages(data.urlImages)
+    const productSpecs = parseEWESpecifications(data.specification)
     const processedSubcategory = await processSubcategory(data.acSubCategory, data.acCategory, data.acName)
     if (!processedSubcategory) return null
     const subcategoryId = await getSubcategoryId(processedSubcategory)
-    const salePrice = calculateSalePrice(data.anPrice, data.anPaymentAdvance)
+    const b2bPrice = calculateEWEB2BPrice(data.anPaymentAdvance, data.anPrice)
+    const salePrice = calculateSalePrice(b2bPrice, data.anPaymentAdvance)
 
     return new Product(
         undefined,
@@ -30,7 +30,7 @@ export async function ProductfromEWEAPI(data: any): Promise<Product | null> {
         data.anStock,
         undefined,
         data.acDept,
-        data.anPrice,
+        b2bPrice,
         data.anRetailPrice,
         salePrice,
         data.anPaymentAdvance,
@@ -46,15 +46,15 @@ export async function ProductfromEWEAPI(data: any): Promise<Product | null> {
 }
 
 export async function ProductfromUsponAPI(data: any): Promise<Product | null> {
-    data.b2bcena *= 1.2
-    const processedImages = processImages(data.slike)
-    const advance = calculateAdvance(data.flag_akcijska_cena)
-    const salePrice = calculateSalePrice(data.b2bcena, advance)
-    const { supplier, country } = parseDeclaration(data.deklaracija)
-    const processedSpecs = parseSpecifications(data.opis)
+    const processedImages = parseImages(data.slike)
+    const processedSpecs = parseUsponSpecifications(data.opis)
+    const { supplier, country } = parseUsponDeclaration(data.deklaracija)
     const processedSubcategory = await processSubcategory(data.grupa, data.nadgrupa, data.naziv)
     if (!processedSubcategory) return null
     const subcategoryId = await getSubcategoryId(processedSubcategory)
+    const advance = calculateAdvance(data.flag_akcijska_cena)
+    const b2bPrice = calculateUsponB2BPrice(data.flag_akcijska_cena, data.b2bcena)
+    const salePrice = calculateSalePrice(b2bPrice, advance)
 
     const isInvalidBrand = /^[\W_]+$/.test(data.proizvodjac)
     const productName = isInvalidBrand ? data.naziv : `${data.proizvodjac.toUpperCase()} ${data.naziv}`
@@ -66,7 +66,7 @@ export async function ProductfromUsponAPI(data: any): Promise<Product | null> {
         parseInt(data.kolicina),
         undefined,
         productBrand,
-        data.b2bcena,
+        b2bPrice,
         data.mpcena,
         salePrice,
         advance,

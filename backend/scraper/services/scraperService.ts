@@ -1,4 +1,4 @@
-import { fetchApiProducts } from '~/scraper/handlers/EWEApiRequestHandler'
+import { fetchEWEApiProducts } from '~/scraper/handlers/EWEApiRequestHandler'
 import { storeCategoriesAndSubcategories } from '~/scraper/services/categoryService'
 import { CategoryfromAPI, ProductfromEWEAPI, ProductfromUsponAPI } from '~/scraper/services/mapperService'
 import { storeProducts } from '~/scraper/services/productService'
@@ -7,7 +7,7 @@ import { Product } from '~/scraper/types/Product'
 
 export const scrapeCategories = async (): Promise<void> => {
     try {
-        const apiProducts = await fetchApiProducts()
+        const apiProducts = await fetchEWEApiProducts()
 
         const categories = apiProducts.map(CategoryfromAPI)
 
@@ -18,18 +18,28 @@ export const scrapeCategories = async (): Promise<void> => {
     }
 }
 
-export const scrapeProducts = async (): Promise<void> => {
+export const scrapeEWEProducts = async (): Promise<void> => {
     try {
-        const eweapiProducts = await fetchApiProducts()
-        // const usponapiProducts = await fetchUsponApiProducts()
+        const apiProducts = await fetchEWEApiProducts()
 
-        // const usponproducts = (await Promise.all(usponapiProducts.map(ProductfromUsponAPI))).filter(
-        //     (product): product is Product => product !== null
-        // )
-        const eweproducts = (await Promise.all(eweapiProducts.map(ProductfromEWEAPI))).filter(
+        const products = (await Promise.all(apiProducts.map(ProductfromEWEAPI))).filter(
             (product): product is Product => product !== null
         )
-        await storeProducts(eweproducts)
+        await storeProducts(products)
+    } catch (error) {
+        console.error('Error processing products:', error)
+        throw new Error('Failed to process products')
+    }
+}
+
+export const scrapeUsponProducts = async (): Promise<void> => {
+    try {
+        const apiProducts = await fetchUsponApiProducts()
+
+        const products = (await Promise.all(apiProducts.map(ProductfromUsponAPI))).filter(
+            (product): product is Product => product !== null
+        )
+        await storeProducts(products)
     } catch (error) {
         console.error('Error processing products:', error)
         throw new Error('Failed to process products')

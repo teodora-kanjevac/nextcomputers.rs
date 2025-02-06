@@ -9,7 +9,6 @@ export const synonymMap: Record<string, string[]> = {
     ssd: ['M.2', 'eksterni ssd'],
     'mrežna oprema': ['ruteri'],
     šporeti: ['električni šporeti'],
-    'ostala baštenska oprema': ['bazeni'],
     'veš mašine': ['mašine za pranje veša', 'pranje i sušenje veša', 'mašine za sušenje veša'],
     'pametni satovi i fitnes narukvice': ['smartwatch'],
     'stajleri i prese za kosu': ['nega kose', 'stajleri i prese'],

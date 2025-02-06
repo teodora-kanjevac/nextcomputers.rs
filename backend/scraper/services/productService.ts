@@ -1,7 +1,7 @@
 import prisma from '~/src/utils/prisma'
 import IsEqual from 'fast-deep-equal'
 import { Product } from '~/scraper/types/Product'
-import { filterProducts, hideNonExistantProducts } from '~/scraper/utils/productUtils'
+import { filterProducts, getLowestAvailablePrice, hideNonExistantProducts } from '~/scraper/utils/productUtils'
 
 const BATCH_SIZE = 100
 
@@ -9,6 +9,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
     try {
         const validProducts = filterProducts(products)
         const validIdentifiers = new Set(validProducts.map(product => product.ean ?? product.name))
+        const productDistributor = new URL(products[0].imageUrl[0].image).hostname
 
         let inserted = 0
         let updated = 0
@@ -38,6 +39,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
             )
 
             const productsToInsert = batch.filter(product => !existingProductsMap[product.ean ?? product.name])
+
             const productsToUpdate = batch.filter(product => {
                 const existingProduct = existingProductsMap[product.ean ?? product.name]
                 return (
@@ -54,19 +56,40 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
             inserted += productsToInsert.length
             updated += productsToUpdate.length
 
-            const updateOperations = productsToUpdate.map(product =>
-                prisma.product.update({
-                    where: { product_id: existingProductsMap[product.ean ?? product.name].product_id },
-                    data: {
-                        available: true,
-                        stock: product.stock,
-                        price: product.price,
-                        retail_price: product.retailPrice,
-                        sale_price: product.salePrice,
-                        image_url: product.imageUrl,
-                    },
+            const updateOperations = productsToUpdate.map(product => {
+                const productKey = product.ean ?? product.name
+                const existingProduct = existingProductsMap[productKey]
+                const productId = existingProduct.product_id
+
+                const currentDistributorHasProduct = JSON.stringify(existingProduct.image_url).includes(
+                    productDistributor
+                )
+                const cheapestPrice =
+                    getLowestAvailablePrice(productKey, existingProducts) || parseFloat(product.price.toFixed(2))
+
+                const commonData = {
+                    available: true,
+                    price: cheapestPrice,
+                    retail_price: product.retailPrice,
+                    sale_price: product.salePrice,
+                }
+
+                if (currentDistributorHasProduct) {
+                    return prisma.product.update({
+                        where: { product_id: productId },
+                        data: {
+                            ...commonData,
+                            stock: product.stock,
+                            image_url: product.imageUrl,
+                        },
+                    })
+                }
+
+                return prisma.product.update({
+                    where: { product_id: productId },
+                    data: commonData,
                 })
-            )
+            })
 
             const insertOperations = prisma.product.createMany({
                 data: productsToInsert.map(product => ({
@@ -91,8 +114,9 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
             await prisma.$transaction([insertOperations, ...updateOperations])
         }
 
-        markedUnavailable = await hideNonExistantProducts(validIdentifiers)
+        markedUnavailable = await hideNonExistantProducts(validIdentifiers, productDistributor)
 
+        console.log('Distributor:', productDistributor)
         console.log('Total products inserted:', inserted)
         console.log('Total products updated:', updated)
         console.log('Total products marked unavailable:', markedUnavailable)
