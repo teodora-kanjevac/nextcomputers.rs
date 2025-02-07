@@ -13,6 +13,17 @@ export const createCart = async (userId: string): Promise<string> => {
     return cart.cart_id
 }
 
+export const updateLastSiteVisitCart = async (cartId: string, lastAccessedAt: Date): Promise<string> => {
+    const cart = await prisma.cart.update({
+        where: { cart_id: cartId },
+        data: {
+            last_accessed_at: lastAccessedAt,
+        },
+    })
+
+    return cart.last_accessed_at.toISOString()
+}
+
 export const fetchCartById = async (cartId: string): Promise<CartDTO> => {
     const cart = await prisma.cart.findUnique({
         where: { cart_id: cartId },

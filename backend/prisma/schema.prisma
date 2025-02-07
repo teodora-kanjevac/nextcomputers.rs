@@ -9,11 +9,12 @@ datasource db {
 }
 
 model cart {
-  cart_id    String     @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  user_id    String?    @db.Char(36)
-  created_at DateTime   @default(dbgenerated("(now())")) @db.Timestamp(0)
-  user       user?      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_cart_FK")
-  cartitem   cartitem[]
+  cart_id          String     @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  user_id          String?    @db.Char(36)
+  created_at       DateTime   @default(dbgenerated("(now())")) @db.Timestamp(0)
+  last_accessed_at DateTime   @default(dbgenerated("(now())")) @db.Timestamp(0)
+  user             user?      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_cart_FK")
+  cartitem         cartitem[]
 
   @@index([user_id], map: "user_id_cart_FK")
 }

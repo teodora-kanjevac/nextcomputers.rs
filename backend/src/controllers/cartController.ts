@@ -7,6 +7,7 @@ import {
     fetchCartByUserId,
     removeCartItem,
     updateCartItemQuantity,
+    updateLastSiteVisitCart,
 } from '~/src/services/cartService'
 
 export const createACart = async (req: Request, res: Response): Promise<void> => {
@@ -16,6 +17,22 @@ export const createACart = async (req: Request, res: Response): Promise<void> =>
         const cartId = await createCart(userId)
 
         res.status(200).json(cartId)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const updateLastVisitToCart = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { cartId, lastAccessedAt } = req.body
+
+        const lastVisited = await updateLastSiteVisitCart(cartId, lastAccessedAt)
+
+        res.status(200).json(lastVisited)
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ error: error.message })

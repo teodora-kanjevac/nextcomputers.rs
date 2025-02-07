@@ -1,5 +1,7 @@
 const categoryOrder = [
-    'Računari i komponente',
+    'Računarske komponente',
+    'Računari i laptopovi',
+    'Računarske periferije',
     'Display, Televizori, Projektori, Audio',
     'Štampači, skeneri i potrošni',
     'Mobilni telefoni i oprema',

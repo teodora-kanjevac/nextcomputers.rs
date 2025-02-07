@@ -75,5 +75,15 @@ export const useCartStore = defineStore('cart', {
                 console.error('Failed to delete from cart:', error)
             }
         },
+        async updateLastAccessToCart(cartId: string, lastAccessedAt: Date) {
+            try {
+                await axios.put(`/api/cart/last-accessed`, {
+                    cartId: cartId,
+                    lastAccessedAt: lastAccessedAt,
+                })
+            } catch (error) {
+                console.error('Failed to change quantity:', error)
+            }
+        },
     },
 })
