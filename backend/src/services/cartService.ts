@@ -133,6 +133,17 @@ export const removeCartItem = async (cartItemId: string): Promise<CartItemDTO> =
     return new CartItemDTO(cartItem)
 }
 
+export const removeUnavailableCartItems = async (cartId: string): Promise<number> => {
+    const deletedItems = await prisma.cartitem.deleteMany({
+        where: {
+            cart_id: cartId,
+            product: { available: false },
+        },
+    })
+
+    return deletedItems.count
+}
+
 export const clearCart = async (cartId: string): Promise<void> => {
     await prisma.cartitem.deleteMany({
         where: { cart_id: cartId },

@@ -66,6 +66,14 @@ export const useCartStore = defineStore('cart', {
                 console.error('Failed to delete from cart:', error)
             }
         },
+        async removeUnavailableItems(cartId: string) {
+            try {
+                const { data } = await axios.delete(`/api/cart/remove-unavailable-items/${cartId}`)
+                return data
+            } catch (error) {
+                console.error('Failed to delete from cart:', error)
+            }
+        },
         async clearCart() {
             try {
                 await axios.delete(`/api/cart/clear/${this.cart.id}`)

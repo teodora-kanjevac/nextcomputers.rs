@@ -10,31 +10,26 @@
 
 <script setup lang="ts">
 import AddToCartIcon from '~/components/icons/AddToCartIcon.vue'
+import { useNotification } from '~/composables/useNotification'
 import { useCartStore } from '~/stores/CartStore'
 
 const { productId } = defineProps<{
     productId: number
 }>()
 
-const toast = useToast()
+const { showNotification } = useNotification()
 const cartStore = useCartStore()
 
 const addToCart = async () => {
     try {
         await cartStore.addToCart(productId, 1)
-        toast.add({
-            severity: 'success',
-            summary: 'Proizvod dodat u korpu!',
-            detail: 'Ovaj proizvod je uspešno dodat u korpu.',
-            life: 4000,
-        })
+        showNotification('success', 'Proizvod dodat u korpu!', 'Ovaj proizvod je uspešno dodat u korpu.', 4000)
     } catch (error) {
-        toast.add({
-            severity: 'error',
-            summary: 'Greška pri dodavanju u korpu!',
-            detail: 'Došlo je do problema pri dodavanju proizvoda u korpu.',
-            life: 5000,
-        })
+        showNotification(
+            'error',
+            'Greška pri dodavanju u korpu!',
+            'Došlo je do problema pri dodavanju proizvoda u korpu.'
+        )
     }
 }
 </script>

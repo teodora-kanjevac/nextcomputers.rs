@@ -126,8 +126,9 @@ import type { ProductDTO } from '~/shared/types/ProductDTO'
 import { formatPrice } from '~/composables/utils'
 import type { ImageDTO } from '~/shared/types/ImageDTO'
 import { useCartStore } from '~/stores/CartStore'
+import { useNotification } from '~/composables/useNotification'
 
-const toast = useToast()
+const { showNotification } = useNotification()
 const productStore = useProductStore()
 const cartStore = useCartStore()
 
@@ -158,27 +159,16 @@ const addToCart = async () => {
     if (product.value?.id !== undefined) {
         await cartStore.addToCart(product.value.id, 1)
     } else {
-        toast.add({
-            severity: 'error',
-            summary: 'Greška pri dodavanju u korpu!',
-            detail: 'Došlo je do problema pri dodavanju proizvoda u korpu.',
-            life: 5000,
-        })
+        showNotification(
+            'error',
+            'Greška pri dodavanju u korpu!',
+            'Došlo je do problema pri dodavanju proizvoda u korpu.'
+        )
     }
-    toast.add({
-        severity: 'success',
-        summary: 'Proizvod dodat u korpu!',
-        detail: 'Ovaj proizvod je uspešno dodat u korpu.',
-        life: 4000,
-    })
+    showNotification('success', 'Proizvod dodat u korpu!', 'Ovaj proizvod je uspešno dodat u korpu.', 4000)
 }
 
 const info = () => {
-    toast.add({
-        severity: 'info',
-        summary: 'Info',
-        detail: 'Funkcionalnost je u pripremi – biće dostupna uskoro. Hvala na razumevanju!',
-        life: 5000,
-    })
+    showNotification('info', 'Info', 'Funkcionalnost je u pripremi – biće dostupna uskoro. Hvala na razumevanju!')
 }
 </script>

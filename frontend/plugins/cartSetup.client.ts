@@ -1,4 +1,5 @@
 import { useCartStore } from '~/stores/CartStore'
+import { deleteUnavailableItems } from '~/composables/useCart'
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.hook('app:mounted', async () => {
@@ -25,8 +26,6 @@ export default defineNuxtPlugin(nuxtApp => {
                     localStorage.removeItem(expirationKey)
                     sessionStorage.removeItem(sessionKey)
                 } else {
-                    await cartStore.fetchCart(cartId)
-
                     if (!sessionUpdated) {
                         await cartStore.updateLastAccessToCart(cartId, now)
 
@@ -36,7 +35,11 @@ export default defineNuxtPlugin(nuxtApp => {
                         localStorage.setItem(lastAccessedKey, now.toISOString())
                         localStorage.setItem(expirationKey, updatedExpiration.toISOString())
                         sessionStorage.setItem(sessionKey, 'true')
+
+                        await deleteUnavailableItems(cartId)
                     }
+
+                    await cartStore.fetchCart(cartId)
 
                     return
                 }

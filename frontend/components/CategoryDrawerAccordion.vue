@@ -31,7 +31,7 @@ const initializeDrawerAccordion = () => {
     useFlowbite(() => {
         const accordionItems = initializeAccordionItems()
         const options: AccordionOptions = {
-            alwaysOpen: true,
+            alwaysOpen: false,
             activeClasses: 'bg-primary-light rounded text-gray-100',
             inactiveClasses: 'text-gray-900',
         }

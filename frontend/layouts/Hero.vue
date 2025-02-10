@@ -2,8 +2,8 @@
     <div>
         <section class="bg-white">
             <div
-                class="max-w-screen-xl px-4 py-6 pb-20 lg:py-28 mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-center">
-                <div class="w-full lg:w-1/4 hidden mb-12 pl-5 lg:flex flex-col lg:items-start">
+                class="max-w-screen-xl px-4 py-6 pb-14 lg:pb-20 lg:pt-11 mx-auto flex flex-col lg:flex-row items-center lg:items-center justify-center">
+                <div class="w-full lg:w-1/4 hidden mb-12 ps-7 pt-12 lg:flex flex-col lg:items-start">
                     <PriceTagIcon class="size-10 sm:size-14 text-primary" />
                     <h2 class="text-left lg:text-left font-semibold text-xl sm:text-3xl mt-3 sm:mt-6">
                         Najnovije

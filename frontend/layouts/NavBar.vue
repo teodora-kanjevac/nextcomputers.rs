@@ -1,7 +1,8 @@
 <template>
     <div>
         <nav class="bg-gray-800 border-gray-200">
-            <div class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto p-3 sm:p-4">
+            <div
+                class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto p-3 sm:p-4">
                 <Logo class="font-medium text-gray-100" />
 
                 <div class="flex md:flex-grow md:w-40 md:xl:px-20 md:pl-5">
@@ -13,6 +14,12 @@
                         class="md:hidden rounded-lg text-sm px-2 me-1 transition-opacity duration-300 ease-in-out">
                         <SearchIcon class="size-5 text-gray-300" />
                     </button>
+
+                    <div class="relative md:flex-1 flex md:hidden">
+                        <a :href="`/korpa`" class="flex gap-3 p-2 text-gray-100 rounded">
+                            <CartWithBadge class="size-6" />
+                        </a>
+                    </div>
 
                     <div class="relative md:flex-1 hidden md:block">
                         <SearchBar />

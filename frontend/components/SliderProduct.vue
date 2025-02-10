@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="rounded-lg border border-gray-200 bg-white px-5 py-4 m-1 shadow-md">
-            <div class="mb-8 h-56 w-full">
+        <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+            <div class="mb-5 h-44 w-full">
                 <a :href="`/proizvod/${product.id}`">
                     <NuxtImg class="mx-auto h-full object-cover" :src="product.thumbnail" :alt="product.name" />
                 </a>
@@ -10,7 +10,7 @@
             <div class="flex items-center justify-between gap-1">
                 <a
                     :href="`/proizvod/${product.id}`"
-                    class="text-lg font-semibold ms-0.5 pb-0.5 leading-tight text-gray-900 hover:underline"
+                    class="font-semibold ms-0.5 pb-0.5 leading-tight text-gray-900 hover:underline"
                     :title="isOverflowing ? product.name : ''">
                     <span ref="productName" class="line-clamp-1 text-ellipsis overflow-hidden">
                         {{ truncateName(product.name) }}
