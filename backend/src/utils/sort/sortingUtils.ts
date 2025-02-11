@@ -76,15 +76,11 @@ export const fetchSortedByRating = async (
 export const fetchSearchResultsSortedByDiscount = async (
     pageSize: number,
     offset: number,
-    searchTerm: string,
+    matchedIds: number[],
     brandFilter?: Prisma.Sql,
     categoryFilter?: Prisma.Sql
 ): Promise<any[]> => {
-    const searchCondition = searchTerm
-        ? Prisma.sql`(name LIKE CONCAT('%', ${searchTerm}, '%') OR
-                     product_id = ${isNaN(parseInt(searchTerm, 10)) ? null : parseInt(searchTerm, 10)} OR
-                     ean = ${searchTerm})`
-        : Prisma.sql`TRUE`
+    const searchCondition = Prisma.sql`product_id IN (${Prisma.join(matchedIds.map(id => Prisma.sql`${id}`))})`
     const categoryCondition = categoryFilter ? Prisma.sql`${categoryFilter}` : Prisma.sql``
     const brandCondition = brandFilter ? Prisma.sql`${brandFilter}` : Prisma.sql``
 
@@ -114,15 +110,11 @@ export const fetchSearchResultsSortedByDiscount = async (
 export const fetchSearchResultsSortedByRating = async (
     pageSize: number,
     offset: number,
-    searchTerm: string,
+    matchedIds: number[],
     brandFilter?: Prisma.Sql,
     categoryFilter?: Prisma.Sql
 ): Promise<any[]> => {
-    const searchCondition = searchTerm
-        ? Prisma.sql`(p.name LIKE CONCAT('%', ${searchTerm}, '%') OR
-                     p.product_id = ${isNaN(parseInt(searchTerm, 10)) ? null : parseInt(searchTerm, 10)} OR
-                     p.ean = ${searchTerm})`
-        : Prisma.sql`TRUE`
+    const searchCondition = Prisma.sql`p.product_id IN (${Prisma.join(matchedIds.map(id => Prisma.sql`${id}`))})`
     const categoryCondition = categoryFilter ? Prisma.sql`${categoryFilter}` : Prisma.sql``
     const brandCondition = brandFilter ? Prisma.sql`${brandFilter}` : Prisma.sql``
 
