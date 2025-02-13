@@ -1,7 +1,12 @@
 import prisma from '~/src/utils/prisma'
 import IsEqual from 'fast-deep-equal'
 import { Product } from '~/scraper/types/Product'
-import { filterProducts, getLowestAvailablePrice, hideNonExistantProducts } from '~/scraper/utils/productUtils'
+import {
+    calculateSalePrice,
+    filterProducts,
+    getLowestAvailablePrice,
+    hideNonExistantProducts,
+} from '~/scraper/utils/productUtils'
 
 const BATCH_SIZE = 100
 
@@ -71,7 +76,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     available: true,
                     price: cheapestPrice,
                     retail_price: product.retailPrice,
-                    sale_price: product.salePrice,
+                    sale_price: calculateSalePrice(cheapestPrice),
                 }
 
                 if (currentDistributorHasProduct) {

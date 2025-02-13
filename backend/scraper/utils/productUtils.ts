@@ -58,7 +58,7 @@ export const parseImages = (imageUrl: any): ProcessedImage[] => {
     }
 }
 
-export const calculateSalePrice = (price: number, paymentAdvance: number): number => {
+export const calculateSalePrice = (price: number): number => {
     const getMarkupPercentage = (price: number): number => {
         switch (true) {
             case price < 10000:
@@ -80,8 +80,7 @@ export const calculateSalePrice = (price: number, paymentAdvance: number): numbe
     }
 
     const markupPercentage = getMarkupPercentage(price)
-    const discountedPrice = paymentAdvance > 0 ? price - price * (paymentAdvance / 100) : price
-    const salePrice = discountedPrice * (1 + markupPercentage / 100)
+    const salePrice = price * (1 + markupPercentage / 100)
 
     return roundToNearestPricing(salePrice)
 }

@@ -1,9 +1,9 @@
 import { Router } from 'express'
-import { getFilteredSearchResults, getProductSearchResults } from '~/src/controllers/searchController'
+import { getFilteredSearchResults, syncSearchEngine } from '~/src/controllers/searchController'
 
 const router: Router = Router()
 
 router.post('/filteredProducts', getFilteredSearchResults)
-router.get('/', getProductSearchResults)
+router.get('/syncEngine', syncSearchEngine)
 
 export default router

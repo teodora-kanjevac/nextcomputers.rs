@@ -1,88 +1,29 @@
-import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import prisma from '~/src/utils/prisma'
 import { mapRatingsToProductCards } from '~/src/utils/mapper/ratingMapper'
 import { calculateOffset } from '~/src/utils/utils'
 import { fetchSearchResultsSortedByDiscount, fetchSearchResultsSortedByRating } from '~/src/utils/sort/sortingUtils'
 import { handleFilterValidation } from '~/src/utils/filter/validateFilters'
 import { buildSearchResultsQueryConditions } from '~/src/utils/filter/queryConditions'
-import { searchProducts, setupFlexProductSearch } from '~/src/utils/search/productFlexSearch'
-
-export const fetchProductSearchResults = async (
-    searchTerm: string,
-    sortBy: string,
-    order: string,
-    page: number = 1,
-    pageSize: number = 15
-): Promise<ProductCardDTO[]> => {
-    if (!searchTerm) return []
-
-    const offset = calculateOffset(page, pageSize)
-
-    const products = await prisma.product.findMany({
-        where: {
-            available: true,
-        },
-    })
-
-    const index = setupFlexProductSearch(products)
-
-    const matchedIds = searchProducts(index, products, searchTerm).map(p => p.product_id)
-
-    if (matchedIds.length === 0) {
-        return []
-    }
-
-    if (['discountPercentage', 'rating'].includes(sortBy)) {
-        const sortFunction =
-            sortBy === 'discountPercentage' ? fetchSearchResultsSortedByDiscount : fetchSearchResultsSortedByRating
-
-        const products = await sortFunction(pageSize, offset, matchedIds)
-        return mapRatingsToProductCards(products)
-    }
-
-    const sortedProducts = await prisma.product.findMany({
-        skip: offset,
-        take: pageSize,
-        where: {
-            available: true,
-            product_id: { in: matchedIds },
-        },
-        orderBy: { [sortBy]: order },
-    })
-
-    return mapRatingsToProductCards(sortedProducts)
-}
+import { fetchMatchedProductIds } from '~/src/utils/search/fetchMatchedProducts'
+import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 
 export const fetchFilteredSearchResults = async (
     searchTerm: string,
-    initSortBy: string,
-    initOrder: string,
+    sortBy: string,
+    order: string,
     initFilters: Record<string, string[]>,
     page: number = 1,
     pageSize: number = 15
-): Promise<any[]> => {
+): Promise<ProductCardDTO[]> => {
     const offset = calculateOffset(page, pageSize)
 
-    const { filters, sortBy, order } = handleFilterValidation(initFilters, initSortBy, initOrder)
+    const filters = handleFilterValidation(initFilters)
 
     const { categoryCondition, brandCondition } = await buildSearchResultsQueryConditions(filters)
 
-    const products = await prisma.product.findMany({
-        where: {
-            available: true,
-        },
-        select: { product_id: true, name: true, ean: true },
-    })
+    const matchedIds = await fetchMatchedProductIds(searchTerm)
 
-    const index = setupFlexProductSearch(products)
-
-    const matchedIds = searchProducts(index, products, searchTerm).map(p => p.product_id)
-
-    if (matchedIds.length === 0) {
-        return []
-    }
-
-    if (['discountPercentage', 'rating'].includes(sortBy)) {
+    if (sortBy && ['discountPercentage', 'rating'].includes(sortBy)) {
         const sortFunction =
             sortBy === 'discountPercentage' ? fetchSearchResultsSortedByDiscount : fetchSearchResultsSortedByRating
 
@@ -93,6 +34,10 @@ export const fetchFilteredSearchResults = async (
     const filterConditions: any = {
         available: true,
         product_id: { in: matchedIds },
+    }
+
+    const queryConditions: any = {
+        where: filterConditions,
     }
 
     if (filters.brand?.length) {
@@ -111,12 +56,16 @@ export const fetchFilteredSearchResults = async (
         }
     }
 
-    const sortedProducts = await prisma.product.findMany({
-        skip: offset,
-        take: pageSize,
-        where: filterConditions,
-        orderBy: { [sortBy]: order },
-    })
+    if (sortBy && order) {
+        queryConditions.orderBy = { [sortBy]: order }
+    }
 
-    return mapRatingsToProductCards(sortedProducts)
+    const products = await prisma.product.findMany(queryConditions)
+
+    const finalProducts =
+        sortBy && order ? products : products.filter(product => matchedIds.includes(product.product_id))
+
+    const paginatedProducts = finalProducts.slice(offset, offset + pageSize)
+
+    return mapRatingsToProductCards(paginatedProducts)
 }

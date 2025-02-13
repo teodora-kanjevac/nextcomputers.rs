@@ -22,7 +22,7 @@ export async function ProductfromEWEAPI(data: any): Promise<Product | null> {
     if (!processedSubcategory) return null
     const subcategoryId = await getSubcategoryId(processedSubcategory)
     const b2bPrice = calculateEWEB2BPrice(data.anPaymentAdvance, data.anPrice)
-    const salePrice = calculateSalePrice(b2bPrice, data.anPaymentAdvance)
+    const salePrice = calculateSalePrice(b2bPrice)
 
     return new Product(
         undefined,
@@ -54,7 +54,7 @@ export async function ProductfromUsponAPI(data: any): Promise<Product | null> {
     const subcategoryId = await getSubcategoryId(processedSubcategory)
     const advance = calculateAdvance(data.flag_akcijska_cena)
     const b2bPrice = calculateUsponB2BPrice(data.flag_akcijska_cena, data.b2bcena)
-    const salePrice = calculateSalePrice(b2bPrice, advance)
+    const salePrice = calculateSalePrice(b2bPrice)
 
     const isInvalidBrand = /^[\W_]+$/.test(data.proizvodjac)
     const productName = isInvalidBrand ? data.naziv : `${data.proizvodjac.toUpperCase()} ${data.naziv}`

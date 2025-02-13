@@ -15,6 +15,7 @@ import {
     mapFiltersToCategories,
     processSpecifications,
 } from '~/src/utils/filter/filterFetchingUtils'
+import { fetchMatchedProductIds } from '~/src/utils/search/fetchMatchedProducts'
 
 export const fetchFilters = async (subcategoryId: number): Promise<FilterCategory[]> => {
     isNaNObject('subcategory', subcategoryId)
@@ -60,14 +61,11 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
 export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCategory[]> => {
     if (!searchTerm) return []
 
+    const matchedIds = await fetchMatchedProductIds(searchTerm)
+
     const products = await prisma.product.findMany({
         where: {
-            available: true,
-            OR: [
-                { name: { contains: searchTerm } },
-                { product_id: parseInt(searchTerm, 10) || undefined },
-                { ean: searchTerm },
-            ],
+            product_id: { in: matchedIds },
         },
         select: {
             brand: true,
@@ -85,7 +83,7 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
         subcategory: new Map(),
     }
 
-    products.forEach(product => {
+    products.forEach((product: any) => {
         if (product.subcategory) {
             const subcategoryName = product.subcategory.name
             const currentCount = filterMap.subcategory.get(subcategoryName) || 0
@@ -102,8 +100,8 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
 
 export const fetchFilteredProducts = async (
     subcategoryId: number,
-    initSortBy: string,
-    initOrder: string,
+    sortBy: string,
+    order: string,
     initFilters: Record<string, string[]>,
     page: number = 1,
     pageSize: number = 15
@@ -112,20 +110,24 @@ export const fetchFilteredProducts = async (
 
     const offset = calculateOffset(page, pageSize)
 
-    const { filters, sortBy, order } = handleFilterValidation(initFilters, initSortBy, initOrder)
+    const filters = handleFilterValidation(initFilters)
 
     const { subcategoryCondition, brandCondition, specificationCondition } = buildSubcategoryQueryConditions(
         subcategoryId,
         filters
     )
 
-    if (['discountPercentage', 'rating'].includes(sortBy)) {
+    let orderByCondition: Prisma.Sql = Prisma.empty
+
+    if (sortBy && ['discountPercentage', 'rating'].includes(sortBy)) {
         const sortFunction = sortBy === 'discountPercentage' ? fetchSortedByDiscount : fetchSortedByRating
         const products = await sortFunction(pageSize, offset, subcategoryId, brandCondition, specificationCondition)
         return mapRatingsToProductCards(products)
     }
 
-    const orderByCondition = Prisma.sql`ORDER BY ${Prisma.raw(sortBy)} ${Prisma.raw(order)}`
+    if (sortBy && order) {
+        orderByCondition = Prisma.sql`ORDER BY ${Prisma.raw(sortBy)} ${Prisma.raw(order)}`
+    }
 
     const query = Prisma.sql`
         SELECT * FROM product
