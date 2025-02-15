@@ -120,7 +120,7 @@
     justify-content: center;
     align-items: center;
     position: relative;
-    top: 35em;
+    top: 30em;
 }
 
 .splide__arrow {
@@ -167,14 +167,19 @@
 .splide__pagination {
     -ms-flex-align: center;
     align-items: center;
-    display: -ms-flexbox;
     display: flex;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
     -ms-flex-pack: center;
     justify-content: center;
-    margin: 0;
-    pointer-events: none
+    background-color: #ececec6e;
+    margin: 0 auto;
+    pointer-events: none;
+    width: 7em;
+    height: 1.6em;
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    border: 1px solid #dbdbdbbd;
+    border-radius: 0.25rem
 }
 
 .splide__pagination li {
@@ -186,7 +191,7 @@
 }
 
 .splide__pagination {
-    bottom: -2em;
+    bottom: -2.5em;
     left: 0;
     position: absolute;
     right: 0;
@@ -194,10 +199,10 @@
 }
 
 .splide__pagination__page {
-    background: #ba4a66;
+    background: #cf6c85;
     border: 0;
     border-radius: 0.75em;
-    display: inline-block;
+    display: inline-flex;
     width: 0.5em;
     height: 0.5em;
     margin: 0 4px;
@@ -208,7 +213,7 @@
 }
 
 .splide__pagination__page.is-active {
-    background: #4d0a1e;
+    background: #c91e49;
     width: 0.8em;
 }
 

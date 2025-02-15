@@ -22,6 +22,7 @@ export const useCategoryStore = defineStore('category', {
                 this.subcategory = data
             } catch (error) {
                 console.error('Failed to fetch categories:', error)
+                useRouter().replace('/proizvodi/404')
             }
         },
     },

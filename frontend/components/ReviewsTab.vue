@@ -85,13 +85,14 @@ import { useRatings } from '~/composables/useRating'
 import type { RatingDTO } from '~/shared/types/RatingDTO'
 import type { ReviewDTO } from '~/shared/types/ReviewDTO'
 import { Rating } from '~/shared/classes/Rating'
+import { useNotification } from '~/composables/useNotification'
 
 const { rating, userReviews } = defineProps<{
     rating: RatingDTO
     userReviews: ReviewDTO[]
 }>()
 
-const toast = useToast()
+const { showNotification } = useNotification()
 
 const averageRating = computed(() => new Rating(rating).getAverageRating())
 
@@ -123,11 +124,6 @@ const getReviewWord = (num: number) => {
 }
 
 const info = () => {
-    toast.add({
-        severity: 'info',
-        summary: 'Info',
-        detail: 'Funkcionalnost je u pripremi – biće dostupna uskoro. Hvala na razumevanju!',
-        life: 5000,
-    })
+    showNotification('info', 'Info', 'Funkcionalnost je u pripremi – biće dostupna uskoro. Hvala na razumevanju!')
 }
 </script>

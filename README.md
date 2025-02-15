@@ -109,3 +109,35 @@ To avoid TypeScript errors for `@splidejs/vue-splide`, add the following to your
 ## Adding .env Files
 
 **API** and **Database** keys are in two seperate `.env` folders. Add one `.env` file in the root of the project with the API URL and add the other `.env` file in the `backend/prisma` folder with the Database URL.
+
+## Setting up Meilisearch Search Engine
+
+Install **Meilisearch** through _WSL_ on a Linux subsytem with the command:
+
+```bash
+curl -L https://install.meilisearch.com | sh
+```
+
+Launch Meilisearch server with the command:
+
+```bash
+./meilisearch
+```
+
+**OR**
+
+```bash
+meilisearch
+```
+
+The server will generate a **Master API key** you can use to connect to the server and make your data. To connect to the server with your API key use this command:
+
+```bash
+./meilisearch --master-key="<api-key>"
+```
+
+**OR**
+
+```bash
+meilisearch --master-key="<api-key>"
+```

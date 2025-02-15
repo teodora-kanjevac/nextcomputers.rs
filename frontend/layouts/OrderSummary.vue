@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="py-3">
-            <div class="mx-auto max-w-screen-xl px-4 mb-[400px]">
+            <div class="mx-auto max-w-screen-xl px-4 min-h-screen mb-8">
                 <div class="lg:flex lg:items-start lg:gap-8">
                     <div class="min-w-0 flex-1 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8 mb-5">
                         <div>
@@ -21,7 +21,7 @@
                                     class="mt-6 text-base font-medium text-gray-800 grid grid-cols-2 md:grid-cols-3 gap-y-3">
                                     <template v-for="item in userDetails">
                                         <span>{{ item.label }}:</span>
-                                        <span class="md:col-span-2 text-gray-500">{{ item.value }}</span>
+                                        <span class="md:col-span-2 text-gray-500 break-all">{{ item.value }}</span>
                                     </template>
                                 </div>
                             </div>
@@ -52,7 +52,9 @@
                                 Klikom na ovo dugme potvrđujete da ste saglasni sa našom
                                 <a href="#" class="text-primary hover:underline">Politikom privatnosti</a>
                                 i
-                                <a href="/uslovi-koriscenja" class="text-primary hover:underline">Uslovima korišćenja</a>
+                                <a href="/uslovi-koriscenja" class="text-primary hover:underline">
+                                    Uslovima korišćenja
+                                </a>
                             </p>
                         </div>
                     </div>
@@ -70,6 +72,7 @@ import { useCheckoutStore } from '~/stores/CheckoutStore'
 import { useOrderStore } from '~/stores/OrderStore'
 import { useMailStore } from '~/stores/MailStore'
 import { useSharedStore } from '~/stores/SharedStore'
+import { useNotification } from '~/composables/useNotification'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -77,7 +80,7 @@ const checkoutStore = useCheckoutStore()
 const orderStore = useOrderStore()
 const mailStore = useMailStore()
 const sharedStore = useSharedStore()
-const toast = useToast()
+const { showNotification } = useNotification()
 
 sharedStore.loading = false
 
@@ -131,12 +134,11 @@ const handleOrder = async () => {
         router.push({ path: '/potvrdjena-kupovina', query: { redirected: 'true' } })
     } catch (error) {
         console.error('Error:', error)
-        toast.add({
-            severity: 'error',
-            summary: 'Greška pri slanju narudžbine!',
-            detail: 'Došlo je do problema pri slanju narudžbine. Pokušajte ponovo.',
-            life: 5000,
-        })
+        showNotification(
+            'error',
+            'Greška pri slanju narudžbine!',
+            'Došlo je do problema pri slanju narudžbine. Pokušajte ponovo.'
+        )
     } finally {
         sharedStore.loading = false
     }

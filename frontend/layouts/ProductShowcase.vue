@@ -1,14 +1,16 @@
 <template>
     <div>
         <div class="mx-auto max-w-screen-xl mt-6 px-3 2xl:px-0">
-            <p class="text-left text-xl font-semibold mb-7 mx-2 sm:text-2xl">Preporučujemo Vam</p>
+            <p class="text-left text-xl font-semibold mb-5 sm:mb-7 mx-2 sm:text-2xl">Preporučujemo Vam</p>
             <div
-                class="relative mx-auto mb-20 max-w-screen-xl px-6 sm:px-9 pt-7 height sm:pt-2 pb-0 sm:pb-24 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
+                class="mx-auto mb-20 max-w-screen-xl p-4 sm:pt-0 sm:px-6 sm:pb-20 rounded-lg border-2 border-rose-100 bg-white shadow-sm">
                 <section class="splide">
                     <Splide :options="options">
                         <template v-for="chunk in productChunks" :key="chunk[0]?.id">
                             <SplideSlide>
-                                <SliderProductGrid class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3" :products="chunk" />
+                                <SliderProductGrid
+                                    class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                                    :products="chunk" />
                             </SplideSlide>
                         </template>
                     </Splide>
@@ -37,7 +39,9 @@ const { width } = useWindowSize()
 watch(
     width,
     newWidth => {
-        if (newWidth >= 1024) {
+        if (newWidth >= 1280) {
+            chunkSize.value = 4
+        } else if (newWidth >= 1024) {
             chunkSize.value = 3
         } else if (newWidth >= 640) {
             chunkSize.value = 2
@@ -61,7 +65,7 @@ const options = {
             arrows: false,
         },
     },
-    speed: 1500,
+    speed: 1200,
     autoplay: true,
     interval: 5000,
     pagination: false,
@@ -70,11 +74,3 @@ const options = {
         'M15.483 26.467L21.95 20 15.483 13.533a1.66 1.66 0 1 1 2.35-2.35l7.65 7.65c.65.65.65 1.7 0 2.35l-7.65 7.65a1.66 1.66 0 0 1-2.35 0c-.633-.65-.65-1.717 0-2.35z',
 }
 </script>
-
-<style scoped>
-@media (max-width: 640px) {
-    .height {
-        height: 35rem;
-    }
-}
-</style>

@@ -1,4 +1,4 @@
-export interface ApiProduct{
+export interface EWEApiProduct{
     acName: string,
     acDept: string,
     specification: any,
@@ -11,5 +11,6 @@ export interface ApiProduct{
     acSupplier: string,
     acMainCategory: string,
     acCategory: string,
+    acSubCategory: string,
     urlImages: any
 }

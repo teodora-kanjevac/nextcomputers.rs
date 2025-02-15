@@ -1,7 +1,8 @@
 import { Product } from '~/scraper/types/Product'
 import { ProcessedImage } from '~/scraper/types/ProcessedImage'
-import { Specifications } from '~/scraper/types/Specifications'
 import prisma from '~/src/utils/prisma'
+import { parseEWEImages, sortImagesByConvention } from '~/scraper/utils/eweAPI/parseUtils'
+import { parseUsponImages } from '~/scraper/utils/usponAPI/parseUtils'
 
 export const filterProducts = (products: Product[]): Product[] => {
     return products.filter(product => {
@@ -9,12 +10,17 @@ export const filterProducts = (products: Product[]): Product[] => {
     })
 }
 
-export const hideNonExistantProducts = async (identifiers: any): Promise<number> => {
+export const hideNonExistantProducts = async (identifiers: any, distributor: string): Promise<number> => {
     const allDatabaseProducts = await prisma.product.findMany({
-        select: { ean: true },
+        select: {
+            ean: true,
+            image_url: true,
+        },
     })
 
-    const productsToHide = allDatabaseProducts.filter(product => !identifiers.has(product.ean))
+    const productsToHide = allDatabaseProducts.filter(
+        product => JSON.stringify(product.image_url).includes(distributor) && !identifiers.has(product.ean)
+    )
 
     await prisma.product.updateMany({
         where: {
@@ -26,50 +32,54 @@ export const hideNonExistantProducts = async (identifiers: any): Promise<number>
     return productsToHide.length
 }
 
-export const processSpecifications = (specification: any[]): Specifications => {
-    const specs: Specifications = {}
-
-    specification.forEach(specGroup => {
-        specGroup.filterSet.forEach((filter: { acFilterSet: string; filters: string }) => {
-            specs[filter.acFilterSet] = filter.filters
-        })
-    })
-
-    return specs
+export const parseImages = (imageUrl: any): ProcessedImage[] => {
+    if (Array.isArray(imageUrl) && imageUrl.every(item => 'acImage' in item)) {
+        const processedImages = parseEWEImages(imageUrl)
+        return sortImagesByConvention(processedImages)
+    } else if (
+        (typeof imageUrl === 'object' &&
+            'slika' in imageUrl &&
+            (typeof imageUrl.slika === 'string' || Array.isArray(imageUrl.slika))) ||
+        typeof imageUrl === 'string'
+    ) {
+        return parseUsponImages(imageUrl)
+    } else {
+        console.error('Unknown image data format:', imageUrl)
+        return []
+    }
 }
 
-export const processImages = (imageUrl: any[]): ProcessedImage[] => {
-    const sortImagesByConvention = (images: { image: string; thumbnail: string }[]) => {
-        return images.sort((a, b) => {
-            const getSuffixValue = (filename: string) => {
-                const suffix = filename.match(/_(v|\d+)\.jpg$/i)
-                if (!suffix) return Number.MAX_SAFE_INTEGER
-                return suffix[1] === 'v' ? -1 : parseInt(suffix[1])
-            }
-
-            return getSuffixValue(a.image) - getSuffixValue(b.image)
-        })
+export const getCheapestPrice = (newPrice: number, existingPrice: number, productDistributor: string): number => {
+    if (productDistributor === 'resource.ewe.rs') {
+        return newPrice
     }
 
-    const processedImages = imageUrl
-        .filter(imageObj => imageObj.acType !== '3D' && imageObj.acType !== 'video')
-        .map(imageObj => ({
-            image: imageObj.acImage,
-            thumbnail: imageObj.acThumbnail,
-        }))
-
-    return sortImagesByConvention(processedImages)
+    return newPrice < existingPrice ? newPrice : existingPrice
 }
 
-export const calculateSalePrice = (price: number, paymentAdvance: number): number => {
-    const markupPercentage = 
-            price < 10000 ? 10 : 
-            price < 20000 ? 8 : 
-            price < 40000 ? 6 : 
-            price < 100000 ? 4 : 3
+export const calculateSalePrice = (price: number): number => {
+    const getMarkupPercentage = (price: number): number => {
+        switch (true) {
+            case price < 10000:
+                return 9
+            case price < 20000:
+                return 7
+            case price < 40000:
+                return 5
+            case price < 100000:
+                return 4
+            default:
+                return 3
+        }
+    }
 
-    const salePrice = (price - price * (paymentAdvance / 100)) * (1 + markupPercentage / 100)
-    const remainder = salePrice % 1000
+    const roundToNearestPricing = (salePrice: number): number => {
+        const remainder = salePrice % 1000
+        return salePrice - remainder + (remainder < 490 ? 490 : 990)
+    }
 
-    return salePrice - remainder + (remainder < 490 ? 490 : 990)
+    const markupPercentage = getMarkupPercentage(price)
+    const salePrice = price * (1 + markupPercentage / 100)
+
+    return roundToNearestPricing(salePrice)
 }

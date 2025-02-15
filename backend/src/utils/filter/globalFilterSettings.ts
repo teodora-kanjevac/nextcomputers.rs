@@ -9,6 +9,11 @@ export const GLOBAL_FILTERS_TO_EXCLUDE = [
     'Ostale osobine',
     'Dodatne mogućnosti',
     'Ostalo',
+    'Prava potrošača',
+    'Garancija',
+    'Uslov za produženu garanciju',
+    'Cena',
+    'Link proizvođača',
 ]
 export const USAGE_THRESHOLD_PERCENT = 0.2 // Filters must appear in at least 20% of products to be included
 export const VALUE_DIVERSITY_THRESHOLD = 20 // Maximum allowed distinct values for a filter; filters with more than 20 distinct values are excluded

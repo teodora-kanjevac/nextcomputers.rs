@@ -1,9 +1,19 @@
-import { Request, Response } from 'express';
-import { scrapeCategories, scrapeProducts } from "~/scraper/services/scraperService"
+import { Request, Response } from 'express'
+import { scrapeCategories, scrapeEWEProducts, scrapeUsponProducts } from '~/scraper/services/scraperService'
 
-export const scrapeProductsAPI = async (req: Request, res: Response): Promise<void> => {
+export const scrapeEWEProductsAPI = async (req: Request, res: Response): Promise<void> => {
     try {
-        const products = await scrapeProducts()
+        const products = await scrapeEWEProducts()
+        res.status(200).json(products)
+    } catch (error) {
+        console.error('Controller Error:', error)
+        res.status(500).json({ error: 'Failed to fetch products' })
+    }
+}
+
+export const scrapeUsponProductsAPI = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const products = await scrapeUsponProducts()
         res.status(200).json(products)
     } catch (error) {
         console.error('Controller Error:', error)

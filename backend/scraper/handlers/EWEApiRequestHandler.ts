@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { ApiProduct } from '~/scraper/types/ApiProduct'
+import { EWEApiProduct } from '~/scraper/types/EWEApiProduct'
 
-export const fetchApiProducts = async (): Promise<ApiProduct[]> => {
+export const fetchEWEApiProducts = async (): Promise<EWEApiProduct[]> => {
     try {
         const response = await axios.get(process.env.EWE_API_URL as string)
         return response.data.catalog

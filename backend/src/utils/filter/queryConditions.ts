@@ -1,5 +1,5 @@
 import { Prisma } from '@prisma/client'
-import prisma from '~/src/utils/prisma';
+import prisma from '~/src/utils/prisma'
 
 export const buildSubcategoryQueryConditions = (
     subcategoryId: number,
@@ -29,9 +29,8 @@ export const buildSubcategoryQueryConditions = (
 }
 
 export const buildSearchResultsQueryConditions = async (
-    searchTerm: string,
     filters: Record<string, string[]>
-): Promise<{ searchCondition: Prisma.Sql; categoryCondition: Prisma.Sql; brandCondition: Prisma.Sql; }> => {
+): Promise<{ categoryCondition: Prisma.Sql; brandCondition: Prisma.Sql }> => {
     const subcategories = await prisma.subcategory.findMany({
         select: {
             name: true,
@@ -50,12 +49,6 @@ export const buildSearchResultsQueryConditions = async (
     const categoryCondition = filters.subcategory?.length
         ? Prisma.sql`AND subcategory_id IN (${Prisma.join(filters.subcategory.map(name => subcategoryMap[name]))})`
         : Prisma.sql``
-        
-    const searchCondition = searchTerm
-        ? Prisma.sql`(name LIKE CONCAT('%', ${searchTerm}, '%') OR
-                 product_id = ${isNaN(parseInt(searchTerm, 10)) ? null : parseInt(searchTerm, 10)} OR
-                 ean = ${searchTerm})`
-        : Prisma.sql`TRUE`
 
-    return { searchCondition, categoryCondition, brandCondition }
+    return { categoryCondition, brandCondition }
 }

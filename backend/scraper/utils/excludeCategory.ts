@@ -1,7 +1,7 @@
 const excludedName = 'Outlet'
 
 export const isExcluded = (name: string): boolean => {
-    return name === excludedName
+    return name.toLowerCase().includes(excludedName.toLowerCase())
 }
 
 const renameMap: Map<string, string> = new Map([
