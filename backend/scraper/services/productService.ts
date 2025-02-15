@@ -4,7 +4,7 @@ import { Product } from '~/scraper/types/Product'
 import {
     calculateSalePrice,
     filterProducts,
-    getLowestAvailablePrice,
+    getCheapestPrice,
     hideNonExistantProducts,
 } from '~/scraper/utils/productUtils'
 
@@ -69,8 +69,11 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                 const currentDistributorHasProduct = JSON.stringify(existingProduct.image_url).includes(
                     productDistributor
                 )
-                const cheapestPrice =
-                    getLowestAvailablePrice(productKey, existingProducts) || parseFloat(product.price.toFixed(2))
+
+                const newPrice = parseFloat(product.price.toFixed(2))
+                const existingPrice = parseFloat(existingProduct.price.toFixed(2))
+
+                const cheapestPrice = getCheapestPrice(newPrice, existingPrice, productDistributor)
 
                 const commonData = {
                     available: true,

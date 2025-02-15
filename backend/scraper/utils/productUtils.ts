@@ -32,15 +32,6 @@ export const hideNonExistantProducts = async (identifiers: any, distributor: str
     return productsToHide.length
 }
 
-export const getLowestAvailablePrice = (eanOrName: string, existingProducts: any): number => {
-    return (
-        existingProducts
-            .filter(p => (p.ean ?? p.name) === eanOrName && p.available)
-            .map(p => parseFloat(p.price.toFixed(2)))
-            .sort((a, b) => a - b)[0] || 0
-    )
-}
-
 export const parseImages = (imageUrl: any): ProcessedImage[] => {
     if (Array.isArray(imageUrl) && imageUrl.every(item => 'acImage' in item)) {
         const processedImages = parseEWEImages(imageUrl)
@@ -56,6 +47,14 @@ export const parseImages = (imageUrl: any): ProcessedImage[] => {
         console.error('Unknown image data format:', imageUrl)
         return []
     }
+}
+
+export const getCheapestPrice = (newPrice: number, existingPrice: number, productDistributor: string): number => {
+    if (productDistributor === 'resource.ewe.rs') {
+        return newPrice
+    }
+
+    return newPrice < existingPrice ? newPrice : existingPrice
 }
 
 export const calculateSalePrice = (price: number): number => {

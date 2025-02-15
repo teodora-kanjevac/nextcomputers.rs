@@ -176,7 +176,7 @@
     margin: 0 auto;
     pointer-events: none;
     width: 7em;
-    height: 1.4em;
+    height: 1.6em;
     box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     border: 1px solid #dbdbdbbd;
     border-radius: 0.25rem
@@ -191,7 +191,7 @@
 }
 
 .splide__pagination {
-    bottom: -2em;
+    bottom: -2.5em;
     left: 0;
     position: absolute;
     right: 0;
@@ -202,7 +202,7 @@
     background: #cf6c85;
     border: 0;
     border-radius: 0.75em;
-    display: inline-block;
+    display: inline-flex;
     width: 0.5em;
     height: 0.5em;
     margin: 0 4px;

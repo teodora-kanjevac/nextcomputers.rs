@@ -15,20 +15,21 @@ export const setupSearchEngine = async () => {
 
         const meilisearchProducts = products.map(product => ({
             id: product.product_id,
+            product_id: product.product_id.toString(),
             name: product.name,
             ean: product.ean || '',
         }))
 
         await client.index('products').updateSettings({
-            rankingRules: ['exactness', 'words', 'proximity'],
-            searchableAttributes: ['name', 'ean', 'id'],
+            rankingRules: ['exactness', 'attribute', 'words', 'proximity'],
+            searchableAttributes: ['name', 'ean', 'product_id'],
             typoTolerance: {
                 enabled: true,
                 minWordSizeForTypos: {
                     oneTypo: 5,
                     twoTypos: 9,
                 },
-                disableOnAttributes: ['id', 'ean'],
+                disableOnAttributes: ['product_id', 'ean'],
             },
         })
 
