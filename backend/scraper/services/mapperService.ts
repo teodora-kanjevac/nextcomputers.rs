@@ -10,12 +10,14 @@ import {
     parseUsponDeclaration,
     parseUsponSpecifications,
 } from '~/scraper/utils/usponAPI/parseUtils'
+import { EWEApiProduct } from '~/scraper/types/EWEApiProduct'
+import { UsponApiProduct } from '~/scraper/types/UsponApiProduct'
 
 export function CategoryfromAPI(data: { acMainCategory: string; acCategory: string }): Category {
     return new Category(data.acMainCategory, data.acCategory)
 }
 
-export async function ProductfromEWEAPI(data: any): Promise<Product | null> {
+export async function ProductfromEWEAPI(data: EWEApiProduct): Promise<Product | null> {
     const processedImages = parseImages(data.urlImages)
     const productSpecs = parseEWESpecifications(data.specification)
     const processedSubcategory = await processSubcategory(data.acSubCategory, data.acCategory, data.acName)
@@ -45,7 +47,7 @@ export async function ProductfromEWEAPI(data: any): Promise<Product | null> {
     )
 }
 
-export async function ProductfromUsponAPI(data: any): Promise<Product | null> {
+export async function ProductfromUsponAPI(data: UsponApiProduct): Promise<Product | null> {
     const processedImages = parseImages(data.slike)
     const processedSpecs = parseUsponSpecifications(data.opis)
     const { supplier, country } = parseUsponDeclaration(data.deklaracija)
