@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { XMLParser } from 'fast-xml-parser'
-import { Product } from '~/scraper/types/Product'
+import { UsponApiProduct } from '~/scraper/types/UsponApiProduct'
 
-export const fetchUsponApiProducts = async (): Promise<Product[]> => {
+export const fetchUsponApiProducts = async (): Promise<UsponApiProduct[]> => {
     try {
         const response = await axios.get(process.env.USPON_API_URL as string, {
             headers: { 'Content-Type': 'application/xml' },
