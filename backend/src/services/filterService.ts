@@ -13,6 +13,8 @@ import { handleFilterValidation } from '~/src/utils/filter/validateFilters'
 import {
     filterMapFilterCriteria,
     mapFiltersToCategories,
+    normalizeFilterName,
+    processBrand,
     processSpecifications,
 } from '~/src/utils/filter/filterFetchingUtils'
 import { fetchMatchedProductIds } from '~/src/utils/search/fetchMatchedProducts'
@@ -22,6 +24,7 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
 
     const products = await prisma.product.findMany({
         where: {
+            available: true,
             subcategory_id: subcategoryId,
         },
         select: {
@@ -34,12 +37,12 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
         brand: new Map(),
     }
 
+    const seenVariations: Record<string, string> = {}
+
     products.forEach(product => {
-        if (product.brand) {
-            const currentCount = filterMap.brand.get(product.brand) || 0
-            filterMap.brand.set(product.brand, currentCount + 1)
-        }
-        processSpecifications(product.specification as Record<string, string>, filterMap)
+        processBrand(product.brand, filterMap.brand, seenVariations)
+
+        processSpecifications(product.specification as Record<string, string>, filterMap, seenVariations)
     })
 
     GLOBAL_FILTERS_TO_EXCLUDE.forEach(filter => delete filterMap[filter])
@@ -65,6 +68,7 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
 
     const products = await prisma.product.findMany({
         where: {
+            available: true,
             product_id: { in: matchedIds },
         },
         select: {
@@ -83,16 +87,15 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
         subcategory: new Map(),
     }
 
+    const seenVariations: Record<string, string> = {}
+
     products.forEach((product: any) => {
         if (product.subcategory) {
             const subcategoryName = product.subcategory.name
             const currentCount = filterMap.subcategory.get(subcategoryName) || 0
             filterMap.subcategory.set(subcategoryName, currentCount + 1)
         }
-        if (product.brand) {
-            const currentCount = filterMap.brand.get(product.brand) || 0
-            filterMap.brand.set(product.brand, currentCount + 1)
-        }
+        processBrand(product.brand, filterMap.brand, seenVariations)
     })
 
     return mapFiltersToCategories(filterMap)

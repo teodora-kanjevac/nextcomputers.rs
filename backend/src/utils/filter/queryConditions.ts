@@ -1,5 +1,6 @@
 import { Prisma } from '@prisma/client'
 import prisma from '~/src/utils/prisma'
+import { normalizeFilterName } from './filterFetchingUtils'
 
 export const buildSubcategoryQueryConditions = (
     subcategoryId: number,
@@ -8,13 +9,13 @@ export const buildSubcategoryQueryConditions = (
     const subcategoryCondition = Prisma.sql`subcategory_id = ${subcategoryId}`
 
     const brandCondition = filters.brand?.length
-        ? Prisma.sql`AND brand IN (${Prisma.join(filters.brand)})`
+        ? Prisma.sql`AND LOWER(REPLACE(brand, ' ', '')) IN (${Prisma.join(filters.brand.map(brand => normalizeFilterName(brand)))})`
         : Prisma.sql``
 
     const specificationConditions = Object.entries(filters).reduce((conditions, [key, values]) => {
         if (key !== 'brand' && values.length > 0) {
             conditions.push(
-                Prisma.sql`JSON_EXTRACT(specification, '$."${Prisma.raw(key)}"') IN (${Prisma.join(values)})`
+                Prisma.sql`LOWER(REPLACE(JSON_UNQUOTE(JSON_EXTRACT(specification, '$."${Prisma.raw(key)}"')), ' ', '')) IN (${Prisma.join(values.map(spec => normalizeFilterName(spec)))})`
             )
         }
         return conditions
@@ -38,12 +39,15 @@ export const buildSearchResultsQueryConditions = async (
         },
     })
 
-    const subcategoryMap = subcategories.reduce((acc, subcategory) => {
-        acc[subcategory.name] = subcategory.subcategory_id
-        return acc
-    }, {} as Record<string, number>)
+    const subcategoryMap = subcategories.reduce(
+        (acc, subcategory) => {
+            acc[subcategory.name] = subcategory.subcategory_id
+            return acc
+        },
+        {} as Record<string, number>
+    )
     const brandCondition = filters.brand?.length
-        ? Prisma.sql`AND brand IN (${Prisma.join(filters.brand)})`
+        ? Prisma.sql`AND LOWER(REPLACE(brand, ' ', '')) IN (${Prisma.join(filters.brand.map(brand => normalizeFilterName(brand)))})`
         : Prisma.sql``
 
     const categoryCondition = filters.subcategory?.length
