@@ -1,8 +1,11 @@
 <template>
     <div>
-        <nav class="bg-gray-800 border-gray-200">
+        <nav
+            ref="navbarRef"
+            class="bg-gray-800 border-gray-200 top-0 left-0 w-full py-4 duration-300"
+            :class="{ 'md:py-1.5 fixed z-50 shadow-md': isScrolled && !isMobile }">
             <div
-                class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto p-3 sm:p-4">
+                class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto px-3 sm:px-4">
                 <Logo class="font-medium text-gray-100" />
 
                 <div class="flex md:flex-grow md:w-40 md:xl:px-20 md:pl-5">
@@ -41,9 +44,9 @@
 
                 <div
                     ref="searchMenu"
-                    class="items-center justify-between w-full md:w-auto h-[73px] md:flex md:order-1 overflow-hidden transition-all duration-500 ease-in-out"
+                    class="items-center justify-between w-full md:w-auto h-[64px] md:flex md:order-1 overflow-hidden transition-all duration-500 ease-in-out"
                     id="search">
-                    <div class="relative mt-7 md:hidden">
+                    <div class="relative mt-4 md:hidden">
                         <SearchBar />
                     </div>
                 </div>
@@ -68,11 +71,29 @@ import Logo from '~/components/Logo.vue'
 
 const searchMenu = ref<HTMLElement | null>(null)
 const navbarMenu = ref<HTMLElement | null>(null)
+const navbarRef = ref<HTMLElement | null>(null)
 
 const isSearchOpen = ref(false)
 const isNavbarOpen = ref(false)
 
 const isMobile = useMediaQuery('(max-width: 767px)')
+const { y } = useWindowScroll()
+
+const isVisible = computed(() => y.value > (navbarRef.value?.clientHeight ?? 50))
+const isScrolled = computed(() => y.value > 300)
+
+const updateNavbarVisibility = (show: boolean, useTransition = true) => {
+    if (!navbarRef.value || isMobile.value) return
+
+    navbarRef.value.classList.toggle('transition-all', useTransition)
+    navbarRef.value.classList.toggle('transition-none', !useTransition)
+
+    const showClass = 'translate-y-0'
+    const hideClass = '-translate-y-full'
+
+    navbarRef.value.classList.toggle(showClass, show)
+    navbarRef.value.classList.toggle(hideClass, !show)
+}
 
 const updateStateOnMobile = (isMobileScreen: boolean) => {
     if (isMobileScreen) {
@@ -83,6 +104,27 @@ const updateStateOnMobile = (isMobileScreen: boolean) => {
         isNavbarOpen.value = false
     }
 }
+
+const toggleSearchMenu = () => {
+    isSearchOpen.value = !isSearchOpen.value
+    if (isSearchOpen.value) {
+        isNavbarOpen.value = false
+    }
+}
+
+const toggleNavbarMenu = () => {
+    isNavbarOpen.value = !isNavbarOpen.value
+    if (isNavbarOpen.value) {
+        isSearchOpen.value = false
+    }
+}
+watch(isVisible, visible => {
+    updateNavbarVisibility(visible === false, false)
+})
+
+watch(isScrolled, scrolled => {
+    updateNavbarVisibility(scrolled)
+})
 
 watch(isMobile, updateStateOnMobile)
 
@@ -100,20 +142,6 @@ watch([isSearchOpen, isNavbarOpen], ([searchOpen, navbarOpen]) => {
 onMounted(() => {
     updateStateOnMobile(isMobile.value)
 })
-
-const toggleSearchMenu = () => {
-    isSearchOpen.value = !isSearchOpen.value
-    if (isSearchOpen.value) {
-        isNavbarOpen.value = false
-    }
-}
-
-const toggleNavbarMenu = () => {
-    isNavbarOpen.value = !isNavbarOpen.value
-    if (isNavbarOpen.value) {
-        isSearchOpen.value = false
-    }
-}
 </script>
 
 <style scoped>

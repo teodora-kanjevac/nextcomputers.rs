@@ -35,13 +35,11 @@
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
 import PlusIcon from './icons/PlusIcon.vue'
 import MinusIcon from './icons/MinusIcon.vue'
-import { useFilterStore } from '~/stores/FilterStore'
 
 const { filterCategory } = defineProps<{
     filterCategory: FilterCategoryDTO
 }>()
 
-const filterStore = useFilterStore()
 const isExpanded = ref(false)
 const filterRef = ref<HTMLElement | null>(null)
 
