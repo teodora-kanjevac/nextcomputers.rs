@@ -4,13 +4,56 @@ import {
     USAGE_THRESHOLD_PERCENT,
     VALUE_DIVERSITY_THRESHOLD,
 } from '~/src/utils/filter/globalFilterSettings'
+import prisma from '~/src/utils/prisma'
+
+export const fetchAllFiltersFromCategory = async (subcategoryId: number): Promise<any> => {
+    const products = await prisma.product.findMany({
+        where: {
+            available: true,
+            subcategory_id: subcategoryId,
+        },
+        select: {
+            brand: true,
+            specification: true,
+        },
+    })
+    return products
+}
+
+export const updateFilterMap = (
+    filterMap: Record<string, Map<string, number>>,
+    dynamicFilterMap: Record<string, Map<string, number>>
+) => {
+    Object.keys(filterMap).forEach(key => delete filterMap[key])
+    Object.keys(dynamicFilterMap).forEach(key => {
+        filterMap[key] = new Map(dynamicFilterMap[key])
+    })
+}
+
+export const createDynamicFilterMap = (
+    filterMap: Record<string, Map<string, number>>,
+    lastSelectedCategoryKey?: string
+): Record<string, Map<string, number>> => {
+    const dynamicFilterMap: Record<string, Map<string, number>> = { brand: new Map() }
+
+    if (lastSelectedCategoryKey && filterMap[lastSelectedCategoryKey]) {
+        dynamicFilterMap[lastSelectedCategoryKey] = new Map(filterMap[lastSelectedCategoryKey])
+    }
+
+    return dynamicFilterMap
+}
 
 export const processSpecifications = (
     specifications: Record<string, string>,
     filterMap: Record<string, Map<string, number>>,
-    seenVariations: Record<string, string>
+    seenVariations: Record<string, string>,
+    lastSelectedCategoryKey?: string
 ): void => {
     Object.entries(specifications).forEach(([key, value]) => {
+        if (lastSelectedCategoryKey && key === lastSelectedCategoryKey) {
+            return
+        }
+
         if (!filterMap[key]) {
             filterMap[key] = new Map()
         }
@@ -31,8 +74,13 @@ export const processSpecifications = (
 export const processBrand = (
     brand: string,
     filterMap: Map<string, number>,
-    seenVariations: Record<string, string>
+    seenVariations: Record<string, string>,
+    lastSelectedCategoryKey?: string
 ): void => {
+    if (lastSelectedCategoryKey && lastSelectedCategoryKey === 'brand') {
+        return
+    }
+
     if (!brand) return
 
     const normalizedBrand = normalizeFilterName(brand)

@@ -21,6 +21,7 @@ const filterStore = useFilterStore()
 const { updateTitle } = usePageTitle()
 
 const subcategoryId = parseInt(route.params.subcategoryId as string)
+filterStore.subcategoryId = subcategoryId
 
 watch(
     () => categoryStore.subcategory,
