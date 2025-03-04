@@ -5,4 +5,5 @@ export interface CartProductDTO {
     price: number
     discountPrice?: number
     thumbnail: string
+    stock: number
 }

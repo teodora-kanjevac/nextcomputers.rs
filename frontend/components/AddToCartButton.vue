@@ -22,14 +22,18 @@ const cartStore = useCartStore()
 
 const addToCart = async () => {
     try {
-        await cartStore.addToCart(productId, 1)
+        await cartStore.addToCart(productId)
         showNotification('success', 'Proizvod dodat u korpu!', 'Ovaj proizvod je uspešno dodat u korpu.', 4000)
-    } catch (error) {
-        showNotification(
-            'error',
-            'Greška pri dodavanju u korpu!',
-            'Došlo je do problema pri dodavanju proizvoda u korpu.'
-        )
+    } catch (error: any) {
+        if (error.response && error.response.data.error.includes('Insufficient stock')) {
+            showNotification('warn', 'Nema dovoljno proizvoda na stanju!', 'Količina koju ste tražili nije dostupna.')
+        } else {
+            showNotification(
+                'error',
+                'Greška pri dodavanju u korpu!',
+                'Došlo je do problema pri dodavanju proizvoda u korpu.'
+            )
+        }
     }
 }
 </script>

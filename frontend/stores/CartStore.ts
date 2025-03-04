@@ -28,22 +28,21 @@ export const useCartStore = defineStore('cart', {
                 console.error('Failed to fetch cart:', error)
             }
         },
-        async addToCart(productId: number, quantity: number) {
+        async addToCart(productId: number) {
             try {
                 const { data } = await axios.post(`/api/cart/add-item`, {
                     cartId: this.cart.id,
                     productId: productId,
-                    quantity: quantity,
                 })
                 const existingItem = this.cart.cartItems.find(item => item.product.id === productId)
 
                 if (existingItem) {
-                    existingItem.quantity += quantity
+                    existingItem.quantity += 1
                 } else {
                     this.cart.cartItems.push(new CartItem(data))
                 }
             } catch (error) {
-                console.error('Failed to add to cart:', error)
+                throw error
             }
         },
         async updateQuantity(cartItemId: string, quantity: number) {
@@ -54,7 +53,7 @@ export const useCartStore = defineStore('cart', {
                     quantity: quantity,
                 })
             } catch (error) {
-                console.error('Failed to change quantity:', error)
+                throw error
             }
         },
         async removeFromCart(cartItemId: string) {

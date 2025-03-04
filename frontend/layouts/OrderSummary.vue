@@ -72,7 +72,7 @@ import { useCheckoutStore } from '~/stores/CheckoutStore'
 import { useOrderStore } from '~/stores/OrderStore'
 import { useMailStore } from '~/stores/MailStore'
 import { useSharedStore } from '~/stores/SharedStore'
-import { useNotification } from '~/composables/useNotification'
+import { OrderFailed } from '~/composables/useOrder'
 
 const router = useRouter()
 const cartStore = useCartStore()
@@ -80,7 +80,6 @@ const checkoutStore = useCheckoutStore()
 const orderStore = useOrderStore()
 const mailStore = useMailStore()
 const sharedStore = useSharedStore()
-const { showNotification } = useNotification()
 
 sharedStore.loading = false
 
@@ -133,12 +132,12 @@ const handleOrder = async () => {
 
         router.push({ path: '/potvrdjena-kupovina', query: { redirected: 'true' } })
     } catch (error) {
-        console.error('Error:', error)
-        showNotification(
-            'error',
-            'Greška pri slanju narudžbine!',
-            'Došlo je do problema pri slanju narudžbine. Pokušajte ponovo.'
-        )
+        cartStore.clearCart()
+        router.push('/').then(() => {
+            setTimeout(() => {
+                OrderFailed()
+            }, 10)
+        })
     } finally {
         sharedStore.loading = false
     }

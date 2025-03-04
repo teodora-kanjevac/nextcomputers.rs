@@ -156,16 +156,24 @@ const updateFeatured = (imageUrl: string) => {
 }
 
 const addToCart = async () => {
-    if (product.value?.id !== undefined) {
-        await cartStore.addToCart(product.value.id, 1)
-    } else {
-        showNotification(
-            'error',
-            'Greška pri dodavanju u korpu!',
-            'Došlo je do problema pri dodavanju proizvoda u korpu.'
-        )
+    try {
+        if (product.value?.id !== undefined) {
+            await cartStore.addToCart(product.value.id)
+            showNotification('success', 'Proizvod dodat u korpu!', 'Ovaj proizvod je uspešno dodat u korpu.', 4000)
+        } else {
+            throw new Error('Product ID is not defined.')
+        }
+    } catch (error: any) {
+        if (error.response && error.response.data.error.includes('Insufficient stock')) {
+            showNotification('warn', 'Nema dovoljno proizvoda na stanju!', 'Količina koju ste tražili nije dostupna.')
+        } else {
+            showNotification(
+                'error',
+                'Greška pri dodavanju u korpu!',
+                'Došlo je do problema pri dodavanju proizvoda u korpu.'
+            )
+        }
     }
-    showNotification('success', 'Proizvod dodat u korpu!', 'Ovaj proizvod je uspešno dodat u korpu.', 4000)
 }
 
 const info = () => {

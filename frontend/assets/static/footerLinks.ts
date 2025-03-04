@@ -46,5 +46,5 @@ export const footerSections = [
 export const socialIcons = [
     { componentIcon: FacebookIcon, link: 'https://www.instagram.com/nextcomputers.rs' },
     { componentIcon: InstagramIcon, link: 'https://www.instagram.com/nextcomputers.rs' },
-    { componentIcon: LinkedInIcon, link: 'https://www.instagram.com/nextcomputers.rs' },
+    { componentIcon: LinkedInIcon, link: 'https://www.linkedin.com/company/nextcomputers' },
 ]

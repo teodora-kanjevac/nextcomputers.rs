@@ -9,7 +9,7 @@
                         <template v-for="chunk in productChunks" :key="chunk[0]?.id">
                             <SplideSlide>
                                 <SliderProductGrid
-                                    class="grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
+                                    class="mb-1 grid gap-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4"
                                     :products="chunk" />
                             </SplideSlide>
                         </template>

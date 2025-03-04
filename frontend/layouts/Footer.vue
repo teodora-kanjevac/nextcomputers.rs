@@ -11,7 +11,7 @@
                 <div class="sm:flex sm:items-center sm:justify-between">
                     <Logo class="hidden lg:flex text-gray-200 font-medium" />
                     <span class="text-xs text-gray-300 flex justify-center gap-0.5 text-center">
-                        Copyright © 2024
+                        Copyright © {{ new Date().getFullYear() }}
                         <a href="/" class="hover:underline">nextcomputers.rs.</a>
                         Sva prava zadržana.
                     </span>

@@ -77,9 +77,9 @@ export const getCartByUser = async (req: Request, res: Response): Promise<void> 
 
 export const addItemToCart = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { cartId, productId, quantity } = req.body
+        const { cartId, productId } = req.body
 
-        const cartItem = await addCartItem(cartId, productId, quantity)
+        const cartItem = await addCartItem(cartId, productId)
 
         res.status(200).json(cartItem)
     } catch (error) {

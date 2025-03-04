@@ -5,6 +5,7 @@ export class CartProduct {
     public price: number
     public discountPrice?: number
     public thumbnail: string
+    public stock: number
 
     constructor(product: any) {
         this.id = product.id
@@ -13,5 +14,6 @@ export class CartProduct {
         this.price = parseInt(product.salePrice)
         this.discountPrice = parseInt(product.discountPrice)
         this.thumbnail = product.thumbnail
+        this.stock = parseInt(product.stock)
     }
 }
