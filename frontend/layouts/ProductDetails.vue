@@ -1,26 +1,7 @@
 <template>
     <div>
         <div v-if="product" class="md:grid md:grid-cols-2 md:gap-8 xl:gap-16">
-            <div class="gap-4">
-                <img
-                    :src="featuredImage"
-                    class="h-auto max-w-full mx-auto rounded-lg mb-3 sm:mb-5"
-                    :alt="product.name" />
-
-                <div class="grid grid-cols-6 gap-2 sm:gap-3">
-                    <div v-for="(imageUrl, index) in galleryImages" :key="index">
-                        <img
-                            :src="imageUrl.thumbnail"
-                            :class="{
-                                'border-2 border-rose-600': imageUrl.image === featuredImage,
-                                'border-2 border-gray-200 hover:border-gray-300': imageUrl.image !== featuredImage,
-                            }"
-                            class="max-h-20 mx-auto rounded-lg cursor-pointer"
-                            @click="updateFeatured(imageUrl.image)"
-                            :alt="imageUrl.image" />
-                    </div>
-                </div>
-            </div>
+            <ProductImageGallery :gallery-images="galleryImages" />
 
             <div class="mt-8 md:mt-0">
                 <span
@@ -90,10 +71,10 @@
 
                 <hr class="my-6 md:my-8 border-gray-200" />
 
-                <div class="mt-6 px-1 lg:px-10 grid sm:gap-14 gap-5 sm:grid-flow-col items-start text-sm">
-                    <div v-if="Object.keys(product.specifications).length > 0" class="grid grid-cols-2 gap-y-2">
+                <div class="mt-6 px-1 lg:px-5 grid gap-5 sm:grid-flow-col items-start text-sm">
+                    <div v-if="Object.keys(product.specifications).length > 0" class="grid grid-cols-[max-content,1fr] gap-x-5 gap-y-2">
                         <template
-                            v-for="([key, value], index) in Object.entries(product.specifications).slice(0, 6)"
+                            v-for="([key, value], index) in Object.entries(product.specifications).slice(0, 5)"
                             :key="index">
                             <span class="font-semibold">{{ key }}:</span>
                             <span class="line-clamp-3">{{ value }}</span>

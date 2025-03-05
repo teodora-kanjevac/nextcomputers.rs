@@ -139,6 +139,104 @@
     width: 2em
 }
 
+.gallery-arrows {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    padding: 0 0.5em;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 10;
+}
+
+.gallery-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 0.5em;
+    cursor: pointer;
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    background-color: rgb(228, 228, 228);
+    color: rgb(110, 110, 110);
+    transition: transform 0.3s ease;
+}
+
+.gallery-arrow:hover {
+    opacity: 0.8;
+}
+
+.gallery-arrow svg {
+    height: 2em;
+    width: 2em
+}
+
+.gallery-arrow-prev {
+    transform: translateX(150%);
+}
+
+.gallery-arrow-next {
+    transform: translateX(-150%);
+}
+
+.gallery:hover .gallery-arrow-prev {
+    transform: translateX(0);
+}
+
+.gallery:hover .gallery-arrow-next {
+    transform: translateX(0);
+}
+
+.modal-arrows {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    transform: translateY(-50%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.modal-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    color: rgb(110, 110, 110);
+    transition: transform 0.2s ease;
+    --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    background-color: rgb(228, 228, 228);
+    border-radius: 0.5rem;
+    padding: 0.2rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    pointer-events: auto;
+}
+
+.modal-arrow:hover {
+    transform: scale(1.1);
+}
+
+.modal-arrow:hover {
+    opacity: 0.8;
+}
+
+.modal-arrow svg {
+    height: 2em;
+    width: 2em
+}
+
 .splide__arrow:hover:not(:disabled) {
     background-color: #be123c;
 }
