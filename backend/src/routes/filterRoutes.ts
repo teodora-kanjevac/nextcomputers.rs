@@ -5,6 +5,6 @@ const router: Router = Router()
 
 router.post('/filteredProducts/:subcategoryId', getFilteredProducts)
 router.get('/search/:searchTerm', getSearchFilters)
-router.get('/:subcategoryId', getFilters)
+router.post('/:subcategoryId', getFilters)
 
 export default router

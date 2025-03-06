@@ -37,4 +37,10 @@ onMounted(() => {
         )
     })
 })
+
+onBeforeMount(() => {
+    nuxtApp.hook('order:failed' as any, () => {
+        showNotification('error', 'Greška pri slanju narudžbine!', 'Došlo je do problema pri slanju narudžbine.')
+    })
+})
 </script>

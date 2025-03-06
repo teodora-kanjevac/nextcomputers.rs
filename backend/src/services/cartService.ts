@@ -58,12 +58,16 @@ export const fetchCartByUserId = async (userId: string): Promise<CartDTO> => {
     return new CartDTO(cart)
 }
 
-export const addCartItem = async (cartId: string, productId: number, quantity: number): Promise<CartItemDTO> => {
-    if (isNaN(quantity) || quantity <= 0 || quantity > 99) {
-        throw new Error('Invalid quantity; Quantity must be greater than 0 and less than 99')
-    }
+export const addCartItem = async (cartId: string, productId: number): Promise<CartItemDTO> => {
+    const product = await prisma.product.findUnique({
+        where: {
+            product_id: productId,
+        },
+    })
 
-    isNaNObject('product', productId)
+    if (!product) {
+        throw new Error(`Product with ID = ${productId} not found.`)
+    }
 
     const cartItem = await prisma.cartitem.findFirst({
         where: {
@@ -73,6 +77,12 @@ export const addCartItem = async (cartId: string, productId: number, quantity: n
         include: { cart: true, product: true },
     })
 
+    const totalCartQuantity = cartItem ? cartItem.quantity + 1 : 1
+
+    if (totalCartQuantity > product.stock) {
+        throw new Error(`Insufficient stock; Only ${product.stock} items available`)
+    }
+
     if (cartItem) {
         const updatedCartItem = await prisma.cartitem.update({
             where: {
@@ -80,7 +90,7 @@ export const addCartItem = async (cartId: string, productId: number, quantity: n
             },
             data: {
                 quantity: {
-                    increment: quantity,
+                    increment: 1,
                 },
             },
             include: { cart: true, product: true },
@@ -92,7 +102,7 @@ export const addCartItem = async (cartId: string, productId: number, quantity: n
             data: {
                 cart_id: cartId,
                 product_id: productId,
-                quantity,
+                quantity: 1,
             },
             include: { cart: true, product: true },
         })
@@ -120,6 +130,10 @@ export const updateCartItemQuantity = async (
     })
 
     isNullObject('cart item', cartItemId, cartItem)
+
+    if (cartItem.product.stock < quantity) {
+        throw new Error(`Insufficient stock; Only ${cartItem.product.stock} items available`)
+    }
 
     return new CartItemDTO(cartItem)
 }

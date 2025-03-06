@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-md">
             <div class="mb-5 h-44 w-full">
                 <a :href="`/proizvod/${product.id}`">
                     <NuxtImg class="mx-auto h-full object-cover" :src="product.thumbnail" :alt="product.name" />

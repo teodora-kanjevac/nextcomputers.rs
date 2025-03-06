@@ -4,8 +4,9 @@ import { fetchFilteredProducts, fetchFilters, fetchSearchFilters } from '~/src/s
 export const getFilters = async (req: Request, res: Response): Promise<void> => {
     try {
         const subcategoryId = parseInt(req.params.subcategoryId)
+        const selectedFilters: Record<string, string[]> = req.body.selectedFilters || {}
 
-        const filters = await fetchFilters(subcategoryId)
+        const filters = await fetchFilters(subcategoryId, selectedFilters)
 
         res.status(200).json(filters)
     } catch (error) {

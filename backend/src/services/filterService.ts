@@ -11,39 +11,68 @@ import { calculateOffset } from '~/src/utils/utils'
 import { buildSubcategoryQueryConditions } from '~/src/utils/filter/queryConditions'
 import { handleFilterValidation } from '~/src/utils/filter/validateFilters'
 import {
+    createDynamicFilterMap,
+    fetchAllFiltersFromCategory,
     filterMapFilterCriteria,
     mapFiltersToCategories,
+    processBrand,
     processSpecifications,
+    updateFilterMap,
 } from '~/src/utils/filter/filterFetchingUtils'
 import { fetchMatchedProductIds } from '~/src/utils/search/fetchMatchedProducts'
 
-export const fetchFilters = async (subcategoryId: number): Promise<FilterCategory[]> => {
+export const fetchFilters = async (
+    subcategoryId: number,
+    selectedFilters: Record<string, string[]>
+): Promise<FilterCategory[]> => {
     isNaNObject('subcategory', subcategoryId)
 
-    const products = await prisma.product.findMany({
-        where: {
-            subcategory_id: subcategoryId,
-        },
-        select: {
-            brand: true,
-            specification: true,
-        },
-    })
+    const filterMap: Record<string, Map<string, number>> = { brand: new Map() }
+    const seenVariations: Record<string, string> = {}
 
-    const filterMap: Record<string, Map<string, number>> = {
-        brand: new Map(),
-    }
+    let products = await fetchAllFiltersFromCategory(subcategoryId)
 
     products.forEach(product => {
-        if (product.brand) {
-            const currentCount = filterMap.brand.get(product.brand) || 0
-            filterMap.brand.set(product.brand, currentCount + 1)
-        }
-        processSpecifications(product.specification as Record<string, string>, filterMap)
+        processBrand(product.brand, filterMap.brand, seenVariations)
+        processSpecifications(product.specification as Record<string, string>, filterMap, seenVariations)
     })
 
-    GLOBAL_FILTERS_TO_EXCLUDE.forEach(filter => delete filterMap[filter])
+    if (Object.keys(selectedFilters).length > 0) {
+        const lastSelectedCategoryKey = Object.keys(selectedFilters).pop()
+        const dynamicFilterMap = createDynamicFilterMap(filterMap, lastSelectedCategoryKey)
 
+        const { subcategoryCondition, brandCondition, specificationCondition } = buildSubcategoryQueryConditions(
+            subcategoryId,
+            selectedFilters
+        )
+
+        const query = Prisma.sql`
+            SELECT * FROM product
+            WHERE available = TRUE
+            AND ${subcategoryCondition}
+            ${brandCondition}
+            ${specificationCondition}
+        `
+
+        products = await prisma.$queryRaw<ProductCardDTO[]>(query)
+
+        await mapBigInt(products)
+
+        products.forEach(product => {
+            processBrand(product.brand, dynamicFilterMap.brand, seenVariations, lastSelectedCategoryKey)
+            processSpecifications(
+                product.specification as Record<string, string>,
+                dynamicFilterMap,
+                seenVariations,
+                lastSelectedCategoryKey
+            )
+        })
+
+        updateFilterMap(filterMap, dynamicFilterMap)
+    }
+
+    GLOBAL_FILTERS_TO_EXCLUDE.forEach(filter => delete filterMap[filter])
+    
     const allowedFilters = SUBCATEGORY_FILTER_MAP[subcategoryId]
     if (allowedFilters) {
         Object.keys(filterMap).forEach(filterKey => {
@@ -54,7 +83,7 @@ export const fetchFilters = async (subcategoryId: number): Promise<FilterCategor
     } else {
         filterMapFilterCriteria(filterMap, products)
     }
-
+    
     return mapFiltersToCategories(filterMap)
 }
 
@@ -65,6 +94,7 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
 
     const products = await prisma.product.findMany({
         where: {
+            available: true,
             product_id: { in: matchedIds },
         },
         select: {
@@ -83,16 +113,15 @@ export const fetchSearchFilters = async (searchTerm: string): Promise<FilterCate
         subcategory: new Map(),
     }
 
+    const seenVariations: Record<string, string> = {}
+
     products.forEach((product: any) => {
         if (product.subcategory) {
             const subcategoryName = product.subcategory.name
             const currentCount = filterMap.subcategory.get(subcategoryName) || 0
             filterMap.subcategory.set(subcategoryName, currentCount + 1)
         }
-        if (product.brand) {
-            const currentCount = filterMap.brand.get(product.brand) || 0
-            filterMap.brand.set(product.brand, currentCount + 1)
-        }
+        processBrand(product.brand, filterMap.brand, seenVariations)
     })
 
     return mapFiltersToCategories(filterMap)

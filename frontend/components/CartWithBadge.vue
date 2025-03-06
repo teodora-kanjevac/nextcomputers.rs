@@ -3,7 +3,7 @@
         <CartIcon class="mb-0.5" />
         <div
             v-if="badgeCount > 0"
-            class="absolute inline-flex items-center justify-center size-5 text-xs font-semibold text-white bg-primary-light rounded-full -top-2 -right-2">
+            class="absolute inline-flex items-center justify-center size-4 md:size-5 md:text-xs text-[10px] font-semibold text-white bg-primary-light rounded-full md:-top-2 md:-right-2 -top-1.5 -right-1.5">
             {{ badgeCount }}
         </div>
     </div>

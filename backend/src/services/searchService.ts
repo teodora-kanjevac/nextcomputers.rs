@@ -6,6 +6,8 @@ import { handleFilterValidation } from '~/src/utils/filter/validateFilters'
 import { buildSearchResultsQueryConditions } from '~/src/utils/filter/queryConditions'
 import { fetchMatchedProductIds } from '~/src/utils/search/fetchMatchedProducts'
 import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
+import { Prisma } from '@prisma/client'
+import { mapBigInt } from '~/src/utils/mapper/bigIntMapper'
 
 export const fetchFilteredSearchResults = async (
     searchTerm: string,
@@ -23,6 +25,8 @@ export const fetchFilteredSearchResults = async (
 
     const matchedIds = await fetchMatchedProductIds(searchTerm)
 
+    let orderByCondition: Prisma.Sql = Prisma.empty
+
     if (sortBy && ['discountPercentage', 'rating'].includes(sortBy)) {
         const sortFunction =
             sortBy === 'discountPercentage' ? fetchSearchResultsSortedByDiscount : fetchSearchResultsSortedByRating
@@ -31,41 +35,24 @@ export const fetchFilteredSearchResults = async (
         return mapRatingsToProductCards(products)
     }
 
-    const filterConditions: any = {
-        available: true,
-        product_id: { in: matchedIds },
-    }
-
-    const queryConditions: any = {
-        where: filterConditions,
-    }
-
-    if (filters.brand?.length) {
-        filterConditions.brand = { in: filters.brand }
-    }
-
-    if (filters.subcategory?.length) {
-        const subcategories = await prisma.subcategory.findMany({
-            where: { name: { in: filters.subcategory } },
-            select: { subcategory_id: true },
-        })
-
-        const validSubcategoryIds = subcategories.map(sub => sub.subcategory_id)
-        if (validSubcategoryIds.length > 0) {
-            filterConditions.subcategory_id = { in: validSubcategoryIds }
-        }
-    }
-
     if (sortBy && order) {
-        queryConditions.orderBy = { [sortBy]: order }
+        orderByCondition = Prisma.sql`ORDER BY ${Prisma.raw(sortBy)} ${Prisma.raw(order)}`
     }
 
-    const products = await prisma.product.findMany(queryConditions)
+    const query = Prisma.sql`
+        SELECT * FROM product
+        WHERE available = TRUE
+        AND product_id IN (${Prisma.join(matchedIds)})
+        ${categoryCondition}
+        ${brandCondition}
+        ${orderByCondition}
+        LIMIT ${pageSize}
+        OFFSET ${offset}
+    `
 
-    const finalProducts =
-        sortBy && order ? products : products.filter(product => matchedIds.includes(product.product_id))
+    const products = await prisma.$queryRaw<ProductCardDTO[]>(query)
 
-    const paginatedProducts = finalProducts.slice(offset, offset + pageSize)
+    const mappedProducts = await mapBigInt(products)
 
-    return mapRatingsToProductCards(paginatedProducts)
+    return mapRatingsToProductCards(mappedProducts)
 }

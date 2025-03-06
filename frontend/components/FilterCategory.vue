@@ -43,9 +43,9 @@ const { filterCategory } = defineProps<{
 const isExpanded = ref(false)
 const filterRef = ref<HTMLElement | null>(null)
 
-const showMoreAvailable = computed(() => filterCategory.filters.length > 4)
 const alwaysShownFilters = computed(() => filterCategory.filters.slice(0, 4))
 const remainingFilters = computed(() => filterCategory.filters.slice(4))
+const showMoreAvailable = computed(() => remainingFilters.value.length > 0)
 
 const toggleShowMoreFilters = async () => {
     isExpanded.value = !isExpanded.value
@@ -56,6 +56,14 @@ const toggleShowMoreFilters = async () => {
         slideFilters(filterRef.value, fromHeight, toHeight, 0.25)
     }
 }
+
+watch(
+    () => filterCategory.filters,
+    () => {
+        isExpanded.value = true
+        toggleShowMoreFilters()
+    }
+)
 </script>
 
 <style>

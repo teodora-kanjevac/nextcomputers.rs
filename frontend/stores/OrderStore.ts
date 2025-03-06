@@ -15,7 +15,7 @@ export const useOrderStore = defineStore('order', {
                 const { data } = await axios.post(`/api/order/create`, orderData)
                 this.order = new Order(data)
             } catch (error) {
-                console.error('Failed to create order:', error)
+                throw error
             }
         },
         async fetchOrder(orderId: string) {
