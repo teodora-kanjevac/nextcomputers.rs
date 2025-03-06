@@ -72,7 +72,7 @@ export const fetchFilters = async (
     }
 
     GLOBAL_FILTERS_TO_EXCLUDE.forEach(filter => delete filterMap[filter])
-
+    
     const allowedFilters = SUBCATEGORY_FILTER_MAP[subcategoryId]
     if (allowedFilters) {
         Object.keys(filterMap).forEach(filterKey => {
@@ -83,7 +83,7 @@ export const fetchFilters = async (
     } else {
         filterMapFilterCriteria(filterMap, products)
     }
-
+    
     return mapFiltersToCategories(filterMap)
 }
 

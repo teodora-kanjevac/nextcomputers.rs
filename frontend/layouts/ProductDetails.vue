@@ -69,10 +69,17 @@
                     </a>
                 </div>
 
-                <hr class="my-6 md:my-8 border-gray-200" />
+                <div class="inline-flex mt-5 px-3 py-1.5 rounded-md gap-2 bg-amber-100">
+                    <TruckDeliveryIcon class="size-5" />
+                    <span class="text-sm">Rok isporuke je 1-3 radna dana</span>
+                </div>
+
+                <hr class="my-6 md:my-7 border-gray-200" />
 
                 <div class="mt-6 px-1 lg:px-5 grid gap-5 sm:grid-flow-col items-start text-sm">
-                    <div v-if="Object.keys(product.specifications).length > 0" class="grid grid-cols-[max-content,1fr] gap-x-5 gap-y-2">
+                    <div
+                        v-if="Object.keys(product.specifications).length > 0"
+                        class="grid grid-cols-[max-content,1fr] gap-x-5 gap-y-2">
                         <template
                             v-for="([key, value], index) in Object.entries(product.specifications).slice(0, 5)"
                             :key="index">
@@ -108,6 +115,7 @@ import { formatPrice } from '~/composables/utils'
 import type { ImageDTO } from '~/shared/types/ImageDTO'
 import { useCartStore } from '~/stores/CartStore'
 import { useNotification } from '~/composables/useNotification'
+import TruckDeliveryIcon from '~/components/icons/TruckDeliveryIcon.vue'
 
 const { showNotification } = useNotification()
 const productStore = useProductStore()

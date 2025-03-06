@@ -97,6 +97,8 @@ export const processBrand = (
 
 export const filterMapFilterCriteria = (filterMap: Record<string, Map<string, number>>, products: any[]): void => {
     Object.entries(filterMap).forEach(([key, values]) => {
+        if (key === 'brand') return
+
         const totalOccurrences = Array.from(values.values()).reduce((sum, count) => sum + count, 0)
         const distinctValueCount = values.size
 

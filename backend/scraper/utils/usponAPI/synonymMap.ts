@@ -1,5 +1,6 @@
 export const synonymMap: Record<string, string[]> = {
-    hlađenje: ['hladnjaci', 'case cooler', 'cpu cooler', 'ventilatori'],
+    'aparati za tretiranje vazduha': ['ventilatori / osveživači / ovlaživači'],
+    hlađenje: ['hladnjaci', 'case cooler', 'cpu cooler', 'ventilator'],
     kosilice: ['kosačice'],
     'tastature i miševi': ['podloga', 'miševi', 'tastature', 'kombo setovi'],
     'grejna tela': ['grejalice'],
@@ -29,7 +30,6 @@ export const synonymMap: Record<string, string[]> = {
     'televizori i oprema': ['televizori', 'oprema za tv'],
     'računari brandname': ['brand-name računari'],
     mikrotalasne: ['mikrotalasne rerne'],
-    'aparati za tretiranje vazduha': ['ventilatori / osveživači / ovlaživači'],
     rasveta: ['led rasveta'],
     kuvala: ['ketleri - grejači vode'],
     'grilovi i tosteri': ['kontaktni gril / aparati za sendviče / roštilj'],
