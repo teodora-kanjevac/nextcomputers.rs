@@ -80,7 +80,7 @@
                             <span class="line-clamp-3">{{ value }}</span>
                         </template>
                     </div>
-                    <div class="grid grid-cols-2 gap-y-2">
+                    <div class="grid grid-cols-[max-content,1fr] gap-x-5 gap-y-2">
                         <span class="font-semibold">Šifra artikla:</span>
                         <span>{{ product?.id }}</span>
 

@@ -199,7 +199,6 @@
     left: 0;
     right: 0;
     transform: translateY(-50%);
-    display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 1rem;

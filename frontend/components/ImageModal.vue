@@ -1,33 +1,35 @@
 <template>
-    <div
-        v-if="isOpen"
-        class="modal fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.8)]"
-        @click="handleBackgroundClick">
-        <div class="relative w-full max-w-5xl h-[85vh] flex items-center justify-center">
-            <Splide :key="initialIndex" :options="modalOptions" ref="modalSplide" aria-label="Galerija">
-                <SplideSlide v-for="(imageUrl, index) in galleryImages" :key="index">
-                    <img
-                        :src="imageUrl.image"
-                        :alt="imageUrl.image"
-                        class="w-full h-full object-contain aspect-[5/4] rounded-md" />
-                </SplideSlide>
-                <div class="modal-arrows md:flex hidden">
-                    <button class="modal-arrow modal-arrow-next" @click="goPrev">
-                        <IndicatorLeftIcon />
-                    </button>
-                    <button class="modal-arrow modal-arrow-prev" @click="goNext">
-                        <IndicatorRightIcon />
-                    </button>
-                </div>
-            </Splide>
+    <Transition name="modal" @after-leave="closeModal">
+        <div
+            v-show="isOpen"
+            class="modal fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.8)]"
+            @click="handleBackgroundClick">
+            <div class="relative w-full max-w-5xl h-[85vh] flex items-center justify-center">
+                <Splide :key="initialIndex" :options="modalOptions" ref="modalSplide" aria-label="Galerija">
+                    <SplideSlide v-for="(imageUrl, index) in galleryImages" :key="index">
+                        <img
+                            :src="imageUrl.image"
+                            :alt="imageUrl.image"
+                            class="w-full h-full object-contain aspect-[5/4] rounded-md" />
+                    </SplideSlide>
+                    <div class="modal-arrows md:flex hidden">
+                        <button class="modal-arrow modal-arrow-next" @click="goPrev">
+                            <IndicatorLeftIcon />
+                        </button>
+                        <button class="modal-arrow modal-arrow-prev" @click="goNext">
+                            <IndicatorRightIcon />
+                        </button>
+                    </div>
+                </Splide>
 
-            <button
-                @click.stop="closeModal"
-                class="z-50 absolute top-4 right-5 p-1 bg-zinc-300 rounded-lg shadow-sm transition-transform duration-200 hover:bg-opacity-70 hover:scale-110">
-                <CloseIcon class="size-7" />
-            </button>
+                <button
+                    @click.stop="closeModal"
+                    class="z-50 absolute top-4 right-5 p-1 bg-zinc-300 rounded-lg shadow-sm transition-transform duration-200 hover:bg-opacity-70 hover:scale-110">
+                    <CloseIcon class="size-7" />
+                </button>
+            </div>
         </div>
-    </div>
+    </Transition>
 </template>
 
 <script setup lang="ts">
@@ -79,24 +81,48 @@ const handleBackgroundClick = (event: MouseEvent) => {
     }
 }
 
+const disableScroll = () => {
+    window.addEventListener('wheel', preventDefault as EventListener, { passive: false } as AddEventListenerOptions)
+    window.addEventListener('touchmove', preventDefault as EventListener, { passive: false } as AddEventListenerOptions)
+}
+
+const enableScroll = () => {
+    window.removeEventListener('wheel', preventDefault as EventListener, { passive: false } as AddEventListenerOptions)
+    window.removeEventListener(
+        'touchmove',
+        preventDefault as EventListener,
+        { passive: false } as AddEventListenerOptions
+    )
+}
+
+const preventDefault = (e: Event) => {
+    e.preventDefault()
+}
+
 watch(
     () => isOpen,
     isOpen => {
         if (isOpen) {
-            document.body.classList.add('no-scroll')
+            disableScroll()
         } else {
-            document.body.classList.remove('no-scroll')
+            enableScroll()
         }
     }
 )
 
 onUnmounted(() => {
-    document.body.classList.remove('no-scroll')
+    enableScroll()
 })
 </script>
 
 <style>
-.no-scroll {
-    overflow: hidden;
+.modal-enter-active,
+.modal-leave-active {
+    transition: opacity 0.3s ease;
+}
+
+.modal-enter-from,
+.modal-leave-to {
+    opacity: 0;
 }
 </style>
