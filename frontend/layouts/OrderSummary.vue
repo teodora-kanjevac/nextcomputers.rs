@@ -132,7 +132,11 @@ const handleOrder = async () => {
 
         router.push({ path: '/potvrdjena-kupovina', query: { redirected: 'true' } })
     } catch (error) {
-        cartStore.clearCart()
+        cartStore.cart.cartItems.forEach(cartItem => {
+            if (cartItem.product.stock === 0) {
+                cartStore.removeFromCart(cartItem.id)
+            }
+        })
         router.push('/').then(() => {
             setTimeout(() => {
                 OrderFailed()

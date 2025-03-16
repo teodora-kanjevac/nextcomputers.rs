@@ -1,5 +1,5 @@
 <template>
-    <div class="gallery max-w-[620px] mx-auto">
+    <div class="gallery md:max-w-xl lg:max-w-lg xl:max-w-[620px] mx-auto">
         <Splide
             :options="mainOptions"
             ref="mainSplide"
@@ -35,7 +35,7 @@
             </SplideSlide>
         </Splide>
     </div>
-    <ImageModal :is-open="isModalOpen" :gallery-images="galleryImages" :initial-index="activeIndex" @close="closeModal" />
+    <ImagesModal :is-open="isModalOpen" :gallery-images="galleryImages" :initial-index="activeIndex" @close="closeModal" />
 </template>
 
 <script setup lang="ts">

@@ -1,9 +1,9 @@
 <template>
     <div>
-        <div v-if="product" class="md:grid md:grid-cols-2 md:gap-8 xl:gap-16">
+        <div v-if="product" class="lg:grid lg:grid-cols-2 md:gap-8 xl:gap-16">
             <ProductImageGallery :gallery-images="galleryImages" />
 
-            <div class="mt-8 md:mt-0">
+            <div class="mt-8 lg:mt-0">
                 <span
                     :class="{
                         'bg-green-100 text-green-800': product.available,

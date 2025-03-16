@@ -26,7 +26,7 @@ export const hideNonExistantProducts = async (identifiers: any, distributor: str
         where: {
             ean: { in: productsToHide.map(product => product.ean) },
         },
-        data: { available: false },
+        data: { available: false, stock: 0 },
     })
 
     return productsToHide.length

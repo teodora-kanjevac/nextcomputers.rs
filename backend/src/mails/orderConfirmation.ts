@@ -5,6 +5,7 @@ export const orderConfirmationData = async (orderData: OrderDataDTO): Promise<an
         orderId: orderData.orderId,
         orderDate: orderData.orderDate,
         products: orderData.products.map(product => ({
+            id: product.id,
             name: product.name,
             ean: product.ean,
             quantity: product.quantity,

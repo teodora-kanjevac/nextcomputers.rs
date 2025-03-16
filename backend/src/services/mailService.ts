@@ -3,10 +3,13 @@ import dotenv from 'dotenv'
 import { htmlToText } from 'html-to-text'
 import { MailOptionsDTO } from '~/src/DTOs/MailOptions.dto'
 import { orderConfirmationData } from '~/src/mails/orderConfirmation'
-import { template } from '~/src/mails/templates/orderConfirmationTemplate'
+import { orderConfirmationTemplate } from '~/src/mails/templates/orderConfirmationTemplate'
 import { OrderDataDTO } from '~/src/DTOs/OrderData.dto'
 import { fetchQRCode } from '~/src/handler/IPSApiHandler'
 import { IPSOptionsDTO } from '~/src/DTOs/IPSOptions.dto'
+import { ContactDataDTO } from '~/src/DTOs/ContactData.dto'
+import { contactForm } from '~/src/mails/contactForm'
+import { contactTemplate } from '~/src/mails/templates/contactFormTemplate'
 
 dotenv.config()
 
@@ -34,7 +37,7 @@ export async function sendOrderConfirmationEmail(orderData: OrderDataDTO): Promi
 
     const formattedOrderData = await orderConfirmationData(orderData)
 
-    const htmlContent = template(formattedOrderData)
+    const htmlContent = orderConfirmationTemplate(formattedOrderData)
 
     const emailOptions: MailOptionsDTO = {
         from: process.env.MAIL_FROM as string,
@@ -44,6 +47,23 @@ export async function sendOrderConfirmationEmail(orderData: OrderDataDTO): Promi
         text: htmlToText(htmlContent),
         html: htmlContent,
         ...(qrAttachment ? { attachments: [qrAttachment] } : {}),
+    }
+
+    const mailInfo = await sendAMail(emailOptions)
+    return mailInfo
+}
+
+export async function sendContactEmail(contactData: ContactDataDTO): Promise<any> {
+    const formattedContactData = await contactForm(contactData)
+
+    const htmlContent = contactTemplate(formattedContactData)
+
+    const emailOptions: MailOptionsDTO = {
+        from: process.env.MAIL_FROM as string,
+        to: process.env.MAIL_FROM as string,
+        subject: `Kontakt forma - ${contactData.fullname}`,
+        text: htmlToText(htmlContent),
+        html: htmlContent,
     }
 
     const mailInfo = await sendAMail(emailOptions)
