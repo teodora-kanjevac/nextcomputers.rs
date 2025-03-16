@@ -6,17 +6,17 @@ export const footerSections = [
     {
         title: 'Kupovina',
         items: [
-            { link: '/', content: 'Politika privatnosti' },
             { link: '/uslovi-koriscenja', content: 'Uslovi korišćenja' },
-            { link: '/', content: 'Reklamacije' },
+            { link: '/politika-privatnosti', content: 'Politika privatnosti' },
+            { link: '/uslovi-koriscenja#reklamacije', content: 'Reklamacije' },
         ],
     },
     {
         title: 'Treba Vam pomoć?',
         items: [
-            { link: '/', content: 'Česta pitanja' },
-            { link: '/', content: 'Kako kupovati' },
-            { link: '/', content: 'Kontakt' },
+            { link: '/faq', content: 'Česta pitanja' },
+            { link: '/kako-kupovati', content: 'Kako kupovati' },
+            { link: '/kontakt', content: 'Kontakt' },
         ],
     },
     {
@@ -29,8 +29,8 @@ export const footerSections = [
     {
         title: 'Plaćanje',
         items: [
-            { link: '/', content: 'Način plaćanja' },
-            { link: '/', content: 'Isporuka' },
+            { link: '/uslovi-koriscenja#nacin-placanja', content: 'Način plaćanja' },
+            { link: '/uslovi-koriscenja#dostava', content: 'Dostava' },
         ],
     },
     {

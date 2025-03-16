@@ -37,7 +37,7 @@
                     :discountPrice="product.discountPrice"
                     :discount-percentage="product.discountPercentage" />
 
-                <AddToCartButton :product-id="product.id" />
+                <AddToCartButton :product-id="product.id" :disabled="!product.available" />
             </div>
         </div>
     </div>

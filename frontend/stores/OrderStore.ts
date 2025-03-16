@@ -1,16 +1,16 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { Order } from '~/shared/classes/Order'
-import type { OrderDataDTO } from '~/shared/classes/OrderData'
+import type { OrderData } from '~/shared/classes/OrderData'
 
 export const useOrderStore = defineStore('order', {
     state: () => ({
         order: {} as Order,
-        orderData: {} as OrderDataDTO,
+        orderData: {} as OrderData,
         qrCode: '',
     }),
     actions: {
-        async createOrder(orderData: OrderDataDTO) {
+        async createOrder(orderData: OrderData) {
             try {
                 const { data } = await axios.post(`/api/order/create`, orderData)
                 this.order = new Order(data)
@@ -26,7 +26,7 @@ export const useOrderStore = defineStore('order', {
                 console.error('Failed to fetch order:', error)
             }
         },
-        async fetchQRCode(orderData: OrderDataDTO) {
+        async fetchQRCode(orderData: OrderData) {
             try {
                 const { data } = await axios.post(`/api/ips/generate`, orderData, {
                     responseType: 'arraybuffer',

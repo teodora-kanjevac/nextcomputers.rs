@@ -1,4 +1,4 @@
-export class OrderDataDTO {
+export class OrderData {
     public orderId: string
     public orderDate: string
     public products: {

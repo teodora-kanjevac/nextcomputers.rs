@@ -19,6 +19,9 @@ export default {
           dark: '#881337',
         },
       },
+      screens: {
+        '3xl': '2000px',
+      },
     },
   },
   plugins: [

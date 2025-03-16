@@ -25,6 +25,10 @@ export const fetchFilteredSearchResults = async (
 
     const matchedIds = await fetchMatchedProductIds(searchTerm)
 
+    if (matchedIds.length === 0) {
+        return []
+    }
+
     let orderByCondition: Prisma.Sql = Prisma.empty
 
     if (sortBy && ['discountPercentage', 'rating'].includes(sortBy)) {

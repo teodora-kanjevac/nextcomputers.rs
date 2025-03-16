@@ -41,7 +41,7 @@
                     </div>
                     <h2 class="font-medium text-lg">Instrukcije za uplatu:</h2>
                     <p class="mx-0.5 my-3 text-sm text-gray-700 text-justify">
-                        Ukoliko niste u mogućnosti da izvršite uplatu putem NBS IPS QR koda, molimo vas da iskoristite
+                        Ukoliko niste u mogućnosti da izvršite uplatu putem NBS IPS QR koda, molimo Vas da iskoristite
                         sledeće podatke za uplatu:
                     </p>
                     <div
@@ -49,7 +49,7 @@
                         <dl class="sm:flex items-center justify-between gap-4">
                             <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Ime primaoca</dt>
                             <dd class="font-medium text-gray-900 sm:text-end">
-                                NEMANJA STOJANOVIC PREDUZEDNIK NIS (PALILULA)
+                                NEMANJA STOJANOVIĆ PREDUZETNIK NIŠ (PALILULA)
                             </dd>
                         </dl>
                         <dl class="sm:flex items-center justify-between gap-4">
