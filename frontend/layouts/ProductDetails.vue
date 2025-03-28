@@ -140,10 +140,6 @@ watch(
     { immediate: true }
 )
 
-const updateFeatured = (imageUrl: string) => {
-    featuredImage.value = imageUrl
-}
-
 const addToCart = async () => {
     try {
         if (product.value?.id !== undefined) {

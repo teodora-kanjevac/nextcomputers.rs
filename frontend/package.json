@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
-    "dev": "start chrome http://localhost:3000 & nuxt dev",
+    "dev": "set NODE_OPTIONS=--no-deprecation & start chrome http://localhost:3000 & nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -23,14 +23,14 @@
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.2.5",
     "@nuxt/image": "^1.10.0",
-    "@primevue/themes": "^4.3.2",
+    "@primevue/themes": "^4.3.3",
     "@splidejs/splide": "^4.1.4",
     "@splidejs/vue-splide": "^0.6.12",
     "@vueuse/core": "^12.8.2",
     "@vueuse/nuxt": "^12.8.2",
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
-    "flowbite": "^2.3.0",
+    "flowbite": "^2.5.2",
     "gsap": "^3.12.7",
     "http-proxy": "1.18.1",
     "nuxt": "^3.16.1",

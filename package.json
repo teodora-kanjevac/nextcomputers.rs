@@ -5,7 +5,7 @@
   "main": "app.ts",
   "scripts": {
     "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
-    "dev:frontend": "start chrome http://localhost:3000 & cd frontend & pnpm nuxt dev",
+    "dev:frontend": "set NODE_OPTIONS=--no-deprecation & start chrome http://localhost:3000 & cd frontend & pnpm nuxt dev",
     "dev:backend": "tsc -p backend/tsconfig.json && npx resolve-tspaths -p backend/tsconfig.json && npx nodemon backend/dist/app.js"
   },
   "type": "commonjs",
