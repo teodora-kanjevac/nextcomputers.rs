@@ -19,15 +19,15 @@
                                         name="fullname"
                                         id="fullname"
                                         :class="{
-                                            'bg-gray-50 border-gray-300': isFullnameValid && formSubmitted,
-                                            'border-red-600': !isFullnameValid && formSubmitted,
+                                            'bg-gray-50 border-gray-300': fullNameCheck.valid && formSubmitted,
+                                            'border-red-600': !fullNameCheck.valid && formSubmitted,
                                         }"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
                                         placeholder="Vaše ime i prezime" />
                                     <p
-                                        v-if="!isFullnameValid && formSubmitted"
+                                        v-if="!fullNameCheck.valid && formSubmitted"
                                         class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                        Ime i prezime su obavezni
+                                        {{ fullNameCheck.message }}
                                     </p>
                                 </div>
 
@@ -42,15 +42,15 @@
                                         name="email"
                                         id="email"
                                         :class="{
-                                            'bg-gray-50 border-gray-300': isEmailValid && formSubmitted,
-                                            'border-red-600': !isEmailValid && formSubmitted,
+                                            'bg-gray-50 border-gray-300': emailCheck.valid && formSubmitted,
+                                            'border-red-600': !emailCheck.valid && formSubmitted,
                                         }"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
                                         placeholder="vasmail@gmail.com" />
                                     <p
-                                        v-if="!isEmailValid && formSubmitted"
+                                        v-if="!emailCheck.valid && formSubmitted"
                                         class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                        Unesite validnu email adresu
+                                        {{ emailCheck.message }}
                                     </p>
                                 </div>
 
@@ -70,16 +70,16 @@
                                             name="phone"
                                             id="phone"
                                             :class="{
-                                                'bg-gray-50 border-gray-300': isPhoneValid && formSubmitted,
-                                                'border-red-600': !isPhoneValid && formSubmitted,
+                                                'bg-gray-50 border-gray-300': phoneCheck.valid && formSubmitted,
+                                                'border-red-600': !phoneCheck.valid && formSubmitted,
                                             }"
                                             class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-12 p-2.5 focus:ring-primary-light focus:border-primary-light"
                                             placeholder="61 2345678" />
                                     </div>
                                     <p
-                                        v-if="!isPhoneValid && formSubmitted"
+                                        v-if="!phoneCheck.valid && formSubmitted"
                                         class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                        Broj telefona treba da ima 6-15 cifara
+                                        {{ phoneCheck.message }}
                                     </p>
                                 </div>
 
@@ -94,15 +94,15 @@
                                         name="address"
                                         id="address"
                                         :class="{
-                                            'bg-gray-50 border-gray-300': isAddressValid && formSubmitted,
-                                            'border-red-600': !isAddressValid && formSubmitted,
+                                            'bg-gray-50 border-gray-300': addressCheck.valid && formSubmitted,
+                                            'border-red-600': !addressCheck.valid && formSubmitted,
                                         }"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
                                         placeholder="Ulica i broj" />
                                     <p
-                                        v-if="!isAddressValid && formSubmitted"
+                                        v-if="!addressCheck.valid && formSubmitted"
                                         class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                        Adresa je obavezna
+                                        {{ addressCheck.message }}
                                     </p>
                                 </div>
 
@@ -117,15 +117,15 @@
                                         name="city"
                                         id="city"
                                         :class="{
-                                            'bg-gray-50 border-gray-300': isCityValid && formSubmitted,
-                                            'border-red-600': !isCityValid && formSubmitted,
+                                            'bg-gray-50 border-gray-300': cityCheck.valid && formSubmitted,
+                                            'border-red-600': !cityCheck.valid && formSubmitted,
                                         }"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
                                         placeholder="Beograd, Zaječar, Niš..." />
                                     <p
-                                        v-if="!isCityValid && formSubmitted"
+                                        v-if="!cityCheck.valid && formSubmitted"
                                         class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                        Grad je obavezan
+                                        {{ cityCheck.message }}
                                     </p>
                                 </div>
 
@@ -140,15 +140,15 @@
                                         name="zipcode"
                                         id="zipcode"
                                         :class="{
-                                            'bg-gray-50 border-gray-300': isZipcodeValid && formSubmitted,
-                                            'border-red-600': !isZipcodeValid && formSubmitted,
+                                            'bg-gray-50 border-gray-300': zipcodeCheck.valid && formSubmitted,
+                                            'border-red-600': !zipcodeCheck.valid && formSubmitted,
                                         }"
                                         class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
                                         placeholder="11000" />
                                     <p
-                                        v-if="!isZipcodeValid && formSubmitted"
+                                        v-if="!zipcodeCheck.valid && formSubmitted"
                                         class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                        Poštanski broj treba da sadrži 5 cifara
+                                        {{ zipcodeCheck.message }}
                                     </p>
                                 </div>
                             </div>
@@ -188,31 +188,78 @@ const form = ref(checkoutStore.form)
 
 const formSubmitted = ref(false)
 
-const isFullnameValid = computed(() => !!form.value.fullname)
-const isAddressValid = computed(() => !!form.value.address)
-const isCityValid = computed(() => !!form.value.city)
-const isEmailValid = computed(() => {
+const fullNameCheck = computed(() => {
+    const fullnameRegex = /^[\p{L} ]+$/u
+    if (!form.value.fullname) {
+        return { valid: false, message: 'Ime i prezime su obavezni' }
+    }
+    if (!fullnameRegex.test(form.value.fullname)) {
+        return { valid: false, message: 'Dozvoljena su samo slova i razmaci' }
+    }
+    return { valid: true, message: '' }
+})
+
+const addressCheck = computed(() => {
+    if (!form.value.address) {
+        return { valid: false, message: 'Adresa je obavezna' }
+    }
+    return { valid: true, message: '' }
+})
+
+const cityCheck = computed(() => {
+    const cityRegex = /^[\p{L} ]+$/u
+    if (!form.value.city) {
+        return { valid: false, message: 'Grad je obavezan' }
+    }
+    if (!cityRegex.test(form.value.city)) {
+        return { valid: false, message: 'Dozvoljena su samo slova i razmaci' }
+    }
+    return { valid: true, message: '' }
+})
+
+const emailCheck = computed(() => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    return emailRegex.test(form.value.email)
+    if (!form.value.email) {
+        return { valid: false, message: 'Email adresa je obavezna' }
+    }
+    if (!emailRegex.test(form.value.email)) {
+        return { valid: false, message: 'Unesite validnu email adresu' }
+    }
+    return { valid: true, message: '' }
 })
-const isZipcodeValid = computed(() => {
+
+const zipcodeCheck = computed(() => {
     const zipcodeRegex = /^\d{5}$/
-    return zipcodeRegex.test(form.value.zipcode)
+    if (!form.value.zipcode) {
+        return { valid: false, message: 'Poštanski broj je obavezan' }
+    }
+    if (!zipcodeRegex.test(form.value.zipcode)) {
+        return { valid: false, message: 'Poštanski broj treba da sadrži 5 cifara' }
+    }
+    return { valid: true, message: '' }
 })
-const isPhoneValid = computed(() => {
+
+const phoneCheck = computed(() => {
+    if (!form.value.phone) {
+        return { valid: false, message: 'Broj telefona je obavezan' }
+    }
     const phoneRegex = /^\d{6,15}$/
-    return phoneRegex.test(form.value.phone.replace(/\s+/g, ''))
+    const cleanPhone = form.value.phone.replace(/\s+/g, '')
+    if (!phoneRegex.test(cleanPhone)) {
+        return { valid: false, message: 'Broj telefona treba da ima 6-15 cifara' }
+    }
+    return { valid: true, message: '' }
 })
 
 const submitForm = () => {
     formSubmitted.value = true
     if (
-        isFullnameValid.value &&
-        isEmailValid.value &&
-        isAddressValid.value &&
-        isCityValid.value &&
-        isZipcodeValid.value &&
-        isPhoneValid.value
+        fullNameCheck.value.valid &&
+        emailCheck.value.valid &&
+        addressCheck.value.valid &&
+        cityCheck.value.valid &&
+        zipcodeCheck.value.valid &&
+        phoneCheck.value.valid
     ) {
         checkoutStore.form = form.value
         goToNextStep()

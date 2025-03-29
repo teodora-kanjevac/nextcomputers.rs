@@ -50,7 +50,7 @@
                             </button>
                             <p class="text-xs mx-1 text-justify">
                                 Klikom na ovo dugme potvrđujete da ste saglasni sa našom
-                                <a href="#" class="text-primary hover:underline">Politikom privatnosti</a>
+                                <a href="/politika-privatnosti" class="text-primary hover:underline">Politikom privatnosti</a>
                                 i
                                 <a href="/uslovi-koriscenja" class="text-primary hover:underline">
                                     Uslovima korišćenja
