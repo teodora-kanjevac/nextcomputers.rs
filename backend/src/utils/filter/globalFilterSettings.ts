@@ -18,6 +18,7 @@ export const GLOBAL_FILTERS_TO_EXCLUDE = [
 export const USAGE_THRESHOLD_PERCENT = 0.4 // Filters must appear in at least 40% of products to be included
 export const VALUE_DIVERSITY_THRESHOLD = 20 // Maximum allowed distinct values for a filter; filters with more than 20 distinct values are excluded
 export const SINGLE_PRODUCT_VALUE_THRESHOLD = 0.75 // Filters where more than 75% of distinct values are tied to a single product are excluded
+export const MAX_VALUE_LENGTH_THRESHOLD = 100 // Maximum length of filter values; filters with values longer than 100 characters are excluded
 export const SUBCATEGORY_FILTER_MAP: Record<number, string[]> = {
     1020: ['Tip', 'Broj jezgara procesora', 'Klasa procesora', 'Proces izrade', 'Grafika'], //CPU
     1028: ['Slot', 'Model', 'Proizvođač čipa', 'Tip memorije', 'Količina memorije'], //GPU

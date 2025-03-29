@@ -85,7 +85,7 @@ export const useFilterStore = defineStore('filter', {
                 sharedStore.setLoading(false)
             }
         },
-        updateFilter(filterKey: string, filterValue: string) {
+        updateFilter(filterKey: string, filterValue: string, searchTerm?: string) {
             if (!this.selectedFilters[filterKey]) {
                 this.selectedFilters[filterKey] = []
             }
@@ -97,11 +97,11 @@ export const useFilterStore = defineStore('filter', {
                 this.selectedFilters[filterKey].splice(index, 1)
             }
 
-            this.fetchFilters()
+            searchTerm ? this.fetchSearchFilters(searchTerm) : this.fetchFilters()
         },
-        resetFilters() {
+        resetFilters(searchTerm?: string) {
             this.selectedFilters = {}
-            this.fetchFilters()
+            searchTerm ? this.fetchSearchFilters(searchTerm) : this.fetchFilters()
         },
     },
 })

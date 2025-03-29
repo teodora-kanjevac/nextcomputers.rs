@@ -18,15 +18,18 @@
         </span>
     </div>
 </template>
+
 <script setup lang="ts">
-import type { FilterCategoryDTO, FilterDTO } from '~/shared/types/FilterCategoryDTO';
+import type { FilterCategoryDTO, FilterDTO } from '~/shared/types/FilterCategoryDTO'
 import { useFilterStore } from '~/stores/FilterStore'
+import { useRoute } from 'vue-router'
 
 const { filterCategory, filter } = defineProps<{
     filterCategory: FilterCategoryDTO
     filter: FilterDTO
 }>()
 
+const route = useRoute()
 const filterStore = useFilterStore()
 
 const isChecked = (category: string, value: string): boolean => {
@@ -34,6 +37,6 @@ const isChecked = (category: string, value: string): boolean => {
 }
 
 const onFilterChange = (category: string, value: string): void => {
-    filterStore.updateFilter(category, value)
+    filterStore.updateFilter(category, value, route.query.q as string | undefined)
 }
 </script>

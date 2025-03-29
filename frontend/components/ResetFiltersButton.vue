@@ -9,11 +9,13 @@
     </div>
 </template>
 <script setup lang="ts">
+import { useRoute } from 'vue-router'
 import { useFilterStore } from '~/stores/FilterStore'
 
 const filterStore = useFilterStore()
+const route = useRoute()
 
 const resetFilters = () => {
-    filterStore.resetFilters()
+    filterStore.resetFilters(route.query.q as string | undefined)
 }
 </script>

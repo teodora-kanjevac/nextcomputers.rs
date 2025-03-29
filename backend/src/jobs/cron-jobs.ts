@@ -9,16 +9,16 @@ cron.schedule('0 4 * * *', () => {
     deleteExpiredCarts()
 })
 
-cron.schedule('0 8-20 * * 1-5', async () => {
-    console.log('Running scheduled scraping products job (Mon-Fri)...')
-    await scrapingProducts()
-    await indexingProducts()
-    await removeUnavailableItemsFromCart()
-})
+// cron.schedule('0 8-20 * * 1-5', async () => {
+//     console.log('Running scheduled scraping products job (Mon-Fri)...')
+//     await scrapingProducts()
+//     await indexingProducts()
+//     await removeUnavailableItemsFromCart()
+// })
 
-cron.schedule('0 9,21 * * 6,7', async () => {
-    console.log('Running scheduled scraping products job (Sat-Sun)...')
-    await scrapingProducts()
-    await indexingProducts()
-    await removeUnavailableItemsFromCart()
-})
+// cron.schedule('0 9,21 * * 6,7', async () => {
+//     console.log('Running scheduled scraping products job (Sat-Sun)...')
+//     await scrapingProducts()
+//     await indexingProducts()
+//     await removeUnavailableItemsFromCart()
+// })

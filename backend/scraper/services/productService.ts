@@ -77,6 +77,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
 
                 const commonData = {
                     available: true,
+                    stock: product.stock,
                     price: cheapestPrice,
                     retail_price: product.retailPrice,
                     sale_price: calculateSalePrice(cheapestPrice),
@@ -87,7 +88,6 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                         where: { product_id: productId },
                         data: {
                             ...commonData,
-                            stock: product.stock,
                             image_url: product.imageUrl,
                         },
                     })

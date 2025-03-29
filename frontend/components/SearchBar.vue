@@ -8,7 +8,6 @@
                 type="text"
                 v-model="searchTerm"
                 @keyup.enter="onSearch"
-                id="search-navbar"
                 class="placeholder:italic placeholder:text-slate-400 block w-full ps-12 pr-12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-light focus:border-primary-light"
                 placeholder="Pretraži proizvode..."
                 autocomplete="off" />
@@ -27,25 +26,36 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import SearchIcon from '~/components/icons/SearchIcon.vue'
+import { useFilterStore } from '~/stores/FilterStore'
 import { useSearchStore } from '~/stores/SearchStore'
 
 const searchTerm = ref('')
 const searchStore = useSearchStore()
+const filterStore = useFilterStore()
 const router = useRouter()
 const route = useRoute()
 
 const onSearch = () => {
     if (!searchTerm.value.trim()) {
-        router.push({ name: 'proizvodi' })
+        router.replace({ name: 'proizvodi' }).then(() => {
+            window.location.reload()
+        })
     } else {
         searchStore.query = searchTerm.value
-        router.push({ name: 'proizvodi-pretraga', query: { q: searchTerm.value } })
+        searchStore.searchResults = []
+        searchStore.selectedFilters = {}
+        filterStore.selectedFilters = {}
+        router.replace({ name: 'proizvodi-pretraga', query: { q: searchTerm.value } }).then(() => {
+            window.location.reload()
+        })
     }
 }
 
-onMounted(() => {
-    if (route.query.q) {
-        searchTerm.value = route.query.q as string
-    }
-})
+watch(
+    () => route.query.q,
+    newQuery => {
+        searchTerm.value = (newQuery as string) || ''
+    },
+    { immediate: true }
+)
 </script>

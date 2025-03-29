@@ -3,6 +3,7 @@ import {
     SINGLE_PRODUCT_VALUE_THRESHOLD,
     USAGE_THRESHOLD_PERCENT,
     VALUE_DIVERSITY_THRESHOLD,
+    MAX_VALUE_LENGTH_THRESHOLD,
 } from '~/src/utils/filter/globalFilterSettings'
 import prisma from '~/src/utils/prisma'
 
@@ -98,6 +99,12 @@ export const processBrand = (
 export const filterMapFilterCriteria = (filterMap: Record<string, Map<string, number>>, products: any[]): void => {
     Object.entries(filterMap).forEach(([key, values]) => {
         if (key === 'brand') return
+
+        const hasLongValues = Array.from(values.keys()).some(value => value.length > MAX_VALUE_LENGTH_THRESHOLD)
+        if (hasLongValues) {
+            delete filterMap[key]
+            return
+        }
 
         const totalOccurrences = Array.from(values.values()).reduce((sum, count) => sum + count, 0)
         const distinctValueCount = values.size
