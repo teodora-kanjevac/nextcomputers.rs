@@ -24,7 +24,7 @@
 
                 <button
                     @click.stop="closeModal"
-                    class="z-50 absolute top-4 right-5 p-1 bg-zinc-300 rounded-lg shadow-sm transition-transform duration-200 hover:bg-opacity-70 hover:scale-110">
+                    class="z-50 absolute top-1 right-2 p-1 bg-zinc-300 rounded-lg shadow-sm transition-transform duration-200 hover:bg-opacity-70 hover:scale-110">
                     <CloseIcon class="size-7" />
                 </button>
             </div>

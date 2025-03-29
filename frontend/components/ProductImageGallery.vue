@@ -10,7 +10,7 @@
                 <img
                     :src="imageUrl.image"
                     :alt="imageUrl.image"
-                    class="w-full h-full aspect-[5/4] object-cover rounded-lg" />
+                    class="w-full h-full aspect-[7/6] object-contain rounded-lg" />
             </SplideSlide>
             <div class="gallery-arrows">
                 <button class="gallery-arrow gallery-arrow-next" @click.stop="goPrev">
