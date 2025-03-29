@@ -1,10 +1,6 @@
-import type { Plugin } from 'postcss';
-
-const config: { plugins: Plugin[] } = {
-  plugins: [
-    require('tailwindcss'),
-    require('autoprefixer'),
-  ],
-};
-
-export default config;
+export default {
+    plugins: {
+        '@tailwindcss/postcss': {},
+        'autoprefixer': {},
+    },
+}

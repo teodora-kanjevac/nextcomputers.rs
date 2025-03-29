@@ -34,7 +34,9 @@ watch(
 
 onMounted(() => {
     categoryStore.fetchCategories()
-    filterStore.fetchSearchFilters(searchStore.query)
-    searchStore.fetchFilteredSearchResults(true)
+    if (searchStore.query.trim()) {
+        filterStore.fetchSearchFilters(searchStore.query)
+        searchStore.fetchFilteredSearchResults(true)
+    }
 })
 </script>

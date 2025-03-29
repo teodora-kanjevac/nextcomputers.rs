@@ -35,16 +35,26 @@
 import type { FilterCategoryDTO } from '~/shared/types/FilterCategoryDTO'
 import PlusIcon from './icons/PlusIcon.vue'
 import MinusIcon from './icons/MinusIcon.vue'
+import { useFilterStore } from '~/stores/FilterStore'
 
 const { filterCategory } = defineProps<{
     filterCategory: FilterCategoryDTO
 }>()
 
+const filterStore = useFilterStore()
 const isExpanded = ref(false)
 const filterRef = ref<HTMLElement | null>(null)
 
-const alwaysShownFilters = computed(() => filterCategory.filters.slice(0, 4))
-const remainingFilters = computed(() => filterCategory.filters.slice(4))
+const selectedFilters = computed(() =>
+    filterCategory.filters.filter(f => filterStore.selectedFilters[filterCategory.name]?.includes(f.name))
+)
+
+const unselectedFilters = computed(() =>
+    filterCategory.filters.filter(f => !filterStore.selectedFilters[filterCategory.name]?.includes(f.name))
+)
+
+const alwaysShownFilters = computed(() => [...selectedFilters.value, ...unselectedFilters.value.slice(0, 4)])
+const remainingFilters = computed(() => unselectedFilters.value.slice(4))
 const showMoreAvailable = computed(() => remainingFilters.value.length > 0)
 
 const toggleShowMoreFilters = async () => {

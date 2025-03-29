@@ -3,11 +3,14 @@
         <Toast position="bottom-right" />
         <NavBar />
         <section class="py-8 bg-white md:py-16 min-h-screen">
-            <div
-                class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
-                <ProductSkeleton v-if="!sharedStore.loading" />
-                <ProductDetails />
-                <ProductDetailsTabs />
+            <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
+                <template v-if="sharedStore.loading">
+                    <ProductSkeleton />
+                </template>
+                <template v-else>
+                    <ProductDetails />
+                    <ProductDetailsTabs />
+                </template>
             </div>
         </section>
         <Footer />
@@ -42,8 +45,5 @@ const productId = parseInt(route.params.productId as string)
 
 onMounted(() => {
     productStore.fetchProductDetails(productId)
-    setTimeout(() => {
-        sharedStore.loading = true
-    }, 300)
 })
 </script>

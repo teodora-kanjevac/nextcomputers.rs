@@ -1,5 +1,5 @@
 import prisma from '~/src/utils/prisma'
-import { isNaNObject, isNullObject } from '~/src/utils/ErrorHandling'
+import { isNullObject } from '~/src/utils/ErrorHandling'
 import { CartDTO } from '~/src/DTOs/Cart.dto'
 import { CartItemDTO } from '~/src/DTOs/CartItem.dto'
 
