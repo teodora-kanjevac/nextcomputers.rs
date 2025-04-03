@@ -14,7 +14,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
     try {
         const validProducts = filterProducts(products)
         const validIdentifiers = new Set(validProducts.map(product => product.ean ?? product.name))
-        const productDistributor = new URL(products[0].imageUrl[0].image).hostname
+        const productDistributor = new URL(validProducts[0].imageUrl[0].image).hostname
 
         let inserted = 0
         let updated = 0
@@ -73,14 +73,17 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                 const newPrice = parseFloat(product.price.toFixed(2))
                 const existingPrice = parseFloat(existingProduct.price.toFixed(2))
 
-                const cheapestPrice = getCheapestPrice(newPrice, existingPrice, productDistributor)
+                const cheapestPrice = getCheapestPrice(newPrice, product.stock, existingPrice, productDistributor)
 
-                const commonData = {
+                const commonData: any = {
                     available: true,
-                    stock: product.stock,
                     price: cheapestPrice,
                     retail_price: product.retailPrice,
                     sale_price: calculateSalePrice(cheapestPrice),
+                }
+
+                if (product.stock > 0) {
+                    commonData.stock = product.stock
                 }
 
                 if (currentDistributorHasProduct) {
