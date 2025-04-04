@@ -33,8 +33,8 @@ export const setupSearchEngine = async () => {
             },
         })
 
-        const response = await client.index('products').addDocuments(meilisearchProducts)
-        console.log('Meilisearch Indexing Response:', response)
+        await client.index('products').addDocuments(meilisearchProducts)
+        console.log('Indexing Successful!')
     } catch (error) {
         console.error('Error setting up Meilisearch:', error)
     }
