@@ -73,7 +73,13 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                 const newPrice = parseFloat(product.price.toFixed(2))
                 const existingPrice = parseFloat(existingProduct.price.toFixed(2))
 
-                const cheapestPrice = getCheapestPrice(newPrice, product.stock, existingPrice, productDistributor)
+                const cheapestPrice = getCheapestPrice(
+                    newPrice,
+                    product.stock,
+                    existingPrice,
+                    existingProduct.stock,
+                    productDistributor
+                )
 
                 const commonData: any = {
                     available: true,

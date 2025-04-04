@@ -64,9 +64,10 @@ export const getCheapestPrice = (
     newPrice: number,
     newStock: number,
     existingPrice: number,
+    existingStock: number,
     productDistributor: string
 ): number => {
-    if (productDistributor === 'resource.ewe.rs') {
+    if (productDistributor === 'resource.ewe.rs' || existingStock === 0) {
         return newPrice
     }
 
@@ -77,11 +78,13 @@ export const calculateSalePrice = (price: number): number => {
     const getMarkupPercentage = (price: number): number => {
         switch (true) {
             case price < 10000:
-                return 9
+                return 10
             case price < 20000:
                 return 7
             case price < 40000:
-                return 5
+                return 6
+            case price < 70000:
+                return 4.5
             case price < 100000:
                 return 4
             default:
@@ -95,7 +98,11 @@ export const calculateSalePrice = (price: number): number => {
     }
 
     const markupPercentage = getMarkupPercentage(price)
-    const salePrice = price * (1 + markupPercentage / 100)
+    let salePrice = price * (1 + markupPercentage / 100)
+
+    if (markupPercentage === 3) {
+        salePrice += 490
+    }
 
     return roundToNearestPricing(salePrice)
 }
