@@ -1,7 +1,7 @@
 import FlexSearch from 'flexsearch'
 import { Subcategory } from '~/src/models/Subcategory'
 import prisma from '~/src/utils/prisma'
-import { synonymMap } from '~/scraper/utils/usponAPI/synonymMap'
+import { synonymMap } from '~/scraper/utils/uspon&dscAPI/synonymMap'
 
 export const fetchCategories = async (): Promise<Subcategory[]> => {
     const subcategories = await prisma.subcategory.findMany({

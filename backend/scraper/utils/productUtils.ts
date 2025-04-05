@@ -2,7 +2,7 @@ import { Product } from '~/scraper/types/Product'
 import { ProcessedImage } from '~/scraper/types/ProcessedImage'
 import prisma from '~/src/utils/prisma'
 import { parseEWEImages, sortImagesByConvention } from '~/scraper/utils/eweAPI/parseUtils'
-import { parseUsponImages } from '~/scraper/utils/usponAPI/parseUtils'
+import { parseUsponAndDSCImages } from '~/scraper/utils/uspon&dscAPI/parseUtils'
 
 export const filterProducts = (products: Product[]): Product[] => {
     return products.filter(product => {
@@ -15,12 +15,23 @@ export const hideNonExistantProducts = async (identifiers: any, distributor: str
         select: {
             ean: true,
             image_url: true,
+            stock: true,
         },
     })
 
-    const productsToHide = allDatabaseProducts.filter(
+    const productsNotInApi = allDatabaseProducts.filter(
         product => JSON.stringify(product.image_url).includes(distributor) && !identifiers.has(product.ean)
     )
+
+    const productsWithZeroStock = allDatabaseProducts.filter(
+        product =>
+            JSON.stringify(product.image_url).includes(distributor) &&
+            identifiers.has(product.ean) &&
+            product.stock === 0
+    )
+
+    const toHide = [...productsNotInApi, ...productsWithZeroStock]
+    const productsToHide = [...new Map(toHide.map(item => [item.ean, item])).values()]
 
     await prisma.product.updateMany({
         where: {
@@ -42,30 +53,38 @@ export const parseImages = (imageUrl: any): ProcessedImage[] => {
             (typeof imageUrl.slika === 'string' || Array.isArray(imageUrl.slika))) ||
         typeof imageUrl === 'string'
     ) {
-        return parseUsponImages(imageUrl)
+        return parseUsponAndDSCImages(imageUrl)
     } else {
         console.error('Unknown image data format:', imageUrl)
         return []
     }
 }
 
-export const getCheapestPrice = (newPrice: number, existingPrice: number, productDistributor: string): number => {
-    if (productDistributor === 'resource.ewe.rs') {
+export const getCheapestPrice = (
+    newPrice: number,
+    newStock: number,
+    existingPrice: number,
+    existingStock: number,
+    productDistributor: string
+): number => {
+    if (productDistributor === 'resource.ewe.rs' || existingStock === 0) {
         return newPrice
     }
 
-    return newPrice < existingPrice ? newPrice : existingPrice
+    return newPrice < existingPrice && newStock > 0 ? newPrice : existingPrice
 }
 
 export const calculateSalePrice = (price: number): number => {
     const getMarkupPercentage = (price: number): number => {
         switch (true) {
             case price < 10000:
-                return 9
+                return 10
             case price < 20000:
                 return 7
             case price < 40000:
-                return 5
+                return 6
+            case price < 70000:
+                return 4.5
             case price < 100000:
                 return 4
             default:
@@ -79,7 +98,11 @@ export const calculateSalePrice = (price: number): number => {
     }
 
     const markupPercentage = getMarkupPercentage(price)
-    const salePrice = price * (1 + markupPercentage / 100)
+    let salePrice = price * (1 + markupPercentage / 100)
+
+    if (markupPercentage === 3) {
+        salePrice += 490
+    }
 
     return roundToNearestPricing(salePrice)
 }
