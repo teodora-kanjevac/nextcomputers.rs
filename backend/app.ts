@@ -12,6 +12,7 @@ import cartRoutes from '~/src/routes/cartRoutes'
 import orderRoutes from '~/src/routes/orderRoutes'
 import mailRoutes from '~/src/routes/mailRoutes'
 import ipsRoutes from '~/src/routes/ipsRoutes'
+import catalogRoutes from '~/src/routes/catalogRoutes'
 import '~/src/jobs/cron-jobs'
 
 dotenv.config()
@@ -36,6 +37,7 @@ app.use('/api/cart', cartRoutes)
 app.use('/api/order', orderRoutes)
 app.use('/api/mail', mailRoutes)
 app.use('/api/ips', ipsRoutes)
+app.use('/api/catalog', catalogRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
