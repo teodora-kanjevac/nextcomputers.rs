@@ -34,7 +34,7 @@
                                 67490231
                             </p>
                             <p class="text-gray-700 flex flex-wrap items-center">
-                                <ClockIcon class="size-5 me-1.5 mb-1 shrink-0" />
+                                <ClockIcon class="size-5 me-1.5 mb-0.5 shrink-0" />
                                 <span class="text-gray-800 font-semibold me-1.5">Radno vreme:</span>
                                 Svakog dana - 00-24h
                             </p>
