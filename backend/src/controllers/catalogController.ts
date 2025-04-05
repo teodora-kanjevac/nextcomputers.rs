@@ -6,7 +6,11 @@ export const getCatalog = async (req: Request, res: Response): Promise<void> => 
     try {
         const catalog = await fetchCatalog()
         const builder = new XMLBuilder();
-        const catalogXML = builder.build(catalog);
+        const catalogXML = builder.build({
+            products: {
+                product: catalog  
+              }
+        });
 
         res.type('application/xml').send(catalogXML);
     } catch (error) {
