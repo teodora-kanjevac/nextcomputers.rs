@@ -5,14 +5,14 @@ import { XMLBuilder } from 'fast-xml-parser'
 export const getCatalog = async (req: Request, res: Response): Promise<void> => {
     try {
         const catalog = await fetchCatalog()
-        const builder = new XMLBuilder();
+        const builder = new XMLBuilder()
         const catalogXML = builder.build({
             products: {
-                product: catalog  
-              }
-        });
+                product: catalog,
+            },
+        })
 
-        res.type('application/xml').send(catalogXML);
+        res.type('application/xml').send(catalogXML)
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ error: error.message })

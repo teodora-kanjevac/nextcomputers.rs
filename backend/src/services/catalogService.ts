@@ -16,15 +16,15 @@ export const fetchCatalog = async () => {
                     name: true,
                     category: {
                         select: {
-                            name: true
-                        }
-                    }
-                }
-            }
-        }
+                            name: true,
+                        },
+                    },
+                },
+            },
+        },
     })
 
     const catalogs = catalog.map(catalog => new Catalog(catalog))
 
-    return catalogs;
+    return catalogs
 }
