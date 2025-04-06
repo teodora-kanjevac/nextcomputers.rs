@@ -129,7 +129,6 @@ model subcategory {
 
 model user {
   user_id       String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  username      String   @unique(map: "username") @default("") @db.VarChar(100)
   email         String   @unique(map: "email") @default("") @db.VarChar(100)
   first_name    String?  @default("") @db.VarChar(50)
   last_name     String?  @default("") @db.VarChar(50)
