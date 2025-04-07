@@ -23,14 +23,21 @@ export const register = async (req: Request, res: Response): Promise<void> => {
 
 export const login = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email, password } = req.body
+        const { email, password, rememberMe } = req.body
 
         const user = await loginUser({ email, password })
 
-        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
-        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+        if (rememberMe === true) {
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, { expiresIn: '30d' })
+            res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
 
-        res.status(200).json({ user, token })
+            res.status(200).json({ user, token })
+        } else {
+            const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
+            res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+
+            res.status(200).json({ user, token })
+        }
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message })
