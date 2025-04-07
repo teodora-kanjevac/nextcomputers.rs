@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { registerUser } from '~/src/services/authService'
+import { loginUser } from '~/src/services/authService'
 import jwt from 'jsonwebtoken'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -12,6 +13,25 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
 
         res.status(201).json({ newUser, token })
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const login = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const { email, password } = req.body
+
+        const user = await loginUser({ email, password })
+
+        const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
+        res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })
+
+        res.status(200).json({ user, token })
     } catch (error) {
         if (error instanceof Error) {
             res.status(400).json({ error: error.message })
