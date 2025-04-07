@@ -57,3 +57,5 @@ export const loginUser = async (userData: LoginUserDTO) => {
         throw new Error(`Error logging in: ${error}`)
     }
 }
+
+
