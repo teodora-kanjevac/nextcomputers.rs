@@ -1,4 +1,4 @@
-import { IRegisterUserDTO } from "./interfaces/IRegisterUser.dto"
+import { IRegisterUserDTO } from '~/src/DTOs/interfaces/IRegisterUser.dto'
 
 export class RegisterUserDTO implements IRegisterUserDTO {
     email: string
@@ -8,12 +8,12 @@ export class RegisterUserDTO implements IRegisterUserDTO {
     phoneNumber: string
     password: string
 
-    constructor(registerUser: any) {
-        this.email = registerUser.email
-        this.firstName = registerUser.firstName
-        this.lastName = registerUser.lastName
-        this.address = registerUser.address
-        this.phoneNumber = registerUser.phoneNumber
-        this.password = registerUser.password
+    constructor(user: any) {
+        this.email = user.email
+        this.firstName = user.firstName
+        this.lastName = user.lastName
+        this.address = user.address
+        this.phoneNumber = user.phoneNumber
+        this.password = user.password
     }
 }
