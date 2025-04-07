@@ -1,6 +1,5 @@
 import { Request, Response } from 'express'
-import { registerUser } from '~/src/services/authService'
-import { loginUser } from '~/src/services/authService'
+import { registerUser, loginUser, verifyEmail } from '~/src/services/authService'
 import jwt from 'jsonwebtoken'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -44,4 +43,11 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 export const logout = (req: Request, res: Response): void => {
     res.clearCookie('token')
     res.status(200).json({ message: 'Logged out successfully' })
+}
+
+export const verifyUser = async (req: Request, res: Response): Promise<void> => {
+    const { token } = req.body
+
+    const response = await verifyEmail(token)
+    res.status(200).json(response)
 }

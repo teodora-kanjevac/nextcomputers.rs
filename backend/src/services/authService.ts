@@ -3,6 +3,7 @@ import { User } from '~/src/models/User'
 import bcryptjs from 'bcryptjs'
 import { RegisterUserDTO } from '~/src/DTOs/RegisterUser.dto'
 import { LoginUserDTO } from '~/src/DTOs/LoginUser.dto'
+import jwt from 'jsonwebtoken'
 
 export const registerUser = async (userData: RegisterUserDTO) => {
     const hashedPassword = await bcryptjs.hash(userData.password, 10)
@@ -58,4 +59,34 @@ export const loginUser = async (userData: LoginUserDTO) => {
     }
 }
 
+export const verifyEmail = async (token: string) => {
+    try {
+        const payload = jwt.verify(token, process.env.EMAIL_VERIFY_SECRET!) as any as { userId: string }; 
+      
+        const user = await prisma.user.findUnique({ where: { user_id: payload.userId } });
+      
+        if (user && !user.is_verified) {
+            await prisma.user.update({
+                where: { user_id: payload.userId },
+                data: { is_verified: true }
+            });
+            return { success: true, message: 'Email verified successfully' };
+        } 
+        else {
+            return { success: false, message: 'Email already verified or user not found' };
+        }
+    } catch (error) {
+        throw new Error(`Error verifying email: ${error}`)
+    }
+}
 
+export const generateToken = async (userId: string) => {
+    try {
+        const token = jwt.sign({ id: userId }, process.env.JWT_SECRET as string, {
+            expiresIn: '15m',
+        })
+        return token
+    } catch (error) {
+        throw new Error(`Error generating token: ${error}`)
+    }
+}

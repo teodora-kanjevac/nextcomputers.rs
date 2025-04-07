@@ -136,6 +136,7 @@ model user {
   phone_number  String?  @db.VarChar(50)
   created_at    DateTime @default(now()) @db.Timestamp(0)
   password_hash String   @default("") @db.VarChar(255)
+  is_verified  Boolean  @default(false)
   cart          cart[]
   order         order[]
   review        review[]
