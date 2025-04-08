@@ -39,6 +39,13 @@
                             {{ formattedPrice }}
                             <span class="text-xl sm:text-2xl">RSD</span>
                         </p>
+                        <div class="mt-2">
+                            <span class="rounded px-2 py-1 text-xs font-semibold  bg-green-200 text-green-800">
+                                {{ DiscountedPrice }} 
+                                <span class="text-xs">RSD </span>
+                                <span>POPUST SA UPLATOM NA RAČUN</span>
+                            </span>
+                        </div>
                     </div>
                 </div>
 
@@ -127,6 +134,8 @@ const featuredImage = ref<string>()
 const galleryImages = ref<ImageDTO[]>([])
 
 const formattedPrice = computed(() => formatPrice(product.value?.discountPrice || product.value!.price))
+const rawPrice = computed(() => product.value?.discountPrice || product.value!.price)
+const DiscountedPrice = computed(() => formatPrice(Math.round(rawPrice.value * 0.99)))
 const isDiscounted = computed(() => product.value?.discountPrice && product.value.discountPrice > 0)
 
 watch(
