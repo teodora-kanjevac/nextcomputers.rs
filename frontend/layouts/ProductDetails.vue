@@ -15,11 +15,11 @@
                 <h1 class="mt-2 text-xl font-semibold text-gray-900 sm:text-2xl">
                     {{ product?.name }}
                 </h1>
-                <div class="mt-2 mb-4 sm:items-center sm:gap-4 sm:flex">
+                <div class="mt-3 mb-4 sm:items-center sm:gap-4 sm:flex">
                     <StarRating :rating="product?.ratings" />
                 </div>
 
-                <div class="flex items-center justify-between mt-5">
+                <div class="flex items-center justify-between mt-3 md:mt-5">
                     <div class="flex-col">
                         <div
                             v-if="product?.retailPrice && product.retailPrice > product.price"
@@ -39,20 +39,19 @@
                             {{ formattedPrice }}
                             <span class="text-xl sm:text-2xl">RSD</span>
                         </p>
-                        <div class="mt-2">
-                            <span class="rounded px-2 py-1 text-xs font-semibold  bg-green-200 text-green-800">
-                                {{ DiscountedPrice }} 
-                                <span class="text-xs">RSD </span>
-                                <span>POPUST SA UPLATOM NA RAČUN</span>
+                        <div class="mt-4">
+                            <span class="rounded px-2 py-1 text-sm font-bold bg-green-200">
+                                {{ advancePrice }} RSD
+                                <span class="font-medium">SA UPLATOM NA RAČUN</span>
                             </span>
                         </div>
                     </div>
                 </div>
 
-                <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-8">
+                <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-5">
                     <a
                         @click="info"
-                        class="flex items-center justify-center py-3 px-5 text-sm font-medium text-gray-900 bg-white rounded-lg border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
+                        class="flex items-center justify-center py-3 px-5 text-sm font-medium text-gray-900 bg-white rounded-md border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
                         role="button">
                         <HeartOutlineIcon class="size-5 -ms-2 me-2 shrink-0" />
                         Sačuvaj proizvod
@@ -61,7 +60,7 @@
                     <a
                         v-if="product.available"
                         @click="addToCart"
-                        class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-lg text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
+                        class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-md text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
                         role="button">
                         <AddToCartIcon class="size-5 -ms-2 me-2 shrink-0" />
                         Dodaj u korpu
@@ -69,16 +68,16 @@
                     <a
                         v-else
                         :href="`/proizvodi/${product.subcategoryId}`"
-                        class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-lg text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
+                        class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-md text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
                         role="button">
                         Pretraži proizvode iz ove kategorije
                         <ArrowRightIcon class="size-4 ms-2 me-2 shrink-0" />
                     </a>
                 </div>
 
-                <div class="inline-flex mt-5 px-3 py-1.5 rounded-md gap-2 bg-amber-100">
+                <div class="inline-flex mt-5 px-2 py-1 rounded gap-2 bg-amber-100">
                     <TruckDeliveryIcon class="size-5" />
-                    <span class="text-sm">Rok isporuke je 1-3 radna dana</span>
+                    <span class="text-sm font-medium">Rok isporuke je 1-3 radna dana</span>
                 </div>
 
                 <hr class="my-6 md:my-7 border-gray-200" />
@@ -133,9 +132,9 @@ const product = computed<ProductDTO | null>(() => productStore.product)
 const featuredImage = ref<string>()
 const galleryImages = ref<ImageDTO[]>([])
 
-const formattedPrice = computed(() => formatPrice(product.value?.discountPrice || product.value!.price))
-const rawPrice = computed(() => product.value?.discountPrice || product.value!.price)
-const DiscountedPrice = computed(() => formatPrice(Math.round(rawPrice.value * 0.99)))
+const price = computed(() => product.value?.discountPrice || product.value!.price)
+const formattedPrice = computed(() => formatPrice(price.value))
+const advancePrice = computed(() => formatPrice(Math.round(price.value * 0.99)))
 const isDiscounted = computed(() => product.value?.discountPrice && product.value.discountPrice > 0)
 
 watch(
