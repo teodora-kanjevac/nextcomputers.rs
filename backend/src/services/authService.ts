@@ -23,6 +23,7 @@ export const registerUser = async (userData: RegisterUserDTO) => {
                 first_name: userData.firstName,
                 last_name: userData.lastName,
                 address: userData.address,
+                city: userData.city,
                 phone_number: userData.phoneNumber,
                 password_hash: hashedPassword,
             },

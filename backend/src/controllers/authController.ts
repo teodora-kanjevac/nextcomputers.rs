@@ -4,9 +4,9 @@ import jwt from 'jsonwebtoken'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email, password, firstName, lastName, address, phoneNumber } = req.body
+        const { email, password, firstName, lastName, address, city, phoneNumber } = req.body
         
-        const newUser = await registerUser({ email, password, firstName, lastName, address, phoneNumber })
+        const newUser = await registerUser({ email, password, firstName, lastName, address, city, phoneNumber })
 
         const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET as string, { expiresIn: '1h' })
         res.cookie('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' })

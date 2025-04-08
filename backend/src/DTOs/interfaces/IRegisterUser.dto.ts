@@ -3,6 +3,7 @@ export interface IRegisterUserDTO {
     firstName: string
     lastName: string
     address: string
+    city: string
     phoneNumber: string
     password: string
 }

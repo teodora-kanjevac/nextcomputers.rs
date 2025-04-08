@@ -5,6 +5,7 @@ export class RegisterUserDTO implements IRegisterUserDTO {
     firstName: string
     lastName: string
     address: string
+    city: string
     phoneNumber: string
     password: string
 
@@ -13,6 +14,7 @@ export class RegisterUserDTO implements IRegisterUserDTO {
         this.firstName = user.firstName
         this.lastName = user.lastName
         this.address = user.address
+        this.city = user.city
         this.phoneNumber = user.phoneNumber
         this.password = user.password
     }
