@@ -22,3 +22,30 @@ export const fetchUserFullName = async (userId: string): Promise<User> => {
 
     return new User(user)
 }
+
+export const editBasicUserInfo = async (userId: string, userData: any): Promise<User> => {
+    const existingUser = await prisma.user.findUnique({
+        where: {
+            user_id: userId,
+        },
+    });
+
+    isNullObject('user', userId, existingUser);
+
+    const user = await prisma.user.update({
+        where: {
+            user_id: userId,
+        },
+        data: {
+            first_name: userData.firstName ?? existingUser!.first_name,
+            last_name: userData.lastName ?? existingUser!.last_name,
+            address: userData.address ?? existingUser!.address,
+            city: userData.city ?? existingUser!.city,
+            phone_number: userData.phoneNumber ?? existingUser!.phone_number,
+        },
+    })
+
+    isNullObject('user', userId, user)
+
+    return new User(user)
+}
