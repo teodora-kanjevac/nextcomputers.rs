@@ -40,7 +40,7 @@
 <script setup lang="ts">
 import { useCartStore } from '~/stores/CartStore'
 import { useCheckoutStore } from '~/stores/CheckoutStore'
-import { useOrderStore } from '~/stores/OrderStore'
+import { calculateShippingPrice } from '~/composables/useCart'
 import { formatPrice } from '~/composables/utils'
 
 const { selectedPaymentMethod } = defineProps<{
@@ -49,7 +49,6 @@ const { selectedPaymentMethod } = defineProps<{
 
 const cartStore = useCartStore()
 const checkoutStore = useCheckoutStore()
-const orderStore = useOrderStore()
 
 const totalProductPrice = computed(() => {
     return cartStore.cart.cartItems.reduce((sum, item) => {
@@ -66,7 +65,10 @@ const productDiscount = computed(() => {
 })
 
 const paymentMethodDiscountAmount = computed(() => {
-    return Math.ceil(totalProductPrice.value - totalProductPrice.value * checkoutStore.paymentMethodDiscount)
+    const totalProductPriceWithDiscount = totalProductPrice.value - productDiscount.value
+    return Math.ceil(
+        totalProductPriceWithDiscount - totalProductPriceWithDiscount * checkoutStore.paymentMethodDiscount
+    )
 })
 
 const totalDiscount = computed(() => {
@@ -74,7 +76,7 @@ const totalDiscount = computed(() => {
 })
 
 const shippingPrice = computed(() => {
-    return totalProductPrice.value - totalDiscount.value > 10000 ? 0 : 490
+    return calculateShippingPrice(totalProductPrice.value - productDiscount.value)
 })
 
 const totalPrice = computed(() => {

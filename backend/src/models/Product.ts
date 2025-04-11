@@ -13,6 +13,7 @@ export class Product {
     public discountPrice?: number
     public retailPrice: number
     public salePrice: number
+    public shippingPrice: number
     public productDistributor: string
     public available: boolean
     public subcategoryId?: number
@@ -26,6 +27,7 @@ export class Product {
         this.price = product.price
         this.retailPrice = product.retail_price
         this.salePrice = product.sale_price
+        this.shippingPrice = product.shipping_price
         this.productDistributor = product.product_distributor
         this.imageUrl = product.image_url
         this.specification = product.specification

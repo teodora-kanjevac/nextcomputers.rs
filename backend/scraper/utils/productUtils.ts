@@ -102,3 +102,11 @@ export const calculateSalePrice = (price: number): number => {
 
     return roundToNearestPricing(salePrice)
 }
+
+export const calculateShippingPrice = (price: number, subcategoryId: number): number => {
+    if (SHIPPING_SUBCATEGORIES.has(subcategoryId)) {
+        return FIXED_SHIPPING_PRICE
+    }
+
+    return price >= 10000 ? 0 : 490
+}

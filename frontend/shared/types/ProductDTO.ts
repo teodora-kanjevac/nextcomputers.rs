@@ -7,6 +7,7 @@ export interface ProductDTO {
     name: string
     brand: string
     price: number
+    shippingPrice: number
     discountPrice?: number
     discountPercentage?: number
     retailPrice: number
