@@ -5,6 +5,7 @@ export class OrderData {
         id: number
         name: string
         ean: string
+        price: number
         quantity: number
         imageUrl: string
     }[]

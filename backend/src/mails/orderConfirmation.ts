@@ -8,6 +8,7 @@ export const orderConfirmationData = async (orderData: OrderDataDTO): Promise<an
             id: product.id,
             name: product.name,
             ean: product.ean,
+            price: product.price,
             quantity: product.quantity,
             imageUrl: product.imageUrl,
         })),
