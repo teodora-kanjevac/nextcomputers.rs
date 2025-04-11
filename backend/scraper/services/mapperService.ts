@@ -1,6 +1,6 @@
 import { Category } from '~/scraper/types/Category'
 import { Product } from '~/scraper/types/Product'
-import { calculateSalePrice, parseImages } from '~/scraper/utils/productUtils'
+import { calculateSalePrice, calculateShippingPrice, parseImages } from '~/scraper/utils/productUtils'
 import { getSubcategoryId } from '~/scraper/services/categoryService'
 import { processSubcategory } from '~/scraper/utils/uspon&dscAPI/subcategoryMapper'
 import { calculateEWEB2BPrice, parseEWESpecifications } from '~/scraper/utils/eweAPI/parseUtils'
@@ -27,6 +27,7 @@ export async function ProductfromEWEAPI(data: EWEApiProduct): Promise<Product | 
     const subcategoryId = await getSubcategoryId(processedSubcategory)
     const b2bPrice = calculateEWEB2BPrice(data.anPaymentAdvance, data.anPrice)
     const salePrice = calculateSalePrice(b2bPrice)
+    const shippingPrice = calculateShippingPrice(salePrice, subcategoryId)
 
     return new Product(
         undefined,
@@ -37,6 +38,7 @@ export async function ProductfromEWEAPI(data: EWEApiProduct): Promise<Product | 
         b2bPrice,
         data.anRetailPrice,
         salePrice,
+        shippingPrice,
         data.anPaymentAdvance,
         data.acEan,
         true,
@@ -59,6 +61,7 @@ export async function ProductfromUsponAPI(data: UsponApiProduct): Promise<Produc
     const advance = calculateUsponAdvance(data.flag_akcijska_cena)
     const b2bPrice = calculateUsponB2BPrice(data.flag_akcijska_cena, data.b2bcena)
     const salePrice = calculateSalePrice(b2bPrice)
+    const shippingPrice = calculateShippingPrice(salePrice, subcategoryId)
 
     const isInvalidBrand = /^[\W_]+$/.test(data.proizvodjac)
     const productName = isInvalidBrand ? data.naziv : `${data.proizvodjac.toUpperCase()} ${data.naziv}`
@@ -73,6 +76,7 @@ export async function ProductfromUsponAPI(data: UsponApiProduct): Promise<Produc
         b2bPrice,
         data.mpcena,
         salePrice,
+        shippingPrice,
         advance,
         data.barkod.toString(),
         true,
@@ -94,6 +98,7 @@ export async function ProductfromDSCAPI(data: DSCApiProduct): Promise<Product | 
     const advance = 2
     const b2bPrice = calculateDSCB2BPrice(data.cena)
     const salePrice = calculateSalePrice(b2bPrice)
+    const shippingPrice = calculateShippingPrice(salePrice, subcategoryId)
 
     const isInvalidBrand = data.proizvodjac.toLowerCase() === 'nedefinisan'
     const productName = isInvalidBrand ? data.naziv : `${data.proizvodjac.toUpperCase()} ${data.naziv}`
@@ -108,6 +113,7 @@ export async function ProductfromDSCAPI(data: DSCApiProduct): Promise<Product | 
         b2bPrice,
         data.mpcena,
         salePrice,
+        shippingPrice,
         advance,
         data.barkod.toString(),
         true,

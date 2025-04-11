@@ -43,7 +43,7 @@ export const synonymMap: Record<string, string[]> = {
     'kontroleri/kartice': ['mrežne kartice'],
     računari: ['all-in-one računari', 'desktop računari sa OS', 'desktop računari bez OS', 'mini pc'],
     'switch/hub': ['svičevi'],
-    'gamepad/joystick/volani': ['gamepad', 'volan', 'joystick'],
+    'gamepad/joystick/volani': ['gamepad', 'volan', 'joystick', 'konzole'],
     'interfonski sistemi': ['interfoni'],
     'ostali kuhinjski aparati': ['aparati za kuvanje na paru'],
     nameštaj: ['nameštaj', 'stolica'],

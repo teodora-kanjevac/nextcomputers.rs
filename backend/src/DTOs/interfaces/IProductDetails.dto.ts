@@ -11,6 +11,7 @@ export interface IProductDetailsDTO {
     country?: string
     supplier?: string
     salePrice: number
+    shippingPrice: number
     retailPrice: number
     discountPrice?: number
     discountPercentage?: number

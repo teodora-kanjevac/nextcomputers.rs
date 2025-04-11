@@ -1,19 +1,14 @@
 import prisma from '~/src/utils/prisma'
 import IsEqual from 'fast-deep-equal'
 import { Product } from '~/scraper/types/Product'
-import {
-    calculateSalePrice,
-    filterProducts,
-    getCheapestPrice,
-    hideNonExistantProducts,
-} from '~/scraper/utils/productUtils'
-
-const BATCH_SIZE = 100
+import { filterProducts, hideNonExistantProducts } from '~/scraper/utils/productUtils'
+import { updateDistributorPrices } from '~/scraper/utils/distributorUtils'
+import { BATCH_SIZE } from '~/scraper/constants/constantValues'
 
 export const storeProducts = async (products: Product[]): Promise<void> => {
     try {
         const validProducts = filterProducts(products)
-        const validIdentifiers = new Set(validProducts.map(product => product.ean ?? product.name))
+        const validIdentifiers = new Set(validProducts.map(product => product.ean))
         const productDistributor = new URL(validProducts[0].imageUrl[0].image).hostname
 
         let inserted = 0
@@ -22,7 +17,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
 
         for (let i = 0; i < validProducts.length; i += BATCH_SIZE) {
             const batch = validProducts.slice(i, i + BATCH_SIZE)
-            const identifiers = batch.map(product => product.ean ?? product.name)
+            const identifiers = batch.map(product => product.ean)
 
             const existingProducts = await prisma.product.findMany({
                 where: { OR: [{ ean: { in: identifiers } }, { name: { in: identifiers } }] },
@@ -39,21 +34,17 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                 },
             })
 
-            const existingProductsMap = Object.fromEntries(
-                existingProducts.map(product => [product.ean ?? product.name, product])
-            )
+            const existingProductsMap = Object.fromEntries(existingProducts.map(product => [product.ean, product]))
 
-            const productsToInsert = batch.filter(product => !existingProductsMap[product.ean ?? product.name])
+            const productsToInsert = batch.filter(product => !existingProductsMap[product.ean])
 
             const productsToUpdate = batch.filter(product => {
-                const existingProduct = existingProductsMap[product.ean ?? product.name]
+                const existingProduct = existingProductsMap[product.ean]
                 return (
                     existingProduct &&
                     (!existingProduct.available ||
                         existingProduct.stock !== product.stock ||
-                        existingProduct.price.toNumber() !== parseFloat(product.price.toFixed(2)) ||
                         existingProduct.retail_price.toNumber() !== parseFloat(product.retailPrice.toFixed(2)) ||
-                        existingProduct.sale_price.toNumber() !== parseFloat(product.salePrice.toFixed(2)) ||
                         !IsEqual(existingProduct.image_url, product.imageUrl))
                 )
             })
@@ -62,7 +53,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
             updated += productsToUpdate.length
 
             const updateOperations = productsToUpdate.map(product => {
-                const productKey = product.ean ?? product.name
+                const productKey = product.ean
                 const existingProduct = existingProductsMap[productKey]
                 const productId = existingProduct.product_id
 
@@ -70,26 +61,10 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     productDistributor
                 )
 
-                const newPrice = parseFloat(product.price.toFixed(2))
-                const existingPrice = parseFloat(existingProduct.price.toFixed(2))
-
-                const cheapestPrice = getCheapestPrice(
-                    newPrice,
-                    product.stock,
-                    existingPrice,
-                    existingProduct.stock,
-                    productDistributor
-                )
-
                 const commonData: any = {
                     available: true,
-                    price: cheapestPrice,
+                    stock: product.stock,
                     retail_price: product.retailPrice,
-                    sale_price: calculateSalePrice(cheapestPrice),
-                }
-
-                if (product.stock > 0) {
-                    commonData.stock = product.stock
                 }
 
                 if (currentDistributorHasProduct) {
@@ -115,6 +90,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     price: product.price,
                     retail_price: product.retailPrice,
                     sale_price: product.salePrice,
+                    shipping_price: product.shippingPrice,
                     payment_advance: product.paymentAdvance,
                     brand: product.brand,
                     supplier: product.supplier,
@@ -132,6 +108,8 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
         }
 
         markedUnavailable = await hideNonExistantProducts(validIdentifiers, productDistributor)
+
+        await updateDistributorPrices(validProducts, productDistributor)
 
         console.log('Distributor:', productDistributor)
         console.log('Total products inserted:', inserted)

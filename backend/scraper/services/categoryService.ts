@@ -2,7 +2,7 @@ import prisma from '~/src/utils/prisma'
 import { Category } from '~/scraper/types/Category'
 import { filterUniqueCategories, getCategoryIdMap } from '~/scraper/utils/categoryUtils'
 
-export const getSubcategoryId = async (subcategoryName: string): Promise<number | undefined> => {
+export const getSubcategoryId = async (subcategoryName: string): Promise<number> => {
     try {
         const subcategory = await prisma.subcategory.findUnique({
             where: {
@@ -12,7 +12,12 @@ export const getSubcategoryId = async (subcategoryName: string): Promise<number 
                 subcategory_id: true,
             },
         })
-        return subcategory?.subcategory_id
+
+        if (!subcategory) {
+            throw new Error(`Subcategory with name "${subcategoryName}" not found.`)
+        }
+
+        return subcategory.subcategory_id
     } catch (error) {
         console.error('Error inserting subcategory:', error)
         throw error
@@ -54,16 +59,19 @@ const insertSubcategories = async (
     subcategoryData: Array<{ name: string; categoryName: string }>,
     categoryIdMap: Map<string, number>
 ) => {
-    const subcategoryInserts = subcategoryData.reduce((acc, sub) => {
-        const categoryId = categoryIdMap.get(sub.categoryName)
-        if (categoryId !== undefined) {
-            acc.push({
-                name: sub.name,
-                category_id: categoryId,
-            })
-        }
-        return acc
-    }, [] as { name: string; category_id: number }[])
+    const subcategoryInserts = subcategoryData.reduce(
+        (acc, sub) => {
+            const categoryId = categoryIdMap.get(sub.categoryName)
+            if (categoryId !== undefined) {
+                acc.push({
+                    name: sub.name,
+                    category_id: categoryId,
+                })
+            }
+            return acc
+        },
+        [] as { name: string; category_id: number }[]
+    )
 
     if (subcategoryInserts.length) {
         await prisma.subcategory.createMany({

@@ -4,6 +4,7 @@ export interface IProductCardDTO {
     ean: string
     thumbnail: string
     salePrice: number
+    shippingPrice: number
     discountPrice?: number
     discountPercentage?: number
     available: boolean
