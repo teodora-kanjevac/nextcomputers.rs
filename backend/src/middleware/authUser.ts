@@ -17,5 +17,4 @@ export const authUser = (req: CustomRequest, res: Response, next: NextFunction) 
     } catch (err) {
       res.status(401).json({ message: "Unauthorized - Invalid token" });
     }
-  };
-
+};

@@ -1,14 +1,12 @@
 import { Router } from 'express'
-import { register, logout, login, verifyUser } from '~/src/controllers/authController'
-//import { authUser } from '../middleware/authUser'
+import { register, logout, login, generate } from '~/src/controllers/authController'
 
 const router: Router = Router()
-
-//router.use(authUser);
 
 router.post('/register', register)
 router.post('/login', login)
 router.post('/logout', logout)
-router.get('/verify-email', verifyUser)
+// router.get('/verify-email', verifyUser)
+router.post('/generate', generate)
 
 export default router
