@@ -106,6 +106,7 @@ const handleOrder = async () => {
                 id: cartItem.product.id,
                 name: cartItem.product.name,
                 ean: cartItem.product.ean,
+                price: cartItem.product.discountPrice || cartItem.product.price,
                 quantity: cartItem.quantity,
                 imageUrl: cartItem.product.thumbnail,
             })),

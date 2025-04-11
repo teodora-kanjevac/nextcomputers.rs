@@ -4,6 +4,7 @@ export class ProductCard {
     public id: number
     public name: string
     public price: number
+    public shippingPrice: number
     public discountPrice?: number
     public discountPercentage?: number
     public available: boolean
@@ -14,6 +15,7 @@ export class ProductCard {
         this.id = product.id
         this.name = product.name
         this.price = parseInt(product.salePrice)
+        this.shippingPrice = parseInt(product.shippingPrice)
         this.discountPrice = parseInt(product.discountPrice)
         this.discountPercentage = parseInt(product.discountPercentage)
         this.available = product.available

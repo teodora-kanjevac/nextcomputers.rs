@@ -6,6 +6,7 @@ export class ProductCardDTO implements IProductCardDTO {
     name: string
     ean: string
     salePrice: number
+    shippingPrice: number
     discountPrice?: number
     discountPercentage?: number
     available: boolean
@@ -17,6 +18,7 @@ export class ProductCardDTO implements IProductCardDTO {
         this.name = product.name
         this.ean = product.ean
         this.salePrice = product.sale_price
+        this.shippingPrice = product.shipping_price
         this.discountPrice = product.discount_price
         this.discountPercentage = calculateDiscountPercentage(this.salePrice, this.discountPrice)
         this.available = product.available

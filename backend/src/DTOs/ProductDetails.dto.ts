@@ -14,6 +14,7 @@ export class ProductDetailsDTO implements IProductDetailsDTO {
     supplier?: string
     salePrice: number
     retailPrice: number
+    shippingPrice: number
     discountPrice?: number
     discountPercentage?: number
     available: boolean
@@ -32,6 +33,7 @@ export class ProductDetailsDTO implements IProductDetailsDTO {
         this.supplier = product.supplier
         this.salePrice = product.sale_price
         this.retailPrice = product.retail_price
+        this.shippingPrice = product.shipping_price
         this.discountPrice = product.discount_price
         this.discountPercentage = calculateDiscountPercentage(this.salePrice, this.discountPrice)
         this.available = product.available
