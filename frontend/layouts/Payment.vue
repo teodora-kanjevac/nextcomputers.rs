@@ -13,7 +13,7 @@
                                 <p
                                     v-if="!isPaymentMethodValid && formSubmitted"
                                     class="text-center text-red-600 text-xs font-medium mt-3 ms-0.5">
-                                    Molimo vas da izaberete način plaćanja.
+                                    Molimo izaberite način plaćanja
                                 </p>
                             </div>
                             <div class="text-sm">
