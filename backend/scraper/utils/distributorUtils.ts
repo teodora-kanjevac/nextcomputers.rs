@@ -14,6 +14,19 @@ export const updateDistributorPrices = async (products: Product[], distributorId
 
     const distributorId = distributor.distributor_id
 
+    const scrapedEANs = products.map(p => p.ean)
+
+    await prisma.distributorprice.deleteMany({
+        where: {
+            distributor_id: distributorId,
+            NOT: {
+                ean: {
+                    in: scrapedEANs,
+                },
+            },
+        },
+    })
+
     await Promise.all(
         products.map(async product => {
             try {
