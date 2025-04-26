@@ -1,6 +1,7 @@
 <template>
     <div class="min-h-screen flex flex-col justify-center items-center">
-        <div class="flex flex-col lg:flex-row justify-center items-center max-w-screen-xl xl:p-0 lg:px-3 lg:py-0 sm:px-8 py-10 px-5 w-full gap-8">
+        <div
+            class="flex flex-col lg:flex-row justify-center items-center max-w-screen-2xl xl:p-0 lg:px-3 lg:py-0 sm:px-8 py-10 px-5 w-full gap-8">
             <div class="hidden lg:flex lg:w-1/2 items-center justify-center">
                 <img :src="illustrationSrc" alt="Illustration" class="w-full" />
             </div>
@@ -12,8 +13,12 @@
                     </NuxtLink>
                 </div>
                 <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                    <div class="w-full md:px-7 md:py-6 p-5 lg:space-y-4 space-y-3">
-                        <h2 class="md:text-3xl text-2xl font-bold text-gray-800">Kreirajte svoj nalog</h2>
+                    <div class="w-full md:px-7 md:py-5 p-5 lg:space-y-4 space-y-3">
+                        <div class="flex items-center pb-2">
+                            <img class="rounded w-8" src="/assets/images/logo.webp" alt="logo" />
+                            <h1 class="text-sm font-medium ps-3">nextcomputers.rs</h1>
+                        </div>
+                        <h2 class="text-2xl font-bold text-gray-800">Kreirajte svoj nalog</h2>
                         <p class="text-gray-600 text-sm">
                             Već imate nalog?
                             <NuxtLink :to="`login`" class="text-primary font-medium hover:underline">
@@ -41,7 +46,7 @@
                                     :shakeTrigger="shakeTrigger" />
                                 <TextInput
                                     label="Adresa"
-                                    placeholder="Ulica i broj"
+                                    placeholder="Vaša ulica i broj"
                                     :required="false"
                                     v-model="form.address"
                                     :showError="false"
@@ -99,17 +104,15 @@
                             </div>
 
                             <div class="text-gray-600">
-                                <div class="flex items-center gap-2">
+                                <label class="text-xs text-left font-medium flex items-center gap-2">
                                     <input
                                         type="checkbox"
                                         v-model="form.agreeToTerms"
                                         :class="[
-                                            'rounded size-5 text-primary focus:outline-none focus:ring-transparent',
+                                            'rounded size-5 text-primary focus:outline-none focus:ring-transparent cursor-pointer',
                                             { 'border-red-600': !agreeToTermsCheck.valid && formSubmitted },
-                                        ]"
-                                        class="rounded size-5 text-primary focus:outline-none focus:ring-transparent" />
-
-                                    <label class="text-xs text-left font-medium">
+                                        ]" />
+                                    <p class="select-none">
                                         Slažem se sa
                                         <NuxtLink
                                             to="/politika-privatnosti"
@@ -121,8 +124,8 @@
                                             class="text-primary font-medium hover:underline">
                                             Uslovima korišćenja
                                         </NuxtLink>
-                                    </label>
-                                </div>
+                                    </p>
+                                </label>
                                 <p
                                     v-if="!agreeToTermsCheck.valid && formSubmitted"
                                     :key="'error-' + shakeTrigger"
@@ -131,11 +134,14 @@
                                 </p>
                             </div>
 
-                            <button
-                                type="submit"
-                                class="w-full bg-primary-light text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition duration-100">
-                                Registruj se
-                            </button>
+                            <div class="flex items-center justify-center">
+                                <button
+                                    type="submit"
+                                    class="w-2/3 sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition duration-100">
+                                    <PersonAddIcon class="size-5 me-1.5" />
+                                    Registruj se
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -146,6 +152,7 @@
 
 <script setup lang="ts">
 import ArrowLeftIcon from '~/components/icons/ArrowLeftIcon.vue'
+import PersonAddIcon from '~/components/icons/PersonAddIcon.vue'
 import { useFormValidation } from '~/composables/useFormValidation'
 
 const illustrationSrc = '/assets/images/shop-illustration.webp'
@@ -189,10 +196,10 @@ const isFormInvalid = computed(() => {
 
 const submitForm = () => {
     formSubmitted.value = true
-    if (!isFormInvalid.value) {
-        alert('Form submitted successfully!')
-    } else {
+    if (isFormInvalid.value) {
         shakeTrigger.value++
+        return
     }
+    alert('Form submitted successfully!')
 }
 </script>

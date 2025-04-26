@@ -16,13 +16,13 @@
                 <CartWithBadge class="size-7 mb-0.5" />
                 Vaša korpa
             </a>
-            <a
-                href="#"
-                class="hidden py-1.5 px-3 text-gray-50 rounded-md bg-primary-light active:bg-primary flex-col items-center"
+            <NuxtLink
+                to="/login"
+                class="py-2 px-3 text-gray-50 hover:text-gray-300 flex flex-col items-center"
                 aria-current="page">
                 <LogInIcon class="size-7 mb-0.5" />
                 Prijavite se
-            </a>
+            </NuxtLink>
         </ul>
     </div>
 </template>

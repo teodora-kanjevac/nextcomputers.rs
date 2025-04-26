@@ -30,6 +30,11 @@ export function useFormValidation(form: Ref<any>) {
         return { valid: true, message: '' }
     })
 
+    const emailLoginCheck = computed(() => {
+        if (!form.value.email) return { valid: false, message: 'Korisničko ime je obavezno' }
+        return { valid: true, message: '' }
+    })
+
     const phoneCheck = computed(() => {
         if (!form.value.phone) return { valid: false, message: 'Broj telefona je obavezan' }
         const phoneRegex = /^\d{6,15}$/
@@ -79,6 +84,11 @@ export function useFormValidation(form: Ref<any>) {
         return { valid: true, message: '' }
     })
 
+    const passwordLoginCheck = computed(() => {
+        if (!form.value.password) return { valid: false, message: 'Lozinka je obavezna' }
+        return { valid: true, message: '' }
+    })
+
     const confirmPasswordCheck = computed(() => {
         if (!form.value.confirmPassword) return { valid: false, message: 'Morate potvrditi lozinku' }
         if (form.value.confirmPassword !== form.value.password)
@@ -96,11 +106,13 @@ export function useFormValidation(form: Ref<any>) {
         lastNameCheck,
         fullNameCheck,
         emailCheck,
+        emailLoginCheck,
         phoneCheck,
         addressCheck,
         cityCheck,
         zipcodeCheck,
         passwordCheck,
+        passwordLoginCheck,
         confirmPasswordCheck,
         agreeToTermsCheck,
     }

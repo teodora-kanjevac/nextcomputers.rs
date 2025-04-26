@@ -51,7 +51,7 @@ export const synonymMap: Record<string, string[]> = {
     mikrofoni: ['mikrofoni'],
     'trotineti i bicikle': ['bicikle i fitnes', 'trotineti', 'oprema za bicikle'],
     'display, signage i oprema': ['interaktivni display'],
-    'toneri, kertridži, mastila': ['toneri, kertridž, riboni, mastila', 'potrošni materijal'],
+    'toneri, kertridži, mastila': ['toneri, kertridž, riboni, mastila', 'potrošni materijal', 'toneri , cartridge'],
     'razni akumulatorski alati': ['razni električni i akumulatorski alati'],
     'grafičke karte': ['grafičke kartice', 'grafičke karte'],
     'klima uređaji': ['klime', 'klima uređaji'],

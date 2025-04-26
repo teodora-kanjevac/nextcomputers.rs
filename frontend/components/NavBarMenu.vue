@@ -14,9 +14,9 @@
                 </a>
             </li>
             <li>
-                <NuxtLink to="/" class="hidden gap-3 p-2 text-gray-100 rounded active:bg-primary bg-primary-light">
-                    <LogInIcon class="size-6" />
-                    <span class="pt-0.5">Prijavite se</span>
+                <NuxtLink to="/login" class="flex gap-3 p-2 text-gray-100 hover:bg-gray-600 rounded">
+                    <LogInIcon class="size-5" />
+                    <span>Prijavite se</span>
                 </NuxtLink>
             </li>
         </ul>
