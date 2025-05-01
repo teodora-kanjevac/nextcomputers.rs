@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "concurrently \"pnpm dev:frontend\" \"pnpm dev:backend\"",
     "dev:frontend": "set NODE_OPTIONS=--no-deprecation & start chrome http://localhost:3000 & cd frontend & pnpm nuxt dev",
-    "dev:backend": "tsc -p backend/tsconfig.json && npx resolve-tspaths -p backend/tsconfig.json && npx nodemon backend/dist/app.js"
+    "dev:backend": "tsc -p backend/tsconfig.json && pnpm dlx resolve-tspaths -p backend/tsconfig.json && pnpm dlx node backend/dist/app.js",
+    "dev:scraper": "tsc -p backend/tsconfig.json && pnpm dlx resolve-tspaths -p backend/tsconfig.json && pnpm dlx node backend/dist/scraper.js"
   },
   "type": "commonjs",
   "keywords": [],

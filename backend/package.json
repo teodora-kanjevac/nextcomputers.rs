@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc -p tsconfig.json && resolve-tspaths",
     "start": "node dist/app.js",
-    "dev": "tsc -p tsconfig.json && resolve-tspaths && nodemon dist/app.js"
+    "dev": "tsc -p tsconfig.json && resolve-tspaths && node dist/app.js"
   },
   "type": "module",
   "keywords": [],
@@ -15,32 +15,31 @@
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/html-to-text": "^9.0.4",
-    "@types/node": "^20.17.27",
-    "nodemon": "^3.1.9",
+    "@types/node": "^20.17.32",
     "prisma": "6.6.0",
     "resolve-tspaths": "^0.8.23",
     "ts-node": "^10.9.2",
-    "typescript": "^5.8.2"
+    "typescript": "^5.8.3"
   },
   "dependencies": {
     "@prisma/client": "6.6.0",
-    "axios": "^1.8.4",
+    "axios": "^1.9.0",
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
+    "dotenv": "^16.5.0",
     "express": "^4.21.2",
     "fast-deep-equal": "^3.1.3",
     "fast-xml-parser": "^4.5.3",
     "flexsearch": "^0.7.43",
     "handlebars": "^4.7.8",
     "helmet": "^7.2.0",
-    "html-entities": "^2.5.3",
+    "html-entities": "^2.6.0",
     "html-to-text": "^9.0.5",
     "htmlparser2": "^10.0.0",
     "jsdom": "^25.0.1",
     "jsonwebtoken": "^9.0.2",
     "meilisearch": "^0.48.2",
     "node-cron": "^3.0.3",
-    "nodemailer": "^6.10.0"
+    "nodemailer": "^6.10.1"
   }
 }

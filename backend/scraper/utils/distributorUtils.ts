@@ -14,6 +14,19 @@ export const updateDistributorPrices = async (products: Product[], distributorId
 
     const distributorId = distributor.distributor_id
 
+    const scrapedEANs = products.map(p => p.ean)
+
+    await prisma.distributorprice.deleteMany({
+        where: {
+            distributor_id: distributorId,
+            NOT: {
+                ean: {
+                    in: scrapedEANs,
+                },
+            },
+        },
+    })
+
     await Promise.all(
         products.map(async product => {
             try {
@@ -46,14 +59,12 @@ export const updateDistributorPrices = async (products: Product[], distributorId
 
 export const updateProductsWithBestPrice = async (): Promise<void> => {
     let offset = 0
+    let markedUnavailable = 0
 
     while (true) {
         const products = await prisma.product.findMany({
             skip: offset,
             take: BATCH_SIZE,
-            where: {
-                available: true,
-            },
             select: {
                 product_id: true,
                 ean: true,
@@ -83,7 +94,19 @@ export const updateProductsWithBestPrice = async (): Promise<void> => {
                 },
             })
 
-            if (!bestOffer) return
+            if (!bestOffer) {
+                await prisma.product.update({
+                    where: {
+                        product_id: product.product_id,
+                    },
+                    data: {
+                        available: false,
+                        stock: 0,
+                    },
+                })
+                markedUnavailable++
+                return
+            }
 
             const bestPrice = parseFloat(bestOffer.price.toFixed(2))
             const salePrice = calculateSalePrice(bestPrice)
@@ -107,5 +130,6 @@ export const updateProductsWithBestPrice = async (): Promise<void> => {
         offset += BATCH_SIZE
     }
 
+    console.log('Total products marked unavailable:', markedUnavailable)
     console.log('Product prices updated from best distributor offers.')
 }

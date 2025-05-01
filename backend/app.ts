@@ -1,7 +1,6 @@
 import express, { Application } from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
-import scraperRoutes from '~/src/routes/scraperRoutes'
 import categoryRoutes from '~/src/routes/categoryRoutes'
 import subcategoryRoutes from '~/src/routes/subcategoryRoutes'
 import productRoutes from '~/src/routes/productRoutes'
@@ -13,7 +12,6 @@ import orderRoutes from '~/src/routes/orderRoutes'
 import mailRoutes from '~/src/routes/mailRoutes'
 import ipsRoutes from '~/src/routes/ipsRoutes'
 import catalogRoutes from '~/src/routes/catalogRoutes'
-import '~/src/jobs/cron-jobs'
 
 dotenv.config()
 const app: Application = express()
@@ -26,7 +24,6 @@ app.use(
     })
 )
 
-app.use('/scraper', scraperRoutes)
 app.use('/api/categories', categoryRoutes)
 app.use('/api/subcategories', subcategoryRoutes)
 app.use('/api/products', productRoutes)
