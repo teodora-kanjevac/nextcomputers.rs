@@ -14,13 +14,16 @@ export const setupSearchEngine = async () => {
         }
 
         const meilisearchProducts = products.map(product => ({
-            id: product.product_id,
             product_id: product.product_id.toString(),
             name: product.name,
-            ean: product.ean || '',
+            ean: product.ean,
         }))
 
-        await client.index('products').updateSettings({
+        const index = client.index('products')
+
+        await index.update({ primaryKey: 'product_id' })
+
+        await index.updateSettings({
             rankingRules: ['exactness', 'attribute', 'words', 'proximity'],
             searchableAttributes: ['name', 'ean', 'product_id'],
             typoTolerance: {
@@ -33,7 +36,8 @@ export const setupSearchEngine = async () => {
             },
         })
 
-        await client.index('products').addDocuments(meilisearchProducts)
+        await index.addDocuments(meilisearchProducts)
+
         console.log('Indexing Successful!')
     } catch (error) {
         console.error('Error setting up Meilisearch:', error)

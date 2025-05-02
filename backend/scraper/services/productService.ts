@@ -29,6 +29,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     price: true,
                     retail_price: true,
                     sale_price: true,
+                    specification: true,
                     image_url: true,
                 },
             })
@@ -44,6 +45,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     (!existingProduct.available ||
                         existingProduct.stock !== product.stock ||
                         existingProduct.retail_price.toNumber() !== parseFloat(product.retailPrice.toFixed(2)) ||
+                        !IsEqual(existingProduct.specification, product.specification) ||
                         !IsEqual(existingProduct.image_url, product.imageUrl))
                 )
             })
@@ -71,6 +73,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                         where: { product_id: productId },
                         data: {
                             ...commonData,
+                            specification: product.specification,
                             image_url: product.imageUrl,
                         },
                     })
