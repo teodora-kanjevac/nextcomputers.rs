@@ -38,19 +38,25 @@
 
                     <div
                         class="w-full space-y-6 lg:max-w-xs xl:max-w-md rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
-                        <CheckoutPrice :selectedPaymentMethod="checkoutStore.paymentMethod" />
+                        <CheckoutPrice :selectedPaymentMethod="formStore.checkout.meta.paymentMethod" />
 
                         <div class="space-y-3">
                             <button
                                 @click="handleOrder"
-                                :disabled="sharedStore.loading"
-                                class="flex w-full items-center justify-center rounded-lg bg-primary-light px-5 py-2.5 text-sm font-medium text-white active:bg-primary">
-                                <Spinner v-if="sharedStore.loading" class="size-5" />
-                                <span v-if="!sharedStore.loading">Pošalji narudžbinu</span>
+                                :disabled="isLoading"
+                                class="flex w-full items-center justify-center rounded-md bg-primary-light enabled:hover:bg-rose-800 transition duration-75 px-5 py-2.5 text-sm font-medium text-white disabled:contrast-75 active:bg-primary">
+                                <template v-if="isLoading">
+                                    <SubmitionSpinner class="size-5 px-5" />
+                                </template>
+                                <template v-else>
+                                    <span>Pošalji narudžbinu</span>
+                                </template>
                             </button>
                             <p class="text-xs mx-1 text-justify">
                                 Klikom na ovo dugme potvrđujete da ste saglasni sa našom
-                                <a href="/politika-privatnosti" class="text-primary hover:underline">Politikom privatnosti</a>
+                                <a href="/politika-privatnosti" class="text-primary hover:underline">
+                                    Politikom privatnosti
+                                </a>
                                 i
                                 <a href="/uslovi-koriscenja" class="text-primary hover:underline">
                                     Uslovima korišćenja
@@ -68,36 +74,34 @@
 import dayjs from 'dayjs'
 import type { CartItemDTO } from '~/shared/types/CartDTO'
 import { useCartStore } from '~/stores/CartStore'
-import { useCheckoutStore } from '~/stores/CheckoutStore'
 import { useOrderStore } from '~/stores/OrderStore'
 import { useMailStore } from '~/stores/MailStore'
-import { useSharedStore } from '~/stores/SharedStore'
 import { OrderFailed } from '~/composables/useOrder'
+import { useFormStore } from '~/stores/FormStore'
 
 const router = useRouter()
 const cartStore = useCartStore()
-const checkoutStore = useCheckoutStore()
+const formStore = useFormStore()
 const orderStore = useOrderStore()
 const mailStore = useMailStore()
-const sharedStore = useSharedStore()
 
-sharedStore.loading = false
+const isLoading = ref(false)
 
 const cartItems = computed<CartItemDTO[]>(() => cartStore.cart.cartItems)
 
 const userDetails = computed(() => [
-    { label: 'Ime i prezime', value: checkoutStore.form.fullname },
-    { label: 'Email adresa', value: checkoutStore.form.email },
-    { label: 'Broj telefona', value: `+381 ${checkoutStore.form.phone}` },
-    { label: 'Adresa dostave', value: checkoutStore.form.address },
-    { label: 'Grad', value: checkoutStore.form.city },
-    { label: 'Poštanski broj', value: checkoutStore.form.zipcode },
+    { label: 'Ime i prezime', value: formStore.checkout.form.fullname },
+    { label: 'Email adresa', value: formStore.checkout.form.email },
+    { label: 'Broj telefona', value: `+381 ${formStore.checkout.form.phone}` },
+    { label: 'Adresa dostave', value: formStore.checkout.form.address },
+    { label: 'Grad', value: formStore.checkout.form.city },
+    { label: 'Poštanski broj', value: formStore.checkout.form.zipcode },
 ])
 
-const paymentMethod = computed(() => checkoutStore.paymentMethodText)
+const paymentMethod = computed(() => formStore.checkout.meta.paymentMethodText)
 
 const handleOrder = async () => {
-    sharedStore.loading = true
+    isLoading.value = true
     try {
         orderStore.orderData = {
             orderId: '',
@@ -111,12 +115,12 @@ const handleOrder = async () => {
                 imageUrl: cartItem.product.thumbnail,
             })),
             form: {
-                ...checkoutStore.form,
-                phone: `+381 ${checkoutStore.form.phone}`,
+                ...formStore.checkout.form,
+                phone: `+381 ${formStore.checkout.form.phone}`,
             },
-            prices: checkoutStore.prices,
-            paymentMethod: checkoutStore.paymentMethod,
-            paymentMethodText: checkoutStore.paymentMethodText,
+            prices: formStore.checkout.meta.prices,
+            paymentMethod: formStore.checkout.meta.paymentMethod,
+            paymentMethodText: formStore.checkout.meta.paymentMethodText,
         }
 
         await orderStore.createOrder(orderStore.orderData)
@@ -124,7 +128,7 @@ const handleOrder = async () => {
         orderStore.orderData.orderId = orderStore.order.id
         orderStore.orderData.orderDate = dayjs(orderStore.order.createdAt).format('DD.MM.YYYY. HH:mm')
 
-        if (checkoutStore.paymentMethod === 'advance') {
+        if (formStore.checkout.meta.paymentMethod === 'advance') {
             await orderStore.fetchQRCode(orderStore.orderData)
         }
         await mailStore.sendMail(orderStore.orderData)
@@ -144,7 +148,7 @@ const handleOrder = async () => {
             }, 10)
         })
     } finally {
-        sharedStore.loading = false
+        isLoading.value = false
     }
 }
 </script>

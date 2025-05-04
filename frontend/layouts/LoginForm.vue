@@ -70,7 +70,7 @@
                             <div class="flex items-center justify-center">
                                 <button
                                     type="submit"
-                                    class="w-2/3 sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition duration-100">
+                                    class="w-full sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition duration-100">
                                     <LogInIcon class="size-6 me-1" />
                                     Prijavi se
                                 </button>

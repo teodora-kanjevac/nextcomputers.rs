@@ -33,48 +33,48 @@
                                     placeholder="Vaše ime"
                                     required
                                     v-model="form.firstName"
-                                    :showError="!firstNameCheck.valid && formSubmitted"
-                                    :errorMessage="firstNameCheck.message"
+                                    :showError="!firstNameCheck().value.valid && formSubmitted"
+                                    :errorMessage="firstNameCheck().value.message"
                                     :shakeTrigger="shakeTrigger" />
                                 <TextInput
                                     label="Prezime"
                                     placeholder="Vaše prezime"
                                     required
                                     v-model="form.lastName"
-                                    :showError="!lastNameCheck.valid && formSubmitted"
-                                    :errorMessage="lastNameCheck.message"
+                                    :showError="!lastNameCheck().value.valid && formSubmitted"
+                                    :errorMessage="lastNameCheck().value.message"
                                     :shakeTrigger="shakeTrigger" />
                                 <TextInput
                                     label="Adresa"
                                     placeholder="Vaša ulica i broj"
                                     :required="false"
                                     v-model="form.address"
-                                    :showError="false"
-                                    :errorMessage="''"
+                                    :showError="!addressCheck(false).value.valid && formSubmitted"
+                                    :errorMessage="addressCheck(false).value.message"
                                     :shakeTrigger="shakeTrigger" />
                                 <TextInput
                                     label="Grad"
                                     placeholder="Beograd, Zaječar, Niš..."
                                     :required="false"
                                     v-model="form.city"
-                                    :showError="false"
-                                    :errorMessage="''"
+                                    :showError="!cityCheck(false).value.valid && formSubmitted"
+                                    :errorMessage="cityCheck(false).value.message"
                                     :shakeTrigger="shakeTrigger" />
                                 <PhoneInput
                                     label="Broj telefona"
                                     placeholder="61 2345678"
                                     required
                                     v-model="form.phone"
-                                    :showError="!phoneCheck.valid && formSubmitted"
-                                    :errorMessage="phoneCheck.message"
+                                    :showError="!phoneCheck().value.valid && formSubmitted"
+                                    :errorMessage="phoneCheck().value.message"
                                     :shakeTrigger="shakeTrigger" />
                                 <TextInput
                                     label="Email"
                                     placeholder="vasmail@gmail.com"
                                     required
                                     v-model="form.email"
-                                    :showError="!emailCheck.valid && formSubmitted"
-                                    :errorMessage="emailCheck.message"
+                                    :showError="!emailCheck().value.valid && formSubmitted"
+                                    :errorMessage="emailCheck().value.message"
                                     :shakeTrigger="shakeTrigger" />
                                 <PasswordInput
                                     label="Lozinka"
@@ -104,13 +104,13 @@
                             </div>
 
                             <div class="text-gray-600">
-                                <label class="text-xs text-left font-medium flex items-center gap-2">
+                                <label class="text-xs text-left font-medium inline-flex items-center gap-2">
                                     <input
                                         type="checkbox"
-                                        v-model="form.agreeToTerms"
+                                        v-model="form.termsAccepted"
                                         :class="[
                                             'rounded size-5 text-primary focus:outline-none focus:ring-transparent cursor-pointer',
-                                            { 'border-red-600': !agreeToTermsCheck.valid && formSubmitted },
+                                            { 'border-red-600': !termsAcceptedCheck.valid && formSubmitted },
                                         ]" />
                                     <p class="select-none">
                                         Slažem se sa
@@ -127,17 +127,17 @@
                                     </p>
                                 </label>
                                 <p
-                                    v-if="!agreeToTermsCheck.valid && formSubmitted"
+                                    v-if="!termsAcceptedCheck.valid && formSubmitted"
                                     :key="'error-' + shakeTrigger"
                                     class="text-red-600 text-xs font-medium mt-2 animate-shake">
-                                    {{ agreeToTermsCheck.message }}
+                                    {{ termsAcceptedCheck.message }}
                                 </p>
                             </div>
 
                             <div class="flex items-center justify-center">
                                 <button
                                     type="submit"
-                                    class="w-2/3 sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition duration-100">
+                                    class="w-full sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md hover:bg-primary-dark transition duration-100">
                                     <PersonAddIcon class="size-5 me-1.5" />
                                     Registruj se
                                 </button>
@@ -154,20 +154,13 @@
 import ArrowLeftIcon from '~/components/icons/ArrowLeftIcon.vue'
 import PersonAddIcon from '~/components/icons/PersonAddIcon.vue'
 import { useFormValidation } from '~/composables/useFormValidation'
+import { useFormStore } from '~/stores/FormStore'
 
 const illustrationSrc = '/assets/images/shop-illustration.webp'
 
-const form = ref({
-    firstName: '',
-    lastName: '',
-    email: '',
-    address: '',
-    city: '',
-    phone: '',
-    password: '',
-    confirmPassword: '',
-    agreeToTerms: false,
-})
+const formStore = useFormStore()
+
+const form = ref(formStore.register.form)
 
 const formSubmitted = ref(false)
 const shakeTrigger = ref(0)
@@ -176,21 +169,25 @@ const {
     firstNameCheck,
     lastNameCheck,
     phoneCheck,
+    addressCheck,
+    cityCheck,
     emailCheck,
     passwordCheck,
     confirmPasswordCheck,
-    agreeToTermsCheck,
+    termsAcceptedCheck,
 } = useFormValidation(form)
 
 const isFormInvalid = computed(() => {
     return !(
-        firstNameCheck.value.valid &&
-        lastNameCheck.value.valid &&
-        emailCheck.value.valid &&
-        phoneCheck.value.valid &&
+        firstNameCheck().value.valid &&
+        lastNameCheck().value.valid &&
+        emailCheck().value.valid &&
+        addressCheck(false).value.valid &&
+        cityCheck(false).value.valid &&
+        phoneCheck().value.valid &&
         passwordCheck.value.valid &&
         confirmPasswordCheck.value.valid &&
-        agreeToTermsCheck.value.valid
+        termsAcceptedCheck.value.valid
     )
 })
 

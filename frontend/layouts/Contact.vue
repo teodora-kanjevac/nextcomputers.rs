@@ -19,7 +19,9 @@
                             <p class="flex flex-wrap items-center">
                                 <EmailIcon class="size-5 me-1.5 mb-0.5 shrink-0" />
                                 <span class="text-gray-800 font-semibold me-1.5">Email:</span>
-                                <a href="mailto:prodaja.nextcomputers@gmail.com" class="text-primary hover:underline break-all">
+                                <a
+                                    href="mailto:prodaja.nextcomputers@gmail.com"
+                                    class="text-primary hover:underline break-all">
                                     prodaja.nextcomputers@gmail.com
                                 </a>
                             </p>
@@ -48,77 +50,47 @@
                         </p>
                         <form @submit.prevent="submitForm" class="space-y-5">
                             <div>
-                                <label for="fullname" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
-                                    Vaše ime i prezime
-                                    <span class="text-red-600">*</span>
-                                </label>
-                                <input
+                                <TextInput
+                                    label="Vaše ime i prezime"
+                                    placeholder="Unesite ime i prezime"
+                                    required
                                     v-model="form.fullname"
-                                    type="text"
-                                    name="fullname"
-                                    id="fullname"
-                                    :class="{
-                                        'bg-gray-50 border-gray-300': isFullnameValid && formSubmitted,
-                                        'border-red-600': !isFullnameValid && formSubmitted,
-                                    }"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
-                                    placeholder="Unesite ime i prezime" />
-                                <p
-                                    v-if="!isFullnameValid && formSubmitted"
-                                    class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                    Ime i prezime su obavezni
-                                </p>
+                                    :showError="!fullNameCheck().value.valid && formSubmitted"
+                                    :errorMessage="fullNameCheck().value.message"
+                                    :shakeTrigger="shakeTrigger" />
                             </div>
                             <div>
-                                <label for="email" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
-                                    Vaš email
-                                    <span class="text-red-600">*</span>
-                                </label>
-                                <input
+                                <TextInput
+                                    label="Vaš email"
+                                    placeholder="Unesite email"
+                                    required
                                     v-model="form.email"
-                                    type="text"
-                                    name="email"
-                                    id="email"
-                                    :class="{
-                                        'bg-gray-50 border-gray-300': isEmailValid && formSubmitted,
-                                        'border-red-600': !isEmailValid && formSubmitted,
-                                    }"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
-                                    placeholder="vasmail@gmail.com" />
-                                <p
-                                    v-if="!isEmailValid && formSubmitted"
-                                    class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                    Unesite validnu email adresu
-                                </p>
+                                    :showError="!emailCheck().value.valid && formSubmitted"
+                                    :errorMessage="emailCheck().value.message"
+                                    :shakeTrigger="shakeTrigger" />
                             </div>
                             <div>
-                                <label for="comment" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
-                                    Vaš komentar
-                                    <span class="text-red-600">*</span>
-                                </label>
-                                <textarea
+                                <TextAreaInput
+                                    label="Vaš komentar"
+                                    :rows="5"
+                                    placeholder="Unesite komentar"
+                                    required
                                     v-model="form.comment"
-                                    type="text"
-                                    name="comment"
-                                    id="comment"
-                                    rows="5"
-                                    :class="{
-                                        'bg-gray-50 border-gray-300': isCommentValid && formSubmitted,
-                                        'border-red-600': !isCommentValid && formSubmitted,
-                                    }"
-                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
-                                    placeholder="Ostavite vašu poruku..." />
-                                <p
-                                    v-if="!isCommentValid && formSubmitted"
-                                    class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                                    Komentar je obavezan
-                                </p>
+                                    :showError="!commentCheck.valid && formSubmitted"
+                                    :errorMessage="commentCheck.message"
+                                    :shakeTrigger="shakeTrigger" />
                             </div>
                             <button
                                 type="submit"
-                                class="py-3 px-4 text-sm font-medium text-center flex items-center text-white rounded-lg bg-primary-light sm:w-fit hover:bg-primary">
-                                <EmailIcon class="size-5 me-1.5 shrink-0" />
-                                Pošalji poruku
+                                class="py-3 px-4 w-1/3 text-sm font-medium text-center flex items-center justify-center text-white rounded-md bg-primary-light sm:w-fit disabled:contrast-75 enabled:hover:bg-rose-800"
+                                :disabled="sharedStore.loading">
+                                <template v-if="sharedStore.loading">
+                                    <SubmitionSpinner class="size-5 px-5" />
+                                </template>
+                                <template v-else>
+                                    <EmailIcon class="size-5 me-1.5 shrink-0" />
+                                    <span>Pošalji poruku</span>
+                                </template>
                             </button>
                         </form>
                     </div>
@@ -134,47 +106,77 @@ import DocumentIcon from '~/components/icons/DocumentIcon.vue'
 import EmailIcon from '~/components/icons/EmailIcon.vue'
 import OfficeBuildingIcon from '~/components/icons/OfficeBuildingIcon.vue'
 import PhoneIcon from '~/components/icons/PhoneIcon.vue'
-import { useContactStore } from '~/stores/ContactStore'
+import { useRateLimit } from '~/composables/useRateLimit'
 import { useMailStore } from '~/stores/MailStore'
 import { useNotification } from '~/composables/useNotification'
+import { useFormStore } from '~/stores/FormStore'
+import { useSharedStore } from '~/stores/SharedStore'
 
 const { showNotification } = useNotification()
-const contactStore = useContactStore()
-const mailStore = useMailStore()
+const { checkLimit } = useRateLimit(3, 2 * 60 * 60 * 1000)
 
-const form = ref(contactStore.form)
+const formStore = useFormStore()
+const mailStore = useMailStore()
+const sharedStore = useSharedStore()
+
+const form = ref(formStore.contact.form)
 
 const formSubmitted = ref(false)
+const shakeTrigger = ref(0)
 
-const isFullnameValid = computed(() => !!form.value.fullname)
-const isCommentValid = computed(() => !!form.value.comment)
-const isEmailValid = computed(() => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-    return emailRegex.test(form.value.email)
+const { fullNameCheck, emailCheck, commentCheck } = useFormValidation(form)
+
+const isFormInvalid = computed(() => {
+    return !(fullNameCheck().value.valid && emailCheck().value.valid && commentCheck.value.valid)
 })
+
+const resetForm = () => {
+    formStore.contact.form = {
+        fullname: '',
+        email: '',
+        comment: '',
+    }
+    Object.assign(form.value, formStore.contact.form)
+    formSubmitted.value = false
+}
 
 const submitForm = async () => {
     formSubmitted.value = true
-    if (isFullnameValid.value && isEmailValid.value && isCommentValid.value) {
-        contactStore.contactData = { ...form.value }
-        try {
-            await mailStore.sendContactMail(contactStore.contactData)
-            form.value.fullname = ''
-            form.value.email = ''
-            form.value.comment = ''
-            formSubmitted.value = false
-            showNotification(
-                'success',
-                'Poruka uspešno poslata!',
-                'Vaša poruka je uspešno poslata. Hvala Vam što koristite nextcomputers.rs!'
-            )
-        } catch (error) {
-            showNotification(
-                'error',
-                'Greška pri slanju poruke!',
-                'Došlo je do problema pri slanju poruke. Molimo pokušajte kasnije.'
-            )
-        }
+
+    if (isFormInvalid.value) {
+        shakeTrigger.value++
+        return
+    }
+
+    if (!checkLimit()) {
+        showNotification(
+            'warn',
+            'Previše pokušaja!',
+            'Poslali ste previše poruka u kratkom roku. Molimo pokušajte kasnije.'
+        )
+        return
+    }
+
+    sharedStore.setLoading(true)
+
+    formStore.contact.form = { ...form.value }
+
+    try {
+        await mailStore.sendContactMail(formStore.contact.form)
+        resetForm()
+        showNotification(
+            'success',
+            'Poruka uspešno poslata!',
+            'Vaša poruka je uspešno poslata. Hvala Vam što koristite nextcomputers.rs!'
+        )
+    } catch (error) {
+        showNotification(
+            'error',
+            'Greška pri slanju poruke!',
+            'Došlo je do problema pri slanju poruke. Molimo pokušajte kasnije.'
+        )
+    } finally {
+        sharedStore.setLoading(false)
     }
 }
 </script>

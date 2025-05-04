@@ -1,67 +1,90 @@
 export function useFormValidation(form: Ref<any>) {
-    const firstNameCheck = computed(() => {
-        const firstNameCheck = /^[\p{L} ]+$/u
-        if (!form.value.firstName) return { valid: false, message: 'Ime je obavezno' }
-        if (!firstNameCheck.test(form.value.firstName))
-            return { valid: false, message: 'Dozvoljena su samo slova i razmaci' }
-        return { valid: true, message: '' }
-    })
+    const firstNameCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && !form.value.firstName) return { valid: false, message: 'Ime je obavezno' }
+            if (!required && !form.value.firstName) return { valid: true, message: '' }
+            const firstNameCheck = /^[\p{L} ]+$/u
+            if (!firstNameCheck.test(form.value.firstName))
+                return { valid: false, message: 'Dozvoljena su samo slova' }
+            return { valid: true, message: '' }
+        })
 
-    const lastNameCheck = computed(() => {
-        const lastNameCheck = /^[\p{L} ]+$/u
-        if (!form.value.lastName) return { valid: false, message: 'Prezime je obavezno' }
-        if (!lastNameCheck.test(form.value.lastName))
-            return { valid: false, message: 'Dozvoljena su samo slova i razmaci' }
-        return { valid: true, message: '' }
-    })
+    const lastNameCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && !form.value.lastName) return { valid: false, message: 'Prezime je obavezno' }
+            if (!required && !form.value.lastName) return { valid: true, message: '' }
+            const lastNameCheck = /^[\p{L} ]+$/u
+            if (!lastNameCheck.test(form.value.lastName))
+                return { valid: false, message: 'Dozvoljena su samo slova' }
+            return { valid: true, message: '' }
+        })
 
-    const fullNameCheck = computed(() => {
-        const fullnameRegex = /^[\p{L} ]+$/u
-        if (!form.value.fullname) return { valid: false, message: 'Ime i prezime su obavezni' }
-        if (!fullnameRegex.test(form.value.fullname))
-            return { valid: false, message: 'Dozvoljena su samo slova i razmaci' }
-        return { valid: true, message: '' }
-    })
+    const fullNameCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && !form.value.fullname) return { valid: false, message: 'Ime i prezime su obavezni' }
+            if (!required && !form.value.fullname) return { valid: true, message: '' }
+            const fullnameRegex = /^[\p{L} ]+$/u
+            if (!fullnameRegex.test(form.value.fullname))
+                return { valid: false, message: 'Dozvoljena su samo slova i razmaci' }
+            return { valid: true, message: '' }
+        })
 
-    const emailCheck = computed(() => {
-        const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-        if (!form.value.email) return { valid: false, message: 'Email adresa je obavezna' }
-        if (!emailRegex.test(form.value.email)) return { valid: false, message: 'Unesite validnu email adresu' }
-        return { valid: true, message: '' }
-    })
+    const emailCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && !form.value.email) return { valid: false, message: 'Email adresa je obavezna' }
+            if (!required && !form.value.email) return { valid: true, message: '' }
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+            if (!emailRegex.test(form.value.email)) return { valid: false, message: 'Unesite validnu email adresu' }
+            return { valid: true, message: '' }
+        })
 
     const emailLoginCheck = computed(() => {
         if (!form.value.email) return { valid: false, message: 'Korisničko ime je obavezno' }
         return { valid: true, message: '' }
     })
 
-    const phoneCheck = computed(() => {
-        if (!form.value.phone) return { valid: false, message: 'Broj telefona je obavezan' }
-        const phoneRegex = /^\d{6,15}$/
-        const cleanPhone = form.value.phone.replace(/\s+/g, '')
-        if (!phoneRegex.test(cleanPhone)) return { valid: false, message: 'Broj telefona treba da ima 6-15 cifara' }
+    const commentCheck = computed(() => {
+        if (!form.value.comment) return { valid: false, message: 'Komentar je obavezan' }
         return { valid: true, message: '' }
     })
 
-    const addressCheck = computed(() => {
-        if (!form.value.address) return { valid: false, message: 'Adresa je obavezna' }
-        return { valid: true, message: '' }
-    })
+    const phoneCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && !form.value.phone) return { valid: false, message: 'Broj telefona je obavezan' }
+            if (!required && !form.value.phone) return { valid: true, message: '' }
+            const phoneRegex = /^\d{6,15}$/
+            const cleanPhone = form.value.phone.replace(/\s+/g, '')
+            if (!phoneRegex.test(cleanPhone)) return { valid: false, message: 'Broj telefona treba da ima 6-15 cifara' }
+            return { valid: true, message: '' }
+        })
 
-    const cityCheck = computed(() => {
-        const cityRegex = /^[\p{L} ]+$/u
-        if (!form.value.city) return { valid: false, message: 'Grad je obavezan' }
-        if (!cityRegex.test(form.value.city)) return { valid: false, message: 'Dozvoljena su samo slova i razmaci' }
-        return { valid: true, message: '' }
-    })
+    const addressCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && !form.value.address) return { valid: false, message: 'Adresa je obavezna' }
+            if (!required && !form.value.address) return { valid: true, message: '' }
+            const addressRegex = /[a-zA-Z]/
+            if (!addressRegex.test(form.value.address)) return { valid: false, message: 'Adresa mora sadržati slova' }
+            return { valid: true, message: '' }
+        })
 
-    const zipcodeCheck = computed(() => {
-        const zipcodeRegex = /^\d{5}$/
-        if (!form.value.zipcode) return { valid: false, message: 'Poštanski broj je obavezan' }
-        if (!zipcodeRegex.test(form.value.zipcode))
-            return { valid: false, message: 'Poštanski broj treba da sadrži 5 cifara' }
-        return { valid: true, message: '' }
-    })
+    const cityCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && !form.value.city) return { valid: false, message: 'Grad je obavezan' }
+            if (!required && !form.value.city) return { valid: true, message: '' }
+            const cityRegex = /^[\p{L} ]+$/u
+            if (!cityRegex.test(form.value.city)) return { valid: false, message: 'Dozvoljena su samo slova i razmaci' }
+            return { valid: true, message: '' }
+        })
+
+    const zipcodeCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && !form.value.zipcode) return { valid: false, message: 'Poštanski broj je obavezan' }
+            if (!required && !form.value.zipcode) return { valid: true, message: '' }
+            const zipcodeRegex = /^\d{5}$/
+            if (!zipcodeRegex.test(form.value.zipcode))
+                return { valid: false, message: 'Poštanski broj treba da sadrži 5 cifara' }
+            return { valid: true, message: '' }
+        })
 
     const passwordCheck = computed(() => {
         const password = form.value.password
@@ -69,15 +92,18 @@ export function useFormValidation(form: Ref<any>) {
             return { valid: false, message: 'Lozinka je obavezna' }
         }
 
+        const digitRegex = /\d/
+        const specialCharRegex = /[!@#$%^&*(),.?":{}|<>]/
+
         if (password.length < 6) {
             return { valid: false, message: 'Lozinka mora imati najmanje 6 karaktera' }
         }
 
-        if (!/\d/.test(password)) {
+        if (!digitRegex.test(password)) {
             return { valid: false, message: 'Lozinka mora sadržati bar jedan broj' }
         }
 
-        if (!/[!@#$%^&*(),.?":{}|<>]/.test(password)) {
+        if (!specialCharRegex.test(password)) {
             return { valid: false, message: 'Lozinka mora sadržati bar jedan specijalan karakter' }
         }
 
@@ -96,8 +122,8 @@ export function useFormValidation(form: Ref<any>) {
         return { valid: true, message: '' }
     })
 
-    const agreeToTermsCheck = computed(() => {
-        if (!form.value.agreeToTerms) return { valid: false, message: 'Morate prihvatiti uslove korišćenja' }
+    const termsAcceptedCheck = computed(() => {
+        if (!form.value.termsAccepted) return { valid: false, message: 'Morate prihvatiti uslove korišćenja' }
         return { valid: true, message: '' }
     })
 
@@ -111,9 +137,10 @@ export function useFormValidation(form: Ref<any>) {
         addressCheck,
         cityCheck,
         zipcodeCheck,
+        commentCheck,
         passwordCheck,
         passwordLoginCheck,
         confirmPasswordCheck,
-        agreeToTermsCheck,
+        termsAcceptedCheck,
     }
 }

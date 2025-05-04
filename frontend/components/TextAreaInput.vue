@@ -4,8 +4,9 @@
             {{ label }}
             <span v-if="required" class="text-red-600">*</span>
         </label>
-        <input
+        <textarea
             type="text"
+            :rows="rows"
             :placeholder="placeholder"
             :value="modelValue"
             @input="$emit('update:modelValue', ($event.target as HTMLInputElement)?.value || '')"
@@ -16,7 +17,7 @@
         <p
             v-if="!!showError"
             :key="'error-' + shakeTrigger"
-            class="text-red-600 text-xs font-medium mt-1 ms-0.5 animate-shake">
+            class="text-red-600 text-xs font-medium ms-0.5 animate-shake">
             {{ errorMessage }}
         </p>
     </div>
@@ -24,6 +25,7 @@
 
 <script setup lang="ts">
 defineProps<{
+    rows: number
     label: string
     placeholder: string
     required: boolean
