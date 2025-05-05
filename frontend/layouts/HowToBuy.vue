@@ -1,4 +1,4 @@
-<template lang="">
+<template>
     <div>
         <section class="py-8 md:py-16">
             <div class="mx-auto max-w-screen-xl px-6 2xl:px-0">

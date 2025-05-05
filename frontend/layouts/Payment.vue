@@ -13,7 +13,7 @@
                                 <p
                                     v-if="!isPaymentMethodValid && formSubmitted"
                                     class="text-center text-red-600 text-xs font-medium mt-3 ms-0.5">
-                                    Molimo vas da izaberete način plaćanja.
+                                    Molimo izaberite način plaćanja
                                 </p>
                             </div>
                             <div class="text-sm">
@@ -55,7 +55,7 @@
                         <div class="space-y-3">
                             <button
                                 type="submit"
-                                class="flex w-full items-center justify-center rounded-lg bg-primary-light px-5 py-2.5 text-sm font-medium text-white active:bg-primary">
+                                class="flex w-full items-center justify-center rounded-md bg-primary-light hover:bg-rose-800 transition duration-75 px-5 py-2.5 text-sm font-medium text-white active:bg-primary">
                                 Nastavi na pregled narudžbine
                             </button>
                         </div>
@@ -67,13 +67,13 @@
 </template>
 
 <script setup lang="ts">
-import { useCheckoutStore } from '~/stores/CheckoutStore'
+import { useFormStore } from '~/stores/FormStore'
 
-const checkoutStore = useCheckoutStore()
+const formStore = useFormStore()
 
 const emit = defineEmits(['nextStep'])
 
-const selectedPaymentMethod = ref<string | undefined>(checkoutStore.paymentMethod)
+const selectedPaymentMethod = ref<string | undefined>(formStore.checkout.meta.paymentMethod)
 const paymentMethodMap = {
     advance: 'Uplatom na račun',
     cash: 'Plaćanje gotovinom pri pouzeću',
@@ -83,8 +83,8 @@ const formSubmitted = ref(false)
 function handleSubmit() {
     formSubmitted.value = true
     if (selectedPaymentMethod.value) {
-        checkoutStore.paymentMethod = selectedPaymentMethod.value
-        checkoutStore.paymentMethodText =
+        formStore.checkout.meta.paymentMethod = selectedPaymentMethod.value
+        formStore.checkout.meta.paymentMethodText =
             paymentMethodMap[selectedPaymentMethod.value as keyof typeof paymentMethodMap] ||
             'Nije izabran način plaćanja'
         goToNextStep()

@@ -12,7 +12,7 @@
                     class="text-xs font-medium me-2 px-2 py-0.5 rounded">
                     {{ product.available ? 'Na stanju' : 'Trenutno nije dostupno' }}
                 </span>
-                <h1 class="mt-2 text-xl font-semibold text-gray-900 sm:text-2xl">
+                <h1 class="mt-2 text-xl font-semibold text-gray-900 sm:text-2xl break-words">
                     {{ product?.name }}
                 </h1>
                 <div class="mt-3 mb-4 sm:items-center sm:gap-4 sm:flex">

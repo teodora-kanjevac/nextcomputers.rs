@@ -36,8 +36,8 @@ export const footerSections = [
     {
         title: 'Korisnički nalog',
         items: [
-            { link: '/', content: 'Prijavite se' },
-            { link: '/', content: 'Registracija' },
+            { link: '/login', content: 'Prijavite se' },
+            { link: '/register', content: 'Registracija' },
             { link: '/', content: 'Zaboravljena lozinka' },
         ],
     },

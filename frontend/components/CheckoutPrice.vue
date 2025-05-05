@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { useCartStore } from '~/stores/CartStore'
-import { useCheckoutStore } from '~/stores/CheckoutStore'
+import { useFormStore } from '~/stores/FormStore'
 import { calculateShippingPrice } from '~/composables/useCart'
 import { formatPrice } from '~/composables/utils'
 
@@ -48,7 +48,7 @@ const { selectedPaymentMethod } = defineProps<{
 }>()
 
 const cartStore = useCartStore()
-const checkoutStore = useCheckoutStore()
+const formStore = useFormStore()
 
 const totalProductPrice = computed(() => {
     return cartStore.cart.cartItems.reduce((sum, item) => {
@@ -67,7 +67,7 @@ const productDiscount = computed(() => {
 const paymentMethodDiscountAmount = computed(() => {
     const totalProductPriceWithDiscount = totalProductPrice.value - productDiscount.value
     return Math.ceil(
-        totalProductPriceWithDiscount - totalProductPriceWithDiscount * checkoutStore.paymentMethodDiscount
+        totalProductPriceWithDiscount - totalProductPriceWithDiscount * formStore.checkout.meta.paymentMethodDiscount
     )
 })
 
@@ -83,18 +83,18 @@ const totalPrice = computed(() => {
     return totalProductPrice.value + shippingPrice.value - totalDiscount.value
 })
 
-checkoutStore.prices.productsPrice = totalProductPrice.value
-checkoutStore.prices.discountPrice = totalDiscount.value
-checkoutStore.prices.shippingPrice = shippingPrice.value
-checkoutStore.prices.totalPrice = totalPrice.value
+formStore.checkout.meta.prices.productsPrice = totalProductPrice.value
+formStore.checkout.meta.prices.discountPrice = totalDiscount.value
+formStore.checkout.meta.prices.shippingPrice = shippingPrice.value
+formStore.checkout.meta.prices.totalPrice = totalPrice.value
 
 watch(
     () => selectedPaymentMethod,
     newVal => {
         if (newVal === 'advance') {
-            checkoutStore.paymentMethodDiscount = 0.99
+            formStore.checkout.meta.paymentMethodDiscount = 0.99
         } else {
-            checkoutStore.paymentMethodDiscount = 1
+            formStore.checkout.meta.paymentMethodDiscount = 1
         }
     }
 )
