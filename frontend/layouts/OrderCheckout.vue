@@ -80,7 +80,7 @@
                         <div class="space-y-3">
                             <button
                                 type="submit"
-                                class="flex w-full items-center justify-center rounded-md bg-primary-light hover:bg-primary-dark transition duration-75 px-5 py-2.5 text-sm font-medium text-white active:bg-primary">
+                                class="flex w-full items-center justify-center rounded-md bg-primary-light hover:bg-rose-800 transition duration-75 px-5 py-2.5 text-sm font-medium text-white active:bg-primary">
                                 Nastavi ka plaćanju
                             </button>
                         </div>

@@ -44,7 +44,7 @@
                             <button
                                 @click="handleOrder"
                                 :disabled="isLoading"
-                                class="flex w-full items-center justify-center rounded-md bg-primary-light enabled:hover:bg-rose-800 transition duration-75 px-5 py-2.5 text-sm font-medium text-white disabled:contrast-75 active:bg-primary">
+                                class="flex w-full items-center justify-center rounded-md bg-primary-light enabled:hover:bg-rose-800 transition duration-75 px-5 py-2.5 text-sm font-medium text-white disabled:contrast-75 enabled:active:bg-primary">
                                 <template v-if="isLoading">
                                     <SubmitionSpinner class="size-5 px-5" />
                                 </template>
