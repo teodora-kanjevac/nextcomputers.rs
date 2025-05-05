@@ -12,6 +12,9 @@ import orderRoutes from '~/src/routes/orderRoutes'
 import mailRoutes from '~/src/routes/mailRoutes'
 import ipsRoutes from '~/src/routes/ipsRoutes'
 import catalogRoutes from '~/src/routes/catalogRoutes'
+import authRoutes from '~/src/routes/authRoutes'
+import userRoutes from '~/src/routes/userRoutes'
+import cookieParser from 'cookie-parser'
 
 dotenv.config()
 const app: Application = express()
@@ -23,6 +26,7 @@ app.use(
         origin: 'http://localhost',
     })
 )
+app.use(cookieParser())
 
 app.use('/api/categories', categoryRoutes)
 app.use('/api/subcategories', subcategoryRoutes)
@@ -35,6 +39,8 @@ app.use('/api/order', orderRoutes)
 app.use('/api/mail', mailRoutes)
 app.use('/api/ips', ipsRoutes)
 app.use('/api/catalog', catalogRoutes)
+app.use('/api/auth', authRoutes)
+app.use('/api/user', userRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)

@@ -129,14 +129,15 @@ model subcategory {
 
 model user {
   user_id       String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  username      String   @unique(map: "username") @default("") @db.VarChar(100)
   email         String   @unique(map: "email") @default("") @db.VarChar(100)
   first_name    String?  @default("") @db.VarChar(50)
   last_name     String?  @default("") @db.VarChar(50)
   address       String?  @db.VarChar(255)
+  city          String?  @db.VarChar(50)
   phone_number  String?  @db.VarChar(50)
   created_at    DateTime @default(now()) @db.DateTime(0)
   password_hash String   @default("") @db.VarChar(255)
+  is_verified  Boolean  @default(false)
   cart          cart[]
   order         order[]
   review        review[]
