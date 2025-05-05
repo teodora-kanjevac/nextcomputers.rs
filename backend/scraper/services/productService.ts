@@ -1,7 +1,7 @@
 import prisma from '~/src/utils/prisma'
 import IsEqual from 'fast-deep-equal'
 import { Product } from '~/scraper/types/Product'
-import { filterProducts, hideNonExistantProducts } from '~/scraper/utils/productUtils'
+import { filterProducts } from '~/scraper/utils/productUtils'
 import { updateDistributorPrices } from '~/scraper/utils/distributorUtils'
 import { BATCH_SIZE } from '~/scraper/constants/constantValues'
 
@@ -13,7 +13,6 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
 
         let inserted = 0
         let updated = 0
-        let markedUnavailable = 0
 
         for (let i = 0; i < validProducts.length; i += BATCH_SIZE) {
             const batch = validProducts.slice(i, i + BATCH_SIZE)
@@ -30,6 +29,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     price: true,
                     retail_price: true,
                     sale_price: true,
+                    specification: true,
                     image_url: true,
                 },
             })
@@ -45,6 +45,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                     (!existingProduct.available ||
                         existingProduct.stock !== product.stock ||
                         existingProduct.retail_price.toNumber() !== parseFloat(product.retailPrice.toFixed(2)) ||
+                        !IsEqual(existingProduct.specification, product.specification) ||
                         !IsEqual(existingProduct.image_url, product.imageUrl))
                 )
             })
@@ -72,6 +73,7 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
                         where: { product_id: productId },
                         data: {
                             ...commonData,
+                            specification: product.specification,
                             image_url: product.imageUrl,
                         },
                     })
@@ -107,14 +109,11 @@ export const storeProducts = async (products: Product[]): Promise<void> => {
             await prisma.$transaction([insertOperations, ...updateOperations])
         }
 
-        markedUnavailable = await hideNonExistantProducts(validIdentifiers, productDistributor)
-
         await updateDistributorPrices(validProducts, productDistributor)
 
         console.log('Distributor:', productDistributor)
         console.log('Total products inserted:', inserted)
         console.log('Total products updated:', updated)
-        console.log('Total products marked unavailable:', markedUnavailable)
     } catch (error) {
         console.error('Error storing products:', error)
         throw error

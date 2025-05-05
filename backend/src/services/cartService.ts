@@ -159,6 +159,8 @@ export const removeUnavailableCartItems = async (cartId: string): Promise<number
 }
 
 export const clearCart = async (cartId: string): Promise<void> => {
+    if (!cartId) throw new Error('cartId is required')
+
     await prisma.cartitem.deleteMany({
         where: { cart_id: cartId },
     })

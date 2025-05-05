@@ -15,7 +15,7 @@ const router: Router = Router()
 
 router.delete('/remove-unavailable-items/:cartId', removeUnavailableItemsFromCart)
 router.delete('/remove-item/:cartItemId', removeItemFromCart)
-router.delete('/clear/:cartItemId', emptyCart)
+router.delete('/clear/:cartId', emptyCart)
 router.put('/last-accessed', updateLastVisitToCart)
 router.put('/update-quantity', updateQuantity)
 router.post('/add-item', addItemToCart)

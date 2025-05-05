@@ -1,6 +1,5 @@
 import { Product } from '~/scraper/types/Product'
 import { ProcessedImage } from '~/scraper/types/ProcessedImage'
-import prisma from '~/src/utils/prisma'
 import { parseEWEImages, sortImagesByConvention } from '~/scraper/utils/eweAPI/parseUtils'
 import { parseUsponAndDSCImages } from '~/scraper/utils/uspon&dscAPI/parseUtils'
 import { FIXED_SHIPPING_PRICE, SHIPPING_SUBCATEGORIES } from '~/scraper/constants/constantValues'
@@ -9,34 +8,6 @@ export const filterProducts = (products: Product[]): Product[] => {
     return products.filter(product => {
         return !product.isExcluded() && product.imageUrl && product.imageUrl.length > 0 && product.ean
     })
-}
-
-export const hideNonExistantProducts = async (identifiers: any, distributor: string): Promise<number> => {
-    const allDatabaseProducts = await prisma.product.findMany({
-        select: {
-            ean: true,
-            image_url: true,
-            stock: true,
-        },
-    })
-
-    const productsNotInApi = allDatabaseProducts.filter(
-        product => JSON.stringify(product.image_url).includes(distributor) && !identifiers.has(product.ean)
-    )
-
-    const productsWithZeroStock = allDatabaseProducts.filter(product => product.stock === 0)
-
-    const toHide = [...productsNotInApi, ...productsWithZeroStock]
-    const productsToHide = [...new Map(toHide.map(item => [item.ean, item])).values()]
-
-    await prisma.product.updateMany({
-        where: {
-            ean: { in: productsToHide.map(product => product.ean) },
-        },
-        data: { available: false, stock: 0 },
-    })
-
-    return productsToHide.length
 }
 
 export const parseImages = (imageUrl: any): ProcessedImage[] => {
