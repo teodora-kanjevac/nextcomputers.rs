@@ -26,18 +26,18 @@ export const editUserEmail = async (req: Request, res: Response) => {
     const verify = verifyEmailChange(token)
     console.log(verify)
     if (verify === true) {
-    try {
-        const userId = req.user?.id
-        console.log(req.user?.id)
-        const updatedUser = await changeUserEmail(email, userId)
+        try {
+            const userId = req.user?.id
+            console.log(req.user?.id)
+            const updatedUser = await changeUserEmail(email, userId)
 
-        res.status(200).json(updatedUser);
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(400).json({ error: error.message });
-        } else {
-            res.status(500).json({ error: 'Unexpected error occurred' });
-        }
+            res.status(200).json(updatedUser)
+        } catch (error) {
+            if (error instanceof Error) {
+                res.status(400).json({ error: error.message })
+            } else {
+                res.status(500).json({ error: 'Unexpected error occurred' })
+            }
         }
     }
 }

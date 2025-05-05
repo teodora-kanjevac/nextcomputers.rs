@@ -14,8 +14,7 @@ import ipsRoutes from '~/src/routes/ipsRoutes'
 import catalogRoutes from '~/src/routes/catalogRoutes'
 import authRoutes from '~/src/routes/authRoutes'
 import userRoutes from '~/src/routes/userRoutes'
-import cookieParser from "cookie-parser";
-import '~/src/jobs/cron-jobs'
+import cookieParser from 'cookie-parser'
 
 dotenv.config()
 const app: Application = express()
@@ -27,7 +26,7 @@ app.use(
         origin: 'http://localhost',
     })
 )
-app.use(cookieParser());
+app.use(cookieParser())
 
 app.use('/api/categories', categoryRoutes)
 app.use('/api/subcategories', subcategoryRoutes)

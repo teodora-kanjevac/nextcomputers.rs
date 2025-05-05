@@ -5,7 +5,7 @@ import { authUser } from '../middleware/authUser'
 
 const router: Router = Router()
 
-router.use(authUser);
+router.use(authUser)
 
 router.post('/verify-email', verifyUser)
 router.put('/:id', editUserInfo)

@@ -3,24 +3,24 @@ import { User } from '~/src/models/User'
 import { isNullObject } from '~/src/utils/ErrorHandling'
 
 export const fetchUsers = async (): Promise<User[]> => {
-    const user = await prisma.user.findMany();
-    return user.map(user => new User(user));
+    const user = await prisma.user.findMany()
+    return user.map(user => new User(user))
 }
 
 export const fetchUserFullName = async (userId: string): Promise<User> => {
     const user = await prisma.user.findUnique({
-        where:{
-            user_id: userId
+        where: {
+            user_id: userId,
         },
-        select:{
+        select: {
             first_name: true,
-            last_name: true
-        }
+            last_name: true,
+        },
     })
 
-    isNullObject('user', userId, user);
+    isNullObject('user', userId, user)
 
-    return new User(user);
+    return new User(user)
 }
 
 export const editBasicUserInfo = async (userId: string, userData: any): Promise<User> => {
@@ -28,9 +28,9 @@ export const editBasicUserInfo = async (userId: string, userData: any): Promise<
         where: {
             user_id: userId,
         },
-    });
+    })
 
-    isNullObject('user', userId, existingUser);
+    isNullObject('user', userId, existingUser)
 
     const user = await prisma.user.update({
         where: {
@@ -45,32 +45,32 @@ export const editBasicUserInfo = async (userId: string, userData: any): Promise<
         },
     })
 
-    isNullObject('user', userId, user);
+    isNullObject('user', userId, user)
 
-    return new User(user);
+    return new User(user)
 }
 
 export const changeUserEmail = async (email: any, userId?: string): Promise<User> => {
-        try {
+    try {
         const existingUser = await prisma.user.findUnique({
             where: {
                 user_id: userId,
             },
-        });
+        })
 
-        isNullObject('user', userId, existingUser);
+        isNullObject('user', userId, existingUser)
 
         const user = await prisma.user.update({
             where: {
                 user_id: userId,
             },
             data: {
-                email: email
+                email: email,
             },
         })
 
-        return new User(user) 
-        } catch (error) {
-            throw new Error(`Error updating user email: ${error}`);
-        }
+        return new User(user)
+    } catch (error) {
+        throw new Error(`Error updating user email: ${error}`)
+    }
 }
