@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { registerUser, loginUser, verifyEmail, generateToken } from '~/src/services/authService'
+import { fetchMe } from '~/src/services/userService'
 import jwt from 'jsonwebtoken'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
@@ -47,7 +48,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     }
 }
 
-export const logout = (res: Response): void => {
+export const logout = (req: Request, res: Response): void => {
     res.clearCookie('token')
     res.status(200).json({ message: 'Logged out successfully' })
 }
@@ -62,4 +63,21 @@ export const verifyUser = async (req: Request, res: Response): Promise<void> => 
 export const generate = async (req: Request, res: Response): Promise<void> => {
     const response = await generateToken(req.body.userId)
     res.status(200).json({ token: response })
+}
+
+export const getMe = async (req: Request, res: Response) => {
+    try{
+        const token = req.cookies.token;
+
+        if(!token) {
+            return res.status(400).send('User not authenticated')
+        }
+        else {
+            const decoded = jwt.decode(token) as { id: string }
+            const user = await fetchMe(decoded.id)
+            return res.status(200).json(user)
+        }
+    } catch (error) {
+        throw (error)
+    }
 }

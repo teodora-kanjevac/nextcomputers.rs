@@ -102,7 +102,7 @@ export const verifyEmailChange = (token: string): boolean => {
 export const generateToken = async (userId: string) => {
     try {
         const token = jwt.sign({ id: userId }, process.env.EMAIL_VERIFY_SECRET as string, {
-            expiresIn: '15m',
+            expiresIn: '24h',
         })
         console.log(userId)
         return token

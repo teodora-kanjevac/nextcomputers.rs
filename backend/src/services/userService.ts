@@ -7,6 +7,19 @@ export const fetchUsers = async (): Promise<User[]> => {
     return user.map(user => new User(user))
 }
 
+export const fetchMe= async (userId: string): Promise<User> => {
+    const user = await prisma.user.findUnique({
+        where: {
+            user_id: userId,
+        },
+        select: {
+            user_id: true,
+            email: true,
+        },
+    })
+    return new User(user)
+}
+
 export const fetchUserFullName = async (userId: string): Promise<User> => {
     const user = await prisma.user.findUnique({
         where: {
