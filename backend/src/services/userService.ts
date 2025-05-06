@@ -1,6 +1,7 @@
 import prisma from '~/src/utils/prisma'
 import { User } from '~/src/models/User'
 import { isNullObject } from '~/src/utils/ErrorHandling'
+import bcryptjs from 'bcryptjs'
 
 export const fetchUsers = async (): Promise<User[]> => {
     const user = await prisma.user.findMany()
@@ -85,5 +86,33 @@ export const changeUserEmail = async (email: any, userId?: string): Promise<User
         return new User(user)
     } catch (error) {
         throw new Error(`Error updating user email: ${error}`)
+    }
+}
+
+export const changeUserPassword = async (password: any, userId?: string): Promise<User> => {
+    try {
+        const existingUser = await prisma.user.findUnique({
+            where: {
+                user_id: userId,
+            },
+        })
+
+        isNullObject('user', userId, existingUser)
+
+        const hashPassword = await bcryptjs.hash(password, 10)
+
+        const user = await prisma.user.update({
+            where: {
+                user_id: userId,
+            },
+            data: {
+                password_hash: hashPassword,
+            },
+        })
+
+        return new User(user)
+    }
+    catch (error) {
+        throw new Error(`Error updating user password: ${error}`)
     }
 }

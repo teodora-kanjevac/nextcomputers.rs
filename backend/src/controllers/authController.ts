@@ -60,8 +60,13 @@ export const verifyUser = async (req: Request, res: Response): Promise<void> => 
     res.status(200).json(response)
 }
 
-export const generate = async (req: Request, res: Response): Promise<void> => {
-    const response = await generateToken(req.body.userId)
+export const generatePassToken = async (req: Request, res: Response): Promise<void> => {
+    const response = await generateToken(req.body.userId, process.env.PASSWORD_VERIFY_SECRET as string)
+    res.status(200).json({ token: response })
+}
+
+export const generateEmailToken = async (req: Request, res: Response): Promise<void> => {
+    const response = await generateToken(req.body.userId, process.env.EMAIL_VERIFY_SECRET as string)
     res.status(200).json({ token: response })
 }
 

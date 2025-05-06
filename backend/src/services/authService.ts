@@ -4,6 +4,7 @@ import bcryptjs from 'bcryptjs'
 import { RegisterUserDTO } from '~/src/DTOs/RegisterUser.dto'
 import { LoginUserDTO } from '~/src/DTOs/LoginUser.dto'
 import jwt from 'jsonwebtoken'
+import { regenerateExpiredEmailToken, regenerateExpiredPasswordToken } from '../utils/jwt/regenerateExpiredToken'
 
 export const registerUser = async (userData: RegisterUserDTO) => {
     const hashedPassword = await bcryptjs.hash(userData.password, 10)
@@ -59,7 +60,7 @@ export const loginUser = async (userData: LoginUserDTO) => {
 
 export const verifyEmail = async (token: string) => {
     try {
-        const payload = jwt.verify(token, process.env.EMAIL_VERIFY_SECRET!) as any as { id: string }
+        const payload = jwt.verify(token, process.env.EMAIL_VERIFY_SECRET as string) as any as { id: string }
         const user = await prisma.user.findUnique({ where: { user_id: payload.id } })
 
         if (user && !user.is_verified) {
@@ -76,10 +77,7 @@ export const verifyEmail = async (token: string) => {
 
         try {
             if (error.name === 'TokenExpiredError') {
-                const decoded = jwt.decode(token) as { id: string }
-                const newToken = generateToken(decoded?.id)
-
-                //Ovde stavi funkciju da se posalje mail :'D
+                await regenerateExpiredEmailToken(token)
             } else {
                 console.log('Unhandled JWT error type')
             }
@@ -89,19 +87,48 @@ export const verifyEmail = async (token: string) => {
     }
 }
 
-export const verifyEmailChange = (token: string): boolean => {
+export const verifyEmailChange = async (token: string) => {
     try {
-        const payload = jwt.verify(token, process.env.EMAIL_VERIFY_SECRET!) as { id: string }
-        console.log(payload)
+        const payload = jwt.verify(token, process.env.EMAIL_VERIFY_SECRET as string) as { id: string }
         return typeof payload.id === 'string'
-    } catch (error) {
-        return false
+    } catch (error: any) {
+        console.error('Token verification failed:', error.message)
+
+        try {
+            if (error.name === 'TokenExpiredError') {
+                await regenerateExpiredEmailToken(token)
+            } else {
+                console.log('Unhandled JWT error type')
+            }
+        } catch (error) {
+            console.log('Failed to send email:', error)
+        }
     }
 }
 
-export const generateToken = async (userId: string) => {
+export const verifyPasswordChange = async (token: string) => {
     try {
-        const token = jwt.sign({ id: userId }, process.env.EMAIL_VERIFY_SECRET as string, {
+        const payload = jwt.verify(token, process.env.PASSWORD_VERIFY_SECRET as string) as { id: string }
+        return typeof payload.id === 'string'
+    }
+    catch (error: any) {
+        console.error('Token verification failed:', error.message)
+
+        try {
+            if (error.name === 'TokenExpiredError') {
+                await regenerateExpiredPasswordToken(token)
+            } else {
+                console.log('Unhandled JWT error type')
+            }
+        } catch (error) {
+            console.log('Failed to send email:', error)
+        }
+    }
+}
+
+export const generateToken = async (userId: string, envSecret: string) => {
+    try {
+        const token = jwt.sign({ id: userId }, envSecret as string, {
             expiresIn: '24h',
         })
         console.log(userId)
