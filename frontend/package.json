@@ -23,7 +23,7 @@
   "dependencies": {
     "@fontsource-variable/montserrat": "^5.2.5",
     "@nuxt/image": "^1.10.0",
-    "@primevue/themes": "^4.3.3",
+    "@primevue/themes": "^4.3.4",
     "@splidejs/splide": "^4.1.4",
     "@splidejs/vue-splide": "^0.6.12",
     "@vueuse/core": "^12.8.2",
@@ -33,7 +33,7 @@
     "flowbite": "^2.5.2",
     "gsap": "^3.13.0",
     "http-proxy": "1.18.1",
-    "nuxt": "^3.17.1",
+    "nuxt": "^3.17.2",
     "nuxt-primevue": "^3.0.0",
     "pinia": "^2.3.1",
     "pinia-plugin-persistedstate": "^4.2.0",

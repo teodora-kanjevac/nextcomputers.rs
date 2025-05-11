@@ -2,16 +2,19 @@ import prisma from '~/src/utils/prisma'
 import { User } from '~/src/models/User'
 import { isNullObject } from '~/src/utils/ErrorHandling'
 import bcryptjs from 'bcryptjs'
+import jwt from 'jsonwebtoken'
 
 export const fetchUsers = async (): Promise<User[]> => {
     const user = await prisma.user.findMany()
     return user.map(user => new User(user))
 }
 
-export const fetchMe= async (userId: string): Promise<User> => {
+export const fetchMe= async (token: string): Promise<User> => {
+    const decoded = jwt.decode(token) as { id: string }
+
     const user = await prisma.user.findUnique({
         where: {
-            user_id: userId,
+            user_id: decoded.id,
         },
         select: {
             user_id: true,

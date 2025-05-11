@@ -53,21 +53,40 @@ export const logout = (req: Request, res: Response): void => {
     res.status(200).json({ message: 'Logged out successfully' })
 }
 
-export const verifyUser = async (req: Request, res: Response): Promise<void> => {
-    const { token } = req.body
+export const verifyUser = async (req: Request, res: Response) => {
+    const { token } = req.params
 
+    if (typeof token !== 'string') {
+        return res.status(400).json({ error: 'Invalid token' })
+    }
     const response = await verifyEmail(token)
     res.status(200).json(response)
 }
 
 export const generatePassToken = async (req: Request, res: Response): Promise<void> => {
+    try {
     const response = await generateToken(req.body.userId, process.env.PASSWORD_VERIFY_SECRET as string)
     res.status(200).json({ token: response })
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
 }
 
 export const generateEmailToken = async (req: Request, res: Response): Promise<void> => {
+    try {
     const response = await generateToken(req.body.userId, process.env.EMAIL_VERIFY_SECRET as string)
     res.status(200).json({ token: response })
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
 }
 
 export const getMe = async (req: Request, res: Response) => {
@@ -78,8 +97,7 @@ export const getMe = async (req: Request, res: Response) => {
             return res.status(400).send('User not authenticated')
         }
         else {
-            const decoded = jwt.decode(token) as { id: string }
-            const user = await fetchMe(decoded.id)
+            const user = await fetchMe(token)
             return res.status(200).json(user)
         }
     } catch (error) {
