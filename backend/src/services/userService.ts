@@ -9,7 +9,7 @@ export const fetchUsers = async (): Promise<User[]> => {
     return user.map(user => new User(user))
 }
 
-export const fetchMe= async (token: string): Promise<User> => {
+export const fetchMe = async (token: string): Promise<User> => {
     const decoded = jwt.decode(token) as { id: string }
 
     const user = await prisma.user.findUnique({
@@ -58,7 +58,7 @@ export const editBasicUserInfo = async (userId: string, userData: any): Promise<
             last_name: userData.lastName ?? existingUser!.last_name,
             address: userData.address ?? existingUser!.address,
             city: userData.city ?? existingUser!.city,
-            phone_number: userData.phoneNumber ?? existingUser!.phone_number,
+            phone_number: userData.phone ?? existingUser!.phone_number,
         },
     })
 

@@ -22,11 +22,11 @@ export const editUserInfo = async (req: Request, res: Response) => {
 export const editUserEmail = async (req: Request, res: Response) => {
     const { token } = req.params
     const email = req.body.email
+
     const verify = await verifyEmailChange(token)
-    if (verify === true) {
+    if (verify) {
         try {
             const userId = req.user?.id
-            console.log(req.user?.id)
             const updatedUser = await changeUserEmail(email, userId)
 
             res.status(200).json(updatedUser)
@@ -44,10 +44,9 @@ export const editUserPassword = async (req: Request, res: Response) => {
     const { token } = req.params
     const password = req.body.password
     const verify = await verifyPasswordChange(token)
-    if (verify === true) {
+    if (verify) {
         try {
             const userId = req.user?.id
-            console.log(req.user?.id)
             const updatedUser = await changeUserPassword(password, userId)
 
             res.status(200).json(updatedUser)

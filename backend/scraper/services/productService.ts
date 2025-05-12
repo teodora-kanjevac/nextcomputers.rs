@@ -8,7 +8,6 @@ import { BATCH_SIZE } from '~/scraper/constants/constantValues'
 export const storeProducts = async (products: Product[]): Promise<void> => {
     try {
         const validProducts = filterProducts(products)
-        const validIdentifiers = new Set(validProducts.map(product => product.ean))
         const productDistributor = new URL(validProducts[0].imageUrl[0].image).hostname
 
         let inserted = 0

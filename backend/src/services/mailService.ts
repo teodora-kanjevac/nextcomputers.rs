@@ -10,6 +10,10 @@ import { IPSOptionsDTO } from '~/src/DTOs/IPSOptions.dto'
 import { ContactDataDTO } from '~/src/DTOs/ContactData.dto'
 import { contactForm } from '~/src/mails/contactForm'
 import { contactTemplate } from '~/src/mails/templates/contactFormTemplate'
+import { registerForm } from '../mails/verificationEmail'
+import { resetPasswordForm } from '../mails/resetPassword'
+import { RegisterDataDTO } from '../DTOs/RegisterData.dto'
+import { verificationEmailTemplate } from '../mails/templates/verificationEmailTemplate'
 
 dotenv.config()
 
@@ -22,6 +26,11 @@ const transporter = nodemailer.createTransport({
         pass: process.env.MAIL_PASS as string,
     },
 })
+
+async function sendAMail(mailOptions: MailOptionsDTO): Promise<any> {
+    const info = await transporter.sendMail(mailOptions)
+    return info
+}
 
 export async function sendOrderConfirmationEmail(orderData: OrderDataDTO): Promise<any> {
     let qrAttachment: { filename: string; content: Buffer; contentType: string } | null = null
@@ -70,7 +79,37 @@ export async function sendContactEmail(contactData: ContactDataDTO): Promise<any
     return mailInfo
 }
 
-async function sendAMail(mailOptions: MailOptionsDTO): Promise<any> {
-    const info = await transporter.sendMail(mailOptions)
-    return info
+export async function sendEmailVerification(registerData: RegisterDataDTO): Promise<any> {
+    const formattedRegisterData = await registerForm(registerData)
+
+    const htmlContent = verificationEmailTemplate(formattedRegisterData)
+
+    const emailOptions: MailOptionsDTO = {
+        from: process.env.MAIL_FROM as string,
+        to: registerData.email,
+        subject: 'Verifikacija profila - nextcomputers.rs',
+        text: htmlToText(htmlContent),
+        html: htmlContent,
+    }
+
+    const mailInfo = await sendAMail(emailOptions)
+    return mailInfo
+}
+
+export async function sendPasswordResetEmail(email: string): Promise<any> {
+    const link = ''
+    const formattedResetPassData = await resetPasswordForm(email, link)
+
+    const htmlContent = contactTemplate(formattedResetPassData)
+
+    const emailOptions: MailOptionsDTO = {
+        from: process.env.MAIL_FROM as string,
+        to: email,
+        subject: 'Resetovanje lozinke - nextcomputers.rs',
+        text: htmlToText(htmlContent),
+        html: htmlContent,
+    }
+
+    const mailInfo = await sendAMail(emailOptions)
+    return mailInfo
 }

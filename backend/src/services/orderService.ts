@@ -31,7 +31,6 @@ export const createOrder = async (orderData: OrderDataDTO, token: string): Promi
         } else {
             userId = null
         }
-        console.log('User ID:', userId)
         const order = await prisma.order.create({
             data: {
                 order_id: generateOrderIdWithUUID(),
@@ -102,7 +101,7 @@ export const fetchOrderById = async (orderId: string): Promise<OrderDTO> => {
 }
 
 export const fetchOrderHistory = async (token: string): Promise<OrderDTO[]> => {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { id: string }    
+    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string }
     const userId = decoded.id
     const orders = await prisma.order.findMany({
         where: { user_id: userId },

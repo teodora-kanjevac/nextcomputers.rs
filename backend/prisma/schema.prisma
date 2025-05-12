@@ -162,3 +162,15 @@ model distributorprice {
   @@unique([ean, distributor_id])
   @@index([distributor_id], map: "distributorprice_distributor_id_fkey")
 }
+
+model pendingverification {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  token     String
+  fullname  String
+  expiresAt DateTime @db.DateTime(0)
+  createdAt DateTime @default(now()) @db.DateTime(0)
+
+  @@index([email])
+  @@index([expiresAt])
+}

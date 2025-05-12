@@ -9,7 +9,6 @@ export const setupSearchEngine = async () => {
         })
 
         if (products.length === 0) {
-            console.log('No products found to index.')
             return
         }
 
