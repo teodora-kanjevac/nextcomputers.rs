@@ -1,4 +1,4 @@
-export function useRateLimit(limit: number, interval: number, storageKey = 'rate_limit') {
+export function useRateLimit(limit: number, interval: number, storageKey: string) {
     const getLocalStorage = () => {
         if (typeof window === 'undefined') return null
         return localStorage

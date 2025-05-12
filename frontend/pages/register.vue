@@ -1,5 +1,6 @@
 <template>
     <div>
+        <Toast position="bottom-right" />
         <RegisterForm />
     </div>
 </template>

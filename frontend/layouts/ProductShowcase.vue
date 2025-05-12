@@ -29,32 +29,33 @@ import { Splide, SplideSlide } from '@splidejs/vue-splide'
 import 'assets/css/splide.css'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 import { useProductStore } from '~/stores/ProductStore'
-import { updateProductChunks, productChunks, chunkSize } from '~/composables/useSliderChunks'
+import { updateProductChunks, productChunks } from '~/composables/useSliderChunks'
 
 const productStore = useProductStore()
 const productCards = computed<ProductCardDTO[]>(() => productStore.showcaseProductCards)
 
 const { width } = useWindowSize()
+let chunkSize = 4
 
 watch(
     width,
     newWidth => {
         if (newWidth >= 1280) {
-            chunkSize.value = 4
+            chunkSize = 4
         } else if (newWidth >= 1024) {
-            chunkSize.value = 3
+            chunkSize = 3
         } else if (newWidth >= 640) {
-            chunkSize.value = 2
+            chunkSize = 2
         } else {
-            chunkSize.value = 1
+            chunkSize = 1
         }
     },
     { immediate: true }
 )
 
 onMounted(() => {
-    updateProductChunks(productCards.value)
-    watch(productCards, updateProductChunks, { immediate: true })
+    updateProductChunks(productCards.value, chunkSize)
+    watch(productCards, () => updateProductChunks(productCards.value, chunkSize), { immediate: true })
 })
 
 const options = {

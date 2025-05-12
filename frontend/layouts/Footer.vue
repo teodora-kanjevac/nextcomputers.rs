@@ -12,7 +12,7 @@
                     <Logo class="hidden lg:flex text-gray-200 font-medium" />
                     <span class="text-xs text-gray-300 flex justify-center gap-0.5 text-center">
                         Copyright © {{ new Date().getFullYear() }}
-                        <a href="/" class="hover:underline">nextcomputers.rs.</a>
+                        <NuxtLink to="/" class="hover:underline">nextcomputers.rs.</NuxtLink>
                         Sva prava zadržana.
                     </span>
                     <div class="flex space-x-4 justify-center">

@@ -16,6 +16,21 @@ export default defineNuxtConfig({
             ],
         },
     },
+    runtimeConfig: {
+        public: {
+            environment: process.env.NODE_ENV,
+            verifyBaseUrl: process.env.NUXT_PUBLIC_VERIFY_BASE_URL,
+            verifyDevUrl: process.env.NUXT_PUBLIC_VERIFY_DEV_URL,
+        },
+    },
+    imports: {
+        presets: [
+            {
+                from: 'pinia',
+                imports: ['acceptHMRUpdate'],
+            },
+        ],
+    },
     compatibilityDate: '2024-07-22',
     css: [
         '~/assets/css/base.sass',
@@ -36,6 +51,7 @@ export default defineNuxtConfig({
         '~/plugins/routeInfo.ts',
         { src: '~/plugins/cartSetup.client.ts', mode: 'client' },
         '~/plugins/primevue.ts',
+        '~/plugins/auth.ts',
     ],
     devtools: { enabled: true },
 })

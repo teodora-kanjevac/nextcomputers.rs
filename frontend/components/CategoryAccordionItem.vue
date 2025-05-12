@@ -13,11 +13,11 @@
         </h2>
         <div :id="bodyId" class="hidden" :aria-labelledby="headingId">
             <template v-for="subcategory in category.subcategories" :key="subcategory.id">
-                <a
-                    :href="`/proizvodi/${subcategory.id}`"
+                <NuxtLink
+                    :to="`/proizvodi/${subcategory.id}`"
                     class="p-2 ps-6 rounded block border-b border-gray-200 font-medium text-xs xl:text-sm text-gray-800 hover:bg-gray-200">
                     {{ subcategory.name }}
-                </a>
+                </NuxtLink>
             </template>
         </div>
     </div>

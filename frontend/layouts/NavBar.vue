@@ -19,9 +19,9 @@
                     </button>
 
                     <div class="relative md:flex-1 flex md:hidden">
-                        <a :href="`/korpa`" class="flex gap-3 p-2 text-gray-100 rounded">
+                        <NuxtLink to="/korpa" class="flex gap-3 p-2 text-gray-100 rounded">
                             <CartWithBadge class="size-6" />
-                        </a>
+                        </NuxtLink>
                     </div>
 
                     <div class="relative md:flex-1 hidden md:block">
@@ -39,7 +39,8 @@
                 </div>
 
                 <div class="hidden md:flex md:justify-end md:w-auto" id="navbar">
-                    <NavBarLinks />
+                    <NavBarSkeleton v-if="!authStore.hydrated" />
+                    <NavBarLinks v-else />
                 </div>
 
                 <div
@@ -68,6 +69,7 @@ import SearchIcon from '~/components/icons/SearchIcon.vue'
 import HamburgerIcon from '~/components/icons/HamburgerIcon.vue'
 import SearchBar from '~/components/SearchBar.vue'
 import Logo from '~/components/Logo.vue'
+import { useAuthStore } from '~/stores/AuthStore'
 
 const searchMenu = ref<HTMLElement | null>(null)
 const navbarMenu = ref<HTMLElement | null>(null)
@@ -75,6 +77,8 @@ const navbarRef = ref<HTMLElement | null>(null)
 
 const isSearchOpen = ref(false)
 const isNavbarOpen = ref(false)
+
+const authStore = useAuthStore()
 
 const isMobile = useMediaQuery('(max-width: 767px)')
 const { y } = useWindowScroll()

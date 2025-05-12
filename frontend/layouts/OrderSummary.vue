@@ -134,6 +134,7 @@ const handleOrder = async () => {
         await mailStore.sendMail(orderStore.orderData)
 
         cartStore.clearCart()
+        formStore.resetCheckoutForm()
 
         router.push({ path: '/potvrdjena-kupovina', query: { redirected: 'true' } })
     } catch (error) {
@@ -151,4 +152,9 @@ const handleOrder = async () => {
         isLoading.value = false
     }
 }
+
+onBeforeRouteLeave(() => {
+    formStore.resetCheckoutForm()
+    return true
+})
 </script>

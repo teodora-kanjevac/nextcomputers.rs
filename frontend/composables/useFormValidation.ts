@@ -4,8 +4,7 @@ export function useFormValidation(form: Ref<any>) {
             if (required && !form.value.firstName) return { valid: false, message: 'Ime je obavezno' }
             if (!required && !form.value.firstName) return { valid: true, message: '' }
             const firstNameCheck = /^[\p{L} ]+$/u
-            if (!firstNameCheck.test(form.value.firstName))
-                return { valid: false, message: 'Dozvoljena su samo slova' }
+            if (!firstNameCheck.test(form.value.firstName)) return { valid: false, message: 'Dozvoljena su samo slova' }
             return { valid: true, message: '' }
         })
 
@@ -14,8 +13,7 @@ export function useFormValidation(form: Ref<any>) {
             if (required && !form.value.lastName) return { valid: false, message: 'Prezime je obavezno' }
             if (!required && !form.value.lastName) return { valid: true, message: '' }
             const lastNameCheck = /^[\p{L} ]+$/u
-            if (!lastNameCheck.test(form.value.lastName))
-                return { valid: false, message: 'Dozvoljena su samo slova' }
+            if (!lastNameCheck.test(form.value.lastName)) return { valid: false, message: 'Dozvoljena su samo slova' }
             return { valid: true, message: '' }
         })
 
@@ -62,8 +60,11 @@ export function useFormValidation(form: Ref<any>) {
         computed(() => {
             if (required && !form.value.address) return { valid: false, message: 'Adresa je obavezna' }
             if (!required && !form.value.address) return { valid: true, message: '' }
-            const addressRegex = /[a-zA-Z]/
-            if (!addressRegex.test(form.value.address)) return { valid: false, message: 'Adresa mora sadržati slova' }
+            const hasLetter = /\p{L}/u.test(form.value.address)
+            const hasOnlyNumbers = /^[\d\s]+$/.test(form.value.address)
+            if (!hasLetter || hasOnlyNumbers) {
+                return { valid: false, message: 'Adresa mora sadržati slova' }
+            }
             return { valid: true, message: '' }
         })
 

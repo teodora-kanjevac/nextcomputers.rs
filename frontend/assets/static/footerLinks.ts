@@ -38,7 +38,7 @@ export const footerSections = [
         items: [
             { link: '/login', content: 'Prijavite se' },
             { link: '/register', content: 'Registracija' },
-            { link: '/', content: 'Zaboravljena lozinka' },
+            { link: '/forgot-password', content: 'Zaboravljena lozinka' },
         ],
     },
 ]

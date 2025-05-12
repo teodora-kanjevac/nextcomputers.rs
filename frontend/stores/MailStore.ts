@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { OrderData } from '~/shared/classes/OrderData'
 import type { ContactData } from '~/shared/classes/ContactData'
+import type { RegisterData } from '~/shared/classes/RegisterData'
 
 export const useMailStore = defineStore('mail', {
     state: () => ({}),
@@ -16,6 +17,13 @@ export const useMailStore = defineStore('mail', {
         async sendContactMail(contactData: ContactData) {
             try {
                 await axios.post(`/api/mail/contact`, contactData)
+            } catch (error) {
+                throw error
+            }
+        },
+        async sendVerificationMail(registerData: RegisterData) {
+            try {
+                await axios.post(`/api/mail/register`, registerData)
             } catch (error) {
                 throw error
             }

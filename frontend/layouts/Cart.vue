@@ -55,12 +55,12 @@
 
                             <div class="flex items-center justify-center gap-2">
                                 <span class="text-sm font-normal text-gray-500">ili</span>
-                                <a
-                                    href="/"
+                                <NuxtLink
+                                    to="/"
                                     class="inline-flex items-center gap-1 text-sm font-medium text-primary-light underline hover:no-underline">
                                     Nastavi sa kupovinom
                                     <ArrowRightIcon class="size-4 mt-0.5" />
-                                </a>
+                                </NuxtLink>
                             </div>
                         </div>
                     </div>
@@ -87,7 +87,7 @@ const emit = defineEmits(['nextStep'])
 function goToNextStep() {
     emit('nextStep')
 }
-
+let chunkSize = 3
 const productStore = useProductStore()
 const productCards = computed<ProductCardDTO[]>(() => productStore.showcaseProductCards)
 
@@ -101,8 +101,8 @@ const checkoutStore = useCheckoutStore()
 const selectedPaymentMethod = computed(() => checkoutStore.paymentMethod)
 
 onMounted(() => {
-    updateProductChunks(productCards.value)
-    watch(productCards, updateProductChunks, { immediate: true })
+    updateProductChunks(productCards.value, chunkSize)
+    watch(productCards, () => updateProductChunks(productCards.value, chunkSize), { immediate: true })
     productStore.fetchShowcaseProducts()
 })
 

@@ -1,7 +1,9 @@
 import { defineStore } from 'pinia'
 import type { CheckoutData } from '~/shared/classes/CheckoutData'
+import type { CheckoutMeta } from '~/shared/classes/CheckoutMeta'
 import type { ContactData } from '~/shared/classes/ContactData'
-import type { RegisterData } from '~/shared/classes/RegisterData'
+import type { LogInData } from '~/shared/classes/LogInData'
+import type { RegisterData } from '~/shared/classes/RegisterFormData'
 
 export const useFormStore = defineStore('forms', {
     state: () => ({
@@ -31,7 +33,7 @@ export const useFormStore = defineStore('forms', {
                     shippingPrice: 0,
                     totalPrice: 0,
                 },
-            } as CheckoutData,
+            } as CheckoutMeta,
         },
         register: {
             form: {
@@ -46,10 +48,63 @@ export const useFormStore = defineStore('forms', {
                 termsAccepted: false,
             } as RegisterData,
         },
+        login: {
+            form: {
+                email: '',
+                password: '',
+                rememberMe: false,
+            } as LogInData,
+        },
     }),
     actions: {
         setPaymentMethod(method: string) {
-            this.checkout.form.paymentMethod = method
+            this.checkout.meta.paymentMethod = method
+        },
+        resetContactForm() {
+            this.contact.form = {
+                fullname: '',
+                email: '',
+                comment: '',
+            }
+        },
+        resetCheckoutForm() {
+            this.checkout.form = {
+                fullname: '',
+                email: '',
+                address: '',
+                city: '',
+                zipcode: '',
+                phone: '',
+            }
+            this.checkout.meta.paymentMethod = ''
+            this.checkout.meta.paymentMethodText = ''
+            this.checkout.meta.paymentMethodDiscount = 1
+            this.checkout.meta.prices = {
+                productsPrice: 0,
+                discountPrice: 0,
+                shippingPrice: 0,
+                totalPrice: 0,
+            }
+        },
+        resetRegisterForm() {
+            this.register.form = {
+                firstName: '',
+                lastName: '',
+                email: '',
+                address: '',
+                city: '',
+                phone: '',
+                password: '',
+                confirmPassword: '',
+                termsAccepted: false,
+            }
+        },
+        resetLoginForm() {
+            this.login.form = {
+                email: '',
+                password: '',
+                rememberMe: false,
+            }
         },
     },
 })

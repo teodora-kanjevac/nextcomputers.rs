@@ -26,8 +26,8 @@
                             </NuxtLink>
                         </p>
 
-                        <form @submit.prevent="submitForm" class="space-y-5">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-y-3 gap-y-3">
+                        <form @submit.prevent="submitForm" class="space-y-4">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 md:gap-y-4 gap-y-3">
                                 <TextInput
                                     label="Ime"
                                     placeholder="Vaše ime"
@@ -117,7 +117,8 @@
                                         <NuxtLink
                                             to="/politika-privatnosti"
                                             class="text-primary font-medium hover:underline">
-                                            Politikom privatnosti</NuxtLink>
+                                            Politikom privatnosti
+                                        </NuxtLink>
                                         i
                                         <NuxtLink
                                             to="/uslovi-koriscenja"
@@ -134,12 +135,31 @@
                                 </p>
                             </div>
 
+                            <div
+                                v-if="registerError"
+                                :key="'error-' + shakeTriggerInvalidEmail"
+                                class="p-3 text-xs font-medium text-red-800 rounded-md bg-red-100 flex items-center animate-shake">
+                                <ErrorFillIcon class="size-5 me-1.5" />
+                                <p>
+                                    Nalog sa unešenim emailom već postoji. Zaboravili ste lozinku? Resetujte je
+                                    <NuxtLink to="forgot-password" class="font-semibold underline">
+                                        ovde
+                                    </NuxtLink>
+                                </p>
+                            </div>
+
                             <div class="flex items-center justify-center">
                                 <button
                                     type="submit"
-                                    class="w-full sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md hover:bg-rose-800 transition duration-100">
-                                    <PersonAddIcon class="size-5 me-1.5" />
-                                    Registruj se
+                                    class="w-full sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md disabled:contrast-75 enabled:hover:bg-rose-800 transition duration-100"
+                                    :disabled="sharedStore.loading">
+                                    <template v-if="sharedStore.loading">
+                                        <SubmitionSpinner class="size-6 px-5" />
+                                    </template>
+                                    <template v-else>
+                                        <PersonAddIcon class="size-5 me-1.5" />
+                                        Registruj se
+                                    </template>
                                 </button>
                             </div>
                         </form>
@@ -152,18 +172,31 @@
 
 <script setup lang="ts">
 import ArrowLeftIcon from '~/components/icons/ArrowLeftIcon.vue'
+import ErrorFillIcon from '~/components/icons/ErrorFillIcon.vue'
 import PersonAddIcon from '~/components/icons/PersonAddIcon.vue'
 import { useFormValidation } from '~/composables/useFormValidation'
+import { useNotification } from '~/composables/useNotification'
+import { RegisterData } from '~/shared/classes/RegisterData'
+import { useAuthStore } from '~/stores/AuthStore'
 import { useFormStore } from '~/stores/FormStore'
+import { useMailStore } from '~/stores/MailStore'
+import { useSharedStore } from '~/stores/SharedStore'
 
 const illustrationSrc = '/assets/images/shop-illustration.webp'
 
+const runtimeConfig = useRuntimeConfig()
 const formStore = useFormStore()
+const authStore = useAuthStore()
+const mailStore = useMailStore()
+const sharedStore = useSharedStore()
+const { showNotification } = useNotification()
 
 const form = ref(formStore.register.form)
 
 const formSubmitted = ref(false)
 const shakeTrigger = ref(0)
+const shakeTriggerInvalidEmail = ref(0)
+const registerError = ref(false)
 
 const {
     firstNameCheck,
@@ -191,12 +224,73 @@ const isFormInvalid = computed(() => {
     )
 })
 
-const submitForm = () => {
+const resetForm = () => {
+    formStore.resetRegisterForm()
+    formSubmitted.value = false
+}
+
+const submitForm = async () => {
     formSubmitted.value = true
     if (isFormInvalid.value) {
+        registerError.value = false
         shakeTrigger.value++
         return
     }
-    alert('Form submitted successfully!')
+    try {
+        sharedStore.loading = true
+        formStore.register.form = {
+            ...form.value,
+            phone: `+381 ${form.value.phone}`,
+        }
+
+        await authStore.registerUser(formStore.register.form)
+
+        const token = await authStore.generateEmailToken()
+
+        const link =
+            runtimeConfig.public.environment === 'production'
+                ? `${runtimeConfig.public.verifyBaseUrl}${token}`
+                : `${runtimeConfig.public.verifyDevUrl}${token}`
+
+        const registerData: RegisterData = {
+            fullname: `${form.value.firstName} ${form.value.lastName}`,
+            email: form.value.email,
+            link: link,
+        }
+
+        await authStore.storePendingVerification({
+            fullname: registerData.fullname,
+            email: registerData.email,
+            token: token,
+        })
+
+        await mailStore.sendVerificationMail(registerData)
+        resetForm()
+
+        await authStore.getMe()
+        useRouter()
+            .replace('/profil')
+            .then(() => {
+                window.location.reload()
+            })
+    } catch (error: any) {
+        if (error.message.includes('Email already in use')) {
+            registerError.value = true
+            shakeTriggerInvalidEmail.value++
+        } else {
+            showNotification(
+                'error',
+                'Greška pri kreiranju naloga!',
+                'Došlo je do greške pri kreiranju naloga. Molimo pokušajte ponovo kasnije.'
+            )
+        }
+    } finally {
+        sharedStore.loading = false
+    }
 }
+
+onBeforeRouteLeave(() => {
+    resetForm()
+    return true
+})
 </script>

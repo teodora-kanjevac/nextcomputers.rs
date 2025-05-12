@@ -1,6 +1,6 @@
 <template>
     <div>
-        <label class="block text-sm font-medium mb-1 ms-0.5">
+        <label class="block text-sm font-medium mb-1.5 ms-0.5">
             {{ label }}
             <span v-if="required" class="text-red-600">*</span>
         </label>

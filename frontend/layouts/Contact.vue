@@ -113,7 +113,7 @@ import { useFormStore } from '~/stores/FormStore'
 import { useSharedStore } from '~/stores/SharedStore'
 
 const { showNotification } = useNotification()
-const { checkLimit } = useRateLimit(3, 2 * 60 * 60 * 1000)
+const { checkLimit } = useRateLimit(3, 2 * 60 * 60 * 1000, 'rate-limit-contact')
 
 const formStore = useFormStore()
 const mailStore = useMailStore()
@@ -131,12 +131,7 @@ const isFormInvalid = computed(() => {
 })
 
 const resetForm = () => {
-    formStore.contact.form = {
-        fullname: '',
-        email: '',
-        comment: '',
-    }
-    Object.assign(form.value, formStore.contact.form)
+    formStore.resetContactForm()
     formSubmitted.value = false
 }
 
@@ -179,4 +174,9 @@ const submitForm = async () => {
         sharedStore.setLoading(false)
     }
 }
+
+onBeforeRouteLeave(() => {
+    resetForm()
+    return true
+})
 </script>

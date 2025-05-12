@@ -75,7 +75,7 @@
 
                     <div
                         class="w-full space-y-6 lg:max-w-xs xl:max-w-md rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
-                        <CheckoutPrice :selectedPaymentMethod="formStore.checkout.form.paymentMethod" />
+                        <CheckoutPrice :selectedPaymentMethod="formStore.checkout.meta.paymentMethod" />
 
                         <div class="space-y-3">
                             <button

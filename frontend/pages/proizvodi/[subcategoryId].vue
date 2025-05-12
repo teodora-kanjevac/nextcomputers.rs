@@ -14,10 +14,12 @@ import ProductsBySubcategory from '~/layouts/ProductsBySubcategory.vue'
 import { useCategoryStore } from '~/stores/CategoryStore'
 import { useFilterStore } from '~/stores/FilterStore'
 import { usePageTitle } from '~/composables/useTitle'
+import { useProductStore } from '~/stores/ProductStore'
 
 const route = useRoute()
 const categoryStore = useCategoryStore()
 const filterStore = useFilterStore()
+const productStore = useProductStore()
 const { updateTitle } = usePageTitle()
 
 const subcategoryId = parseInt(route.params.subcategoryId as string)
@@ -34,7 +36,8 @@ watch(
 )
 
 onMounted(() => {
-    filterStore.fetchFilteredProducts(subcategoryId)
+    filterStore.resetFilters()
+    filterStore.fetchFilteredProducts(subcategoryId, true)
     categoryStore.fetchCategories()
     filterStore.fetchFilters(subcategoryId)
 })
