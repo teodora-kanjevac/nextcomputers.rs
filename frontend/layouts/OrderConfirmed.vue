@@ -34,6 +34,10 @@
                         <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Broj telefona</dt>
                         <dd class="font-medium text-gray-900 sm:text-end">{{ order.form.phone }}</dd>
                     </dl>
+                    <dl v-if="order.form.pib" class="sm:flex items-center justify-between gap-4">
+                        <dt class="font-normal mb-1 sm:mb-0 text-gray-700">PIB firme</dt>
+                        <dd class="font-medium text-gray-900 sm:text-end">{{ order.form.pib }}</dd>
+                    </dl>
                 </div>
                 <div v-if="order.paymentMethod === 'advance'">
                     <div class="flex items-center justify-center pb-14">

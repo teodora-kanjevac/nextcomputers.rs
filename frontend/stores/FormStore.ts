@@ -3,7 +3,7 @@ import type { CheckoutData } from '~/shared/classes/CheckoutData'
 import type { CheckoutMeta } from '~/shared/classes/CheckoutMeta'
 import type { ContactData } from '~/shared/classes/ContactData'
 import type { LogInData } from '~/shared/classes/LogInData'
-import type { RegisterData } from '~/shared/classes/RegisterFormData'
+import type { RegisterFormData } from '~/shared/classes/RegisterFormData'
 
 export const useFormStore = defineStore('forms', {
     state: () => ({
@@ -22,6 +22,7 @@ export const useFormStore = defineStore('forms', {
                 city: '',
                 zipcode: '',
                 phone: '',
+                pib: '',
             } as CheckoutData,
             meta: {
                 paymentMethod: '',
@@ -46,7 +47,7 @@ export const useFormStore = defineStore('forms', {
                 password: '',
                 confirmPassword: '',
                 termsAccepted: false,
-            } as RegisterData,
+            } as RegisterFormData,
         },
         login: {
             form: {
@@ -75,6 +76,7 @@ export const useFormStore = defineStore('forms', {
                 city: '',
                 zipcode: '',
                 phone: '',
+                pib: '',
             }
             this.checkout.meta.paymentMethod = ''
             this.checkout.meta.paymentMethodText = ''

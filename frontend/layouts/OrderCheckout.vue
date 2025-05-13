@@ -7,7 +7,7 @@
                         class="min-w-0 flex-1 space-y-6 rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-8 mb-5">
                         <div class="space-y-4">
                             <p class="font-semibold text-xl lg:text-2xl ps-0.5 pb-2 sm:pb-4">Informacije o dostavi</p>
-                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                            <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 border-b border-gray-200 pb-6">
                                 <div>
                                     <TextInput
                                         label="Ime i prezime"
@@ -70,6 +70,16 @@
                                         :shakeTrigger="shakeTrigger" />
                                 </div>
                             </div>
+                            <div>
+                                <TextInput
+                                    label="PIB (samo za firme)"
+                                    placeholder="Unesite PIB firme"
+                                    :required="false"
+                                    v-model="form.pib"
+                                    :showError="!PIBCheck(false).value.valid && formSubmitted"
+                                    :errorMessage="PIBCheck(false).value.message"
+                                    :shakeTrigger="shakeTrigger" />
+                            </div>
                         </div>
                     </div>
 
@@ -108,7 +118,7 @@ const form = ref(formStore.checkout.form)
 const formSubmitted = ref(false)
 const shakeTrigger = ref(0)
 
-const { fullNameCheck, emailCheck, phoneCheck, addressCheck, cityCheck, zipcodeCheck } = useFormValidation(form)
+const { fullNameCheck, emailCheck, phoneCheck, addressCheck, cityCheck, zipcodeCheck, PIBCheck } = useFormValidation(form)
 
 const isFormInvalid = computed(() => {
     return !(
@@ -117,7 +127,8 @@ const isFormInvalid = computed(() => {
         addressCheck().value.valid &&
         cityCheck().value.valid &&
         phoneCheck().value.valid &&
-        zipcodeCheck().value.valid
+        zipcodeCheck().value.valid &&
+        PIBCheck(false).value.valid
     )
 })
 

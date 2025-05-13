@@ -87,6 +87,15 @@ export function useFormValidation(form: Ref<any>) {
             return { valid: true, message: '' }
         })
 
+    const PIBCheck = (required: boolean = true) =>
+        computed(() => {
+            if (!required && !form.value.pib) return { valid: true, message: '' }
+            const PIBRegex = /^\d+$/
+            if (!PIBRegex.test(form.value.pib))
+                return { valid: false, message: 'Dozvoljeni su samo brojevi' }
+            return { valid: true, message: '' }
+        })
+
     const passwordCheck = computed(() => {
         const password = form.value.password
         if (!password) {
@@ -138,6 +147,7 @@ export function useFormValidation(form: Ref<any>) {
         addressCheck,
         cityCheck,
         zipcodeCheck,
+        PIBCheck,
         commentCheck,
         passwordCheck,
         passwordLoginCheck,

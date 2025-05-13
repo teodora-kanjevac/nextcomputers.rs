@@ -5,6 +5,7 @@ export class CheckoutData {
     public city: string
     public zipcode: string
     public phone: string
+    public pib: string
 
     constructor(data: any) {
         this.fullname = data.fullname
@@ -13,5 +14,6 @@ export class CheckoutData {
         this.city = data.city
         this.zipcode = data.zipcode
         this.phone = data.phone
+        this.pib = data.pib
     }
 }

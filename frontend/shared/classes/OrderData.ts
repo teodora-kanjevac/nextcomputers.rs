@@ -22,6 +22,7 @@ export class OrderData {
         city: string
         zipcode: string
         phone: string
+        pib: string
     }
     public paymentMethod: string
     public paymentMethodText: string

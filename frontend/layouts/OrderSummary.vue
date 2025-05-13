@@ -89,14 +89,22 @@ const isLoading = ref(false)
 
 const cartItems = computed<CartItemDTO[]>(() => cartStore.cart.cartItems)
 
-const userDetails = computed(() => [
-    { label: 'Ime i prezime', value: formStore.checkout.form.fullname },
-    { label: 'Email adresa', value: formStore.checkout.form.email },
-    { label: 'Broj telefona', value: `+381 ${formStore.checkout.form.phone}` },
-    { label: 'Adresa dostave', value: formStore.checkout.form.address },
-    { label: 'Grad', value: formStore.checkout.form.city },
-    { label: 'Poštanski broj', value: formStore.checkout.form.zipcode },
-])
+const userDetails = computed(() => {
+    const details = [
+        { label: 'Ime i prezime', value: formStore.checkout.form.fullname },
+        { label: 'Email adresa', value: formStore.checkout.form.email },
+        { label: 'Broj telefona', value: `+381 ${formStore.checkout.form.phone}` },
+        { label: 'Adresa dostave', value: formStore.checkout.form.address },
+        { label: 'Grad', value: formStore.checkout.form.city },
+        { label: 'Poštanski broj', value: formStore.checkout.form.zipcode },
+    ]
+
+    if (formStore.checkout.form.pib && formStore.checkout.form.pib.trim() !== '') {
+        details.push({ label: 'PIB firme', value: formStore.checkout.form.pib })
+    }
+
+    return details
+})
 
 const paymentMethod = computed(() => formStore.checkout.meta.paymentMethodText)
 

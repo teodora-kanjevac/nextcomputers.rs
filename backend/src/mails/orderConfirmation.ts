@@ -22,6 +22,7 @@ export const orderConfirmationData = async (orderData: OrderDataDTO): Promise<an
         customerCity: orderData.form.city,
         customerZipcode: orderData.form.zipcode,
         customerPhoneNumber: orderData.form.phone,
+        customerPIB: orderData.form.pib,
         paymentMethod: orderData.paymentMethodText,
     }
 }

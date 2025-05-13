@@ -22,6 +22,7 @@ export interface IOrderDataDTO {
         city: string
         zipcode: string
         phone: string
+        pib: string
     }
     paymentMethod: string
     paymentMethodText: string
