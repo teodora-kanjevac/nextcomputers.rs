@@ -20,8 +20,8 @@ export class Catalog {
         this.product_mpn = catalog.name
         this.product_name = catalog.name
         this.product_url = 'https://nextcomputers.rs/proizvod/' + catalog.product_id
-        this.product_price = parseInt(catalog.sale_price)
-        this.product_price_discount = Math.round(catalog.sale_price * 0.99)
+        this.product_price = catalog.discount_price ? parseInt(catalog.discount_price) : parseInt(catalog.sale_price)
+        this.product_price_discount = Math.round(this.product_price * 0.99)
         this.product_description = catalog.name
         this.product_image_urls = {
             product_image_url: Array.isArray(catalog.image_url)

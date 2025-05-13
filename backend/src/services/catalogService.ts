@@ -17,6 +17,7 @@ export const fetchCatalog = async () => {
             product_id: true,
             brand: true,
             sale_price: true,
+            discount_price: true,
             ean: true,
             stock: true,
             name: true,
