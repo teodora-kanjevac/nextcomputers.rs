@@ -2,11 +2,17 @@ import { Product } from '~/scraper/types/Product'
 import { ProcessedImage } from '~/scraper/types/ProcessedImage'
 import { parseEWEImages, sortImagesByConvention } from '~/scraper/utils/eweAPI/parseUtils'
 import { parseUsponAndDSCImages } from '~/scraper/utils/uspon&dscAPI/parseUtils'
-import { FIXED_SHIPPING_PRICE, SHIPPING_SUBCATEGORIES } from '~/scraper/constants/constantValues'
+import { BLACKLISTED_PRODUCTS, FIXED_SHIPPING_PRICE, SHIPPING_SUBCATEGORIES } from '~/scraper/constants/constantValues'
 
 export const filterProducts = (products: Product[]): Product[] => {
     return products.filter(product => {
-        return !product.isExcluded() && product.imageUrl && product.imageUrl.length > 0 && product.ean
+        return (
+            !product.isExcluded() &&
+            product.imageUrl &&
+            product.imageUrl.length > 0 &&
+            product.ean &&
+            !BLACKLISTED_PRODUCTS.has(product.ean)
+        )
     })
 }
 
