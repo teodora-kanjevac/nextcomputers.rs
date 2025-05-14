@@ -1,16 +1,15 @@
 import prisma from '~/src/utils/prisma'
 import { Catalog } from '~/src/models/Catalog'
-import { EXCLUDED_CATEGORIES } from '~/src/utils/filter/globalFilterSettings'
+import { EXCLUDED_CATEGORIES, EXCLUDED_SUBCATEGORIES } from '~/src/utils/filter/globalFilterSettings'
 
 export const fetchCatalog = async () => {
     const catalog = await prisma.product.findMany({
         where: {
             subcategory: {
-                NOT: {
-                    category: {
-                        category_id: { in: Array.from(EXCLUDED_CATEGORIES) },
-                    },
-                },
+                NOT: [
+                    { category: { category_id: { in: Array.from(EXCLUDED_CATEGORIES) }, }, },
+                    { subcategory_id: { in: Array.from(EXCLUDED_SUBCATEGORIES) }, },
+                ],
             },
         },
         select: {

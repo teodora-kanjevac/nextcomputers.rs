@@ -44,4 +44,5 @@ export const SUBCATEGORY_FILTER_MAP: Record<number, string[]> = {
     1047: [ 'Boja', 'Veličina ekrana', 'Rezolucija ekrana', 'Dijagonala ekrana', 'Tip panela', 'RAM memorija', 'Unutrašnja memorija' ], //Tableti
 }
 
-export const EXCLUDED_CATEGORIES = new Set<number>([106, 108,])
+export const EXCLUDED_CATEGORIES = new Set<number>([106, 108, 105,])
+export const EXCLUDED_SUBCATEGORIES = new Set<number>([1004, 1005,])
