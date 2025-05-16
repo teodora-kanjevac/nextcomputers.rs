@@ -3,9 +3,10 @@ export class User {
     public email: string
     public firstName: string
     public lastName: string
+    public phone: string
     public address: string
     public city: string
-    public phone: string
+    public zipcode: string
 
     constructor(user: any) {
         this.id = user.id
@@ -15,5 +16,6 @@ export class User {
         this.address = user.address
         this.city = user.city
         this.phone = user.phone
+        this.zipcode = user.zipcode
     }
 }

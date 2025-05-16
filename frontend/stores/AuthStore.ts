@@ -2,12 +2,12 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { RegisterFormData } from '~/shared/classes/RegisterFormData'
 import type { LogInData } from '~/shared/classes/LogInData'
-import type { User } from '~/shared/classes/User'
+import type { UserMe } from '~/shared/classes/UserMe'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         loginUserData: {} as LogInData,
-        user: null as User | null,
+        user: null as UserMe | null,
         hydrated: false,
     }),
     getters: {

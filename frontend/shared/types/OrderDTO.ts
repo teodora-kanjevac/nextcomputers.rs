@@ -1,4 +1,4 @@
-import type { OrderProductDTO } from './OrderProduct'
+import type { OrderProductDTO } from './OrderProductDTO'
 
 export interface OrderDTO {
     id: string

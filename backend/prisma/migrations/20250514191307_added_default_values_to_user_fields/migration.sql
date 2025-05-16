@@ -1,0 +1,5 @@
+-- AlterTable
+ALTER TABLE `user` MODIFY `address` VARCHAR(255) NULL DEFAULT '',
+    MODIFY `phone_number` VARCHAR(50) NULL DEFAULT '',
+    MODIFY `city` VARCHAR(50) NULL DEFAULT '',
+    MODIFY `zipcode` VARCHAR(10) NULL DEFAULT '';

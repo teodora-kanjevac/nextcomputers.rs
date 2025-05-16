@@ -1,14 +1,14 @@
 <template>
-    <div>
-        <section class="py-8 md:py-16">
-            <div class="mx-auto max-w-screen-xl px-5 2xl:px-0">
+    <div class="min-h-screen py-10">
+        <div class="max-w-screen-xl mx-auto px-5 2xl:px-0">
+            <div class="mx-auto">
                 <h2 class="font-semibold text-xl sm:text-2xl ps-0.5 pb-2 sm:pb-4 border-b-2 border-gray-200">
                     Vaša korpa
                 </h2>
 
                 <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
                     <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-                        <div class="space-y-3">
+                        <div class="space-y-2">
                             <template v-for="cartItem in cartItems">
                                 <CartItem :cart-item="cartItem" />
                             </template>
@@ -16,13 +16,13 @@
                         <div class="flex justify-end">
                             <button
                                 @click="emptyCart"
-                                class="flex me-0.5 my-6 px-5 py-2 text-gray-800 bg-gray-200 hover:bg-gray-300 border border-gray-300 font-medium text-sm rounded-lg">
+                                class="flex me-0.5 my-5 px-4 py-2 text-gray-800 bg-gray-200 hover:bg-gray-300 border border-gray-300 font-medium text-sm rounded-md">
                                 <TrashCanIcon class="size-5 me-1" />
                                 Isprazni korpu
                             </button>
                         </div>
-                        <hr class="border-b border-gray-200" />
-                        <div class="hidden xl:mt-14 xl:block">
+                        <hr class="mt-2 border-b border-gray-200" />
+                        <div class="hidden xl:my-14 xl:block">
                             <h3 class="font-semibold text-xl sm:text-2xl ps-0.5 pb-4 sm:pb-6">
                                 Možda ste zainteresovani i za
                             </h3>
@@ -66,7 +66,7 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </div>
     </div>
 </template>
 

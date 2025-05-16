@@ -15,18 +15,9 @@
             </li>
             <template v-if="authStore.isLoggedIn">
                 <li>
-                    <button
-                        @click="handleLogout"
-                        class="flex gap-3.5 p-2 w-full text-gray-100 hover:bg-gray-600 rounded"
-                        aria-current="page">
-                        <LogInIcon class="size-5" />
-                        Odjavi se
-                    </button>
-                </li>
-                <li>
                     <NuxtLink to="/" class="flex gap-3 p-2 text-gray-100 hover:bg-gray-600 rounded">
-                        <PersonIcon class="size-5 ms-0.5" />
-                        <span>Vaš nalog</span>
+                        <AccountIcon class="size-6 pb-0.5" />
+                        <span class="pt-0.5">Vaš nalog</span>
                     </NuxtLink>
                 </li>
             </template>
@@ -45,21 +36,12 @@
 import ProductsIcon from './icons/ProductsIcon.vue'
 import HouseOutlineIcon from './icons/HouseOutlineIcon.vue'
 import LogInIcon from './icons/LogInIcon.vue'
-import PersonIcon from './icons/PersonIcon.vue'
+import AccountIcon from './icons/AccountIcon.vue'
 import { useAuthStore } from '~/stores/AuthStore'
 
 const authStore = useAuthStore()
 
-const handleLogout = async () => {
-    try {
-        await authStore.logoutUser()
-        window.location.reload()
-    } catch (error) {
-        console.error('Logout error:', error)
-    }
-}
-
-onMounted(() => {
-    authStore.getMe()
+onMounted(async () => {
+    await authStore.getMe()
 })
 </script>

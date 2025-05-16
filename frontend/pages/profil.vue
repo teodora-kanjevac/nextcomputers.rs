@@ -13,15 +13,15 @@
 <script setup lang="ts">
 import NavBar from '~/layouts/NavBar.vue'
 import Footer from '~/layouts/Footer.vue'
-import { useSharedStore } from '~/stores/SharedStore'
 import { useAuthStore } from '~/stores/AuthStore'
 import AccountOverview from '~/layouts/AccountOverview.vue'
+import { useUserStore } from '~/stores/UserStore'
 
 const { updateTitle } = usePageTitle()
 updateTitle('Vaš profil')
 
-const sharedStore = useSharedStore()
 const authStore = useAuthStore()
+const userStore = useUserStore()
 const nuxtApp = useNuxtApp()
 
 const pageLoading = ref(true)
@@ -41,10 +41,10 @@ onMounted(async () => {
                 }, 200)
             }
         }
-
         checkStatus()
     } else {
         await authStore.getMe()
+        await userStore.fetchUserInfo()
         pageLoading.value = false
     }
 })

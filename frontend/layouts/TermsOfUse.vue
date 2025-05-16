@@ -97,7 +97,7 @@
                         Korisnika vrši se o trošku NEXTCOMPUTERS.RS, osim ako se u narudžbini ne nalazi neki od proizvoda iz kategorija: 
                         Bela Tehnika, Klima uređaji i grejna tela, Alati i baštenska oprema. Svi naručeni proizvodi ispod 10.000 RSD šalju se
                         kurirskom službom a troškovi isporuke padaju na teret kupaca. Cena isporuke je 490 RSD. 
-                        Za određene proizvode (koji se nalaze u kategorijama napomenutim iznad) je cena isporuke 1490 RSD.
+                        Za određene proizvode (koji se nalaze u kategorijama napomenutim iznad) je cena isporuke 1990 RSD.
                     </p>
                 </div>
 
@@ -419,7 +419,7 @@
                         Dostava naručenih Proizvoda putem Veb prodavnice vrši se na adresu koju je Korisnik
                         naveo prilikom kupovine. Cena dostave je 490 RSD, a za proizvode iz kategorije Bela Tehnika, 
                         Klima uređaji i grejna tela, neke od podkategorija iz Alati i baštenska oprema i 
-                        Fitnes, sport i zabava je cena dostave 1490 RSD. 
+                        Fitnes, sport i zabava je cena dostave 1990 RSD. 
                         Dostava je moguća isključivo na teritoriji Republike Srbije.
                     </p>
                     <p class="mb-4">

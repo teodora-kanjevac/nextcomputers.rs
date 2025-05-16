@@ -13,7 +13,7 @@ export const deleteUnavailableItems = async (cartId: string): Promise<void> => {
 export function calculateShippingPrice(totalBeforeShipping: number): number {
     const cartStore = useCartStore()
 
-    const customShipping = 1490
+    const customShipping = 1990
     let totalShippingPrice = 0
 
     const hasCustomShippingCostProducts = cartStore.cart.cartItems.some(

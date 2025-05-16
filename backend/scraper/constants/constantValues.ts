@@ -1,4 +1,4 @@
-export const FIXED_SHIPPING_PRICE = 1490
+export const FIXED_SHIPPING_PRICE = 1990
 
 export const BATCH_SIZE = 100
 

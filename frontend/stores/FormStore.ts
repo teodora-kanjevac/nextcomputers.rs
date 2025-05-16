@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import type { CheckoutData } from '~/shared/classes/CheckoutData'
 import type { CheckoutMeta } from '~/shared/classes/CheckoutMeta'
 import type { ContactData } from '~/shared/classes/ContactData'
+import type { EditUserData } from '~/shared/classes/EditUserData'
 import type { LogInData } from '~/shared/classes/LogInData'
 import type { RegisterFormData } from '~/shared/classes/RegisterFormData'
 
@@ -48,6 +49,17 @@ export const useFormStore = defineStore('forms', {
                 confirmPassword: '',
                 termsAccepted: false,
             } as RegisterFormData,
+        },
+        editUserData: {
+            form: {
+                firstName: '',
+                lastName: '',
+                email: '',
+                address: '',
+                city: '',
+                phone: '',
+                zipcode: '',
+            } as EditUserData,
         },
         login: {
             form: {
@@ -99,6 +111,16 @@ export const useFormStore = defineStore('forms', {
                 password: '',
                 confirmPassword: '',
                 termsAccepted: false,
+            }
+        },
+        resetEditUserForm() {
+            this.editUserData.form = {
+                firstName: '',
+                lastName: '',
+                address: '',
+                city: '',
+                phone: '',
+                zipcode: '',
             }
         },
         resetLoginForm() {

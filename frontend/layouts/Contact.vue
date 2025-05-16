@@ -82,7 +82,7 @@
                             </div>
                             <button
                                 type="submit"
-                                class="py-3 px-4 w-1/3 text-sm font-medium text-center flex items-center justify-center text-white rounded-md bg-primary-light sm:w-fit disabled:contrast-75 enabled:hover:bg-rose-800"
+                                class="py-2.5 px-4 w-1/3 text-sm font-medium text-center flex items-center justify-center text-white rounded-md bg-primary-light sm:w-fit disabled:contrast-75 enabled:hover:bg-rose-800"
                                 :disabled="sharedStore.loading">
                                 <template v-if="sharedStore.loading">
                                     <SubmitionSpinner class="size-5 px-5" />

@@ -142,9 +142,7 @@
                                 <ErrorFillIcon class="size-5 me-1.5" />
                                 <p>
                                     Nalog sa unešenim emailom već postoji. Zaboravili ste lozinku? Resetujte je
-                                    <NuxtLink to="forgot-password" class="font-semibold underline">
-                                        ovde
-                                    </NuxtLink>
+                                    <NuxtLink to="forgot-password" class="font-semibold underline">ovde</NuxtLink>
                                 </p>
                             </div>
 
@@ -240,7 +238,7 @@ const submitForm = async () => {
         sharedStore.loading = true
         formStore.register.form = {
             ...form.value,
-            phone: `+381 ${form.value.phone}`,
+            phone: `+381 ${form.value.phone.replace(/^0/, '')}`,
         }
 
         await authStore.registerUser(formStore.register.form)
