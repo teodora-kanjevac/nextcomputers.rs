@@ -3,7 +3,7 @@ import { OrderDataDTO } from '~/src/DTOs/OrderData.dto'
 import { isNullObject } from '~/src/utils/ErrorHandling'
 import { OrderDTO } from '~/src/DTOs/Order.dto'
 import { generateOrderIdWithUUID } from '~/src/utils/order/generateOrderId'
-import { fetchMe } from './userService'
+import { fetchMe } from '~/src/services/userService'
 import jwt from 'jsonwebtoken'
 
 export const createOrder = async (orderData: OrderDataDTO, token: string): Promise<OrderDTO> => {
@@ -43,6 +43,21 @@ export const createOrder = async (orderData: OrderDataDTO, token: string): Promi
                         quantity: product.quantity,
                     })),
                 },
+                orderinfo: {
+                    create: {
+                        name: orderData.form.fullname,
+                        address: orderData.form.address,
+                        phone_number: orderData.form.phone,
+                        email: orderData.form.email,
+                        city: orderData.form.city,
+                        zipcode: orderData.form.zipcode,
+                        payment_method: orderData.paymentMethod,
+                        subtotal_price: orderData.prices.productsPrice,
+                        shipping_price: orderData.prices.shippingPrice,
+                        discount_price: orderData.prices.discountPrice || 0,
+                        pib: orderData.form.pib || null,
+                    },
+                },
             },
             include: {
                 orderdetails: {
@@ -60,6 +75,23 @@ export const createOrder = async (orderData: OrderDataDTO, token: string): Promi
                                 image_url: true,
                             },
                         },
+                    },
+                },
+                orderinfo: {
+                    select: {
+                        order_info_id: true,
+                        order_id: true,
+                        name: true,
+                        email: true,
+                        phone_number: true,
+                        address: true,
+                        city: true,
+                        zipcode: true,
+                        pib: true,
+                        payment_method: true,
+                        subtotal_price: true,
+                        discount_price: true,
+                        shipping_price: true,
                     },
                 },
             },
@@ -90,6 +122,23 @@ export const fetchOrderById = async (orderId: string): Promise<OrderDTO> => {
                             image_url: true,
                         },
                     },
+                },
+            },
+            orderinfo: {
+                select: {
+                    order_info_id: true,
+                    order_id: true,
+                    name: true,
+                    email: true,
+                    phone_number: true,
+                    address: true,
+                    city: true,
+                    zipcode: true,
+                    pib: true,
+                    payment_method: true,
+                    subtotal_price: true,
+                    discount_price: true,
+                    shipping_price: true,
                 },
             },
         },
@@ -123,7 +172,25 @@ export const fetchOrderHistory = async (token: string): Promise<OrderDTO[]> => {
                     },
                 },
             },
+            orderinfo: {
+                select: {
+                    order_info_id: true,
+                    order_id: true,
+                    name: true,
+                    email: true,
+                    phone_number: true,
+                    address: true,
+                    city: true,
+                    zipcode: true,
+                    pib: true,
+                    payment_method: true,
+                    subtotal_price: true,
+                    discount_price: true,
+                    shipping_price: true,
+                },
+            },
         },
+        orderBy: { created_at: 'desc' },
     })
 
     return orders.map(order => new OrderDTO(order))

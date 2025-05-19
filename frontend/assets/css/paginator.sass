@@ -1,0 +1,66 @@
+.p-paginator
+  @apply bg-white border-none px-0 py-3
+
+.p-paginator-page,
+.p-paginator-first,
+.p-paginator-prev,
+.p-paginator-next,
+.p-paginator-last
+  @apply min-w-[2rem] h-8 mx-1 rounded-md border border-gray-300 bg-white text-gray-700 transition-all
+
+  &:hover
+    @apply bg-gray-100 border-gray-400 text-gray-800
+
+.p-paginator-page.p-highlight
+  @apply bg-primary-light border-primary text-white hover:bg-rose-800
+
+.p-paginator-current
+  @apply text-sm text-gray-600 mx-4
+
+.p-paginator-rpp-options
+  @apply py-0 px-1 h-8
+
+.p-dropdown
+  @apply min-w-2 h-8 border border-gray-300 rounded-md bg-white transition-colors
+
+  &:not(.p-disabled):hover
+    @apply border-gray-400
+
+  &:not(.p-disabled).p-focus
+    @apply ring-0 ring-transparent
+
+.p-dropdown-label
+  @apply py-0 text-sm text-gray-700 leading-8
+
+  &.p-placeholder
+    @apply text-gray-400
+
+.p-dropdown-trigger
+  @apply w-3 mx-2 text-gray-500
+
+  .p-dropdown-trigger-icon
+    @apply text-xs
+
+.p-dropdown-panel
+  @apply bg-white border border-gray-300 rounded shadow-lg
+
+.p-dropdown-items-wrapper
+  @apply overflow-auto
+
+.p-dropdown-item
+  @apply text-sm py-1.5 text-gray-700 bg-white transition-colors rounded
+
+  &:not(.p-highlight):not(.p-disabled):hover
+    @apply bg-gray-100 text-gray-900
+
+.p-dropdown-item.p-highlight
+  @apply bg-primary-light text-white
+
+  &:hover
+    @apply bg-primary-light
+
+.p-dropdown-item-group
+  @apply text-xs font-semibold text-gray-500 py-2 bg-gray-50
+
+.p-dropdown-empty-message
+  @apply py-2 text-gray-500 text-sm

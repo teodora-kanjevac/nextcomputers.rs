@@ -34,9 +34,10 @@ export default defineNuxtConfig({
     compatibilityDate: '2024-07-22',
     css: [
         '~/assets/css/base.sass',
-        '~/assets/css/toast.sass',
         'primevue/resources/themes/saga-blue/theme.css',
         'primevue/resources/primevue.min.css',
+        '~/assets/css/toast.sass',
+        '~/assets/css/paginator.sass',
     ],
     vite: {
         resolve: {

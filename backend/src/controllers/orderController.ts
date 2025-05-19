@@ -35,7 +35,7 @@ export const getOrderById = async (req: Request, res: Response): Promise<void> =
 
 export const getOrdersByUserId = async (req: Request, res: Response): Promise<void> => {
     try {
-        const token = req.cookies.token as string 
+        const token = req.cookies.token as string
         const orders = await fetchOrderHistory(token)
 
         res.status(200).json(orders)

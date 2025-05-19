@@ -47,6 +47,7 @@ model order {
   created_at   DateTime       @default(dbgenerated("(now())")) @db.DateTime(0)
   user         user?          @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_order_FK")
   orderdetails orderdetails[]
+  orderinfo    orderinfo?
 
   @@index([user_id], map: "user_id_order_FK")
 }
@@ -63,6 +64,23 @@ model orderdetails {
   @@index([product_id], map: "product_id_orderdetails_FK")
 }
 
+model orderinfo {
+  order_info_id  String         @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  order_id       String         @unique @db.VarChar(20)
+  name           String         @db.VarChar(255)
+  address        String         @db.VarChar(255)
+  phone_number   String         @db.VarChar(50)
+  email          String         @db.VarChar(255)
+  city           String         @db.VarChar(50)
+  zipcode        String         @db.VarChar(20)
+  payment_method payment_method
+  subtotal_price Decimal        @db.Decimal(10, 2)
+  shipping_price Decimal        @db.Decimal(10, 2)
+  discount_price Decimal        @db.Decimal(10, 2)
+  pib            String?        @db.VarChar(50)
+  order          order          @relation(fields: [order_id], references: [order_id], onDelete: Cascade, onUpdate: NoAction, map: "order_id_orderinfo_FK")
+}
+
 model product {
   product_id        Int            @id @default(autoincrement()) @db.UnsignedInt
   image_url         Json?
@@ -74,20 +92,22 @@ model product {
   ean               String         @unique(map: "ean") @default("") @db.VarChar(100)
   country           String?        @default("") @db.VarChar(100)
   supplier          String?        @default("") @db.VarChar(100)
-  price_distributor String?        @default("") @db.VarChar(50)
-  price             Decimal        @default(0) @db.Decimal(10, 2)
-  retail_price      Decimal        @default(0) @db.Decimal(10, 2)
-  sale_price        Decimal        @default(0) @db.Decimal(10, 2)
-  shipping_price    Decimal        @default(0) @db.Decimal(10, 2)
+  price             Decimal        @default(0.00) @db.Decimal(10, 2)
+  retail_price      Decimal        @default(0.00) @db.Decimal(10, 2)
+  sale_price        Decimal        @default(0.00) @db.Decimal(10, 2)
   discount_price    Decimal?       @db.Decimal(10, 2)
-  available         Boolean        @default(false)
   payment_advance   Int            @default(0) @db.SmallInt
   subcategory_id    Int?           @db.UnsignedInt
+  available         Boolean        @default(false)
+  price_distributor String?        @default("") @db.VarChar(50)
+  shipping_price    Decimal        @default(0.00) @db.Decimal(10, 2)
   cartitem          cartitem[]
   orderdetails      orderdetails[]
   subcategory       subcategory?   @relation(fields: [subcategory_id], references: [subcategory_id], onUpdate: NoAction, map: "subcategory_id_FK")
   promotion         promotion[]
   review            review[]
+
+  @@index([subcategory_id], map: "subcategory_id_FK")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -133,12 +153,12 @@ model user {
   first_name    String?  @default("") @db.VarChar(50)
   last_name     String?  @default("") @db.VarChar(50)
   address       String?  @default("") @db.VarChar(255)
-  city          String?  @default("") @db.VarChar(50)
   phone_number  String?  @default("") @db.VarChar(50)
-  zipcode       String?  @default("") @db.VarChar(10)
-  created_at    DateTime @default(now()) @db.DateTime(0)
+  created_at    DateTime @default(dbgenerated("(now())")) @db.DateTime(0)
   password_hash String   @default("") @db.VarChar(255)
   is_verified   Boolean  @default(false)
+  city          String?  @default("") @db.VarChar(50)
+  zipcode       String?  @default("") @db.VarChar(10)
   cart          cart[]
   order         order[]
   review        review[]
@@ -174,4 +194,10 @@ model pendingverification {
 
   @@index([email])
   @@index([expiresAt])
+}
+
+enum payment_method {
+  CASH
+  CARD
+  ADVANCE
 }

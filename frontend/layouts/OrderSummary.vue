@@ -127,7 +127,7 @@ const handleOrder = async () => {
                 phone: `+381 ${formStore.checkout.form.phone}`,
             },
             prices: formStore.checkout.meta.prices,
-            paymentMethod: formStore.checkout.meta.paymentMethod,
+            paymentMethod: formStore.checkout.meta.paymentMethod ?? 'ADVANCE',
             paymentMethodText: formStore.checkout.meta.paymentMethodText,
         }
 
@@ -136,7 +136,7 @@ const handleOrder = async () => {
         orderStore.orderData.orderId = orderStore.order.id
         orderStore.orderData.orderDate = dayjs(orderStore.order.createdAt).format('DD.MM.YYYY. HH:mm')
 
-        if (formStore.checkout.meta.paymentMethod === 'advance') {
+        if (formStore.checkout.meta.paymentMethod === 'ADVANCE') {
             await orderStore.fetchQRCode(orderStore.orderData)
         }
         await mailStore.sendMail(orderStore.orderData)

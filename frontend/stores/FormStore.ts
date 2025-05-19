@@ -26,7 +26,7 @@ export const useFormStore = defineStore('forms', {
                 pib: '',
             } as CheckoutData,
             meta: {
-                paymentMethod: '',
+                paymentMethod: undefined,
                 paymentMethodText: '',
                 paymentMethodDiscount: 1 as number,
                 prices: {
@@ -70,7 +70,7 @@ export const useFormStore = defineStore('forms', {
         },
     }),
     actions: {
-        setPaymentMethod(method: string) {
+        setPaymentMethod(method: 'CASH' | 'CARD' | 'ADVANCE') {
             this.checkout.meta.paymentMethod = method
         },
         resetContactForm() {
@@ -90,7 +90,7 @@ export const useFormStore = defineStore('forms', {
                 phone: '',
                 pib: '',
             }
-            this.checkout.meta.paymentMethod = ''
+            this.checkout.meta.paymentMethod = undefined
             this.checkout.meta.paymentMethodText = ''
             this.checkout.meta.paymentMethodDiscount = 1
             this.checkout.meta.prices = {

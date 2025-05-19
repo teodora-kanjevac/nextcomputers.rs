@@ -6,16 +6,24 @@
                 <p class="text-gray-500 text-sm">{{ authStore.user?.email }}</p>
             </div>
         </div>
-        <div class="grid border-t pt-4">
+        <div class="grid border-t pt-4 font-medium">
             <NuxtLink
                 to="/profil"
-                class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100 text-primary font-medium">
+                class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100"
+                :class="{
+                    'text-primary': activeSection === 'profile',
+                    'text-gray-600 hover:text-primary': activeSection !== 'profile',
+                }">
                 <AccountIcon class="size-5 absolute ms-0.5 mb-0.5" />
                 <span class="ps-8">Nalog</span>
             </NuxtLink>
             <NuxtLink
-                to="/"
-                class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100 text-gray-600 hover:text-primary">
+                to="/profil/istorija-kupovine"
+                class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100"
+                :class="{
+                    'text-primary': activeSection === 'order-history',
+                    'text-gray-600 hover:text-primary': activeSection !== 'order-history',
+                }">
                 <ReceiptIcon class="size-5 absolute mb-0.5" />
                 <span class="ps-8">Moje porudžbine</span>
             </NuxtLink>
@@ -68,12 +76,15 @@ import { useUserStore } from '~/stores/UserStore'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
+const route = useRoute()
 
 const userFullName = computed<string>(() => {
     const firstName = userStore.user?.firstName?.trim() || ''
     const lastName = userStore.user?.lastName?.trim() || ''
     return `${firstName} ${lastName}`.trim()
 })
+
+const activeSection = computed(() => route.meta.section)
 
 const handleLogout = async () => {
     try {
@@ -89,7 +100,6 @@ const handleLogout = async () => {
 }
 
 onMounted(async () => {
-    await authStore.getMe()
     await userStore.fetchUserFullName()
 })
 </script>

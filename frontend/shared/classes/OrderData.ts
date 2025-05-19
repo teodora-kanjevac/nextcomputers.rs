@@ -24,7 +24,7 @@ export class OrderData {
         phone: string
         pib: string
     }
-    public paymentMethod: string
+    public paymentMethod: 'CASH' | 'CARD' | 'ADVANCE'
     public paymentMethodText: string
 
     constructor(data: any) {

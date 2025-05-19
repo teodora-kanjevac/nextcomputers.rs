@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="py-8 md:py-20" :class="{ 'h-screen': order.paymentMethod === 'cash' }">
+        <section class="py-8 md:py-20" :class="{ 'h-screen': order.paymentMethod === 'CASH' }">
             <div class="mx-auto max-w-2xl px-4 2xl:px-0">
                 <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl mb-4">Hvala Vam na kupovini!</h2>
                 <p class="text-gray-700 text-sm mb-3 mx-0.5 text-justify">
@@ -39,7 +39,7 @@
                         <dd class="font-medium text-gray-900 sm:text-end">{{ order.form.pib }}</dd>
                     </dl>
                 </div>
-                <div v-if="order.paymentMethod === 'advance'">
+                <div v-if="order.paymentMethod === 'ADVANCE'">
                     <div class="flex items-center justify-center pb-14">
                         <img :src="qrCode" alt="QR kod za plaćanje" />
                     </div>

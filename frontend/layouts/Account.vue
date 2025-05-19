@@ -5,7 +5,19 @@
         <div v-if="pageLoading" class="min-h-screen flex flex-col items-center justify-center text-2xl">
             <Spinner class="size-10" />
         </div>
-        <AccountOverview />
+        <div v-else class="min-h-screen py-10">
+            <div class="max-w-screen-xl mx-auto px-5 2xl:px-0">
+                <h2 class="font-semibold text-xl sm:text-2xl ps-0.5 pb-2 sm:pb-4 border-b-2 border-gray-200">
+                    Vaš nalog
+                </h2>
+                <div class="flex flex-col md:flex-row gap-4 mt-5">
+                    <AccountActionsSidebar />
+                    <main class="flex-1">
+                        <slot />
+                    </main>
+                </div>
+            </div>
+        </div>
         <Footer />
     </div>
 </template>
@@ -13,22 +25,12 @@
 <script setup lang="ts">
 import NavBar from '~/layouts/NavBar.vue'
 import Footer from '~/layouts/Footer.vue'
+import AccountActionsSidebar from '~/layouts/AccountActionsSidebar.vue'
 import { useAuthStore } from '~/stores/AuthStore'
-import AccountOverview from '~/layouts/AccountOverview.vue'
-import { useUserStore } from '~/stores/UserStore'
-
-const { updateTitle } = usePageTitle()
-updateTitle('Vaš profil')
-
-const authStore = useAuthStore()
-const userStore = useUserStore()
-const nuxtApp = useNuxtApp()
 
 const pageLoading = ref(true)
-
-definePageMeta({
-    middleware: ['profile-guard'],
-})
+const nuxtApp = useNuxtApp()
+const authStore = useAuthStore()
 
 onMounted(async () => {
     if (nuxtApp._authCheckInProgress) {
@@ -44,7 +46,6 @@ onMounted(async () => {
         checkStatus()
     } else {
         await authStore.getMe()
-        await userStore.fetchUserInfo()
         pageLoading.value = false
     }
 })

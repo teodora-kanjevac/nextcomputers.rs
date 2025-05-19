@@ -7,11 +7,27 @@ export interface OrderDTO {
     totalPrice: number
     orderStatus?: string
     orderDetails: OrderDetailsDTO[]
+    orderInfo: OrderInfo
 }
 
 export interface OrderDetailsDTO {
     id: string
-    cartId: string
     product: OrderProductDTO
     quantity: number
+}
+
+export interface OrderInfo {
+    id: string
+    orderId: string
+    fullname: string
+    address: string
+    phone: string
+    email: string
+    city: string
+    zipcode: string
+    pib: string
+    paymentMethod: 'CASH' | 'CARD' | 'ADVANCE'
+    productPrice: number
+    shippingPrice: number
+    discountPrice: number
 }

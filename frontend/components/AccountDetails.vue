@@ -96,7 +96,6 @@ const phoneNumber = computed<string>(() => {
 })
 
 onMounted(async () => {
-    await authStore.getMe()
     await userStore.fetchUserInfo()
 })
 </script>

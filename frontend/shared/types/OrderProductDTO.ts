@@ -3,4 +3,6 @@ export interface OrderProductDTO {
     name: string
     ean: string
     thumbnail: string
+    price: number
+    discountPrice: number
 }

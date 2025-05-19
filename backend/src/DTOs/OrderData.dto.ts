@@ -1,4 +1,4 @@
-import { IOrderDataDTO } from "~/src/DTOs/interfaces/IOrderData.dto"
+import { IOrderDataDTO } from '~/src/DTOs/interfaces/IOrderData.dto'
 
 export class OrderDataDTO implements IOrderDataDTO {
     orderId: string
@@ -26,7 +26,7 @@ export class OrderDataDTO implements IOrderDataDTO {
         phone: string
         pib: string
     }
-    paymentMethod: string
+    paymentMethod: 'CASH' | 'CARD' | 'ADVANCE'
     paymentMethodText: string
 
     constructor(data: any) {

@@ -6,3 +6,8 @@
 @layer base
   body
     @apply bg-gray-100 font-sans
+
+    .p-component,
+    [class^='p-'],
+    [class*=' p-']
+      font-family: theme('fontFamily.sans') !important
