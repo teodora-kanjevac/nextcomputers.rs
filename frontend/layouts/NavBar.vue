@@ -3,7 +3,7 @@
         <nav
             ref="navbarRef"
             class="bg-gray-800 border-gray-200 top-0 left-0 w-full py-4 duration-300"
-            :class="{ 'md:py-1.5 fixed z-50 shadow-md': isScrolled && !isMobile }">
+            :class="{ 'md:py-1.5 fixed z-20 shadow-md': isScrolled && !isMobile }">
             <div
                 class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto px-3 sm:px-4">
                 <Logo class="font-medium text-gray-100" />

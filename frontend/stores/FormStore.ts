@@ -5,6 +5,7 @@ import type { ContactData } from '~/shared/classes/ContactData'
 import type { EditUserData } from '~/shared/classes/EditUserData'
 import type { LogInData } from '~/shared/classes/LogInData'
 import type { RegisterFormData } from '~/shared/classes/RegisterFormData'
+import type { ReviewData } from '~/shared/classes/ReviewData'
 
 export const useFormStore = defineStore('forms', {
     state: () => ({
@@ -14,6 +15,12 @@ export const useFormStore = defineStore('forms', {
                 email: '',
                 comment: '',
             } as ContactData,
+        },
+        review: {
+            form: {
+                rating: 0,
+                comment: '',
+            } as ReviewData,
         },
         checkout: {
             form: {
@@ -77,6 +84,12 @@ export const useFormStore = defineStore('forms', {
             this.contact.form = {
                 fullname: '',
                 email: '',
+                comment: '',
+            }
+        },
+        resetReviewForm() {
+            this.review.form = {
+                rating: 0,
                 comment: '',
             }
         },

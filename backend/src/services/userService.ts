@@ -81,8 +81,6 @@ export const changeUserInfo = async (token: string, userData: UserDataDTO): Prom
         },
     })
 
-    isNullObject('user', decoded.id, existingUser)
-
     if (!existingUser) {
         throw new Error(`User with ID ${decoded.id} not found`)
     }

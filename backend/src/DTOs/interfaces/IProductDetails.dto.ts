@@ -1,4 +1,3 @@
-import { ReviewDTO } from "~/src/DTOs/Review.dto"
 import { ProductRatingDTO } from "~/src/DTOs/ProductRating.dto"
 
 export interface IProductDetailsDTO {
@@ -17,6 +16,5 @@ export interface IProductDetailsDTO {
     discountPercentage?: number
     available: boolean
     subcategoryId: number
-    reviews?: ReviewDTO[]
     ratings?: ProductRatingDTO
 }

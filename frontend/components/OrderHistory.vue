@@ -1,37 +1,47 @@
 <template>
     <div class="bg-white rounded-lg border px-6 py-5 shadow-sm">
         <h2 class="font-semibold border-b pb-2 text-lg mb-5">Istorija kupovine</h2>
-        <div class="relative overflow-x-auto rounded-md border border-gray-200 mb-4">
-            <table class="w-full text-sm text-left text-gray-500">
-                <thead class="text-xs text-gray-700 uppercase bg-gray-200">
-                    <tr>
-                        <th scope="col" class="px-6 py-3">Broj porudžbine</th>
-                        <th scope="col" class="px-6 py-3">Datum kupovine</th>
-                        <th scope="col" class="px-6 py-3">Ukupna cena</th>
-                        <th scope="col" class="px-6 py-3">Status porudžbine</th>
-                    </tr>
-                </thead>
-                <tbody class="divide-y divide-gray-200 font-medium">
-                    <tr v-for="(order, index) in paginatedOrders" :key="order.id" class="bg-gray-50">
-                        <td class="px-6 py-4 text-gray-800 whitespace-nowrap">
-                            <NuxtLink :to="`/profil/istorija-kupovine/${order.id}`" class="hover:underline">
-                                {{ order.id }}
-                            </NuxtLink>
-                        </td>
-                        <td class="px-6 py-4">{{ formattedData[index].date }}</td>
-                        <td class="px-6 py-4">{{ formattedData[index].price }} RSD</td>
-                        <td class="px-6 py-4">{{ order.orderStatus }}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div v-if="orders.length === 0" class="text-gray-600 font-medium flex flex-col items-center justify-center">
+            <img class="max-w-md w-full h-auto my-10" src="/assets/images/order-illustration.png" alt="illustration" />
+            <p class="font-semibold text-base sm:text-lg mb-5 text-center px-4">
+                Trenutno nemate porudžbine.
+                <br />
+                Kada napravite porudžbinu, ona će se prikazati ovde.
+            </p>
         </div>
+        <template v-else>
+            <div class="relative overflow-x-auto rounded-md border border-gray-200 mb-4">
+                <table class="w-full text-sm text-left text-gray-500">
+                    <thead class="text-xs text-gray-700 uppercase bg-gray-200">
+                        <tr>
+                            <th scope="col" class="px-6 py-3">Broj porudžbine</th>
+                            <th scope="col" class="px-6 py-3">Datum kupovine</th>
+                            <th scope="col" class="px-6 py-3">Ukupna cena</th>
+                            <th scope="col" class="px-6 py-3">Status porudžbine</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200 font-medium">
+                        <tr v-for="(order, index) in paginatedOrders" :key="order.id" class="bg-gray-50">
+                            <td class="px-6 py-4 text-gray-800 whitespace-nowrap">
+                                <NuxtLink :to="`/profil/istorija-kupovine/${order.id}`" class="hover:underline">
+                                    {{ order.id }}
+                                </NuxtLink>
+                            </td>
+                            <td class="px-6 py-4">{{ formattedData[index].date }}</td>
+                            <td class="px-6 py-4">{{ formattedData[index].price }} RSD</td>
+                            <td class="px-6 py-4">{{ order.orderStatus }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
 
-        <Paginator
-            :rows="rowsPerPage"
-            :totalRecords="orders.length"
-            :rowsPerPageOptions="[5, 10, 20, 40]"
-            @page="onPageChange"
-            class="border border-gray-200 rounded-md" />
+            <Paginator
+                :rows="rowsPerPage"
+                :totalRecords="orders.length"
+                :rowsPerPageOptions="[5, 10, 20, 40]"
+                @page="onPageChange"
+                class="border border-gray-200 rounded-md" />
+        </template>
     </div>
 </template>
 

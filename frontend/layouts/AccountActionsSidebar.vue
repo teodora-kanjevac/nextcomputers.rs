@@ -28,10 +28,14 @@
                 <span class="ps-8">Moje porudžbine</span>
             </NuxtLink>
             <NuxtLink
-                to="/"
-                class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100 text-gray-600 hover:text-primary">
+                to="/profil/ocene"
+                class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100"
+                :class="{
+                    'text-primary': activeSection === 'reviews',
+                    'text-gray-600 hover:text-primary': activeSection !== 'reviews',
+                }">
                 <StarOutlinedIcon class="size-5 absolute mb-0.5" />
-                <span class="ps-8">Moje ocene</span>
+                <span class="ps-8">Moje recenzije</span>
             </NuxtLink>
             <NuxtLink
                 to="/"

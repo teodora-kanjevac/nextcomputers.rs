@@ -3,6 +3,7 @@
         <BuyerStatistics />
         <AccountDetails />
         <RecentOrders />
+        <ReviewSuggestions />
         <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div class="bg-white rounded-lg border p-6 shadow-sm">
                 <h2 class="font-semibold mb-2">My addresses</h2>

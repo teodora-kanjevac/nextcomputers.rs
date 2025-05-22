@@ -1,109 +1,133 @@
 <template>
-    <form @submit.prevent="submitReview">
-        <div class="mb-6">
+    <form @submit.prevent="submitReview" class="text-gray-900">
+        <div class="mb-4">
             <label class="text-sm font-medium">
                 Proizvod:
                 <br />
-                <span class="font-medium italic">{{ product?.name }}</span>
+                <span class="font-medium italic text-xs text-gray-600">{{ product?.name }}</span>
             </label>
         </div>
-        <div class="grid gap-y-4 gap-x-8 mb-4 sm:grid-cols-2">
-            <div>
-                <label for="name" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
-                    Ime
-                    <span class="text-red-600">*</span>
-                </label>
-                <input
-                    v-model="reviewForm.name"
-                    type="text"
-                    name="name"
-                    id="name"
-                    :class="{
-                        'bg-gray-50 border-gray-300': isNameValid && formSubmitted,
-                        'border-red-600': !isNameValid && formSubmitted,
-                    }"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 focus:ring-primary-light focus:border-primary-light"
-                    placeholder="Vaše ime" />
-                <p v-if="!isNameValid && formSubmitted" class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                    Ime je obavezno
-                </p>
-            </div>
+        <div class="grid gap-y-5 mb-4">
+            <RatingInput
+                label="Vaša ocena"
+                required
+                v-model="form.rating"
+                :rating="form.rating"
+                @update:rating="handleRatingUpdate"
+                :showError="!ratingCheck().value.valid && formSubmitted"
+                :errorMessage="ratingCheck().value.message"
+                :shakeTrigger="shakeTrigger" />
 
-            <div>
-                <label for="brand" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
-                    Ocena
-                    <span class="text-red-600">*</span>
-                </label>
-                <RatingInput :rating="rating" @update:rating="handleRatingUpdate" class="mt-3" />
-                <p v-if="!isRatingValid && formSubmitted" class="text-red-600 text-xs font-medium mt-1 ms-1">
-                    Ocena je obavezna
-                </p>
-            </div>
-
-            <div class="sm:col-span-2">
-                <label for="comment" class="block mb-2 ms-0.5 text-sm font-medium text-gray-900">
-                    Komentar
-                    <span class="text-red-600">*</span>
-                </label>
-                <textarea
-                    v-model="reviewForm.comment"
-                    id="comment"
-                    rows="4"
-                    :class="{
-                        'bg-gray-50 border-gray-300': isCommentValid && formSubmitted,
-                        'border-red-600': !isCommentValid && formSubmitted,
-                    }"
-                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-light focus:border-primary-light"
-                    placeholder="Vaš komentar"></textarea>
-                <p v-if="!isCommentValid && formSubmitted" class="text-red-600 text-xs font-medium mt-1 ms-0.5">
-                    Komentar je obavezan
-                </p>
-            </div>
+            <TextAreaInput
+                label="Vaš komentar"
+                :rows="5"
+                placeholder="Unesite komentar"
+                required
+                v-model="form.comment"
+                :showError="!commentCheck.valid && formSubmitted"
+                :errorMessage="commentCheck.message"
+                :shakeTrigger="shakeTrigger" />
         </div>
-
-        <button
-            type="submit"
-            class="text-white inline-flex items-center font-medium rounded-lg text-sm mt-2 px-5 py-2.5 text-center bg-primary-light hover:bg-rose-800 active:bg-primary">
-            <PenIcon class="size-5 me-2 -ms-1" />
-            Dodaj recenziju
-        </button>
+        <div class="flex justify-center ms-1">
+            <span class="text-red-600 font-bold -mt-0.5">!</span>
+            <p class="text-xs border-b border-gray-200 font-medium pb-4 mb-4 ps-2 leading-5">
+                Cenimo Vaše mišljenje i podstičemo iskrene ocene naših proizvoda. Međutim, molimo Vas da recenzije budu
+                konstruktivne, objektivne i korisne za druge kupce. Recenzije koje sadrže zlonameran, uvredljiv ili
+                lažan sadržaj biće uklonjene kako bismo održali pravičnu i pouzdanu zajednicu. Hvala na razumevanju.
+            </p>
+        </div>
+        <div class="flex gap-3 font-medium text-white text-sm text-center">
+            <button
+                type="submit"
+                class="flex items-center rounded-md px-4 py-1.5 bg-primary-light sm:w-fit disabled:contrast-75 enabled:hover:bg-rose-800"
+                :disabled="sharedStore.loading">
+                <template v-if="sharedStore.loading">
+                    <SubmitionSpinner class="size-5 px-5" />
+                </template>
+                <template v-else>
+                    <PenIcon class="size-5 me-2 -ms-1 shrink-0" />
+                    <span>Dodaj recenziju</span>
+                </template>
+            </button>
+            <button
+                type="button"
+                @click="emit('closeModal')"
+                class="text-gray-700 px-4 py-1.5 rounded-md bg-gray-200 hover:bg-gray-300 border border-gray-300">
+                Otkaži
+            </button>
+        </div>
     </form>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import RatingInput from './RatingInput.vue'
 import PenIcon from './icons/PenIcon.vue'
 import { useProductStore } from '~/stores/ProductStore'
+import { useSharedStore } from '~/stores/SharedStore'
+import { useFormStore } from '~/stores/FormStore'
+import { useReviewStore } from '~/stores/ReviewStore'
 
+const sharedStore = useSharedStore()
+const reviewStore = useReviewStore()
 const productStore = useProductStore()
+const formStore = useFormStore()
+const { showNotification } = useNotification()
+
 const product = computed(() => productStore.product)
 
-const reviewForm = ref({
-    name: '',
-    comment: '',
-})
-
-const rating = ref<number>(0)
+const form = computed(() => formStore.review.form)
+const emit = defineEmits(['closeModal'])
 
 const formSubmitted = ref(false)
+const shakeTrigger = ref(0)
 
-const isNameValid = computed(() => !!reviewForm.value.name)
-const isRatingValid = computed(() => rating.value > 0)
-const isCommentValid = computed(() => !!reviewForm.value.comment)
+const { commentCheck, ratingCheck } = useFormValidation(form)
+
+const isFormInvalid = computed(() => {
+    return !(commentCheck.value.valid && ratingCheck().value.valid)
+})
 
 const handleRatingUpdate = (newRating: number) => {
-    rating.value = newRating
+    form.value.rating = newRating
 }
 
-const submitReview = () => {
-    formSubmitted.value = true
+const resetForm = () => {
+    formStore.resetReviewForm()
+    formSubmitted.value = false
+}
 
-    if (isNameValid.value && isRatingValid.value && isCommentValid.value) {
-        reviewForm.value.name = ''
-        reviewForm.value.comment = ''
-        rating.value = 0
-        formSubmitted.value = false
+defineExpose({
+    resetForm,
+})
+
+const submitReview = async () => {
+    formSubmitted.value = true
+    if (isFormInvalid.value) {
+        shakeTrigger.value++
+        return
+    }
+    try {
+        sharedStore.setLoading(true)
+        if (!product.value?.id) return
+
+        await reviewStore.writeAReview(product.value.id, formStore.review.form)
+        resetForm()
+
+        emit('closeModal')
+        showNotification(
+            'success',
+            'Uspešno dodata recenzija!',
+            'Vaša recenzija za ovaj proizvod je uspešno dodata.',
+            4000
+        )
+    } catch (error: any) {
+        emit('closeModal')
+        showNotification(
+            'error',
+            'Greška pri dodavanju recenzije!',
+            'Došlo je do greške pri dodavanju recenzije. Molimo pokušajte ponovo kasnije.'
+        )
+    } finally {
+        sharedStore.setLoading(false)
     }
 }
 </script>

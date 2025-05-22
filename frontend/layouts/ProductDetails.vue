@@ -16,7 +16,7 @@
                     {{ product?.name }}
                 </h1>
                 <div class="mt-3 mb-4 sm:items-center sm:gap-4 sm:flex">
-                    <StarRating :rating="product?.ratings" />
+                    <StarRating :size="6" :rating="product?.ratings" />
                 </div>
 
                 <div class="flex items-center justify-between mt-3 md:mt-5">

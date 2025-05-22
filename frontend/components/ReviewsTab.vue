@@ -4,32 +4,15 @@
             <div class="mx-auto max-w-screen-xl">
                 <div class="sm:flex items-center gap-3">
                     <h2 class="text-2xl font-semibold text-gray-900">Recenzije</h2>
-                    <StarRating :rating="rating" class="mt-2 -ms-1 sm:ms-0 sm:pt-0 sm:pb-1" />
+                    <StarRating :size="6" :rating="rating" class="mt-1 -ms-1 sm:ms-0 sm:pt-0 sm:pb-1" />
                 </div>
 
                 <div class="my-6 gap-8 sm:flex sm:items-start md:my-8">
-                    <div class="shrink-0 space-y-4">
+                    <div class="shrink-0">
                         <p class="ms-0.5 text-2xl font-semibold leading-none text-gray-900">
                             {{ averageRating.toFixed(2) }} od 5
                         </p>
-                        <button
-                            @click="info"
-                            type="button"
-                            aria-label="Otvori formu za ostavljanje recenzije"
-                            class="mb-2 me-2 flex items-center rounded-lg px-5 py-2.5 text-sm font-medium text-white bg-primary-light hover:bg-rose-800 active:bg-primary">
-                            <PenIcon class="size-5 me-2 -ms-1" />
-                            Napiši recenziju
-                        </button>
-                        <!-- <button
-                            type="button"
-                            aria-label="Otvori formu za ostavljanje recenzije"
-                            data-modal-target="createReview"
-                            data-modal-toggle="createReview"
-                            class="mb-2 me-2 flex items-center rounded-lg px-5 py-2.5 text-sm font-medium text-white bg-primary-light hover:bg-rose-800 active:bg-primary">
-                            <PenIcon class="size-5 me-2 -ms-1" />
-                            Napiši recenziju
-                        </button>
-                        <ReviewModal /> -->
+                        <ReviewModal />
                     </div>
 
                     <div class="mt-8 min-w-0 flex-1 space-y-3 sm:mt-0">
@@ -38,12 +21,7 @@
                                 {{ star.star }}
                             </p>
                             <StarFilledIcon class="size-5 shrink-0" />
-                            <div class="h-1.5 w-80 rounded-full bg-gray-200">
-                                <div
-                                    class="h-1.5 rounded-full"
-                                    :class="star.percentage > 0 ? 'bg-yellow-300' : 'bg-gray-200'"
-                                    :style="{ width: star.percentage + '%' }"></div>
-                            </div>
+                            <ReviewProgressBar :star="star" />
                             <a
                                 href="#"
                                 class="w-8 shrink-0 ps-1 text-right text-sm font-medium leading-none hover:text-primary sm:w-auto sm:text-left">
@@ -80,19 +58,22 @@
 <script setup lang="ts">
 import StarFilledIcon from './icons/StarFilledIcon.vue'
 import IndicatorDownIcon from './icons/IndicatorDownIcon.vue'
-import PenIcon from './icons/PenIcon.vue'
 import { useRatings } from '~/composables/useRating'
 import type { RatingDTO } from '~/shared/types/RatingDTO'
-import type { ReviewDTO } from '~/shared/types/ReviewDTO'
+import type { ReviewProductDTO } from '~/shared/types/ReviewProductDTO'
 import { Rating } from '~/shared/classes/Rating'
-import { useNotification } from '~/composables/useNotification'
+import { useReviewStore } from '~/stores/ReviewStore'
+import { useAuthStore } from '~/stores/AuthStore'
 
-const { rating, userReviews } = defineProps<{
+const { rating } = defineProps<{
     rating: RatingDTO
-    userReviews: ReviewDTO[]
 }>()
 
-const { showNotification } = useNotification()
+const route = useRoute()
+const reviewStore = useReviewStore()
+const authStore = useAuthStore()
+
+const userReviews = computed<ReviewProductDTO[]>(() => reviewStore.reviews)
 
 const averageRating = computed(() => new Rating(rating).getAverageRating())
 
@@ -106,8 +87,10 @@ const percentageForStars = computed(() => {
 
 const pageCount = ref(0)
 const reviewsPerPage = 5
-const numberOfVisibleReviews = computed(() => Math.min(userReviews.length, reviewsPerPage * (pageCount.value + 1)))
-const visibleReviews = computed(() => userReviews.slice(0, numberOfVisibleReviews.value))
+const numberOfVisibleReviews = computed(() =>
+    Math.min(userReviews.value.length, reviewsPerPage * (pageCount.value + 1))
+)
+const visibleReviews = computed(() => userReviews.value.slice(0, numberOfVisibleReviews.value))
 
 const loadMoreReviews = () => {
     pageCount.value++
@@ -123,7 +106,8 @@ const getReviewWord = (num: number) => {
     }
 }
 
-const info = () => {
-    showNotification('info', 'Info', 'Funkcionalnost je u pripremi – biće dostupna uskoro. Hvala na razumevanju!')
-}
+onMounted(async () => {
+    await authStore.getMe()
+    await reviewStore.getReviewStatus(parseInt(route.params.productId as string))
+})
 </script>

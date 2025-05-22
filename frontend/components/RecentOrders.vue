@@ -27,8 +27,8 @@
         </div>
         <NuxtLink
             to="profil/istorija-kupovine"
-            class="inline-flex items-center mt-5 px-3 py-2 font-medium text-sm bg-primary-light hover:bg-rose-800 text-white rounded-md">
-            <ReceiptIcon class="size-5 me-2" />
+            class="inline-flex items-center mt-5 px-3 py-1.5 font-medium text-sm bg-primary-light hover:bg-rose-800 text-white rounded">
+            <ReceiptIcon class="size-4 me-2" />
             Pregled svih porudžbina
         </NuxtLink>
     </div>

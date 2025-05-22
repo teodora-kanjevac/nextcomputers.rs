@@ -1,5 +1,5 @@
 <template>
-    <form @submit.prevent="changeUserDetails()">
+    <form @submit.prevent="changeUserDetails()" class="text-gray-900">
         <div class="grid sm:grid-cols-2 gap-4 mb-4 pb-5 border-b border-gray-200">
             <TextInput
                 label="Ime"
@@ -49,23 +49,34 @@
                 :showError="!zipcodeCheck(false).value.valid && formSubmitted"
                 :errorMessage="zipcodeCheck(false).value.message"
                 :shakeTrigger="shakeTrigger" />
-            </div>
-            <p class="text-xs border-b border-gray-200 pb-4 mb-4 ps-2">
-                <span class="text-red-600 font-bold pe-1">!</span>
-                Molimo da podaci koje unosite budu tačni i kompletni kako bi Vam omogućili što bolje korisničko iskustvo. Hvala na razumevanju.
+        </div>
+        <div class="flex justify-center ms-1 mb-4 border-b border-gray-200">
+            <span class="text-red-600 font-bold -mt-0.5">!</span>
+            <p class="text-xs font-medium pb-3 ps-2 leading-5">
+                Molimo da podaci koje unosite budu tačni i kompletni kako bi Vam omogućili što bolje korisničko
+                iskustvo. Hvala na razumevanju.
             </p>
-        <button
-            type="submit"
-            class="text-white flex items-center font-medium rounded-md text-sm mt-2 px-4 py-2 text-center bg-primary-light sm:w-fit disabled:contrast-75 enabled:hover:bg-rose-800"
-            :disabled="sharedStore.loading">
-            <template v-if="sharedStore.loading">
-                <SubmitionSpinner class="size-5 px-5" />
-            </template>
-            <template v-else>
-                <PenIcon class="size-5 me-2 -ms-1 shrink-0" />
-                <span>Potvrdi izmene</span>
-            </template>
-        </button>
+        </div>
+        <div class="flex gap-3 font-medium text-white text-sm text-center">
+            <button
+                type="submit"
+                class="text-white flex items-center font-medium rounded-md text-sm px-4 py-1.5 text-center bg-primary-light sm:w-fit disabled:contrast-75 enabled:hover:bg-rose-800"
+                :disabled="sharedStore.loading">
+                <template v-if="sharedStore.loading">
+                    <SubmitionSpinner class="size-5 px-5" />
+                </template>
+                <template v-else>
+                    <PenIcon class="size-5 me-2 -ms-1 shrink-0" />
+                    <span>Potvrdi izmene</span>
+                </template>
+            </button>
+            <button
+                type="button"
+                @click="emit('closeModal')"
+                class="text-gray-700 px-4 py-1.5 rounded-md bg-gray-200 hover:bg-gray-300 border border-gray-300">
+                Otkaži
+            </button>
+        </div>
     </form>
 </template>
 
@@ -108,6 +119,10 @@ const resetForm = () => {
     formSubmitted.value = false
 }
 
+defineExpose({
+    resetForm,
+})
+
 const changeUserDetails = async () => {
     formSubmitted.value = true
     if (isFormInvalid.value) {
@@ -124,17 +139,17 @@ const changeUserDetails = async () => {
         await userStore.editUserData(formStore.editUserData.form)
         resetForm()
 
-        emit("closeModal")
+        emit('closeModal')
         showNotification('success', 'Uspešna izmena!', 'Podaci su uspešno ažurirani.', 4000)
     } catch (error: any) {
-        emit("closeModal")
+        emit('closeModal')
         showNotification(
             'error',
             'Greška pri izmeni podataka!',
             'Došlo je do greške pri izmeni podataka. Molimo pokušajte ponovo kasnije.'
         )
     } finally {
-        sharedStore.loading = false
+        sharedStore.setLoading(false)
     }
 }
 
@@ -150,9 +165,5 @@ onMounted(async () => {
         city: user.value?.city || '',
         zipcode: user.value?.zipcode || '',
     }
-})
-
-onBeforeUnmount(() => {
-    resetForm()
 })
 </script>

@@ -25,9 +25,11 @@ import ProductDetailsTabs from '~/layouts/ProductDetailsTabs.vue'
 import { useProductStore } from '~/stores/ProductStore'
 import { usePageTitle } from '~/composables/useTitle'
 import { useSharedStore } from '~/stores/SharedStore'
+import { useReviewStore } from '~/stores/ReviewStore'
 
 const route = useRoute()
 const productStore = useProductStore()
+const reviewStore = useReviewStore()
 const sharedStore = useSharedStore()
 const { updateTitle } = usePageTitle()
 
@@ -43,7 +45,8 @@ watch(
 
 const productId = parseInt(route.params.productId as string)
 
-onMounted(() => {
-    productStore.fetchProductDetails(productId)
+onMounted(async () => {
+    await productStore.fetchProductDetails(productId)
+    await reviewStore.fetchReviewsForProduct(productId)
 })
 </script>

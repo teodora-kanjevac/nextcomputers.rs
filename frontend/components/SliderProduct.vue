@@ -24,7 +24,7 @@
                 </button>
             </div>
 
-            <StarRating :rating="product.ratings" class="mt-1" />
+            <StarRating :size="5" :rating="product.ratings" class="mt-1" />
 
             <div class="mt-3 flex items-center text-gray-600 gap-1.5">
                 <TruckDeliveryIcon class="size-5" />

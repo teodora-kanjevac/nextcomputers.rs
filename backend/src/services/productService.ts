@@ -5,7 +5,6 @@ import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
 import { mapRatingsToProduct, mapRatingsToProductCards } from '~/src/utils/mapper/ratingMapper'
 import { isNaNObject, isNullObject } from '~/src/utils/ErrorHandling'
 import { fetchSortedProducts } from '~/src/utils/product/productSortingUtils'
-import { fetchUsersFullNames } from '~/src/utils/user/userFullName'
 import { calculateOffset } from '~/src/utils/utils'
 import { productEans } from '~/src/utils/product/productShowcaseEans'
 
@@ -41,20 +40,9 @@ export const fetchProductDetails = async (productId: number): Promise<ProductDet
 
     const product = await prisma.product.findUnique({
         where: { product_id: productId },
-        include: { review: true },
     })
 
     isNullObject('product', productId, product)
-
-    if (product?.review?.length) {
-        const userIds = product.review.map(review => review.user_id)
-        const userMap = await fetchUsersFullNames(userIds)
-
-        product.review = product.review.map(review => ({
-            ...review,
-            fullName: `${userMap[review.user_id]?.firstName || ''} ${userMap[review.user_id]?.lastName || ''}`,
-        }))
-    }
 
     return mapRatingsToProduct(product)
 }

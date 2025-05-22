@@ -1,21 +1,5 @@
 import gsap from 'gsap'
 
-export const animateScale = (selector: any, scale: number, duration: number = 0.3, ease: string = 'power1.out') => {
-    gsap.to(selector, {
-        scale,
-        duration,
-        ease,
-    })
-}
-
-export const resetScale = (selector: any, duration: number = 0.2, ease: string = 'power1.out') => {
-    gsap.to(selector, {
-        scale: 1,
-        duration,
-        ease,
-    })
-}
-
 export const fadeIn = (selector: any, duration: number = 0.2) => {
     gsap.to(selector, {
         opacity: 1,
