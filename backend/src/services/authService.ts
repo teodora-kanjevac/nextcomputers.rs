@@ -27,6 +27,12 @@ export const registerUser = async (userData: RegisterUserDTO) => {
                 city: userData.city,
                 phone_number: userData.phone,
                 password_hash: hashedPassword,
+                wishlist: {
+                    create: {
+                        name: 'Default Wishlist',
+                        is_default: true,
+                    },
+                }
             },
         })
 
