@@ -7,7 +7,7 @@
                 <span class="font-medium italic text-xs text-gray-600">{{ product?.name }}</span>
             </label>
         </div>
-        <div class="grid gap-y-5 mb-4">
+        <div class="grid gap-y-5 mb-3 pb-3 border-b border-gray-200">
             <RatingInput
                 label="Vaša ocena"
                 required
@@ -28,9 +28,9 @@
                 :errorMessage="commentCheck.message"
                 :shakeTrigger="shakeTrigger" />
         </div>
-        <div class="flex justify-center ms-1">
+        <div class="flex justify-center ms-1 mb-4 border-b border-gray-200">
             <span class="text-red-600 font-bold -mt-0.5">!</span>
-            <p class="text-xs border-b border-gray-200 font-medium pb-4 mb-4 ps-2 leading-5">
+            <p class="text-xs font-medium pb-3 ps-2 leading-5">
                 Cenimo Vaše mišljenje i podstičemo iskrene ocene naših proizvoda. Međutim, molimo Vas da recenzije budu
                 konstruktivne, objektivne i korisne za druge kupce. Recenzije koje sadrže zlonameran, uvredljiv ili
                 lažan sadržaj biće uklonjene kako bismo održali pravičnu i pouzdanu zajednicu. Hvala na razumevanju.

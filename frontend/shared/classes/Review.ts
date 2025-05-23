@@ -1,4 +1,3 @@
-import dayjs from 'dayjs'
 import { ProductData } from './ProductData'
 
 export class Review {
@@ -15,10 +14,6 @@ export class Review {
         this.product = new ProductData(review.product)
         this.comment = review.comment
         this.rating = review.rating
-        this.date = dayjs(review.createdAt).toDate()
-    }
-
-    formatDate(): string {
-        return dayjs(this.date).format('DD.MM.YYYY')
+        this.date = review.createdAt
     }
 }

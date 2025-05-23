@@ -2,14 +2,14 @@
     <div class="gap-3 py-6 sm:flex sm:items-start">
         <div class="shrink-0 space-y-1 sm:w-48 md:w-52">
             <div class="flex items-center">
-                <UserStarRating :size="5" :rating="review.rating" class="-ms-1" />
+                <UserStarRating :size="7" :rating="review.rating" class="-ms-1 mb-1" />
             </div>
             <div class="space-y-0.5">
                 <p class="text-base font-semibold text-gray-900">
                     {{ review.name }}
                 </p>
                 <p class="text-sm font-medium text-gray-600">
-                    {{ review.date }}
+                    {{ formatLongDate(review.date) }}
                 </p>
             </div>
         </div>

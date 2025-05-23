@@ -13,7 +13,7 @@
             </div>
             <div class="space-y-1">
                 <p class="font-medium">Status:</p>
-                <p class="font-semibold text-green-600">{{ order.orderStatus }}</p>
+                <StatusBadge :order-status="order.orderStatus" />
             </div>
         </div>
         <div class="divide-y rounded-md border border-gray-200 my-4">
@@ -103,7 +103,7 @@
                     <span class="text-gray-600">{{ paymentMethodText }}</span>
 
                     <span>Status porudžbine:</span>
-                    <span class="text-gray-600">{{ order.orderStatus }}</span>
+                    <StatusBadge class="mt-0.5" :order-status="order.orderStatus" />
                 </div>
             </div>
         </div>
@@ -111,7 +111,6 @@
 </template>
 
 <script setup lang="ts">
-import dayjs from 'dayjs'
 import type { OrderDTO } from '~/shared/types/OrderDTO'
 import { useOrderStore } from '~/stores/OrderStore'
 import { paymentMethodMap } from '~/assets/static/paymentMethodMap'
@@ -122,7 +121,7 @@ const order = computed<OrderDTO>(() => orderStore.order)
 
 const formattedData = computed(() => {
     return {
-        date: dayjs(order.value.createdAt).format('DD.MM.YYYY. HH:mm'),
+        date: formatLongDate(order.value.createdAt, true),
         totalPrice: formatPrice(Number(order.value.totalPrice)),
         productPrice: formatPrice(Number(order.value.orderInfo.productPrice)),
         discountPrice: formatPrice(Number(order.value.orderInfo.discountPrice)),

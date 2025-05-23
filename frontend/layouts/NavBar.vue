@@ -71,6 +71,7 @@ import SearchBar from '~/components/SearchBar.vue'
 import Logo from '~/components/Logo.vue'
 import { useAuthStore } from '~/stores/AuthStore'
 
+const route = useRoute()
 const searchMenu = ref<HTMLElement | null>(null)
 const navbarMenu = ref<HTMLElement | null>(null)
 const navbarRef = ref<HTMLElement | null>(null)
@@ -83,11 +84,22 @@ const authStore = useAuthStore()
 const isMobile = useMediaQuery('(max-width: 767px)')
 const { y } = useWindowScroll()
 
-const isVisible = computed(() => y.value > (navbarRef.value?.clientHeight ?? 50))
-const isScrolled = computed(() => y.value > 300)
+const shouldHideOnScroll = computed(() => {
+    const excludedPages = ['/profil', '/korpa']
+    return !excludedPages.some(prefix => route.path.startsWith(prefix))
+})
+
+const isVisible = computed(() => shouldHideOnScroll.value && y.value > (navbarRef.value?.clientHeight ?? 50))
+const isScrolled = computed(() => shouldHideOnScroll.value && y.value > 300)
 
 const updateNavbarVisibility = (show: boolean, useTransition = true) => {
-    if (!navbarRef.value || isMobile.value) return
+    if (!navbarRef.value || isMobile.value || !shouldHideOnScroll.value) {
+        if (navbarRef.value) {
+            navbarRef.value.classList.remove('-translate-y-full')
+            navbarRef.value.classList.add('translate-y-0')
+        }
+        return
+    }
 
     navbarRef.value.classList.toggle('transition-all', useTransition)
     navbarRef.value.classList.toggle('transition-none', !useTransition)

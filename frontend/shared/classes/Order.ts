@@ -13,6 +13,7 @@ export class Order {
         this.id = order.id
         this.userId = order.userId
         this.createdAt = order.createdAt
+        this.orderStatus = order.orderStatus
         this.totalPrice = order.totalPrice
         this.orderDetails = order.orderDetails.map((details: any) => new OrderDetails(details))
         this.orderInfo = new OrderInfo(order.orderInfo)

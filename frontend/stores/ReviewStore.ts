@@ -5,6 +5,7 @@ import { Review } from '~/shared/classes/Review'
 import type { ReviewData } from '~/shared/classes/ReviewData'
 import { ReviewProduct } from '~/shared/classes/ReviewProduct'
 import { ReviewSuggestion } from '~/shared/classes/ReviewSuggestion'
+import { useUserStore } from './UserStore'
 
 export const useReviewStore = defineStore('review', {
     state: () => ({
@@ -30,6 +31,7 @@ export const useReviewStore = defineStore('review', {
         async writeAReview(productId: number, reviewData: ReviewData) {
             try {
                 const authStore = useAuthStore()
+                const userStore = useUserStore()
                 await authStore.getMe()
                 if (!authStore.user) return
 
@@ -39,6 +41,7 @@ export const useReviewStore = defineStore('review', {
                 this.reviews.push(this.review)
                 this.removeReviewedProduct(productId)
 
+                userStore.userStatistics.reviews += 1
                 this.eligibility.hasReviewed = true
                 this.eligibility.canReview = false
             } catch (error) {

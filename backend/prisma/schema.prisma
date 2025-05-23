@@ -43,7 +43,7 @@ model order {
   order_id     String         @id @db.VarChar(12)
   user_id      String?        @db.Char(36)
   total_price  Decimal        @db.Decimal(10, 2)
-  order_status String?        @db.VarChar(20)
+  order_status order_status
   created_at   DateTime       @default(dbgenerated("(now())")) @db.DateTime(0)
   user         user?          @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_order_FK")
   orderdetails orderdetails[]
@@ -200,4 +200,12 @@ enum payment_method {
   CASH
   CARD
   ADVANCE
+}
+
+enum order_status {
+  CANCELED
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
 }

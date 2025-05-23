@@ -29,7 +29,7 @@
                             </td>
                             <td class="px-6 py-4">{{ formattedData[index].date }}</td>
                             <td class="px-6 py-4">{{ formattedData[index].price }} RSD</td>
-                            <td class="px-6 py-4">{{ order.orderStatus }}</td>
+                            <td class="px-6 py-4"><StatusBadge :order-status="order.orderStatus" /></td>
                         </tr>
                     </tbody>
                 </table>

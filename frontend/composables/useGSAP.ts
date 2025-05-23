@@ -1,21 +1,5 @@
 import gsap from 'gsap'
 
-export const fadeIn = (selector: any, duration: number = 0.2) => {
-    gsap.to(selector, {
-        opacity: 1,
-        duration,
-        ease: 'power1.out',
-    })
-}
-
-export const fadeOut = (selector: any, duration: number = 0.2) => {
-    gsap.to(selector, {
-        opacity: 0,
-        duration,
-        ease: 'power1.out',
-    })
-}
-
 export const slideInOut = (selector: any, targetHeight: number, duration: number = 0.5) => {
     gsap.to(selector, {
         height: targetHeight,

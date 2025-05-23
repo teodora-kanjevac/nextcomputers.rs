@@ -36,7 +36,7 @@ export const createOrder = async (orderData: OrderDataDTO, token: string): Promi
                 order_id: generateOrderIdWithUUID(),
                 user_id: userId,
                 total_price: orderData.prices.totalPrice,
-                order_status: null,
+                order_status: 'PENDING',
                 orderdetails: {
                     create: orderData.products.map(product => ({
                         product_id: product.id,
@@ -151,9 +151,9 @@ export const fetchOrderById = async (orderId: string): Promise<OrderDTO> => {
 
 export const fetchOrderHistory = async (token: string): Promise<OrderDTO[]> => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string }
-    const userId = decoded.id
+
     const orders = await prisma.order.findMany({
-        where: { user_id: userId },
+        where: { user_id: decoded.id },
         include: {
             orderdetails: {
                 select: {

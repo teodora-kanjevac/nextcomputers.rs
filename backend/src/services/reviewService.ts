@@ -58,6 +58,7 @@ export const fetchAllReviewsFromUser = async (token: string): Promise<ReviewDTO[
                 },
             },
         },
+        orderBy: { created_at: 'desc' },
     })
 
     if (reviews.length === 0) return []

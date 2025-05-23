@@ -5,6 +5,7 @@ import {
     fetchUserFullName,
     fetchUserInfo,
     changeUserInfo,
+    fetchUserStatistics,
 } from '~/src/services/userService'
 import { verifyEmailChange, verifyPasswordChange } from '~/src/services/authService'
 
@@ -36,6 +37,25 @@ export const getUserInfo = async (req: Request, res: Response) => {
         } else {
             const user = await fetchUserInfo(token)
             res.status(200).json(user)
+        }
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(400).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const getUserStatistics = async (req: Request, res: Response) => {
+    try {
+        const token = req.cookies.token
+
+        if (!token) {
+            return res.status(200).json({ user: null })
+        } else {
+            const statistics = await fetchUserStatistics(token)
+            res.status(200).json(statistics)
         }
     } catch (error) {
         if (error instanceof Error) {

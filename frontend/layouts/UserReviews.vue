@@ -36,7 +36,7 @@
                                         <UserStarRating :size="6" :rating="review.rating" class="-me-1.5" />
                                     </div>
                                     <div class="text-sm text-gray-600">
-                                        {{ dayjs(review.date).format('DD.MM.YYYY') }}
+                                        {{ formatLongDate(review.date) }}
                                     </div>
                                 </div>
                             </div>

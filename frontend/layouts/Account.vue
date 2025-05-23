@@ -17,6 +17,7 @@
                     </main>
                 </div>
             </div>
+            <ScrollToTopButton />
         </div>
         <Footer />
     </div>
