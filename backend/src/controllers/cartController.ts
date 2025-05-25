@@ -10,10 +10,18 @@ import {
     updateCartItemQuantity,
     updateLastSiteVisitCart,
 } from '~/src/services/cartService'
+import jwt from 'jsonwebtoken'
 
 export const createACart = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { userId } = req.body
+        const token = req.cookies.token
+        let userId
+        if (!token) {
+            userId = null
+        } else {
+            const decoded = jwt.decode(token) as { id: string }
+            userId = decoded.id
+        }
 
         const cartId = await createCart(userId)
 

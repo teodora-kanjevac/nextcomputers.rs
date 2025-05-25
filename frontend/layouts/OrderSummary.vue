@@ -93,7 +93,7 @@ const userDetails = computed(() => {
     const details = [
         { label: 'Ime i prezime', value: formStore.checkout.form.fullname },
         { label: 'Email adresa', value: formStore.checkout.form.email },
-        { label: 'Broj telefona', value: `+381 ${formStore.checkout.form.phone}` },
+        { label: 'Broj telefona', value: `+381 ${formStore.checkout.form.phone.replace(/^0/, '')}` },
         { label: 'Adresa dostave', value: formStore.checkout.form.address },
         { label: 'Grad', value: formStore.checkout.form.city },
         { label: 'Poštanski broj', value: formStore.checkout.form.zipcode },
@@ -124,7 +124,7 @@ const handleOrder = async () => {
             })),
             form: {
                 ...formStore.checkout.form,
-                phone: `+381 ${formStore.checkout.form.phone}`,
+                phone: `+381 ${formStore.checkout.form.phone.replace(/^0/, '')}`,
             },
             prices: formStore.checkout.meta.prices,
             paymentMethod: formStore.checkout.meta.paymentMethod ?? 'ADVANCE',

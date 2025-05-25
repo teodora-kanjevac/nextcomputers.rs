@@ -46,7 +46,7 @@ export default defineNuxtConfig({
             },
         },
     },
-    modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image', '@vueuse/nuxt'],
+    modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image', '@vueuse/nuxt', '@formkit/auto-animate'],
     plugins: [
         { src: '~/plugins/flowbite-init.js', mode: 'client' },
         '~/plugins/routeInfo.ts',

@@ -9,11 +9,9 @@ export const useCartStore = defineStore('cart', {
         } as Cart,
     }),
     actions: {
-        async createCart(userId: string | null = null) {
+        async createCart() {
             try {
-                const { data } = await axios.post(`/api/cart/create`, {
-                    userId: userId,
-                })
+                const { data } = await axios.post(`/api/cart/create`)
                 this.cart.id = data
                 return data
             } catch (error) {

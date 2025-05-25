@@ -10,9 +10,9 @@ import {
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email, password, firstName, lastName, address, city, phone } = req.body
+        const { email, password, firstName, lastName, address, city, phone, cartId } = req.body
 
-        const newUser = await registerUser({ email, password, firstName, lastName, address, city, phone })
+        const newUser = await registerUser({ email, password, firstName, lastName, address, city, phone }, cartId)
 
         const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET as string, { expiresIn: '24h' })
         res.cookie('token', token, {

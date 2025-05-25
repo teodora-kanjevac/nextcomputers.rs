@@ -3,13 +3,13 @@ import { isNullObject } from '~/src/utils/ErrorHandling'
 import { CartDTO } from '~/src/DTOs/Cart.dto'
 import { CartItemDTO } from '~/src/DTOs/CartItem.dto'
 
-export const createCart = async (userId: string): Promise<string> => {
+export const createCart = async (userId: string | null): Promise<string> => {
     const cart = await prisma.cart.create({
         data: {
             user_id: userId,
         },
     })
-
+    
     return cart.cart_id
 }
 

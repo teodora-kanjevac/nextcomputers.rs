@@ -6,12 +6,11 @@
                 <div v-if="suggestions.length === 0" class="text-center py-4 text-gray-500">
                     Trenutno nemate proizvode za ocenjivanje.
                 </div>
-                <div v-else class="space-y-3">
+                <div v-else class="space-y-3" v-auto-animate="{ duration: 200, easing: 'ease' }">
                     <p class="text-sm text-gray-600 mb-7">
                         Budite deo naše zajednice - podelite svoje utiske o proizvodima koje ste nedavno kupili. Vaše
                         povratne informacije mogu da pomognu drugima da donesu bolje odluke pri kupovini!
                     </p>
-
                     <div
                         v-for="suggestion in visibleSuggestions"
                         :key="`${suggestion.orderId}-${suggestion.product.id}`"
@@ -32,7 +31,7 @@
                                     class="hover:underline">
                                     Porudžbina - {{ suggestion.orderId }}
                                 </NuxtLink>
-                                • Kupljeno {{ formatDate(suggestion.purchasedAt) }}
+                                • Kupljeno {{ formatLongDate(suggestion.purchasedAt) }}
                             </p>
                         </div>
                         <ReviewSuggestionModal
@@ -65,7 +64,7 @@ const visibleSuggestions = computed(() => suggestions.value.slice(0, visibleCoun
 const hasMoreSuggestions = computed(() => suggestions.value.length > visibleCount.value)
 
 const loadMore = () => {
-    visibleCount.value += 5
+    visibleCount.value += 4
 }
 
 const handleReviewSubmitted = () => {
@@ -77,13 +76,4 @@ const handleReviewSubmitted = () => {
 onMounted(async () => {
     await reviewStore.getReviewSuggestions()
 })
-
-const formatDate = (date: any) => {
-    const d = new Date(date)
-    return d.toLocaleDateString('sr-Latn', {
-        day: '2-digit',
-        month: 'long',
-        year: 'numeric',
-    })
-}
 </script>

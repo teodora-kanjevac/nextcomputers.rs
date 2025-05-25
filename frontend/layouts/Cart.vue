@@ -8,10 +8,8 @@
 
                 <div class="mt-6 sm:mt-8 md:gap-6 lg:flex lg:items-start xl:gap-8">
                     <div class="mx-auto w-full flex-none lg:max-w-2xl xl:max-w-4xl">
-                        <div class="space-y-2">
-                            <template v-for="cartItem in cartItems">
-                                <CartItem :cart-item="cartItem" />
-                            </template>
+                        <div class="space-y-2" v-auto-animate>
+                            <CartItem v-for="cartItem in cartItems" :key="cartItem.id" :cart-item="cartItem" />
                         </div>
                         <div class="flex justify-end">
                             <button

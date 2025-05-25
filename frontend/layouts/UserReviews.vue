@@ -16,7 +16,7 @@
                 </p>
             </div>
             <template v-else>
-                <div class="space-y-4">
+                <div class="space-y-4" ref="parent">
                     <template v-for="review in paginatedReview" :key="review.id">
                         <div class="border border-gray-200 px-5 py-4 font-medium rounded-lg shadow-sm">
                             <div class="flex items-start justify-between border-b border-gray-200 pb-3 mb-4">
@@ -70,12 +70,12 @@
 <script setup lang="ts">
 import Paginator from 'primevue/paginator'
 import { useUserStore } from '~/stores/UserStore'
-import dayjs from 'dayjs'
 import type { ReviewDTO } from '~/shared/types/ReviewDTO'
 import EditReviewModal from '~/components/EditReviewModal.vue'
 
 const rowsPerPage = ref(3)
 const first = ref(0)
+const isPaginating = ref(false)
 const { showNotification } = useNotification()
 
 const userStore = useUserStore()
@@ -85,9 +85,22 @@ const paginatedReview = computed(() => {
     return reviews.value.slice(first.value, first.value + rowsPerPage.value)
 })
 
+const [parent, enableAnimations] = useAutoAnimate({
+    duration: 175,
+    easing: 'ease',
+})
+
+watch(isPaginating, newVal => {
+    enableAnimations(!newVal)
+})
+
 const onPageChange = (event: any) => {
+    isPaginating.value = true
     first.value = event.first
     rowsPerPage.value = event.rows
+    nextTick(() => {
+        isPaginating.value = false
+    })
 }
 
 const handleDeleteReview = async (reviewId: string) => {

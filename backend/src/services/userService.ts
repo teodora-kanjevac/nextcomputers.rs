@@ -5,8 +5,8 @@ import bcryptjs from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { UserFullnameDTO } from '~/src/DTOs/UserFullname.dto'
 import { UserMeDTO } from '~/src/DTOs/UserMe.dto'
-import { UserDataDTO } from '../DTOs/UserData.dto'
-import { UserStatisticsDTO } from '../DTOs/UserStatistics.dto'
+import { UserDataDTO } from '~/src/DTOs/UserData.dto'
+import { UserStatisticsDTO } from '~/src/DTOs/UserStatistics.dto'
 
 export const fetchUsers = async (): Promise<User[]> => {
     const user = await prisma.user.findMany()
@@ -23,6 +23,11 @@ export const fetchMe = async (token: string): Promise<UserMeDTO> => {
         select: {
             user_id: true,
             email: true,
+            cart: {
+                select: {
+                    cart_id: true,
+                },
+            },
         },
     })
 

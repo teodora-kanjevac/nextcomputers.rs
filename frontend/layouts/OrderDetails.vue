@@ -136,6 +136,6 @@ const formattedItemData = computed(() => {
 })
 
 const paymentMethodText =
-    paymentMethodMap[order.value.orderInfo.paymentMethod as keyof typeof paymentMethodMap] ||
+    paymentMethodMap[order.value?.orderInfo?.paymentMethod as keyof typeof paymentMethodMap] ||
     'Način plaćanja nije poznat'
 </script>
