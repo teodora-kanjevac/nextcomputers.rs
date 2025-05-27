@@ -148,7 +148,7 @@ export const changeProductPriority = async (req: Request, res: Response) => {
     const products = req.body
     
     if (!Array.isArray(products) || products.length === 0) {
-        return res.status(400).json({ message: 'No product priority has been changed' });
+        return res.status(200).json(products);
     }
 
     try {
