@@ -15,6 +15,7 @@ import catalogRoutes from '~/src/routes/catalogRoutes'
 import authRoutes from '~/src/routes/authRoutes'
 import userRoutes from '~/src/routes/userRoutes'
 import cookieParser from 'cookie-parser'
+import wishlistRoutes from '~/src/routes/wishlistRoutes'
 
 dotenv.config()
 const app: Application = express()
@@ -41,6 +42,7 @@ app.use('/api/ips', ipsRoutes)
 app.use('/api/catalog', catalogRoutes)
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/wishlist', wishlistRoutes)
 
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
