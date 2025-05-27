@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import jwt, { TokenExpiredError, JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
+
+const { TokenExpiredError } = jwt as any;
 
 export interface CustomRequest extends Request {
     user?: any;
@@ -24,9 +26,9 @@ export const authUser = (req: CustomRequest, res: Response, next: NextFunction) 
             }
 
             try {
-                const decodedRefresh = jwt.verify(refreshToken, process.env.REFRESH_SECRET as string) as { id: string };
+                const decodedRefresh = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET as string) as { id: string };
                 const newAccessToken = jwt.sign(
-                    { userId: decodedRefresh.id },
+                    { id: decodedRefresh.id },
                     process.env.JWT_SECRET as string,
                     { expiresIn: '15m' }
                 );
@@ -36,7 +38,11 @@ export const authUser = (req: CustomRequest, res: Response, next: NextFunction) 
                     sameSite: 'strict',
                     maxAge: 15 * 60 * 1000,
                 });
-                req.user = decodedRefresh;
+                req.cookies.token = newAccessToken;
+
+                const decodedUser = jwt.verify(newAccessToken, process.env.JWT_SECRET as string);
+                req.user = decodedUser;
+
                 next();
 
             } catch (refreshErr) {

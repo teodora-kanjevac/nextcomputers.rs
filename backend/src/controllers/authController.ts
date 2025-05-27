@@ -38,13 +38,23 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
             expiresIn: rememberMe ? '30d' : '1h',
-        })
+        });
+
+        const refreshToken = jwt.sign({ userId: user.id }, process.env.JWT_REFRESH_SECRET as string, {
+            expiresIn: '7d',
+        });
 
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : undefined,
         })
+
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            maxAge: 7 * 24 * 60 * 60 * 1000,
+        });
 
         res.status(200).json({ user })
     } catch (error) {
