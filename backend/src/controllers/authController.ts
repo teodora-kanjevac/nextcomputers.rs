@@ -10,7 +10,8 @@ import {
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { email, password, firstName, lastName, address, city, phone, cartId } = req.body
+        const { email, password, firstName, lastName, address, city, phone } = req.body
+        const cartId = req.cookies.cart_id
 
         const newUser = await registerUser({ email, password, firstName, lastName, address, city, phone }, cartId)
 
@@ -18,6 +19,11 @@ export const register = async (req: Request, res: Response): Promise<void> => {
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
+            maxAge: 24 * 60 * 60 * 1000,
+        })
+        res.cookie('cart_id', cartId, {
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
             maxAge: 24 * 60 * 60 * 1000,
         })
 
@@ -34,16 +40,46 @@ export const login = async (req: Request, res: Response): Promise<void> => {
     try {
         const { email, password, rememberMe } = req.body
 
-        const user = await loginUser({ email, password })
+        const { user, cartId } = await loginUser({ email, password })
+
+        let tokenExpiry: Date | undefined
+        let cookieExpiry: Date | undefined
+
+        if (user.isVerified) {
+            if (rememberMe) {
+                const thirtyDays = 30 * 24 * 60 * 60 * 1000
+                tokenExpiry = new Date(Date.now() + thirtyDays)
+                cookieExpiry = tokenExpiry
+            }
+        } else {
+            if (user.expiresAt) {
+                const now = new Date()
+                const expiresAt = new Date(user.expiresAt)
+
+                if (expiresAt <= now) {
+                    throw new Error('User account has expired')
+                }
+
+                tokenExpiry = expiresAt
+                cookieExpiry = expiresAt
+            }
+        }
+
+        const expiresInSeconds = tokenExpiry ? Math.floor((tokenExpiry.getTime() - Date.now()) / 1000) : undefined
 
         const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET as string, {
-            expiresIn: rememberMe ? '30d' : '1h',
+            expiresIn: expiresInSeconds || '1h',
         })
 
         res.cookie('token', token, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
-            maxAge: rememberMe ? 30 * 24 * 60 * 60 * 1000 : undefined,
+            expires: cookieExpiry,
+        })
+        res.cookie('cart_id', cartId, {
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+            expires: cookieExpiry,
         })
 
         res.status(200).json({ user })
@@ -68,6 +104,7 @@ export const verifyUser = async (req: Request, res: Response) => {
             return res.status(400).json({ error: 'Invalid token' })
         }
         const response = await verifyEmail(token)
+
         res.status(200).json(response)
     } catch (error) {
         if (error instanceof Error) {

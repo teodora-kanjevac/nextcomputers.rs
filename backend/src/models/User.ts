@@ -9,6 +9,8 @@ export class User {
     public zipcode: string
     public passwordHash: string
     public createdAt: Date
+    public expiresAt: Date
+    public isVerified: boolean
 
     constructor(user: any) {
         this.id = user.user_id
@@ -21,5 +23,7 @@ export class User {
         this.zipcode = user.zipcode
         this.passwordHash = user.password_hash
         this.createdAt = user.created_at
+        this.expiresAt = user.expires_at
+        this.isVerified = user.is_verified
     }
 }

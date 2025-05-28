@@ -9,15 +9,15 @@ export const createCart = async (userId: string | null): Promise<string> => {
             user_id: userId,
         },
     })
-    
+
     return cart.cart_id
 }
 
-export const updateLastSiteVisitCart = async (cartId: string, lastAccessedAt: Date): Promise<string> => {
+export const updateLastSiteVisitCart = async (cartId: string): Promise<string> => {
     const cart = await prisma.cart.update({
         where: { cart_id: cartId },
         data: {
-            last_accessed_at: lastAccessedAt,
+            last_accessed_at: new Date(),
         },
     })
 

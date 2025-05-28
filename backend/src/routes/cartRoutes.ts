@@ -21,6 +21,6 @@ router.put('/update-quantity', updateQuantity)
 router.post('/add-item', addItemToCart)
 router.post('/create', createACart)
 router.get('/user/:userId', getCartByUser)
-router.get('/:cartId', getCartById)
+router.get('/', getCartById)
 
 export default router

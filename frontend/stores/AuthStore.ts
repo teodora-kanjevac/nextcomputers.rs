@@ -2,8 +2,9 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { RegisterFormData } from '~/shared/classes/RegisterFormData'
 import type { LogInData } from '~/shared/classes/LogInData'
-import type { UserMe } from '~/shared/classes/UserMe'
+import { UserMe } from '~/shared/classes/UserMe'
 import { useCartStore } from './CartStore'
+import { useCartCookies } from '~/composables/useCartCookies'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
@@ -16,19 +17,21 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         async registerUser(RegisterFormData: RegisterFormData) {
             try {
-                const cartId = localStorage.getItem('cart_id')
+                const { cartIdCookie, sessionUpdatedCookie } = useCartCookies()
 
                 const { data } = await axios.post(`/api/auth/register`, {
-                    ...RegisterFormData,
-                    cartId: cartId,
-                })
+                        ...RegisterFormData,
+                        cartId: cartIdCookie.value,
+                    },
+                    { validateStatus: status => status < 500 })
+
                 if (data.success === false) {
                     throw new Error(data.error)
                 }
 
-                this.user = data.newUser
+                this.user = new UserMe(data.newUser)
 
-                localStorage.removeItem('cart_expiration')
+                sessionUpdatedCookie.value = undefined
             } catch (error) {
                 throw error
             }
@@ -36,19 +39,21 @@ export const useAuthStore = defineStore('auth', {
         async loginUser(loginData: LogInData) {
             try {
                 const cartStore = useCartStore()
+                const { sessionUpdatedCookie } = useCartCookies()
 
-                const { data } = await axios.post(`/api/auth/login`, loginData)
+                const { data } = await axios.post(`/api/auth/login`, loginData, {
+                    validateStatus: status => status < 500,
+                })
+
                 if (data.success === false) {
                     throw new Error(data.error)
                 }
-                this.user = data.user
 
-                localStorage.removeItem('cart_expiration')
-                sessionStorage.removeItem('session_updated')
+                this.user = new UserMe(data.user)
 
-                if (this.user?.cartId) {
-                    await cartStore.fetchCart(this.user.cartId)
-                }
+                await cartStore.updateLastAccessToCart()
+                await cartStore.fetchCart()
+                sessionUpdatedCookie.value = undefined
             } catch (error) {
                 throw error
             }
@@ -56,20 +61,17 @@ export const useAuthStore = defineStore('auth', {
         async logoutUser() {
             try {
                 const cartStore = useCartStore()
+                const { sessionUpdatedCookie, cartIdCookie } = useCartCookies()
 
                 await axios.post(`/api/auth/logout`)
                 this.user = null
 
-                const newCartId = await cartStore.createCart()
-                localStorage.setItem('cart_id', newCartId)
+                cartIdCookie.value = undefined
+                await cartStore.createCart()
 
-                const now = new Date()
-                const newExpiration = new Date()
-                newExpiration.setUTCDate(newExpiration.getUTCDate() + 10)
+                sessionUpdatedCookie.value = undefined
 
-                localStorage.setItem('last_accessed_at', now.toISOString())
-                localStorage.setItem('cart_expiration', newExpiration.toISOString())
-                sessionStorage.removeItem('session_updated')
+                await cartStore.fetchCart()
             } catch (error) {
                 throw error
             }

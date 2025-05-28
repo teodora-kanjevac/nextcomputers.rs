@@ -13,7 +13,7 @@ export const deleteExpiredCarts = async () => {
                 },
             },
         })
-        console.log(`${deletedCarts.count} expired carts deleted.`)
+        console.log(`Deleted ${deletedCarts.count} expired carts.`)
     } catch (error) {
         console.error('Error deleting expired carts:', error)
     }
