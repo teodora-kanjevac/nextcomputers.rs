@@ -28,6 +28,12 @@ export const registerUser = async (userData: RegisterUserDTO, cartId: string) =>
                 phone_number: userData.phone,
                 password_hash: hashedPassword,
                 expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
+                wishlist: {
+                    create: {
+                        name: 'Default Wishlist',
+                        is_default: true,
+                    },
+                }
             },
         })
 

@@ -81,6 +81,31 @@ model orderinfo {
   order          order          @relation(fields: [order_id], references: [order_id], onDelete: Cascade, onUpdate: NoAction, map: "order_id_orderinfo_FK")
 }
 
+model wishlist {
+  wishlist_id  String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  user_id      String?  @db.Char(36)
+  created_at   DateTime @default(dbgenerated("(now())")) @db.DateTime(0)
+  name         String   @default("") @db.VarChar(100)
+  is_default   Boolean  @default(true)
+  user             user?      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_wishlist_FK")
+  wishlistitem wishlistitem[]
+
+  @@index([user_id], map: "user_id_wishlist_FK")
+}
+
+model wishlistitem {
+  wishlist_item_id String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  wishlist_id      String   @db.Char(36)
+  product_id       Int      @db.UnsignedInt
+  added_at         DateTime @default(dbgenerated("(now())")) @db.DateTime(0)
+  priority         Int      @default(0) @db.UnsignedInt
+  wishlist         wishlist @relation(fields: [wishlist_id], references: [wishlist_id], onDelete: Cascade, onUpdate: NoAction, map: "wishlist_id_wishlistitem_FK")
+  product          product  @relation(fields: [product_id], references: [product_id], onDelete: Cascade, onUpdate: NoAction, map: "product_id_wishlistitem_FK")
+
+  @@index([wishlist_id], map: "wishlist_id_wishlistitem_FK")
+  @@index([product_id], map: "product_id_wishlistitem_FK")
+}
+
 model product {
   product_id        Int            @id @default(autoincrement()) @db.UnsignedInt
   image_url         Json?
@@ -102,6 +127,7 @@ model product {
   price_distributor String?        @default("") @db.VarChar(50)
   shipping_price    Decimal        @default(0.00) @db.Decimal(10, 2)
   cartitem          cartitem[]
+  wishlistitem      wishlistitem[]
   orderdetails      orderdetails[]
   subcategory       subcategory?   @relation(fields: [subcategory_id], references: [subcategory_id], onUpdate: NoAction, map: "subcategory_id_FK")
   promotion         promotion[]
@@ -161,6 +187,7 @@ model user {
   city          String?   @default("") @db.VarChar(50)
   zipcode       String?   @default("") @db.VarChar(10)
   cart          cart[]
+  wishlist      wishlist[]
   order         order[]
   review        review[]
 }
