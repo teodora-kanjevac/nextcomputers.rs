@@ -13,7 +13,7 @@ model cart {
   user_id          String?    @db.Char(36)
   created_at       DateTime   @default(dbgenerated("(now())")) @db.DateTime(0)
   last_accessed_at DateTime   @default(dbgenerated("(now())")) @db.DateTime(0)
-  user             user?      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_cart_FK")
+  user             user?      @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: NoAction, map: "user_id_cart_FK")
   cartitem         cartitem[]
 
   @@index([user_id], map: "user_id_cart_FK")
@@ -43,10 +43,11 @@ model order {
   order_id     String         @id @db.VarChar(12)
   user_id      String?        @db.Char(36)
   total_price  Decimal        @db.Decimal(10, 2)
-  order_status String?        @db.VarChar(20)
+  order_status order_status
   created_at   DateTime       @default(dbgenerated("(now())")) @db.DateTime(0)
-  user         user?          @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_order_FK")
+  user         user?          @relation(fields: [user_id], references: [user_id], onDelete: SetNull, onUpdate: Cascade, map: "user_id_order_FK")
   orderdetails orderdetails[]
+  orderinfo    orderinfo?
 
   @@index([user_id], map: "user_id_order_FK")
 }
@@ -61,6 +62,23 @@ model orderdetails {
 
   @@index([order_id], map: "order_id_orderdetails_FK")
   @@index([product_id], map: "product_id_orderdetails_FK")
+}
+
+model orderinfo {
+  order_info_id  String         @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  order_id       String         @unique @db.VarChar(20)
+  name           String         @db.VarChar(255)
+  address        String         @db.VarChar(255)
+  phone_number   String         @db.VarChar(50)
+  email          String         @db.VarChar(255)
+  city           String         @db.VarChar(50)
+  zipcode        String         @db.VarChar(20)
+  payment_method payment_method
+  subtotal_price Decimal        @db.Decimal(10, 2)
+  shipping_price Decimal        @db.Decimal(10, 2)
+  discount_price Decimal        @db.Decimal(10, 2)
+  pib            String?        @db.VarChar(50)
+  order          order          @relation(fields: [order_id], references: [order_id], onDelete: Cascade, onUpdate: NoAction, map: "order_id_orderinfo_FK")
 }
 
 model wishlist {
@@ -99,21 +117,23 @@ model product {
   ean               String         @unique(map: "ean") @default("") @db.VarChar(100)
   country           String?        @default("") @db.VarChar(100)
   supplier          String?        @default("") @db.VarChar(100)
-  price_distributor String?        @default("") @db.VarChar(50)
-  price             Decimal        @default(0) @db.Decimal(10, 2)
-  retail_price      Decimal        @default(0) @db.Decimal(10, 2)
-  sale_price        Decimal        @default(0) @db.Decimal(10, 2)
-  shipping_price    Decimal        @default(0) @db.Decimal(10, 2)
+  price             Decimal        @default(0.00) @db.Decimal(10, 2)
+  retail_price      Decimal        @default(0.00) @db.Decimal(10, 2)
+  sale_price        Decimal        @default(0.00) @db.Decimal(10, 2)
   discount_price    Decimal?       @db.Decimal(10, 2)
-  available         Boolean        @default(false)
   payment_advance   Int            @default(0) @db.SmallInt
   subcategory_id    Int?           @db.UnsignedInt
+  available         Boolean        @default(false)
+  price_distributor String?        @default("") @db.VarChar(50)
+  shipping_price    Decimal        @default(0.00) @db.Decimal(10, 2)
   cartitem          cartitem[]
   wishlistitem      wishlistitem[]
   orderdetails      orderdetails[]
   subcategory       subcategory?   @relation(fields: [subcategory_id], references: [subcategory_id], onUpdate: NoAction, map: "subcategory_id_FK")
   promotion         promotion[]
   review            review[]
+
+  @@index([subcategory_id], map: "subcategory_id_FK")
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -130,7 +150,7 @@ model promotion {
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
 model review {
-  review_id  Int      @id @default(autoincrement()) @db.UnsignedInt
+  review_id  String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
   created_at DateTime @default(dbgenerated("(now())")) @db.DateTime(0)
   product_id Int      @db.UnsignedInt
   user_id    String   @default("") @db.Char(36)
@@ -154,17 +174,18 @@ model subcategory {
 }
 
 model user {
-  user_id       String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  email         String   @unique(map: "email") @default("") @db.VarChar(100)
-  first_name    String?  @default("") @db.VarChar(50)
-  last_name     String?  @default("") @db.VarChar(50)
-  address       String?  @default("") @db.VarChar(255)
-  city          String?  @default("") @db.VarChar(50)
-  phone_number  String?  @default("") @db.VarChar(50)
-  zipcode       String?  @default("") @db.VarChar(10)
-  created_at    DateTime @default(now()) @db.DateTime(0)
-  password_hash String   @default("") @db.VarChar(255)
-  is_verified   Boolean  @default(false)
+  user_id       String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  email         String    @unique(map: "email") @default("") @db.VarChar(100)
+  first_name    String?   @default("") @db.VarChar(50)
+  last_name     String?   @default("") @db.VarChar(50)
+  address       String?   @default("") @db.VarChar(255)
+  phone_number  String?   @default("") @db.VarChar(50)
+  created_at    DateTime  @default(dbgenerated("(now())")) @db.DateTime(0)
+  expires_at    DateTime? @db.DateTime(0)
+  password_hash String    @default("") @db.VarChar(255)
+  is_verified   Boolean   @default(false)
+  city          String?   @default("") @db.VarChar(50)
+  zipcode       String?   @default("") @db.VarChar(10)
   cart          cart[]
   wishlist      wishlist[]
   order         order[]
@@ -192,13 +213,27 @@ model distributorprice {
 }
 
 model pendingverification {
-  id        String   @id @default(uuid())
-  email     String   @unique
-  token     String
-  fullname  String
-  expiresAt DateTime @db.DateTime(0)
-  createdAt DateTime @default(now()) @db.DateTime(0)
+  id         String   @id @default(uuid())
+  email      String   @unique
+  token      String
+  fullname   String
+  expires_at DateTime @db.DateTime(0)
+  created_at DateTime @default(now()) @db.DateTime(0)
 
   @@index([email])
-  @@index([expiresAt])
+  @@index([expires_at])
+}
+
+enum payment_method {
+  CASH
+  CARD
+  ADVANCE
+}
+
+enum order_status {
+  CANCELED
+  PENDING
+  CONFIRMED
+  SHIPPED
+  DELIVERED
 }

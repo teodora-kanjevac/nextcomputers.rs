@@ -54,6 +54,9 @@ pnpm dev:frontend
 
 # backend only
 pnpm dev:backend
+
+# run cron-jobs
+pnpm dev:scraper
 ```
 
 ## Running Prisma Mirgrate and Pull
@@ -63,19 +66,19 @@ To **push** changes from `schema.prisma` to the Database use the `migrate` comma
 ```bash
 cd backend
 ↓
-npx prisma migrate dev --name 'name'
+pnpm dlx prisma migrate dev --name 'name'
 ```
 
 Then use the `generate` command to generate the Prisma Client:
 
 ```bash
-npx prisma generate
+pnpm dlx prisma generate
 ```
 
 On the server, use the `deploy` command to deploy the migration changes:
 
 ```bash
-npx prisma migrate deploy
+pnpm dlx prisma migrate deploy
 ```
 
 <br/>
@@ -85,13 +88,13 @@ To **pull** changes made in the Database use this command:
 ```bash
 cd backend
 ↓
-npx prisma db pull
+pnpm dlx prisma db pull
 ```
 
 Then use the `generate` command to generate the Prisma Client:
 
 ```bash
-npx prisma generate
+pnpm dlx prisma generate
 ```
 
 ## TypeScript Configuration for Splide
@@ -108,7 +111,7 @@ To avoid TypeScript errors for `@splidejs/vue-splide`, add the following to your
 
 ## Adding .env Files
 
-**API** and **Database** keys are in two seperate `.env` folders. Add one `.env` file in the root of the project with the API URL and add the other `.env` file in the `backend/prisma` folder with the Database URL.
+**API** and **Database** keys are in two seperate `.env` folders. Add one `.env` file in the root of the project with the API URL and add the other `.env` file in the `backend/prisma` folder with the Database URL. Add another `.env` to the `frontend` folder that contains _NUXT BASE_ and _DEV_ URLs.
 
 ## Setting up Meilisearch Search Engine
 

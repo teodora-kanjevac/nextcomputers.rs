@@ -1,20 +1,12 @@
 import prisma from '~/src/utils/prisma'
 
 export const storeVerificationData = async (data: { email: string; token: string; fullname: string }) => {
-    const expiresAt = new Date()
-    expiresAt.setHours(expiresAt.getHours() + 24)
-
-    await prisma.pendingverification.upsert({
-        where: { email: data.email },
-        update: {
-            createdAt: new Date(),
-            expiresAt,
-        },
-        create: {
+    await prisma.pendingverification.create({
+        data: {
             email: data.email,
             token: data.token,
             fullname: data.fullname,
-            expiresAt,
+            expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
         },
     })
 }
@@ -26,11 +18,11 @@ export const getVerificationData = async (email: string) => {
             email: true,
             token: true,
             fullname: true,
-            expiresAt: true,
+            expires_at: true,
         },
     })
 
-    if (data && new Date(data.expiresAt) > new Date()) {
+    if (data && new Date(data.expires_at) > new Date()) {
         return data
     } else if (data) {
         await deleteVerificationData(email)

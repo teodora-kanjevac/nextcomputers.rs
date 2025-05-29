@@ -17,7 +17,7 @@
                                 </p>
                             </div>
                             <div class="text-sm">
-                                <div class="space-y-3 mt-8" v-if="selectedPaymentMethod === 'advance'">
+                                <div class="space-y-3 mt-8" v-if="selectedPaymentMethod === 'ADVANCE'">
                                     <p>
                                         Uplatom na račun
                                         <span class="font-semibold">dobijate</span>
@@ -32,7 +32,7 @@
                                         novac, i čuvate prirodu.
                                     </p>
                                 </div>
-                                <div class="space-y-3 mt-8" v-else-if="selectedPaymentMethod === 'cash'">
+                                <div class="space-y-3 mt-8" v-else-if="selectedPaymentMethod === 'CASH'">
                                     <p>
                                         Plaćanje gotovinom pri pouzeću
                                         <span class="font-semibold">ne dobijate</span>
@@ -68,16 +68,13 @@
 
 <script setup lang="ts">
 import { useFormStore } from '~/stores/FormStore'
+import { paymentMethodMap } from '~/assets/static/paymentMethodMap'
 
 const formStore = useFormStore()
 
 const emit = defineEmits(['nextStep'])
 
-const selectedPaymentMethod = ref<string | undefined>(formStore.checkout.meta.paymentMethod)
-const paymentMethodMap = {
-    advance: 'Uplatom na račun',
-    cash: 'Plaćanje gotovinom pri pouzeću',
-}
+const selectedPaymentMethod = ref<'CASH' | 'CARD' | 'ADVANCE' | undefined>(formStore.checkout.meta.paymentMethod)
 const formSubmitted = ref(false)
 
 function handleSubmit() {
@@ -85,8 +82,7 @@ function handleSubmit() {
     if (selectedPaymentMethod.value) {
         formStore.checkout.meta.paymentMethod = selectedPaymentMethod.value
         formStore.checkout.meta.paymentMethodText =
-            paymentMethodMap[selectedPaymentMethod.value as keyof typeof paymentMethodMap] ||
-            'Nije izabran način plaćanja'
+            paymentMethodMap[selectedPaymentMethod.value] || 'Nije izabran način plaćanja'
         goToNextStep()
     }
 }

@@ -29,15 +29,6 @@
                         </div>
                     </div>
                 </div>
-                <button
-                    type="button"
-                    aria-label="Otvori formu za menjanje podataka"
-                    data-modal-target="changeUserDetails"
-                    data-modal-toggle="changeUserDetails"
-                    class="flex items-center w-full sm:w-auto mt-4 px-3 py-2 font-medium text-sm bg-primary-light hover:bg-rose-800 text-white rounded-md">
-                    <PenIcon class="size-5 me-2" />
-                    Izmeni podatke
-                </button>
                 <UserDetailsModal />
             </div>
             <div class="lg:w-80 lg:pl-6 border-t lg:border-t-0 lg:border-l pt-4 lg:pt-0 border-gray-200">
@@ -65,7 +56,6 @@
 <script setup lang="ts">
 import type { User } from '~/shared/classes/User'
 import CheckMarkIcon from './icons/CheckMarkIcon.vue'
-import PenIcon from './icons/PenIcon.vue'
 import { useUserStore } from '~/stores/UserStore'
 import { useAuthStore } from '~/stores/AuthStore'
 
@@ -96,7 +86,6 @@ const phoneNumber = computed<string>(() => {
 })
 
 onMounted(async () => {
-    await authStore.getMe()
     await userStore.fetchUserInfo()
 })
 </script>

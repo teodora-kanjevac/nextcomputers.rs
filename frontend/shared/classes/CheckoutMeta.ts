@@ -1,5 +1,5 @@
 export class CheckoutMeta {
-    public paymentMethod: string
+    public paymentMethod: 'CASH' | 'CARD' | 'ADVANCE' | undefined
     public paymentMethodText: string
     public paymentMethodDiscount: number
     public prices: {

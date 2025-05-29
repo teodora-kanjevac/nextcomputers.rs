@@ -5,6 +5,7 @@ import {
     editUserPassword,
     getUsersFullName,
     getUserInfo,
+    getUserStatistics,
 } from '~/src/controllers/userController'
 import { authUser } from '~/src/middleware/authUser'
 import { getOrdersByUserId } from '~/src/controllers/orderController'
@@ -19,5 +20,6 @@ router.put('/password/:token', editUserPassword)
 router.get('/history', getOrdersByUserId)
 router.get('/fullname', getUsersFullName)
 router.get('/info', getUserInfo)
+router.get('/statistics', getUserStatistics)
 
 export default router

@@ -91,7 +91,7 @@ formStore.checkout.meta.prices.totalPrice = totalPrice.value
 watch(
     () => selectedPaymentMethod,
     newVal => {
-        if (newVal === 'advance') {
+        if (newVal === 'ADVANCE') {
             formStore.checkout.meta.paymentMethodDiscount = 0.99
         } else {
             formStore.checkout.meta.paymentMethodDiscount = 1

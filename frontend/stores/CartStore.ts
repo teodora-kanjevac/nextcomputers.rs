@@ -9,20 +9,18 @@ export const useCartStore = defineStore('cart', {
         } as Cart,
     }),
     actions: {
-        async createCart(userId: string | null = null) {
+        async createCart() {
             try {
-                const { data } = await axios.post(`/api/cart/create`, {
-                    userId: userId,
-                })
+                const { data } = await axios.post(`/api/cart/create`)
                 this.cart.id = data
                 return data
             } catch (error) {
                 console.error('Failed to create cart:', error)
             }
         },
-        async fetchCart(cartId: string) {
+        async fetchCart() {
             try {
-                const { data } = await axios.get(`/api/cart/${cartId}`)
+                const { data } = await axios.get(`/api/cart`)
                 this.cart = new Cart(data)
             } catch (error) {
                 console.error('Failed to fetch cart:', error)
@@ -82,14 +80,11 @@ export const useCartStore = defineStore('cart', {
                 console.error('Failed to delete from cart:', error)
             }
         },
-        async updateLastAccessToCart(cartId: string, lastAccessedAt: Date) {
+        async updateLastAccessToCart() {
             try {
-                await axios.put(`/api/cart/last-accessed`, {
-                    cartId: cartId,
-                    lastAccessedAt: lastAccessedAt,
-                })
+                await axios.put(`/api/cart/last-accessed`)
             } catch (error) {
-                console.error('Failed to change quantity:', error)
+                console.error('Failed to update last access:', error)
             }
         },
     },

@@ -61,14 +61,18 @@
             </ul>
             <div v-if="product" id="tab" class="px-1 py-1 sm:px-3 sm:py-4 rounded-lg bg-gray-50">
                 <div v-if="activeTab === 'specs'">
-                    <SpecificationsTab v-if="Object.keys(product.specifications).length > 0" :specs="product?.specifications" />
-                    <div v-else class="flex justify-center items-center py-10 text-gray-600 font-semibold">Specifikacije za ovaj proizvod nisu dostupne</div>
+                    <SpecificationsTab
+                        v-if="Object.keys(product.specifications).length > 0"
+                        :specs="product?.specifications" />
+                    <div v-else class="flex justify-center items-center py-10 text-gray-600 font-semibold">
+                        Specifikacije za ovaj proizvod nisu dostupne
+                    </div>
                 </div>
                 <div v-if="activeTab === 'declaration'">
                     <DeclarationTab :declaration="product?.declaration" />
                 </div>
                 <div v-if="activeTab === 'reviews'">
-                    <ReviewsTab :user-reviews="product?.reviews" :rating="product?.ratings" />
+                    <ReviewsTab :rating="product?.ratings" />
                 </div>
             </div>
         </client-only>

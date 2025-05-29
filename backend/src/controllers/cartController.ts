@@ -10,12 +10,26 @@ import {
     updateCartItemQuantity,
     updateLastSiteVisitCart,
 } from '~/src/services/cartService'
+import jwt from 'jsonwebtoken'
 
 export const createACart = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { userId } = req.body
+        const token = req.cookies.token
+        let userId
+        if (!token) {
+            userId = null
+        } else {
+            const decoded = jwt.decode(token) as { id: string }
+            userId = decoded.id
+        }
 
         const cartId = await createCart(userId)
+
+        res.cookie('cart_id', cartId, {
+            maxAge: 1000 * 60 * 60 * 24 * 10,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production'
+        })
 
         res.status(200).json(cartId)
     } catch (error) {
@@ -29,9 +43,23 @@ export const createACart = async (req: Request, res: Response): Promise<void> =>
 
 export const updateLastVisitToCart = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { cartId, lastAccessedAt } = req.body
+        const cartId = req.cookies.cart_id as string
+        const token = req.cookies.token as string
+        
+        if (!cartId) {
+            res.status(400).json({ error: 'Missing cart ID in cookies' })
+            return
+        }
 
-        const lastVisited = await updateLastSiteVisitCart(cartId, lastAccessedAt)
+        const lastVisited = await updateLastSiteVisitCart(cartId)
+
+        if (!token) {
+            res.cookie('cart_id', cartId, {
+                maxAge: 1000 * 60 * 60 * 24 * 10,
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production'
+            })
+        }
 
         res.status(200).json(lastVisited)
     } catch (error) {
@@ -45,7 +73,12 @@ export const updateLastVisitToCart = async (req: Request, res: Response): Promis
 
 export const getCartById = async (req: Request, res: Response): Promise<void> => {
     try {
-        const cartId = req.params.cartId as string
+        const cartId = req.cookies.cart_id as string
+
+        if (!cartId) {
+            res.status(400).json({ error: 'Missing cart ID in cookies' })
+            return
+        }
 
         const cart = await fetchCartById(cartId)
 

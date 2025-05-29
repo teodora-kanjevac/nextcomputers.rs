@@ -1,4 +1,3 @@
-import type { ReviewDTO } from './ReviewDTO'
 import type { RatingDTO } from './RatingDTO'
 import type { ImageDTO } from './ImageDTO'
 
@@ -16,7 +15,6 @@ export interface ProductDTO {
     images: ImageDTO[]
     specifications: SpecificationsDTO
     declaration: DeclarationDTO
-    reviews: ReviewDTO[]
     ratings: RatingDTO
 }
 

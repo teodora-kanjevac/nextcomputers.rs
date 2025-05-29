@@ -4,9 +4,9 @@ import bcryptjs from 'bcryptjs'
 import { RegisterUserDTO } from '~/src/DTOs/RegisterUser.dto'
 import { LoginUserDTO } from '~/src/DTOs/LoginUser.dto'
 import jwt from 'jsonwebtoken'
-import { regenerateExpiredEmailToken, regenerateExpiredPasswordToken } from '~/src/utils/jwt/regenerateExpiredToken'
+import { regenerateExpiredEmailToken } from '~/src/utils/jwt/regenerateExpiredToken'
 
-export const registerUser = async (userData: RegisterUserDTO) => {
+export const registerUser = async (userData: RegisterUserDTO, cartId: string) => {
     const hashedPassword = await bcryptjs.hash(userData.password, 10)
 
     try {
@@ -27,6 +27,7 @@ export const registerUser = async (userData: RegisterUserDTO) => {
                 city: userData.city,
                 phone_number: userData.phone,
                 password_hash: hashedPassword,
+                expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
                 wishlist: {
                     create: {
                         name: 'Default Wishlist',
@@ -36,7 +37,15 @@ export const registerUser = async (userData: RegisterUserDTO) => {
             },
         })
 
-        return new User(user)
+        await prisma.cart.update({
+            where: { cart_id: cartId },
+            data: { user_id: user.user_id },
+        })
+
+        return new User({
+            ...user,
+            cartId,
+        })
     } catch (error) {
         throw new Error(`Error creating user: ${error}`)
     }
@@ -46,6 +55,11 @@ export const loginUser = async (userData: LoginUserDTO) => {
     try {
         const user = await prisma.user.findUnique({
             where: { email: userData.email },
+            include: {
+                cart: {
+                    select: { cart_id: true },
+                },
+            },
         })
 
         if (!user) {
@@ -58,7 +72,10 @@ export const loginUser = async (userData: LoginUserDTO) => {
             throw new Error('Invalid email or password')
         }
 
-        return new User(user)
+        return {
+            user: new User(user),
+            cartId: user.cart[0]?.cart_id,
+        }
     } catch (error) {
         throw new Error(`Error logging in: ${error}`)
     }
@@ -72,7 +89,7 @@ export const verifyEmail = async (token: string) => {
         if (user && !user.is_verified) {
             await prisma.user.update({
                 where: { user_id: payload.id },
-                data: { is_verified: true },
+                data: { is_verified: true, expires_at: null },
             })
             return { success: true, message: 'Email verified successfully' }
         } else {
@@ -121,12 +138,12 @@ export const verifyPasswordChange = async (token: string) => {
 
         try {
             if (error.name === 'TokenExpiredError') {
-                await regenerateExpiredPasswordToken(token)
+                return { success: false, message: 'Token expired' }
             } else {
-                console.error('Unhandled JWT error type')
+                return { success: false, message: error.message }
             }
         } catch (error) {
-            console.error('Failed to send email:', error)
+            console.error('Failed to verify email:', error)
         }
     }
 }

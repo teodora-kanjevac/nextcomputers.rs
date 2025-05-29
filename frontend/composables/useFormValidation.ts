@@ -46,6 +46,14 @@ export function useFormValidation(form: Ref<any>) {
         return { valid: true, message: '' }
     })
 
+    const ratingCheck = (required: boolean = true) =>
+        computed(() => {
+            if (required && (!form.value.rating || form.value.rating === 0)) {
+                return { valid: false, message: 'Ocena je obavezna' }
+            }
+            return { valid: true, message: '' }
+        })
+
     const phoneCheck = (required: boolean = true) =>
         computed(() => {
             if (required && !form.value.phone) return { valid: false, message: 'Broj telefona je obavezan' }
@@ -91,8 +99,7 @@ export function useFormValidation(form: Ref<any>) {
         computed(() => {
             if (!required && !form.value.pib) return { valid: true, message: '' }
             const PIBRegex = /^\d+$/
-            if (!PIBRegex.test(form.value.pib))
-                return { valid: false, message: 'Dozvoljeni su samo brojevi' }
+            if (!PIBRegex.test(form.value.pib)) return { valid: false, message: 'Dozvoljeni su samo brojevi' }
             return { valid: true, message: '' }
         })
 
@@ -148,6 +155,7 @@ export function useFormValidation(form: Ref<any>) {
         cityCheck,
         zipcodeCheck,
         PIBCheck,
+        ratingCheck,
         commentCheck,
         passwordCheck,
         passwordLoginCheck,

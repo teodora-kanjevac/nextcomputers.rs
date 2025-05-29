@@ -1,5 +1,5 @@
 export class Review {
-    public id: number
+    public id: string
     public createdAt: Date
     public productId: number
     public userId: string

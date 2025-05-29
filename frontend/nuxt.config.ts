@@ -34,9 +34,10 @@ export default defineNuxtConfig({
     compatibilityDate: '2024-07-22',
     css: [
         '~/assets/css/base.sass',
-        '~/assets/css/toast.sass',
         'primevue/resources/themes/saga-blue/theme.css',
         'primevue/resources/primevue.min.css',
+        '~/assets/css/toast.sass',
+        '~/assets/css/paginator.sass',
     ],
     vite: {
         resolve: {
@@ -45,7 +46,7 @@ export default defineNuxtConfig({
             },
         },
     },
-    modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image', '@vueuse/nuxt'],
+    modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image', '@vueuse/nuxt', '@formkit/auto-animate'],
     plugins: [
         { src: '~/plugins/flowbite-init.js', mode: 'client' },
         '~/plugins/routeInfo.ts',

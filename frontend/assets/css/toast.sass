@@ -1,50 +1,40 @@
 .p-toast
-  z-index: 9999 !important
-  opacity: 1 !important
-  width: 400px !important
+  @apply w-[400px] z-50
 
-  &-message
-    color: white
-    border-width: 2px
-    border-radius: 8px
+  .p-toast-message
+    @apply text-white border-2 rounded-lg
 
-  &-summary
-    font-weight: 500
+  .p-toast-summary
+    @apply font-medium
 
-  &-detail
-    font-size: 14px
+  .p-toast-detail
+    @apply text-sm
 
-.p-toast-message-success
-  background-color: #16a34a !important
-  border-color: #4ade80 !important
+  .p-toast-message-success
+    @apply bg-green-600 border-green-500
 
-.p-toast-message-info
-  background-color: #0284c7 !important
-  border-color: #38bdf8 !important
+  .p-toast-message-info
+    @apply bg-sky-600 border-sky-400
 
-.p-toast-message-error
-  background-color: #b91c1c !important
-  border-color: #ef4444 !important
+  .p-toast-message-error
+    @apply bg-red-700 border-red-500
 
-.p-toast-message-warn
-  background-color: #ca8a04 !important
-  border-color: #facc15 !important
+  .p-toast-message-warn
+    @apply bg-yellow-500 border-yellow-400
 
-.p-toast-message-icon
-  height: 25px !important
-  color: white !important
+  .p-toast-message-icon
+    height: 1.5rem
+    @apply text-white
 
-.p-toast-icon-close
-  color: #ffffff !important
-  outline: none
-  box-shadow: none
+  .p-toast-icon-close
+    @apply text-white focus:outline-none focus:ring-0
 
-.p-toast-message-content
-  padding: 17px 15px !important
+  .p-toast-message-content
+    @apply p-4
 
 @media (max-width: 640px)
   .p-toast
-    width: 90% !important
+    width: 90%
 
   .p-toast-message-content
-    padding: 12px 10px !important
+    @apply p-3

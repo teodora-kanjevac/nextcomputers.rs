@@ -2,11 +2,12 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { RegisterFormData } from '~/shared/classes/RegisterFormData'
 import type { LogInData } from '~/shared/classes/LogInData'
-import type { UserMe } from '~/shared/classes/UserMe'
+import { UserMe } from '~/shared/classes/UserMe'
+import { useCartStore } from './CartStore'
+import { useCartCookies } from '~/composables/useCartCookies'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        loginUserData: {} as LogInData,
         user: null as UserMe | null,
         hydrated: false,
     }),
@@ -16,29 +17,61 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         async registerUser(RegisterFormData: RegisterFormData) {
             try {
-                const { data } = await axios.post(`/api/auth/register`, RegisterFormData)
+                const { cartIdCookie, sessionUpdatedCookie } = useCartCookies()
+
+                const { data } = await axios.post(`/api/auth/register`, {
+                        ...RegisterFormData,
+                        cartId: cartIdCookie.value,
+                    },
+                    { validateStatus: status => status < 500 })
+
                 if (data.success === false) {
                     throw new Error(data.error)
                 }
+
+                this.user = new UserMe(data.newUser)
+
+                sessionUpdatedCookie.value = undefined
             } catch (error) {
                 throw error
             }
         },
         async loginUser(loginData: LogInData) {
             try {
-                const { data } = await axios.post(`/api/auth/login`, loginData)
+                const cartStore = useCartStore()
+                const { sessionUpdatedCookie } = useCartCookies()
+
+                const { data } = await axios.post(`/api/auth/login`, loginData, {
+                    validateStatus: status => status < 500,
+                })
+
                 if (data.success === false) {
                     throw new Error(data.error)
                 }
-                this.user = data.user
+
+                this.user = new UserMe(data.user)
+
+                await cartStore.updateLastAccessToCart()
+                await cartStore.fetchCart()
+                sessionUpdatedCookie.value = undefined
             } catch (error) {
                 throw error
             }
         },
         async logoutUser() {
             try {
+                const cartStore = useCartStore()
+                const { sessionUpdatedCookie, cartIdCookie } = useCartCookies()
+
                 await axios.post(`/api/auth/logout`)
                 this.user = null
+
+                cartIdCookie.value = undefined
+                await cartStore.createCart()
+
+                sessionUpdatedCookie.value = undefined
+
+                await cartStore.fetchCart()
             } catch (error) {
                 throw error
             }
