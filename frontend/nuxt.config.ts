@@ -38,6 +38,7 @@ export default defineNuxtConfig({
         'primevue/resources/primevue.min.css',
         '~/assets/css/toast.sass',
         '~/assets/css/paginator.sass',
+        '~/assets/css/tooltip.sass',
     ],
     vite: {
         resolve: {

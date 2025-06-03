@@ -31,7 +31,7 @@
                 </div>
                 <UserDetailsModal />
             </div>
-            <div class="lg:w-80 lg:pl-6 border-t lg:border-t-0 lg:border-l pt-4 lg:pt-0 border-gray-200">
+            <div class="lg:w-1/3 lg:pl-6 border-t lg:border-t-0 lg:border-l pt-4 lg:pt-0 border-gray-200">
                 <div>
                     <h2 class="font-semibold text-lg border-b pb-2 border-gray-200">Status profila</h2>
                     <ProfileProgressBar v-if="user" :user="user" />

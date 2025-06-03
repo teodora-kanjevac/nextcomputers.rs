@@ -1,7 +1,6 @@
 <template>
-    <button type="button" @click="visible = true" class="text-red-600 hover:underline flex items-center">
-        <TrashCanIcon class="size-4 me-1 shrink-0" />
-        Obriši recenziju
+    <button type="button" @click="visible = true">
+        <slot />
     </button>
     <Dialog
         v-model:visible="visible"
@@ -68,25 +67,9 @@ const props = defineProps({
         type: String,
         default: 'Otkaži',
     },
-    confirmButtonClass: {
-        type: String,
-        default: 'bg-primary-light hover:bg-rose-800',
-    },
     onConfirm: {
         type: Function,
         required: true,
-    },
-    icon: {
-        type: Object,
-        default: () => TrashCanIcon,
-    },
-    iconBgColor: {
-        type: String,
-        default: 'bg-red-50',
-    },
-    iconColor: {
-        type: String,
-        default: 'text-red-600',
     },
 })
 

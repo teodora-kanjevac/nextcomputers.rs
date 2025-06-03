@@ -16,12 +16,7 @@
                         {{ truncateName(product.name) }}
                     </span>
                 </a>
-                <button
-                    :id="`tooltipAddToFavoritesButton-${product.id}`"
-                    type="button"
-                    class="rounded-lg m-1 p-1 text-gray-500 hover:bg-gray-100 hover:text-gray-900">
-                    <HeartOutlineIcon class="size-6" />
-                </button>
+                <AddToWishlistButton :product-id="product.id" />
             </div>
 
             <StarRating :size="5" :rating="product.ratings" class="mt-1" />
@@ -45,7 +40,6 @@
 
 <script setup lang="ts">
 import { useClamping, truncateName } from '~/composables/useClamping'
-import HeartOutlineIcon from '~/components/icons/HeartOutlineIcon.vue'
 import TruckDeliveryIcon from './icons/TruckDeliveryIcon.vue'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
 

@@ -41,23 +41,6 @@ export const fetchCartById = async (cartId: string): Promise<CartDTO> => {
     return new CartDTO(cart)
 }
 
-export const fetchCartByUserId = async (userId: string): Promise<CartDTO> => {
-    const cart = await prisma.cart.findFirst({
-        where: { user_id: userId },
-        include: {
-            cartitem: {
-                include: {
-                    product: true,
-                },
-            },
-        },
-    })
-
-    isNullObject('user', userId, cart)
-
-    return new CartDTO(cart)
-}
-
 export const addCartItem = async (cartId: string, productId: number): Promise<CartItemDTO> => {
     const product = await prisma.product.findUnique({
         where: {

@@ -19,15 +19,16 @@ export const useAuthStore = defineStore('auth', {
             try {
                 const { cartIdCookie, sessionUpdatedCookie } = useCartCookies()
 
-                const { data } = await axios.post(`/api/auth/register`, {
+                const { data } = await axios.post(
+                    `/api/auth/register`,
+                    {
                         ...RegisterFormData,
                         cartId: cartIdCookie.value,
                     },
-                    { validateStatus: status => status < 500 })
+                    { validateStatus: status => status < 500 }
+                )
 
-                if (data.success === false) {
-                    throw new Error(data.error)
-                }
+                if (data.success === false) throw new Error(data.error)
 
                 this.user = new UserMe(data.newUser)
 
@@ -45,9 +46,7 @@ export const useAuthStore = defineStore('auth', {
                     validateStatus: status => status < 500,
                 })
 
-                if (data.success === false) {
-                    throw new Error(data.error)
-                }
+                if (data.success === false) throw new Error(data.error)
 
                 this.user = new UserMe(data.user)
 

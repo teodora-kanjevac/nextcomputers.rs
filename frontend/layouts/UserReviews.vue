@@ -7,7 +7,7 @@
                 class="text-gray-600 font-medium flex flex-col items-center justify-center">
                 <img
                     class="max-w-md w-full h-auto my-10"
-                    src="/assets/images/review-illustration.png"
+                    src="/assets/images/review-illustration.webp"
                     alt="illustration" />
                 <p class="font-semibold text-base sm:text-lg mb-5 text-center px-4">
                     Trenutno nemate recenzije.
@@ -27,7 +27,7 @@
                                         :alt="review.product.name" />
                                     <NuxtLink
                                         :to="`/proizvod/${review.product.id}`"
-                                        class="text-base font-semibold text-gray-900 w-4/5 hover:underline break-words line-clamp-2">
+                                        class="text-base font-semibold text-gray-900 hover:underline break-words line-clamp-2">
                                         {{ review.product.name }}
                                     </NuxtLink>
                                 </div>
@@ -49,8 +49,12 @@
                                 <EditReviewModal :review="review" />
                                 <ConfirmationModal
                                     message="Da li ste sigurni da želite da obrišete ovu recenziju?"
-                                    confirmButtonClass="bg-red-600 hover:bg-red-700"
-                                    :onConfirm="() => handleDeleteReview(review.id)" />
+                                    :onConfirm="() => handleDeleteReview(review.id)">
+                                    <span class="text-red-600 hover:underline flex items-center">
+                                        <TrashCanIcon class="size-4 me-1 shrink-0" />
+                                        Obriši recenziju
+                                    </span>
+                                </ConfirmationModal>
                             </div>
                         </div>
                     </template>
@@ -72,6 +76,7 @@ import Paginator from 'primevue/paginator'
 import { useUserStore } from '~/stores/UserStore'
 import type { ReviewDTO } from '~/shared/types/ReviewDTO'
 import EditReviewModal from '~/components/EditReviewModal.vue'
+import TrashCanIcon from '~/components/icons/TrashCanIcon.vue'
 
 const rowsPerPage = ref(3)
 const first = ref(0)

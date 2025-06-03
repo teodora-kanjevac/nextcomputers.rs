@@ -28,12 +28,6 @@ export const registerUser = async (userData: RegisterUserDTO, cartId: string) =>
                 phone_number: userData.phone,
                 password_hash: hashedPassword,
                 expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000),
-                wishlist: {
-                    create: {
-                        name: 'Default Wishlist',
-                        is_default: true,
-                    },
-                }
             },
         })
 
@@ -89,7 +83,16 @@ export const verifyEmail = async (token: string) => {
         if (user && !user.is_verified) {
             await prisma.user.update({
                 where: { user_id: payload.id },
-                data: { is_verified: true, expires_at: null },
+                data: {
+                    is_verified: true,
+                    expires_at: null,
+                    wishlist: {
+                        create: {
+                            name: 'Moja lista želja',
+                            is_default: true,
+                        },
+                    },
+                },
             })
             return { success: true, message: 'Email verified successfully' }
         } else {

@@ -32,6 +32,9 @@ export const useCartStore = defineStore('cart', {
                     cartId: this.cart.id,
                     productId: productId,
                 })
+
+                if (data.error) throw new Error(data.error)
+
                 const existingItem = this.cart.cartItems.find(item => item.product.id === productId)
 
                 if (existingItem) {

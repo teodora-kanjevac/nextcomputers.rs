@@ -4,7 +4,6 @@ import {
     createACart,
     emptyCart,
     getCartById,
-    getCartByUser,
     removeItemFromCart,
     removeUnavailableItemsFromCart,
     updateLastVisitToCart,
@@ -20,7 +19,6 @@ router.put('/last-accessed', updateLastVisitToCart)
 router.put('/update-quantity', updateQuantity)
 router.post('/add-item', addItemToCart)
 router.post('/create', createACart)
-router.get('/user/:userId', getCartByUser)
 router.get('/', getCartById)
 
 export default router

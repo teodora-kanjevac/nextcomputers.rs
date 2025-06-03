@@ -47,7 +47,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
 
         if (user.isVerified) {
             if (rememberMe) {
-                const thirtyDays = 30 * 24 * 60 * 60 * 1000
+                const thirtyDays = 31 * 24 * 60 * 60 * 1000
                 tokenExpiry = new Date(Date.now() + thirtyDays)
                 cookieExpiry = tokenExpiry
             }

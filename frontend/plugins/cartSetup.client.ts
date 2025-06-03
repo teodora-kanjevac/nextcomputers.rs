@@ -2,10 +2,12 @@ import { useCartStore } from '~/stores/CartStore'
 import { deleteUnavailableItems } from '~/composables/useCart'
 import { useAuthStore } from '~/stores/AuthStore'
 import { useCartCookies } from '~/composables/useCartCookies'
+import { useWishlistStore } from '~/stores/WishlistStore'
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.hook('app:mounted', async () => {
         const cartStore = useCartStore()
+        const wishlistStore = useWishlistStore()
         const authStore = useAuthStore()
 
         await authStore.getMe()
@@ -26,6 +28,7 @@ export default defineNuxtPlugin(nuxtApp => {
                     sessionUpdatedCookie.value = 'true'
                 }
                 await cartStore.fetchCart()
+                await wishlistStore.fetchWishlist()
                 return
             }
 

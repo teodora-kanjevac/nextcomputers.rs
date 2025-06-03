@@ -32,11 +32,11 @@
                     </div>
                 </div>
                 <hr class="my-5 mx-auto border-gray-200" />
-                <div class="mt-8 divide-y divide-gray-200">
+                <div class="divide-y divide-gray-200">
                     <template v-if="filteredReviews.length > 0">
                         <Review v-for="userReview in paginatedReviews" :key="userReview.id" :review="userReview" />
                     </template>
-                    <div class="text-gray-600 text-center" v-else>
+                    <div class="mt-8 text-gray-600 text-center" v-else>
                         <p class="font-semibold py-5">Trenutno nema recenzija</p>
                         <p class="font-medium">Budite prvi koji će ostaviti recenziju!</p>
                     </div>

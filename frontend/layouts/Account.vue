@@ -6,7 +6,7 @@
             <Spinner class="size-10" />
         </div>
         <div v-else class="min-h-screen py-10">
-            <div class="max-w-screen-xl mx-auto px-5 2xl:px-0">
+            <div class="max-w-screen-2xl mx-auto px-5 2xl:px-0">
                 <h2 class="font-semibold text-xl sm:text-2xl ps-0.5 pb-2 sm:pb-4 border-b-2 border-gray-200">
                     Vaš nalog
                 </h2>

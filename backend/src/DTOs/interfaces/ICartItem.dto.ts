@@ -1,4 +1,4 @@
-import { ProductCardDTO } from "../ProductCard.dto"
+import { ProductCardDTO } from "~/src/DTOs/ProductCard.dto"
 
 export interface ICartItemDTO {
     id: string

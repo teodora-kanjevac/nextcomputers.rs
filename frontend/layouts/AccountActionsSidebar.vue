@@ -38,17 +38,22 @@
                 <span class="ps-8">Moje recenzije</span>
             </NuxtLink>
             <NuxtLink
-                to="/"
-                class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100 text-gray-600 hover:text-primary">
+                to="/profil/lista-zelja"
+                class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100"
+                :class="{
+                    'text-primary': activeSection === 'wishlist',
+                    'text-gray-600 hover:text-primary': activeSection !== 'wishlist',
+                }">
                 <HeartOutlineIcon class="size-5 absolute" />
                 <span class="ps-8">Lista želja</span>
             </NuxtLink>
-            <NuxtLink
+            <!-- <NuxtLink DODAVANJE ADRESA
                 to="/"
                 class="flex items-center w-full px-3 py-1.5 rounded-md hover:bg-gray-100 text-gray-600 hover:text-primary">
                 <PinHomeIcon class="size-6 absolute -ms-0.5 mb-0.5" />
                 <span class="ps-8">Moje adrese</span>
-            </NuxtLink>
+            </NuxtLink> -->
+            <!-- Prethodno pregledani proizvodi -->
         </div>
         <div class="grid mt-4 pt-4 border-t">
             <NuxtLink

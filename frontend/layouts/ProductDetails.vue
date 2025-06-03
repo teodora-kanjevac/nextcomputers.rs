@@ -49,30 +49,29 @@
                 </div>
 
                 <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-5">
-                    <a
-                        @click="info"
-                        class="flex items-center justify-center py-3 px-5 text-sm font-medium text-gray-900 bg-white rounded-md border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
+                    <button
+                        @click="addtoWishlist"
+                        class="flex items-center justify-center py-2.5 px-3 text-sm font-medium text-gray-900 bg-white rounded-md border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
                         role="button">
-                        <HeartOutlineIcon class="size-5 -ms-2 me-2 shrink-0" />
+                        <HeartOutlineIcon class="size-5 me-2 shrink-0" />
                         Sačuvaj proizvod
-                    </a>
-
-                    <a
+                    </button>
+                    <button
                         v-if="product.available"
                         @click="addToCart"
-                        class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-md text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
+                        class="flex items-center justify-center text-sm py-2.5 px-4 mt-3 sm:mt-0 font-medium rounded-md text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
                         role="button">
-                        <AddToCartIcon class="size-5 -ms-2 me-2 shrink-0" />
+                        <AddToCartIcon class="size-5 me-2 shrink-0" />
                         Dodaj u korpu
-                    </a>
-                    <a
+                    </button>
+                    <NuxtLink
                         v-else
-                        :href="`/proizvodi/${product.subcategoryId}`"
-                        class="flex items-center justify-center text-sm px-6 py-3 mt-3 sm:mt-0 font-medium rounded-md text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
+                        :to="`/proizvodi/${product.subcategoryId}`"
+                        class="flex items-center justify-center text-sm py-2.5 px-4 mt-3 sm:mt-0 font-medium rounded-md text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
                         role="button">
                         Pretraži proizvode iz ove kategorije
-                        <ArrowRightIcon class="size-4 ms-2 me-2 shrink-0" />
-                    </a>
+                        <ArrowRightIcon class="size-4 ms-1.5 shrink-0" />
+                    </NuxtLink>
                 </div>
 
                 <div class="inline-flex mt-5 px-2 py-1 rounded gap-2 bg-amber-100">
@@ -122,9 +121,11 @@ import type { ImageDTO } from '~/shared/types/ImageDTO'
 import { useCartStore } from '~/stores/CartStore'
 import { useNotification } from '~/composables/useNotification'
 import TruckDeliveryIcon from '~/components/icons/TruckDeliveryIcon.vue'
+import { useWishlistStore } from '~/stores/WishlistStore'
 
 const { showNotification } = useNotification()
 const productStore = useProductStore()
+const wishlistStore = useWishlistStore()
 const cartStore = useCartStore()
 
 const product = computed<ProductDTO | null>(() => productStore.product)
@@ -150,14 +151,11 @@ watch(
 
 const addToCart = async () => {
     try {
-        if (product.value?.id !== undefined) {
-            await cartStore.addToCart(product.value.id)
-            showNotification('success', 'Proizvod dodat u korpu!', 'Ovaj proizvod je uspešno dodat u korpu.', 4000)
-        } else {
-            throw new Error('Product ID is not defined.')
-        }
+        if (!product.value) return
+        await cartStore.addToCart(product.value.id)
+        showNotification('success', 'Proizvod dodat u korpu!', 'Ovaj proizvod je uspešno dodat u korpu.', 4000)
     } catch (error: any) {
-        if (error.response && error.response.data.error.includes('Insufficient stock')) {
+        if (error.message.includes('Insufficient stock')) {
             showNotification('warn', 'Nema dovoljno proizvoda na stanju!', 'Količina koju ste tražili nije dostupna.')
         } else {
             showNotification(
@@ -169,7 +167,30 @@ const addToCart = async () => {
     }
 }
 
-const info = () => {
-    showNotification('info', 'Info', 'Funkcionalnost je u pripremi – biće dostupna uskoro. Hvala na razumevanju!')
+const addtoWishlist = async () => {
+    try {
+        if (!product.value) return
+        await wishlistStore.addToWishlist(product.value.id)
+        showNotification(
+            'success',
+            'Proizvod dodat na listu želja!',
+            'Ovaj proizvod je uspešno dodat na listu želja.',
+            4000
+        )
+    } catch (error: any) {
+        if (error.message.includes('Product already in wishlist')) {
+            showNotification(
+                'warn',
+                'Imate ovaj proizvod na listi želja!',
+                'Ovaj proizvod već postoji na vašoj listi želja.'
+            )
+        } else {
+            showNotification(
+                'error',
+                'Greška pri dodavanju na listu želja!',
+                'Došlo je do problema pri dodavanju proizvoda na listu želja.'
+            )
+        }
+    }
 }
 </script>

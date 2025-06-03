@@ -2,7 +2,7 @@
     <div class="bg-white rounded-lg border px-6 py-5 shadow-sm">
         <h2 class="font-semibold border-b pb-2 text-lg mb-5">Istorija kupovine</h2>
         <div v-if="orders.length === 0" class="text-gray-600 font-medium flex flex-col items-center justify-center">
-            <img class="max-w-md w-full h-auto my-10" src="/assets/images/order-illustration.png" alt="illustration" />
+            <img class="max-w-md w-full h-auto my-10" src="/assets/images/order-illustration.webp" alt="illustration" />
             <p class="font-semibold text-base sm:text-lg mb-5 text-center px-4">
                 Trenutno nemate porudžbine.
                 <br />

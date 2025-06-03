@@ -1,0 +1,13 @@
+.tippy-box[data-theme~='custom']
+  @apply bg-gray-700 text-white text-xs font-normal tracking-wide rounded-md shadow-sm z-50
+  white-space: pre-line
+  word-break: break-word
+
+  .tippy-content
+    @apply px-3 py-2
+
+  .tippy-arrow
+    @apply text-gray-700
+
+.tippy-box[data-theme~='custom'] > .tippy-arrow::before
+  transform: scale(0.85)
