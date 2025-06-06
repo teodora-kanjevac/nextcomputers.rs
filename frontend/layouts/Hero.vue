@@ -18,7 +18,7 @@
                                 <SplideSlide>
                                     <NuxtLink to="/">
                                         <img
-                                            class="h-full mx-auto rounded-xl"
+                                            class="h-full mx-auto rounded-lg"
                                             :src="getResponsiveImageUrl(image)"
                                             :alt="image.name" />
                                     </NuxtLink>

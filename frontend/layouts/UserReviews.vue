@@ -22,7 +22,7 @@
                             <div class="flex items-start justify-between border-b border-gray-200 pb-3 mb-4">
                                 <div class="flex items-center gap-4">
                                     <img
-                                        class="size-16 object-contain"
+                                        class="size-16 object-contain border rounded-md"
                                         :src="review.product.thumbnail"
                                         :alt="review.product.name" />
                                     <NuxtLink

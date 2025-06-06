@@ -2,20 +2,20 @@
     <div>
         <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-md">
             <div class="mb-5 h-44 w-full">
-                <a :href="`/proizvod/${product.id}`">
+                <NuxtLink :to="`/proizvod/${product.id}`">
                     <NuxtImg class="mx-auto h-full object-cover" :src="product.thumbnail" :alt="product.name" />
-                </a>
+                </NuxtLink>
             </div>
 
             <div class="flex items-center justify-between gap-1">
-                <a
-                    :href="`/proizvod/${product.id}`"
+                <NuxtLink
+                    :to="`/proizvod/${product.id}`"
                     class="font-semibold ms-0.5 pb-0.5 leading-tight text-gray-900 hover:underline"
                     :title="isOverflowing ? product.name : ''">
                     <span ref="productName" class="line-clamp-1 text-ellipsis overflow-hidden">
                         {{ truncateName(product.name) }}
                     </span>
-                </a>
+                </NuxtLink>
                 <AddToWishlistButton :product-id="product.id" />
             </div>
 

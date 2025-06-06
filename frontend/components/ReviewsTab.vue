@@ -36,9 +36,13 @@
                     <template v-if="filteredReviews.length > 0">
                         <Review v-for="userReview in paginatedReviews" :key="userReview.id" :review="userReview" />
                     </template>
-                    <div class="mt-8 text-gray-600 text-center" v-else>
+                    <div class="mt-8 text-gray-600 text-center" v-else-if="userReviews.length === 0">
                         <p class="font-semibold py-5">Trenutno nema recenzija</p>
                         <p class="font-medium">Budite prvi koji će ostaviti recenziju!</p>
+                    </div>
+                    <div class="mt-8 text-gray-600 text-center" v-else>
+                        <p class="font-semibold py-5">Trenutno nema recenzija</p>
+                        <p class="font-medium">Nema recenzija za izabranu ocenu</p>
                     </div>
                 </div>
                 <div class="text-center" v-if="showLoadMore">
@@ -63,7 +67,6 @@ import type { RatingDTO } from '~/shared/types/RatingDTO'
 import type { ReviewProductDTO } from '~/shared/types/ReviewProductDTO'
 import { Rating } from '~/shared/classes/Rating'
 import { useReviewStore } from '~/stores/ReviewStore'
-import { useAuthStore } from '~/stores/AuthStore'
 
 const { rating } = defineProps<{
     rating: RatingDTO
@@ -71,7 +74,6 @@ const { rating } = defineProps<{
 
 const route = useRoute()
 const reviewStore = useReviewStore()
-const authStore = useAuthStore()
 
 const activeFilter = ref<number | null>(null)
 const pageCount = ref(0)
@@ -125,7 +127,6 @@ const getReviewWord = (num: number) => {
 }
 
 onMounted(async () => {
-    await authStore.getMe()
     await reviewStore.getReviewStatus(parseInt(route.params.productId as string))
 })
 </script>

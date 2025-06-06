@@ -5,6 +5,7 @@ import { ReviewProductDTO } from '~/src/DTOs/ReviewProduct.dto'
 import { ReviewDTO } from '~/src/DTOs/Review.dto'
 import { ReviewSuggestionDTO } from '../DTOs/ReviewSuggestions.dto'
 import { fetchUserId } from '../utils/jwt/fetchUser'
+import { order_status } from '@prisma/client'
 
 export const fetchAllReviews = async (): Promise<Review[]> => {
     const reviews = await prisma.review.findMany()
@@ -181,7 +182,10 @@ export const getReviewEligibility = async (token: string, productId: number) => 
                     user_id: userId,
                 },
             },
-            select: { order_id: true },
+            select: {
+                order_id: true,
+                order: { select: { order_status: true } },
+            },
         }),
         prisma.review.findFirst({
             where: {
@@ -192,10 +196,16 @@ export const getReviewEligibility = async (token: string, productId: number) => 
         }),
     ])
 
+    const hasPurchased = !!purchase
+    const hasReviewed = !!review
+    const hasValidStatus = hasPurchased && ['DELIVERED', 'RETURNED'].includes(purchase?.order.order_status)
+    const canReview = hasValidStatus && !hasReviewed
+
     return {
-        hasPurchased: !!purchase,
-        hasReviewed: !!review,
-        canReview: !!purchase && !review,
+        hasPurchased,
+        hasReviewed,
+        hasValidStatus,
+        canReview,
     }
 }
 
@@ -206,6 +216,9 @@ export const fetchReviewSuggestions = async (token: string): Promise<ReviewSugge
         where: {
             order: {
                 user_id: userId,
+                order_status: {
+                    in: ['DELIVERED', 'RETURNED'],
+                },
             },
             product: {
                 NOT: {

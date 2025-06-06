@@ -66,9 +66,8 @@ watch(visible, newVal => {
 })
 
 const handleReviewModalClick = () => {
-    if (!authStore.isLoggedIn) {
-        useRouter().push('/login')
-    } else if (!eligibility.value?.hasPurchased) {
+    checkUser(authStore.isLoggedIn)
+    if (!eligibility.value?.hasPurchased) {
         showNotification(
             'warn',
             'Morate kupiti proizvod!',
@@ -76,11 +75,19 @@ const handleReviewModalClick = () => {
             5000
         )
         return
+    } else if (!eligibility.value.hasValidStatus) {
+        showNotification(
+            'warn',
+            'Još uvek ne možete oceniti ovaj proizvod!',
+            'Da bi ste mogli da ostavite recenziju, status vaše porudžbine mora biti "DOSTAVLJENO" ili "VRAĆENO".',
+            6000
+        )
+        return
     } else if (eligibility.value.hasReviewed) {
         showNotification(
             'info',
             'Već ste ocenili ovaj proizvod!',
-            'Ako želite da izmenite recenziju, idite na Vaš nalog < Moje recenzije.',
+            'Ako želite da izmenite recenziju, idite na Nalog < Moje recenzije.',
             5000
         )
         return

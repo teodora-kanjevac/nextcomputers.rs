@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import axios from 'axios'
 import { Wishlist, WishlistItem } from '~/shared/classes/Wishlist'
+import { useAuthStore } from './AuthStore'
 
 export const useWishlistStore = defineStore('wishlist', {
     state: () => ({

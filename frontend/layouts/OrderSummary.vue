@@ -54,13 +54,13 @@
                             </button>
                             <p class="text-xs mx-1 text-justify">
                                 Klikom na ovo dugme potvrđujete da ste saglasni sa našom
-                                <a href="/politika-privatnosti" class="text-primary hover:underline">
+                                <NuxtLink to="/politika-privatnosti" class="text-primary hover:underline">
                                     Politikom privatnosti
-                                </a>
+                                </NuxtLink>
                                 i
-                                <a href="/uslovi-koriscenja" class="text-primary hover:underline">
+                                <NuxtLink to="/uslovi-koriscenja" class="text-primary hover:underline">
                                     Uslovima korišćenja
-                                </a>
+                                </NuxtLink>
                             </p>
                         </div>
                     </div>

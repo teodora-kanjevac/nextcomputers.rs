@@ -16,6 +16,7 @@ import HeartIcon from '~/components/icons/HeartIcon.vue'
 import { useWishlistStore } from '~/stores/WishlistStore'
 import type { Instance } from 'tippy.js'
 import { createTippy } from '~/directives/tippy'
+import { useAuthStore } from '~/stores/AuthStore'
 
 const { productId } = defineProps<{ productId: number }>()
 
@@ -24,6 +25,7 @@ let tooltipInstance: Instance | null = null
 
 const { showNotification } = useNotification()
 const wishlistStore = useWishlistStore()
+const authStore = useAuthStore()
 
 const isInWishlist = computed(() => wishlistStore.wishlist.wishlistItems.some(item => item.product.id === productId))
 const isInWishlistText = computed(() => (isInWishlist.value ? 'Ukloni sa liste želja' : 'Sačuvaj na listu želja'))
@@ -31,6 +33,7 @@ const isInWishlistText = computed(() => (isInWishlist.value ? 'Ukloni sa liste �
 const getWishlistItemId = () => wishlistStore.wishlist.wishlistItems.find(item => item.product.id === productId)?.id
 
 const toggleWishlist = async () => {
+    checkUser(authStore.isLoggedIn)
     try {
         if (isInWishlist.value) {
             const wishlistItemId = getWishlistItemId()

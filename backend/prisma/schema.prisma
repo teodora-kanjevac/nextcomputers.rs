@@ -82,12 +82,12 @@ model orderinfo {
 }
 
 model wishlist {
-  wishlist_id  String   @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  user_id      String?  @db.Char(36)
-  created_at   DateTime @default(dbgenerated("(now())")) @db.DateTime(0)
-  name         String   @default("") @db.VarChar(100)
-  is_default   Boolean  @default(true)
-  user             user?      @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_wishlist_FK")
+  wishlist_id  String         @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  user_id      String?        @db.Char(36)
+  created_at   DateTime       @default(dbgenerated("(now())")) @db.DateTime(0)
+  name         String         @default("") @db.VarChar(100)
+  is_default   Boolean        @default(true)
+  user         user?          @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction, map: "user_id_wishlist_FK")
   wishlistitem wishlistitem[]
 
   @@index([user_id], map: "user_id_wishlist_FK")
@@ -174,18 +174,18 @@ model subcategory {
 }
 
 model user {
-  user_id       String    @id @default(dbgenerated("(uuid())")) @db.Char(36)
-  email         String    @unique(map: "email") @default("") @db.VarChar(100)
-  first_name    String?   @default("") @db.VarChar(50)
-  last_name     String?   @default("") @db.VarChar(50)
-  address       String?   @default("") @db.VarChar(255)
-  phone_number  String?   @default("") @db.VarChar(50)
-  created_at    DateTime  @default(dbgenerated("(now())")) @db.DateTime(0)
-  expires_at    DateTime? @db.DateTime(0)
-  password_hash String    @default("") @db.VarChar(255)
-  is_verified   Boolean   @default(false)
-  city          String?   @default("") @db.VarChar(50)
-  zipcode       String?   @default("") @db.VarChar(10)
+  user_id       String     @id @default(dbgenerated("(uuid())")) @db.Char(36)
+  email         String     @unique(map: "email") @default("") @db.VarChar(100)
+  first_name    String?    @default("") @db.VarChar(50)
+  last_name     String?    @default("") @db.VarChar(50)
+  address       String?    @default("") @db.VarChar(255)
+  phone_number  String?    @default("") @db.VarChar(50)
+  created_at    DateTime   @default(dbgenerated("(now())")) @db.DateTime(0)
+  expires_at    DateTime?  @db.DateTime(0)
+  password_hash String     @default("") @db.VarChar(255)
+  is_verified   Boolean    @default(false)
+  city          String?    @default("") @db.VarChar(50)
+  zipcode       String?    @default("") @db.VarChar(10)
   cart          cart[]
   wishlist      wishlist[]
   order         order[]
@@ -236,4 +236,5 @@ enum order_status {
   CONFIRMED
   SHIPPED
   DELIVERED
+  RETURNED
 }

@@ -15,6 +15,7 @@ export const useReviewStore = defineStore('review', {
         eligibility: {
             hasPurchased: false,
             hasReviewed: false,
+            hasValidStatus: false,
             canReview: false,
         },
     }),
@@ -32,14 +33,13 @@ export const useReviewStore = defineStore('review', {
             try {
                 const authStore = useAuthStore()
                 const userStore = useUserStore()
-                await authStore.getMe()
-                if (!authStore.user) return
+                if (!authStore.isLoggedIn) return
 
                 const { data } = await axios.post(`/api/reviews/leave-review/${productId}`, reviewData)
 
                 this.review = new Review(data)
                 this.reviews.push(this.review)
-                this.removeReviewedProduct(productId)
+                this.reviewSuggestions = this.reviewSuggestions.filter(item => item.product.id !== productId)
 
                 userStore.userStatistics.reviews += 1
                 this.eligibility.hasReviewed = true
@@ -51,8 +51,7 @@ export const useReviewStore = defineStore('review', {
         async getReviewStatus(productId: number) {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
-                if (!authStore.user) return
+                if (!authStore.isLoggedIn) return
 
                 const { data } = await axios.get(`/api/reviews/status/${productId}`)
 
@@ -64,8 +63,7 @@ export const useReviewStore = defineStore('review', {
         async getReviewSuggestions() {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
-                if (!authStore.user) return
+                if (!authStore.isLoggedIn) return
 
                 const { data } = await axios.get('/api/reviews/suggestions')
 
@@ -73,10 +71,6 @@ export const useReviewStore = defineStore('review', {
             } catch (error) {
                 throw error
             }
-        },
-
-        removeReviewedProduct(productId: number) {
-            this.reviewSuggestions = this.reviewSuggestions.filter(item => item.product.id !== productId)
         },
     },
 })

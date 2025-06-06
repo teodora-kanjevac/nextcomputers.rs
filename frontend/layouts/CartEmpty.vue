@@ -9,14 +9,12 @@
                     <div class="text-center text-gray-900">
                         <img class="size-60 sm:size-96 mb-10" src="/assets/images/empty-cart.png" alt="Prazna Korpa" />
                         <p class="font-medium text-base sm:text-lg mb-5">Vaša korpa je trenutno prazna</p>
-                        <a href="/" class="text-sm sm:text-base font-normal underline hover:text-gray-600">
+                        <NuxtLink to="/" class="text-sm sm:text-base font-normal underline hover:text-gray-600">
                             Vrati se na početnu stranicu
-                        </a>
+                        </NuxtLink>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
-
-<script setup lang="ts"></script>

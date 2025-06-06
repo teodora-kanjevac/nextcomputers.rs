@@ -50,11 +50,14 @@
 
                 <div class="mt-6 sm:gap-4 sm:items-center sm:flex sm:mt-5">
                     <button
-                        @click="addtoWishlist"
+                        ref="wishlistButton"
+                        @click="toggleWishlist"
                         class="flex items-center justify-center py-2.5 px-3 text-sm font-medium text-gray-900 bg-white rounded-md border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
                         role="button">
-                        <HeartOutlineIcon class="size-5 me-2 shrink-0" />
-                        Sačuvaj proizvod
+                        <component
+                            :is="isInWishlist ? HeartIcon : HeartOutlineIcon"
+                            class="text-rose-700 hover:text-rose-900 size-5 me-2 shrink-0" />
+                        {{ isInWishlistText }}
                     </button>
                     <button
                         v-if="product.available"
@@ -122,11 +125,14 @@ import { useCartStore } from '~/stores/CartStore'
 import { useNotification } from '~/composables/useNotification'
 import TruckDeliveryIcon from '~/components/icons/TruckDeliveryIcon.vue'
 import { useWishlistStore } from '~/stores/WishlistStore'
+import { useAuthStore } from '~/stores/AuthStore'
+import HeartIcon from '~/components/icons/HeartIcon.vue'
 
 const { showNotification } = useNotification()
 const productStore = useProductStore()
 const wishlistStore = useWishlistStore()
 const cartStore = useCartStore()
+const authStore = useAuthStore()
 
 const product = computed<ProductDTO | null>(() => productStore.product)
 
@@ -137,6 +143,10 @@ const price = computed(() => product.value?.discountPrice || product.value!.pric
 const formattedPrice = computed(() => formatPrice(price.value))
 const advancePrice = computed(() => formatPrice(Math.round(price.value * 0.99)))
 const isDiscounted = computed(() => product.value?.discountPrice && product.value.discountPrice > 0)
+
+const isInWishlist = computed(() => wishlistStore.wishlist.wishlistItems.some(item => item.product.id === product.value?.id) )
+const isInWishlistText = computed(() => (isInWishlist.value ? 'Ukloni sa liste želja' : 'Sačuvaj proizvod'))
+const getWishlistItemId = () => wishlistStore.wishlist.wishlistItems.find(item => item.product.id === product.value?.id)?.id
 
 watch(
     product,
@@ -167,30 +177,22 @@ const addToCart = async () => {
     }
 }
 
-const addtoWishlist = async () => {
+const toggleWishlist = async () => {
+    checkUser(authStore.isLoggedIn)
     try {
-        if (!product.value) return
-        await wishlistStore.addToWishlist(product.value.id)
-        showNotification(
-            'success',
-            'Proizvod dodat na listu želja!',
-            'Ovaj proizvod je uspešno dodat na listu želja.',
-            4000
-        )
-    } catch (error: any) {
-        if (error.message.includes('Product already in wishlist')) {
-            showNotification(
-                'warn',
-                'Imate ovaj proizvod na listi želja!',
-                'Ovaj proizvod već postoji na vašoj listi želja.'
-            )
+        if (isInWishlist.value) {
+            const wishlistItemId = getWishlistItemId()
+            if (wishlistItemId) {
+                await wishlistStore.removeFromWishlist(wishlistItemId)
+                showNotification('info', 'Uklonjeno sa liste želja', 'Proizvod je uklonjen sa vaše liste želja.', 4000)
+            }
         } else {
-            showNotification(
-                'error',
-                'Greška pri dodavanju na listu želja!',
-                'Došlo je do problema pri dodavanju proizvoda na listu želja.'
-            )
+            if (!product.value) return
+            await wishlistStore.addToWishlist(product.value.id)
+            showNotification('success', 'Dodato na listu želja', 'Proizvod je dodat na vašu listu želja.', 4000)
         }
+    } catch (error) {
+        showNotification('error', 'Greška!', 'Došlo je do problema pri obradi liste želja.')
     }
 }
 </script>
