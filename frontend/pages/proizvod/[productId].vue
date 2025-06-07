@@ -2,7 +2,7 @@
     <div>
         <Toast position="bottom-right" />
         <NavBar />
-        <section class="py-8 bg-white md:py-16 min-h-screen">
+        <section class="pt-4 pb-8 bg-white md:py-16 min-h-screen">
             <div class="max-w-screen-xl px-4 mx-auto 2xl:px-0">
                 <template v-if="sharedStore.loading">
                     <ProductSkeleton />

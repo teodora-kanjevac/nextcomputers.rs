@@ -52,7 +52,7 @@
                     <button
                         ref="wishlistButton"
                         @click="toggleWishlist"
-                        class="flex items-center justify-center py-2.5 px-3 text-sm font-medium text-gray-900 bg-white rounded-md border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
+                        class="flex items-center justify-center py-2.5 px-3 w-full sm:w-auto text-sm font-medium text-gray-900 bg-white rounded-md border-2 border-gray-200 hover:bg-gray-100 active:bg-gray-200"
                         role="button">
                         <component
                             :is="isInWishlist ? HeartIcon : HeartOutlineIcon"
@@ -62,7 +62,7 @@
                     <button
                         v-if="product.available"
                         @click="addToCart"
-                        class="flex items-center justify-center text-sm py-2.5 px-4 mt-3 sm:mt-0 font-medium rounded-md text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
+                        class="flex items-center justify-center text-sm w-full sm:w-auto py-2.5 px-4 mt-3 sm:mt-0 font-medium rounded-md text-white bg-primary-light hover:bg-rose-800 active:bg-primary"
                         role="button">
                         <AddToCartIcon class="size-5 me-2 shrink-0" />
                         Dodaj u korpu

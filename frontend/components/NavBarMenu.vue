@@ -15,9 +15,9 @@
             </li>
             <template v-if="authStore.isLoggedIn">
                 <li>
-                    <NuxtLink to="/" class="flex gap-3 p-2 text-gray-100 hover:bg-gray-600 rounded">
+                    <NuxtLink to="/profil" class="flex gap-3 p-2 text-gray-100 hover:bg-gray-600 rounded">
                         <AccountIcon class="size-6 pb-0.5" />
-                        <span class="pt-0.5">Vaš nalog</span>
+                        <span class="pt-0.5">Nalog</span>
                     </NuxtLink>
                 </li>
             </template>

@@ -3,17 +3,23 @@
         <section class="p-4 sm:p-8">
             <div class="mx-auto max-w-screen-xl">
                 <div class="sm:flex items-center gap-3">
-                    <h2 class="text-2xl font-semibold text-gray-900">Recenzije</h2>
+                    <h2 class="text-xl sm:text-2xl font-semibold text-gray-900">Recenzije</h2>
                     <StarRating :size="6" :rating="rating" class="mt-1 -ms-1 sm:ms-0 sm:pt-0 sm:pb-1" />
                 </div>
                 <div class="py-6 gap-8 sm:flex sm:items-start md:py-8">
                     <div class="shrink-0">
-                        <p class="ms-0.5 text-2xl font-semibold leading-none text-gray-900">
+                        <p class="ms-0.5 text-xl sm:text-2xl font-semibold leading-none text-gray-900">
                             {{ averageRating.toFixed(2) }} od 5
                         </p>
-                        <ReviewModal />
+                        <ReviewModal>
+                            <span
+                                class="my-4 me-2 flex items-center rounded-md px-3 py-1.5 sm:py-2 text-sm font-medium text-white bg-primary-light hover:bg-rose-800 active:bg-primary">
+                                <PenIcon class="size-4 sm:size-5 me-2" />
+                                Napiši recenziju
+                            </span>
+                        </ReviewModal>
                     </div>
-                    <div class="mt-8 min-w-0 flex-1 space-y-3 sm:mt-0 text-sm">
+                    <div class="mt-4 min-w-0 flex-1 space-y-3 sm:mt-0 text-sm">
                         <div v-for="(star, index) in percentageForStars" :key="index" class="flex items-center gap-1.5">
                             <p class="w-2 shrink-0 text-start font-medium leading-none text-gray-900">
                                 {{ star.star }}
@@ -23,26 +29,28 @@
                             <button
                                 type="button"
                                 @click.prevent="toggleRatingFilter(star.star)"
-                                class="w-8 shrink-0 ps-1 text-right font-medium leading-none hover:text-primary sm:w-auto sm:text-left"
+                                class="shrink-0 ps-1 text-right font-medium leading-none sm:hover:text-primary sm:w-auto sm:text-left"
                                 :class="{ 'text-primary': activeFilter === star.star }">
                                 {{ star.amount }}
-                                <span class="hidden sm:inline">{{ getReviewWord(star.amount) }}</span>
+                                <span>{{ getReviewWord(star.amount) }}</span>
                             </button>
                         </div>
                     </div>
                 </div>
                 <hr class="my-5 mx-auto border-gray-200" />
-                <div class="divide-y divide-gray-200">
+                <div class="divide-y divide-gray-200 mb-2 sm:mb-0">
                     <template v-if="filteredReviews.length > 0">
                         <Review v-for="userReview in paginatedReviews" :key="userReview.id" :review="userReview" />
                     </template>
-                    <div class="mt-8 text-gray-600 text-center" v-else-if="userReviews.length === 0">
-                        <p class="font-semibold py-5">Trenutno nema recenzija</p>
-                        <p class="font-medium">Budite prvi koji će ostaviti recenziju!</p>
+                    <div
+                        class="sm:mt-8 text-gray-600 text-center text-sm sm:text-base"
+                        v-else-if="userReviews.length === 0">
+                        <p class="font-semibold py-3 sm:py-5">Trenutno nema recenzija</p>
+                        <p class="font-medium italic">Budite prvi koji će ostaviti recenziju!</p>
                     </div>
-                    <div class="mt-8 text-gray-600 text-center" v-else>
-                        <p class="font-semibold py-5">Trenutno nema recenzija</p>
-                        <p class="font-medium">Nema recenzija za izabranu ocenu</p>
+                    <div class="sm:mt-8 text-gray-600 text-center text-sm sm:text-base" v-else>
+                        <p class="font-semibold py-3 sm:py-5">Trenutno nema recenzija</p>
+                        <p class="font-medium italic">Nema recenzija za izabranu ocenu</p>
                     </div>
                 </div>
                 <div class="text-center" v-if="showLoadMore">
@@ -67,6 +75,7 @@ import type { RatingDTO } from '~/shared/types/RatingDTO'
 import type { ReviewProductDTO } from '~/shared/types/ReviewProductDTO'
 import { Rating } from '~/shared/classes/Rating'
 import { useReviewStore } from '~/stores/ReviewStore'
+import PenIcon from './icons/PenIcon.vue'
 
 const { rating } = defineProps<{
     rating: RatingDTO

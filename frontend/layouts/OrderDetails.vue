@@ -1,5 +1,5 @@
 <template>
-    <div class="bg-white rounded-lg border px-6 py-5 shadow-sm">
+    <div class="bg-white rounded-lg border px-4 sm:px-6 py-5 shadow-sm">
         <h2 class="font-semibold border-b pb-2 text-lg">Detalji porudžbine - {{ order.id }}</h2>
         <div
             class="grid grid-cols-1 sm:grid-cols-3 gap-4 p-4 bg-gray-50 border rounded-md border-gray-200 mt-4 text-sm text-left text-gray-700">
@@ -20,17 +20,17 @@
             <div
                 v-for="(item, index) in order.orderDetails"
                 :key="item.id"
-                class="flex items-center justify-between gap-10 px-4 py-3 hover:bg-gray-50 transition-colors duration-100">
+                class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 sm:gap-10 px-3 sm:px-4 py-3 sm:hover:bg-gray-50 transition-colors duration-100">
                 <div class="flex items-center gap-4">
                     <img :src="item.product.thumbnail" alt="Thumbnail" class="size-16 object-contain" />
-                    <div class="text-sm text-gray-700 font-medium">
-                        <NuxtLink :to="`/proizvod/${item.product.id}`" class="hover:underline line-clamp-1">
+                    <div class="text-sm text-gray-700 font-medium min-w-0">
+                        <NuxtLink :to="`/proizvod/${item.product.id}`" class="hover:underline line-clamp-2 sm:line-clamp-1 sm:break-all">
                             {{ item.product.name }}
                         </NuxtLink>
                         <div class="text-xs text-gray-500 pt-1.5">EAN: {{ item.product.ean }}</div>
                     </div>
                 </div>
-                <div class="text-right font-medium text-gray-700 shrink-0">
+                <div class="text-right font-medium text-gray-700 shrink-0 mt-2 sm:mt-0">
                     <p class="font-semibold text-lg">
                         {{ formattedItemData[index].price }}
                         <span class="text-base">RSD</span>
@@ -39,7 +39,7 @@
                 </div>
             </div>
         </div>
-        <div class="gap-6 w-1/2 ms-auto me-2">
+        <div class="gap-6 w-full sm:w-1/2 ms-auto me-2">
             <div class="space-y-2 pb-2 font-medium">
                 <dl class="flex items-center justify-between gap-4">
                     <dt class="text-base text-gray-700">Cena proizvoda</dt>
@@ -71,36 +71,37 @@
                 </dl>
             </div>
         </div>
-        <div class="bg-gray-50 rounded-lg p-5 border">
+        <div class="bg-gray-50 rounded-lg p-5 border sm:mt-6">
             <h3 class="text-lg font-semibold mb-4 border-b border-gray-200 pb-2">Detalji kupca</h3>
-            <div class="grid sm:grid-cols-2 items-start break-all text-sm">
-                <div class="grid grid-cols-[max-content,1fr] gap-x-5 gap-y-2 font-medium">
+            <div class="grid lg:grid-cols-2 items-start text-sm gap-y-2">
+                <div class="grid sm:grid-cols-[max-content,1fr] gap-x-5 gap-y-1 sm:gap-y-2 font-medium break-all">
                     <span>Ime i prezime:</span>
-                    <span class="text-gray-600">{{ order.orderInfo.fullname }}</span>
+                    <span class="text-gray-600 mb-2 sm:mb-0">{{ order.orderInfo?.fullname }}</span>
 
                     <span>Email:</span>
-                    <span class="text-gray-600">{{ order.orderInfo.email }}</span>
+                    <span class="text-gray-600 mb-2 sm:mb-0">{{ order.orderInfo?.email }}</span>
 
                     <span>Broj telefona:</span>
-                    <span class="text-gray-600">{{ order.orderInfo.phone }}</span>
+                    <span class="text-gray-600 mb-2 sm:mb-0">{{ order.orderInfo?.phone }}</span>
 
                     <span>Adresa:</span>
-                    <span class="text-gray-600">{{ order.orderInfo.address }}</span>
+                    <span class="text-gray-600 mb-2 sm:mb-0">{{ order.orderInfo?.address }}</span>
 
                     <span>Grad:</span>
-                    <span class="text-gray-600">{{ order.orderInfo.city }}</span>
+                    <span class="text-gray-600 mb-2 sm:mb-0">{{ order.orderInfo?.city }}</span>
 
                     <span>Poštanski broj:</span>
-                    <span class="text-gray-600">{{ order.orderInfo.zipcode }}</span>
+                    <span class="text-gray-600 mb-2 sm:mb-0">{{ order.orderInfo?.zipcode }}</span>
                 </div>
-                <div class="grid grid-cols-[max-content,1fr] gap-x-5 gap-y-2 font-medium ms-8">
-                    <template v-if="order.orderInfo.pib">
+
+                <div class="grid sm:grid-cols-[max-content,1fr] gap-x-5 gap-y-1 sm:gap-y-2 font-medium xl:ms-8">
+                    <template v-if="order.orderInfo?.pib">
                         <span>PIB:</span>
-                        <span class="text-gray-600">{{ order.orderInfo.pib }}</span>
+                        <span class="text-gray-600 mb-2 sm:mb-0">{{ order.orderInfo?.pib }}</span>
                     </template>
 
-                    <span>Način Plaćanja:</span>
-                    <span class="text-gray-600">{{ paymentMethodText }}</span>
+                    <span>Način plaćanja:</span>
+                    <span class="text-gray-600 mb-2 sm:mb-0">{{ paymentMethodText }}</span>
 
                     <span>Status porudžbine:</span>
                     <StatusBadge class="mt-0.5" :order-status="order.orderStatus" />
@@ -123,9 +124,9 @@ const formattedData = computed(() => {
     return {
         date: formatLongDate(order.value.createdAt, true),
         totalPrice: formatPrice(Number(order.value.totalPrice)),
-        productPrice: formatPrice(Number(order.value.orderInfo.productPrice)),
-        discountPrice: formatPrice(Number(order.value.orderInfo.discountPrice)),
-        shippingPrice: formatPrice(Number(order.value.orderInfo.shippingPrice)),
+        productPrice: formatPrice(Number(order.value.orderInfo?.productPrice)),
+        discountPrice: formatPrice(Number(order.value.orderInfo?.discountPrice)),
+        shippingPrice: formatPrice(Number(order.value.orderInfo?.shippingPrice)),
     }
 })
 

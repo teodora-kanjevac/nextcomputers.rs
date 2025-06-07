@@ -10,13 +10,13 @@
         :style="{ padding: 0 }"
         :unstyled="true"
         :pt="{
-            root: 'w-full max-w-md rounded-lg overflow-hidden border border-gray-600',
+            root: 'w-full max-w-md rounded-lg overflow-hidden border border-gray-600 sm:mx-0 mx-3',
             mask: 'bg-gray-900/60 backdrop-blur-sm justify-center items-center fixed inset-0 z-40',
             content: 'p-0',
             header: 'hidden',
         }">
         <div class="h-full md:h-auto">
-            <div class="relative pb-5 pt-3 bg-white rounded-lg shadow sm:px-3">
+            <div class="relative py-4 px-4 bg-white rounded-lg shadow sm:py-5 sm:px-5">
                 <div class="flex flex-col items-center text-center mb-8">
                     <button
                         type="button"

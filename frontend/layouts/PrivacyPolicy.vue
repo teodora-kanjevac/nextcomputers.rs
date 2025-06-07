@@ -50,6 +50,24 @@
                         ponudu, i omogućili Vam jednostavnije korišćenje, sigurniju i udobniju kupovinu.
                     </p>
                 </div>
+                <div id="kolacici" class="mb-6 scroll-mt-[100px]">
+                    <h2 class="md:text-2xl text-xl font-semibold mb-4 mt-12">KOLAČIĆI</h2>
+                    <p class="mb-4">
+                        Naša veb stranica koristi isključivo neophodne kolačiće koji su ključni za pravilno
+                        funkcionisanje sajta. Ovi kolačići omogućavaju osnovne funkcije kao što su:
+                    </p>
+                    <ul class="list-disc pl-8 mb-4">
+                        <li class="mb-2">čuvanje proizvoda u korpi tokom sesije</li>
+                        <li class="mb-2">omogućavanje prijave i autentifikacije korisnika</li>
+                        <li class="mb-2">obezbeđivanje sigurnosti prilikom korišćenja sajta</li>
+                    </ul>
+                    <p class="mb-3">Ne koristimo kolačiće u svrhe praćenja, analitike ili marketinga.</p>
+                    <p class="mb-4">
+                        Korišćenjem naše veb stranice, saglasni ste sa upotrebom ovih kolačića koji su izuzeti od
+                        obaveze prethodne saglasnosti u skladu sa Zakonom o zaštiti podataka o ličnosti i Opštom uredbom
+                        o zaštiti podataka (GDPR), jer su neophodni za pružanje usluge koju korisnik izričito zahteva.
+                    </p>
+                </div>
                 <div class="mb-6">
                     <h2 class="md:text-2xl text-xl font-semibold mb-4 mt-12">PRIKUPLJANJE INFORMACIJA</h2>
                     <p class="mb-4">
@@ -157,4 +175,6 @@
     </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+useHashScroll()
+</script>

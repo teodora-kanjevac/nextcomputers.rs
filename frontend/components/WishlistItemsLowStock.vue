@@ -1,18 +1,22 @@
 <template>
-    <div v-if="lowStockItems.length > 0" class="bg-white rounded-lg border px-6 py-5 shadow-sm font-medium">
+    <div v-if="lowStockItems.length > 0" class="bg-white rounded-lg border px-4 sm:px-6 py-5 shadow-sm font-medium">
         <h2 class="flex items-center font-semibold border-b pb-2 text-lg mb-3">
             <HourglassIcon class="size-5 text-yellow-500 me-2" />
             Poslednji komadi&#x2009;!
         </h2>
-        <div class="flex items-center justify-between text-gray-600 mb-4 text-sm">
-            <span>Ostalo je samo još par komada – ne propustite priliku!</span>
+        <div
+            class="flex flex-col sm:flex-row sm:items-center sm:justify-between text-gray-600 mb-4 text-sm space-y-2 sm:space-y-0">
+            <span class="text-sm leading-snug sm:leading-normal">
+                Ostalo je samo još par komada – ne propustite priliku!
+            </span>
             <NuxtLink
                 to="/profil/lista-zelja"
-                class="flex items-center font-semibold text-primary-light hover:underline">
+                class="flex items-center justify-end font-semibold text-primary-light hover:underline text-sm">
                 Pogledaj listu želja
-                <ArrowRightIcon class="size-4 ms-1" />
+                <ArrowRightIcon class="size-4 ms-1 shrink-0" />
             </NuxtLink>
         </div>
+
         <div
             class="mx-auto max-w-screen-xl p-4 sm:px-6 sm:py-5 rounded-lg border-2 border-dashed border-rose-200 bg-white shadow-sm">
             <section class="splide">

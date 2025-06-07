@@ -1,9 +1,9 @@
 <template>
-    <div class="bg-white rounded-lg border px-6 py-5 shadow-sm">
+    <div class="bg-white rounded-lg border px-4 sm:px-6 py-5 shadow-sm">
         <h2 class="font-semibold border-b pb-2 text-lg mb-5">Istorija kupovine</h2>
         <div v-if="orders.length === 0" class="text-gray-600 font-medium flex flex-col items-center justify-center">
-            <img class="max-w-md w-full h-auto my-10" src="/assets/images/order-illustration.webp" alt="illustration" />
-            <p class="font-semibold text-base sm:text-lg mb-5 text-center px-4">
+            <img class="max-w-md h-auto mb-6 mt-2" src="/assets/images/order-illustration.webp" alt="illustration" />
+            <p class="font-medium text-base sm:text-lg italic mb-5 text-center px-4">
                 Trenutno nemate porudžbine.
                 <br />
                 Kada napravite porudžbinu, ona će se prikazati ovde.
@@ -14,22 +14,22 @@
                 <table class="w-full text-sm text-left text-gray-500">
                     <thead class="text-xs text-gray-700 uppercase bg-gray-200">
                         <tr>
-                            <th scope="col" class="px-6 py-3">Broj porudžbine</th>
-                            <th scope="col" class="px-6 py-3">Datum kupovine</th>
-                            <th scope="col" class="px-6 py-3">Ukupna cena</th>
-                            <th scope="col" class="px-6 py-3">Status porudžbine</th>
+                            <th scope="col" class="px-4 py-2 sm:px-6 sm:py-3">Broj porudžbine</th>
+                            <th scope="col" class="px-4 py-2 sm:px-6 sm:py-3">Datum kupovine</th>
+                            <th scope="col" class="px-4 py-2 sm:px-6 sm:py-3">Ukupna cena</th>
+                            <th scope="col" class="px-4 py-2 sm:px-6 sm:py-3">Status porudžbine</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200 font-medium">
                         <tr v-for="(order, index) in paginatedOrders" :key="order.id" class="bg-gray-50">
-                            <td class="px-6 py-4 text-gray-800 whitespace-nowrap">
+                            <td class="px-4 py-2 sm:px-6 sm:py-3 text-gray-800 whitespace-nowrap">
                                 <NuxtLink :to="`/profil/istorija-kupovine/${order.id}`" class="hover:underline">
                                     {{ order.id }}
                                 </NuxtLink>
                             </td>
-                            <td class="px-6 py-4">{{ formattedData[index].date }}</td>
-                            <td class="px-6 py-4">{{ formattedData[index].price }} RSD</td>
-                            <td class="px-6 py-4"><StatusBadge :order-status="order.orderStatus" /></td>
+                            <td class="px-4 py-2 sm:px-6 sm:py-4">{{ formattedData[index].date }}</td>
+                            <td class="px-4 py-2 sm:px-6 sm:py-4">{{ formattedData[index].price }} RSD</td>
+                            <td class="px-4 py-2 sm:px-6 sm:py-4"><StatusBadge :order-status="order.orderStatus" /></td>
                         </tr>
                     </tbody>
                 </table>
