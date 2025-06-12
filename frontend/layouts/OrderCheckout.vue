@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="pt-3 pb-8 sm:h-screen">
+        <section class="pt-3 pb-8 sm:min-h-screen">
             <form @submit.prevent="submitForm" class="mx-auto max-w-screen-xl px-4">
                 <div class="lg:flex lg:items-start sm:gap-4 xl:gap-8">
                     <div
@@ -158,7 +158,6 @@ const shouldPopulateField = (currentValue: string, userValue: string | undefined
 
 const populateUserData = async () => {
     try {
-        await authStore.getMe()
         if (!authStore.isLoggedIn || !userStore.user) return
 
         const { user } = userStore

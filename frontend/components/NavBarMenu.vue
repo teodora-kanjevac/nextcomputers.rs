@@ -13,11 +13,11 @@
                     <span class="pt-0.5">Proizvodi</span>
                 </NuxtLink>
             </li>
-            <template v-if="authStore.isLoggedIn">
+            <template v-if="isLoggedIn">
                 <li>
-                    <NuxtLink to="/" class="flex gap-3 p-2 text-gray-100 hover:bg-gray-600 rounded">
+                    <NuxtLink to="/profil" class="flex gap-2.5 p-2 text-gray-100 hover:bg-gray-600 rounded">
                         <AccountIcon class="size-6 pb-0.5" />
-                        <span class="pt-0.5">Vaš nalog</span>
+                        <span class="pt-0.5">Nalog</span>
                     </NuxtLink>
                 </li>
             </template>
@@ -40,8 +40,9 @@ import AccountIcon from './icons/AccountIcon.vue'
 import { useAuthStore } from '~/stores/AuthStore'
 
 const authStore = useAuthStore()
+const isLoggedIn = ref(false)
 
-onMounted(async () => {
-    await authStore.getMe()
+onMounted(() => {
+    isLoggedIn.value = authStore.isLoggedIn
 })
 </script>

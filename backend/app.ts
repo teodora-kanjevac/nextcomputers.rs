@@ -1,6 +1,7 @@
 import express, { Application } from 'express'
 import dotenv from 'dotenv'
 import cors from 'cors'
+import helmet from 'helmet'
 import categoryRoutes from '~/src/routes/categoryRoutes'
 import subcategoryRoutes from '~/src/routes/subcategoryRoutes'
 import productRoutes from '~/src/routes/productRoutes'
@@ -27,6 +28,7 @@ app.use(
         origin: 'http://localhost',
     })
 )
+app.use(helmet())
 app.use(cookieParser())
 
 app.use('/api/categories', categoryRoutes)

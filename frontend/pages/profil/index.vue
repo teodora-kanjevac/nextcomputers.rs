@@ -1,12 +1,17 @@
 <template>
     <Account>
-        <AccountOverview />
+        <div class="space-y-3">
+            <BuyerStatistics />
+            <AccountDetails />
+            <RecentOrders />
+            <WishlistItemsLowStock />
+            <ReviewSuggestions />
+        </div>
     </Account>
 </template>
 
 <script setup lang="ts">
 import Account from '~/layouts/Account.vue'
-import AccountOverview from '~/layouts/AccountOverview.vue'
 import { useUserStore } from '~/stores/UserStore'
 
 const { updateTitle } = usePageTitle()

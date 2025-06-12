@@ -4,13 +4,12 @@ import {
     clearCart,
     createCart,
     fetchCartById,
-    fetchCartByUserId,
     removeCartItem,
     removeUnavailableCartItems,
     updateCartItemQuantity,
     updateLastSiteVisitCart,
 } from '~/src/services/cartService'
-import jwt from 'jsonwebtoken'
+import { fetchUserId } from '~/src/utils/jwt/fetchUser'
 
 export const createACart = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -19,8 +18,7 @@ export const createACart = async (req: Request, res: Response): Promise<void> =>
         if (!token) {
             userId = null
         } else {
-            const decoded = jwt.decode(token) as { id: string }
-            userId = decoded.id
+            userId = fetchUserId(token)
         }
 
         const cartId = await createCart(userId)
@@ -28,7 +26,7 @@ export const createACart = async (req: Request, res: Response): Promise<void> =>
         res.cookie('cart_id', cartId, {
             maxAge: 1000 * 60 * 60 * 24 * 10,
             sameSite: 'lax',
-            secure: process.env.NODE_ENV === 'production'
+            secure: process.env.NODE_ENV === 'production',
         })
 
         res.status(200).json(cartId)
@@ -45,7 +43,7 @@ export const updateLastVisitToCart = async (req: Request, res: Response): Promis
     try {
         const cartId = req.cookies.cart_id as string
         const token = req.cookies.token as string
-        
+
         if (!cartId) {
             res.status(400).json({ error: 'Missing cart ID in cookies' })
             return
@@ -57,7 +55,7 @@ export const updateLastVisitToCart = async (req: Request, res: Response): Promis
             res.cookie('cart_id', cartId, {
                 maxAge: 1000 * 60 * 60 * 24 * 10,
                 sameSite: 'lax',
-                secure: process.env.NODE_ENV === 'production'
+                secure: process.env.NODE_ENV === 'production',
             })
         }
 
@@ -92,22 +90,6 @@ export const getCartById = async (req: Request, res: Response): Promise<void> =>
     }
 }
 
-export const getCartByUser = async (req: Request, res: Response): Promise<void> => {
-    try {
-        const userId = req.params.userId as string
-
-        const cart = await fetchCartByUserId(userId)
-
-        res.status(200).json(cart)
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message })
-        } else {
-            res.status(500).json({ error: 'Unexpected error occurred' })
-        }
-    }
-}
-
 export const addItemToCart = async (req: Request, res: Response): Promise<void> => {
     try {
         const { cartId, productId } = req.body
@@ -116,11 +98,9 @@ export const addItemToCart = async (req: Request, res: Response): Promise<void> 
 
         res.status(200).json(cartItem)
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message })
-        } else {
-            res.status(500).json({ error: 'Unexpected error occurred' })
-        }
+        res.status(200).json({
+            error: error instanceof Error ? error.message : 'Adding to cart failed',
+        })
     }
 }
 

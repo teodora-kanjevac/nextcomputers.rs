@@ -11,7 +11,8 @@ export const useCartStore = defineStore('cart', {
     actions: {
         async createCart() {
             try {
-                const { data } = await axios.post(`/api/cart/create`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/cart/create`)
                 this.cart.id = data
                 return data
             } catch (error) {
@@ -20,7 +21,8 @@ export const useCartStore = defineStore('cart', {
         },
         async fetchCart() {
             try {
-                const { data } = await axios.get(`/api/cart`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/cart`)
                 this.cart = new Cart(data)
             } catch (error) {
                 console.error('Failed to fetch cart:', error)
@@ -28,10 +30,14 @@ export const useCartStore = defineStore('cart', {
         },
         async addToCart(productId: number) {
             try {
-                const { data } = await axios.post(`/api/cart/add-item`, {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/cart/add-item`, {
                     cartId: this.cart.id,
                     productId: productId,
                 })
+
+                if (data.error) throw new Error(data.error)
+
                 const existingItem = this.cart.cartItems.find(item => item.product.id === productId)
 
                 if (existingItem) {
@@ -45,7 +51,8 @@ export const useCartStore = defineStore('cart', {
         },
         async updateQuantity(cartItemId: string, quantity: number) {
             try {
-                await axios.put(`/api/cart/update-quantity`, {
+                const { $axios } = useNuxtApp()
+                await $axios.put(`/api/cart/update-quantity`, {
                     cartItemId: cartItemId,
                     cartId: this.cart.id,
                     quantity: quantity,
@@ -56,7 +63,8 @@ export const useCartStore = defineStore('cart', {
         },
         async removeFromCart(cartItemId: string) {
             try {
-                await axios.delete(`/api/cart/remove-item/${cartItemId}`)
+                const { $axios } = useNuxtApp()
+                await $axios.delete(`/api/cart/remove-item/${cartItemId}`)
 
                 this.cart.cartItems = this.cart.cartItems.filter(item => item.id !== cartItemId)
             } catch (error) {
@@ -73,7 +81,8 @@ export const useCartStore = defineStore('cart', {
         },
         async clearCart() {
             try {
-                await axios.delete(`/api/cart/clear/${this.cart.id}`)
+                const { $axios } = useNuxtApp()
+                await $axios.delete(`/api/cart/clear/${this.cart.id}`)
 
                 this.cart.cartItems = []
             } catch (error) {
@@ -82,7 +91,8 @@ export const useCartStore = defineStore('cart', {
         },
         async updateLastAccessToCart() {
             try {
-                await axios.put(`/api/cart/last-accessed`)
+                const { $axios } = useNuxtApp()
+                await $axios.put(`/api/cart/last-accessed`)
             } catch (error) {
                 console.error('Failed to update last access:', error)
             }

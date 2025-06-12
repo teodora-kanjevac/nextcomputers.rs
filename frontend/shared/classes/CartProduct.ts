@@ -3,6 +3,7 @@ export class CartProduct {
     public name: string
     public ean: string
     public price: number
+    public available: boolean
     public shippingPrice: number
     public discountPrice?: number
     public thumbnail: string
@@ -12,6 +13,7 @@ export class CartProduct {
         this.id = product.id
         this.name = product.name
         this.ean = product.ean
+        this.available = product.available
         this.price = parseInt(product.salePrice)
         this.shippingPrice = parseInt(product.shippingPrice)
         this.discountPrice = parseInt(product.discountPrice)

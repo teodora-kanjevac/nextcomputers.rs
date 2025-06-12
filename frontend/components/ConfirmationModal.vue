@@ -1,7 +1,6 @@
 <template>
-    <button type="button" @click="visible = true" class="text-red-600 hover:underline flex items-center">
-        <TrashCanIcon class="size-4 me-1 shrink-0" />
-        Obriši recenziju
+    <button type="button" @click="visible = true">
+        <slot />
     </button>
     <Dialog
         v-model:visible="visible"
@@ -11,13 +10,13 @@
         :style="{ padding: 0 }"
         :unstyled="true"
         :pt="{
-            root: 'w-full max-w-md rounded-lg overflow-hidden border border-gray-600',
+            root: 'w-full max-w-md rounded-lg overflow-hidden border border-gray-600 sm:mx-0 mx-3',
             mask: 'bg-gray-900/60 backdrop-blur-sm justify-center items-center fixed inset-0 z-40',
             content: 'p-0',
             header: 'hidden',
         }">
-        <div class="h-full md:h-auto">
-            <div class="relative pb-5 pt-3 bg-white rounded-lg shadow sm:px-3">
+        <div class="max-h-screen overflow-y-auto">
+            <div class="relative py-4 px-4 bg-white rounded-lg shadow sm:py-5 sm:px-5">
                 <div class="flex flex-col items-center text-center mb-8">
                     <button
                         type="button"
@@ -28,7 +27,7 @@
                     <div class="mb-4 p-3 rounded-full bg-red-100 text-red-600">
                         <TrashCanIcon class="size-9" />
                     </div>
-                    <p class="text-gray-700 font-medium mt-2 px-3">{{ message }}</p>
+                    <p class="text-gray-700 text-sm font-medium mt-2 px-3">{{ message }}</p>
                 </div>
 
                 <div class="flex justify-center gap-3">
@@ -68,25 +67,9 @@ const props = defineProps({
         type: String,
         default: 'Otkaži',
     },
-    confirmButtonClass: {
-        type: String,
-        default: 'bg-primary-light hover:bg-rose-800',
-    },
     onConfirm: {
         type: Function,
         required: true,
-    },
-    icon: {
-        type: Object,
-        default: () => TrashCanIcon,
-    },
-    iconBgColor: {
-        type: String,
-        default: 'bg-red-50',
-    },
-    iconColor: {
-        type: String,
-        default: 'text-red-600',
     },
 })
 

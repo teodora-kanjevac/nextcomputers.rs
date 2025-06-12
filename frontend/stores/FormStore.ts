@@ -5,6 +5,7 @@ import type { ContactData } from '~/shared/classes/ContactData'
 import type { EditUserData } from '~/shared/classes/EditUserData'
 import type { LogInData } from '~/shared/classes/LogInData'
 import type { RegisterFormData } from '~/shared/classes/RegisterFormData'
+import type { ResetPasswordData } from '~/shared/classes/ResetPasswordData'
 import type { ReviewData } from '~/shared/classes/ReviewData'
 
 export const useFormStore = defineStore('forms', {
@@ -75,6 +76,12 @@ export const useFormStore = defineStore('forms', {
                 rememberMe: false,
             } as LogInData,
         },
+        resetPassword: {
+            form: {
+                password: '',
+                confirmPassword: '',
+            } as ResetPasswordData,
+        },
     }),
     actions: {
         setPaymentMethod(method: 'CASH' | 'CARD' | 'ADVANCE') {
@@ -141,6 +148,12 @@ export const useFormStore = defineStore('forms', {
                 email: '',
                 password: '',
                 rememberMe: false,
+            }
+        },
+        resetResetPasswordForm() {
+            this.resetPassword.form = {
+                password: '',
+                confirmPassword: '',
             }
         },
     },

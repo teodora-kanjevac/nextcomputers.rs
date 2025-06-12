@@ -8,7 +8,7 @@
             <template v-if="isTokenExpired">
                 <div class="space-y-6">
                     <h2 class="text-xl font-bold text-gray-800 md:text-3xl">Link za verifikaciju je istekao</h2>
-                    <p class="text-left text-sm leading-5 text-gray-600 sm:text-base">
+                    <p class="text-center text-sm leading-5 text-gray-600 sm:text-base">
                         Verifikacioni link više nije validan. Molimo Vas da se ponovo registrujete da biste dobili novi
                         link.
                     </p>
@@ -16,7 +16,7 @@
                         <NuxtLink
                             to="/register"
                             class="inline-block rounded bg-red-700 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-800">
-                            Registrujte se ponovo
+                            Registruj se ponovo
                         </NuxtLink>
                         <NuxtLink
                             to="/kontakt"
@@ -29,14 +29,14 @@
             <template v-else-if="isEmailVerified">
                 <div class="space-y-6">
                     <h2 class="text-xl font-bold text-gray-800 md:text-3xl">Email je već verifikovan</h2>
-                    <p class="text-left text-sm leading-5 text-gray-600 sm:text-base">
+                    <p class="text-center text-sm leading-5 text-gray-600 sm:text-base">
                         Ovaj email je već verifikovan. Možete pristupiti vašem profilu.
                     </p>
                     <div class="flex justify-center">
                         <NuxtLink
                             to="/"
                             class="inline-block rounded bg-primary-light px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-800">
-                            Vratite se na početnu
+                            Vrati se na početnu
                         </NuxtLink>
                     </div>
                 </div>
@@ -44,14 +44,12 @@
             <template v-else>
                 <div class="space-y-6">
                     <h2 class="text-xl font-bold text-gray-800 md:text-3xl">Greška u verifikaciji</h2>
-                    <p class="text-left text-sm leading-5 text-gray-600 sm:text-base">
-                        Uneli ste nepostojeći token.
-                    </p>
+                    <p class="text-center text-sm leading-5 text-gray-600 sm:text-base">Uneli ste nepostojeći token.</p>
                     <div class="flex justify-center">
                         <NuxtLink
                             to="/"
                             class="inline-block rounded bg-primary-light px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-rose-800">
-                            Vratite se na početnu
+                            Vrati se na početnu
                         </NuxtLink>
                     </div>
                 </div>

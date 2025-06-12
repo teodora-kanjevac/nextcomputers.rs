@@ -30,3 +30,11 @@ export const formatLongDate = (date: any, hour: boolean = false): string => {
     }
     return date.toLocaleDateString('sr-Latn', options)
 }
+
+export const checkUser = (isLoggedIn: boolean): boolean => {
+    if (!isLoggedIn) {
+        navigateTo('/login')
+        return false
+    }
+    return true
+}

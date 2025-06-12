@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import type { User } from '~/shared/classes/User'
 import { useAuthStore } from './AuthStore'
 import type { EditUserData } from '~/shared/classes/EditUserData'
@@ -20,10 +19,10 @@ export const useUserStore = defineStore('user', {
         async fetchUserFullName() {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
                 if (!authStore.user) return
 
-                const { data } = await axios.get('/api/user/fullname')
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/user/fullname')
 
                 this.user = data
             } catch (error) {
@@ -33,10 +32,10 @@ export const useUserStore = defineStore('user', {
         async fetchUserInfo() {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
                 if (!authStore.user) return
 
-                const { data } = await axios.get('/api/user/info')
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/user/info')
 
                 this.user = data
             } catch (error) {
@@ -46,10 +45,10 @@ export const useUserStore = defineStore('user', {
         async fetchUserPurchaseHistory() {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
                 if (!authStore.user) return
 
-                const { data } = await axios.get('/api/user/history')
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/user/history')
 
                 this.orderHistory = data
             } catch (error) {
@@ -59,10 +58,10 @@ export const useUserStore = defineStore('user', {
         async fetchUserReviewHistory() {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
                 if (!authStore.user) return
 
-                const { data } = await axios.get('/api/reviews/user')
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/reviews/user')
 
                 this.reviewHistory = data.map((review: any) => new Review(review))
             } catch (error) {
@@ -72,10 +71,10 @@ export const useUserStore = defineStore('user', {
         async fetchUserStatistics() {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
                 if (!authStore.user) return
 
-                const { data } = await axios.get('/api/user/statistics')
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/user/statistics')
 
                 this.userStatistics = new UserStatistics(data)
             } catch (error) {
@@ -85,10 +84,10 @@ export const useUserStore = defineStore('user', {
         async editUserReview(reviewId: string, reviewData: ReviewData) {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
                 if (!authStore.user) return
 
-                const { data } = await axios.put(`/api/reviews/edit/${reviewId}`, reviewData)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.put(`/api/reviews/edit/${reviewId}`, reviewData)
 
                 this.reviewHistory = this.reviewHistory.map(review =>
                     review.id === reviewId ? new Review(data) : review
@@ -101,10 +100,10 @@ export const useUserStore = defineStore('user', {
             try {
                 const reviewStore = useReviewStore()
                 const authStore = useAuthStore()
-                await authStore.getMe()
                 if (!authStore.user) return
 
-                await axios.delete(`/api/reviews/delete/${reviewId}`)
+                const { $axios } = useNuxtApp()
+                await $axios.delete(`/api/reviews/delete/${reviewId}`)
 
                 this.reviewHistory = this.reviewHistory.filter(item => item.id !== reviewId)
 
@@ -117,9 +116,9 @@ export const useUserStore = defineStore('user', {
         async editUserData(editUserData: EditUserData) {
             try {
                 const authStore = useAuthStore()
-                await authStore.getMe()
                 if (!authStore.user) return
-                const { data } = await axios.put('/api/user/edit', {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.put('/api/user/edit', {
                     firstName: editUserData.firstName,
                     lastName: editUserData.lastName,
                     phone: editUserData.phone,

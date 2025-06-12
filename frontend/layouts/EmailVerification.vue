@@ -3,7 +3,8 @@
         <div v-if="pageLoading" class="fixed inset-0 flex flex-col items-center justify-center text-2xl">
             <Spinner class="size-10" />
         </div>
-        <div v-else
+        <div
+            v-else
             class="mt-16 md:mt-40 3xl:mt-56 max-w-screen-md rounded-lg bg-white p-6 mx-5 md:mx-auto md:p-12 text-left shadow-lg font-medium">
             <h2 class="mb-6 text-xl font-bold text-gray-800 md:text-3xl">Verifikujte svoju email adresu</h2>
             <p class="mb-6 text-gray-600 sm:text-base text-sm leading-5">
@@ -19,7 +20,7 @@
             </p>
             <button
                 @click="resendVerification"
-                class="mb-5 select-none rounded-md py-2.5 text-sm w-2/5 bg-primary-light disabled:contrast-75 enabled:hover:bg-rose-800 transition duration-100 font-medium text-white"
+                class="mb-5 select-none rounded-md p-2.5 text-sm w-full sm:w-1/2 md:w-2/5 bg-primary-light disabled:contrast-75 enabled:hover:bg-rose-800 transition duration-100 font-medium text-white"
                 :disabled="sharedStore.loading">
                 <template v-if="sharedStore.loading">
                     <SubmitionSpinner class="size-5 flex items-center" />
@@ -41,16 +42,12 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '~/stores/AuthStore'
-import { useMailStore } from '~/stores/MailStore'
 import { useSharedStore } from '~/stores/SharedStore'
 
-const runtimeConfig = useRuntimeConfig()
 const nuxtApp = useNuxtApp()
 const authStore = useAuthStore()
-const mailStore = useMailStore()
 const sharedStore = useSharedStore()
 const { showNotification } = useNotification()
-const { checkLimit } = useRateLimit(3, 2 * 60 * 60 * 1000, 'rate-limit-verify')
 
 const pageLoading = ref(true)
 const email = computed<string>(() => authStore.user?.email || '')
@@ -58,35 +55,16 @@ const email = computed<string>(() => authStore.user?.email || '')
 const resendVerification = async () => {
     try {
         sharedStore.setLoading(true)
-        if (!checkLimit()) {
-            showNotification(
-                'warn',
-                'Previše pokušaja!',
-                'Poslali ste previše email-ova u kratkom roku. Molimo pokušajte kasnije.'
-            )
-            return
-        }
-        const pendingRegisterData = await authStore.getPendingVerification(email.value)
-        const link =
-            runtimeConfig.public.environment === 'production'
-                ? `${runtimeConfig.public.verifyBaseUrl}${pendingRegisterData.token}`
-                : `${runtimeConfig.public.verifyDevUrl}${pendingRegisterData.token}`
 
-        await mailStore.sendVerificationMail({
-            fullname: pendingRegisterData.fullname,
-            email: pendingRegisterData.email,
-            link: link,
-        })
-
-        await authStore.storePendingVerification({
-            fullname: pendingRegisterData.fullname,
-            email: pendingRegisterData.email,
-            token: pendingRegisterData.token,
-        })
-
+        await authStore.requestVerificationMail(email.value)
+       
         showNotification('success', 'Uspešno poslat email!', 'Novi verifikacioni email je poslat.')
     } catch (error: any) {
-        showNotification('error', 'Greška', 'Došlo je do greške pri slanju emaila.')
+        if (error.message.includes('Too many verification attempts')) {
+            showNotification('warn', 'Previše pokušaja!', 'Previše zahteva za verifikaciju. Pokušajte ponovo kasnije.')
+        } else {
+            showNotification('error', 'Greška', 'Došlo je do greške pri slanju emaila.')
+        }
     } finally {
         sharedStore.setLoading(false)
     }
@@ -106,7 +84,6 @@ onMounted(async () => {
 
         checkStatus()
     } else {
-        await authStore.getMe()
         pageLoading.value = false
     }
 })

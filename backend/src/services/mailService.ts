@@ -14,6 +14,8 @@ import { registerForm } from '~/src/mails/verificationEmail'
 import { resetPasswordForm } from '~/src/mails/resetPassword'
 import { RegisterDataDTO } from '~/src/DTOs/RegisterData.dto'
 import { verificationEmailTemplate } from '~/src/mails/templates/verificationEmailTemplate'
+import { reserPasswordTemplate } from '../mails/templates/resetPasswordTemplate'
+import { ResetPasswordDataDTO } from '../DTOs/ResetPasswordData.dto'
 
 dotenv.config()
 
@@ -96,16 +98,15 @@ export async function sendEmailVerification(registerData: RegisterDataDTO): Prom
     return mailInfo
 }
 
-export async function sendPasswordResetEmail(email: string): Promise<any> {
-    const link = ''
-    const formattedResetPassData = await resetPasswordForm(email, link)
+export async function sendPasswordResetEmail(resetPasswordData: ResetPasswordDataDTO): Promise<any> {
+    const formattedResetPassData = await resetPasswordForm(resetPasswordData)
 
-    const htmlContent = contactTemplate(formattedResetPassData)
+    const htmlContent = reserPasswordTemplate(formattedResetPassData)
 
     const emailOptions: MailOptionsDTO = {
         from: process.env.MAIL_FROM as string,
-        to: email,
-        subject: 'Resetovanje lozinke - nextcomputers.rs',
+        to: resetPasswordData.email,
+        subject: 'Promena lozinke - nextcomputers.rs',
         text: htmlToText(htmlContent),
         html: htmlContent,
     }

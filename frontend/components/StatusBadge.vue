@@ -15,7 +15,7 @@ type StatusMap = {
 }
 
 const { orderStatus } = defineProps<{
-    orderStatus: 'CANCELED' | 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | string | undefined
+    orderStatus: 'CANCELED' | 'PENDING' | 'CONFIRMED' | 'SHIPPED' | 'DELIVERED' | 'RETURNED' | string | undefined
 }>()
 
 const statusMap: StatusMap = {
@@ -24,6 +24,7 @@ const statusMap: StatusMap = {
     CONFIRMED: { text: 'Potvrdjeno', classes: 'bg-green-100 text-green-800 border-green-400' },
     SHIPPED: { text: 'Poslato', classes: 'bg-blue-100 text-blue-800 border-blue-400' },
     DELIVERED: { text: 'Dostavljeno', classes: 'bg-violet-100 text-violet-800 border-violet-400' },
+    RETURNED: { text: 'Vraćeno', classes: 'bg-orange-100 text-orange-800 border-orange-400' },
 }
 
 const statusBadge = computed(() => {

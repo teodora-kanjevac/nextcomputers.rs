@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import { getQRCode } from '../controllers/ipsController'
+import { getQRCode } from '~/src/controllers/ipsController'
 
 const router: Router = Router()
 

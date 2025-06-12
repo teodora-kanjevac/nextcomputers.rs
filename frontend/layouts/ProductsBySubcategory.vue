@@ -15,11 +15,11 @@
                     <SortDropdown />
                 </div>
                 <div v-if="sharedStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
-                    <Spinner class="mt-32" />
+                    <Spinner class="my-32" />
                 </div>
                 <div
                     v-if="!sharedStore.loading && productCards.length === 0"
-                    class="text-center font-semibold text-xl text-gray-500 mt-32">
+                    class="text-center font-semibold text-xl text-gray-500 my-32">
                     Nema proizvoda za ovu pretragu.
                 </div>
                 <div

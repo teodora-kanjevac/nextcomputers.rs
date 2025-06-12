@@ -5,6 +5,7 @@ import { OrderDTO } from '~/src/DTOs/Order.dto'
 import { generateOrderIdWithUUID } from '~/src/utils/order/generateOrderId'
 import { fetchMe } from '~/src/services/userService'
 import jwt from 'jsonwebtoken'
+import { fetchUserId } from '../utils/jwt/fetchUser'
 
 export const createOrder = async (orderData: OrderDataDTO, token: string): Promise<OrderDTO> => {
     try {
@@ -150,10 +151,10 @@ export const fetchOrderById = async (orderId: string): Promise<OrderDTO> => {
 }
 
 export const fetchOrderHistory = async (token: string): Promise<OrderDTO[]> => {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET as string) as { id: string }
+    const userId = fetchUserId(token)
 
     const orders = await prisma.order.findMany({
-        where: { user_id: decoded.id },
+        where: { user_id: userId },
         include: {
             orderdetails: {
                 select: {

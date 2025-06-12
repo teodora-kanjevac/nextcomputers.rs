@@ -1,10 +1,6 @@
 <template>
-    <button
-        type="button"
-        @click="handleReviewModalClick"
-        class="my-4 me-2 flex items-center rounded-md px-4 py-2 text-sm font-medium text-white bg-primary-light hover:bg-rose-800 active:bg-primary">
-        <PenIcon class="size-5 me-2 -ms-1" />
-        Napiši recenziju
+    <button type="button" @click="handleReviewModalClick">
+        <slot />
     </button>
     <Dialog
         v-model:visible="visible"
@@ -14,13 +10,13 @@
         :style="{ padding: 0 }"
         :unstyled="true"
         :pt="{
-            root: 'w-full max-w-xl rounded-lg overflow-hidden border border-gray-600',
+            root: 'w-full max-w-xl rounded-lg overflow-hidden border border-gray-600 sm:mx-0 mx-3',
             mask: 'bg-gray-900/60 backdrop-blur-sm justify-center items-center fixed inset-0 z-40',
             content: 'p-0',
             header: 'hidden',
         }">
-        <div class="w-full max-w-xl h-full md:h-auto">
-            <div class="relative py-4 bg-white rounded-lg shadow sm:py-5 sm:px-5">
+        <div class="w-full max-w-xl max-h-screen overflow-y-auto">
+            <div class="relative py-4 px-4 bg-white rounded-lg shadow sm:py-5 sm:px-5">
                 <div class="flex justify-between items-center pb-2 mb-4 rounded-t border-b">
                     <h3 class="text-lg font-semibold text-gray-900">Napiši recenziju</h3>
                     <button
@@ -40,7 +36,6 @@
 import CloseIcon from './icons/CloseIcon.vue'
 import { useAuthStore } from '~/stores/AuthStore'
 import { useReviewStore } from '~/stores/ReviewStore'
-import PenIcon from './icons/PenIcon.vue'
 import Dialog from 'primevue/dialog'
 
 const authStore = useAuthStore()
@@ -66,9 +61,8 @@ watch(visible, newVal => {
 })
 
 const handleReviewModalClick = () => {
-    if (!authStore.isLoggedIn) {
-        useRouter().push('/login')
-    } else if (!eligibility.value?.hasPurchased) {
+    if (!checkUser(authStore.isLoggedIn)) return
+    if (!eligibility.value?.hasPurchased) {
         showNotification(
             'warn',
             'Morate kupiti proizvod!',
@@ -76,11 +70,19 @@ const handleReviewModalClick = () => {
             5000
         )
         return
+    } else if (!eligibility.value.hasValidStatus) {
+        showNotification(
+            'warn',
+            'Ne možete oceniti ovaj proizvod!',
+            'Da bi ste mogli da ostavite recenziju, status vaše porudžbine mora biti "DOSTAVLJENO" ili "VRAĆENO".',
+            6000
+        )
+        return
     } else if (eligibility.value.hasReviewed) {
         showNotification(
             'info',
             'Već ste ocenili ovaj proizvod!',
-            'Ako želite da izmenite recenziju, idite na Vaš nalog < Moje recenzije.',
+            'Ako želite da izmenite recenziju, idite na Nalog < Moje recenzije.',
             5000
         )
         return

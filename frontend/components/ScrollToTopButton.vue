@@ -3,7 +3,7 @@
         <button
             v-show="showButton"
             ref="scrollButton"
-            class="fixed bottom-5 right-5 p-2 bg-primary-light text-gray-100 border-2 border-primary hover:bg-primary rounded-full cursor-pointer"
+            class="fixed bottom-4 right-4 sm:bottom-5 sm:right-5 p-1 sm:p-2 bg-primary-light text-gray-100 border-2 border-primary hover:bg-primary rounded-full cursor-pointer"
             @click="scrollToTop">
             <ArrowUpIcon class="size-6" />
         </button>

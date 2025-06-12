@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="py-8 md:py-16">
-            <div class="px-4 mx-auto max-w-screen-lg 3xl:max-w-screen-xl h-screen">
+            <div class="px-4 mx-auto max-w-screen-lg 3xl:max-w-screen-xl min-h-screen">
                 <h2 class="md:text-3xl text-2xl font-semibold pb-3 md:pb-4 border-b-2 border-gray-200 text-left">
                     Kontaktirajte nas
                 </h2>
@@ -82,7 +82,7 @@
                             </div>
                             <button
                                 type="submit"
-                                class="py-2.5 px-4 w-1/3 text-sm font-medium text-center flex items-center justify-center text-white rounded-md bg-primary-light sm:w-fit disabled:contrast-75 enabled:hover:bg-rose-800"
+                                class="py-2.5 px-4 text-sm font-medium text-center flex items-center justify-center text-white rounded-md bg-primary-light sm:w-fit disabled:contrast-75 enabled:hover:bg-rose-800"
                                 :disabled="sharedStore.loading">
                                 <template v-if="sharedStore.loading">
                                     <SubmitionSpinner class="size-5 px-5" />
@@ -106,18 +106,15 @@ import DocumentIcon from '~/components/icons/DocumentIcon.vue'
 import EmailIcon from '~/components/icons/EmailIcon.vue'
 import OfficeBuildingIcon from '~/components/icons/OfficeBuildingIcon.vue'
 import PhoneIcon from '~/components/icons/PhoneIcon.vue'
-import { useRateLimit } from '~/composables/useRateLimit'
 import { useMailStore } from '~/stores/MailStore'
 import { useNotification } from '~/composables/useNotification'
 import { useFormStore } from '~/stores/FormStore'
 import { useSharedStore } from '~/stores/SharedStore'
 
-const { showNotification } = useNotification()
-const { checkLimit } = useRateLimit(3, 2 * 60 * 60 * 1000, 'rate-limit-contact')
-
 const formStore = useFormStore()
 const mailStore = useMailStore()
 const sharedStore = useSharedStore()
+const { showNotification } = useNotification()
 
 const form = ref(formStore.contact.form)
 
@@ -132,28 +129,18 @@ const isFormInvalid = computed(() => {
 
 const resetForm = () => {
     formStore.resetContactForm()
+    form.value = formStore.contact.form
     formSubmitted.value = false
 }
 
 const submitForm = async () => {
     formSubmitted.value = true
-
     if (isFormInvalid.value) {
         shakeTrigger.value++
         return
     }
 
-    if (!checkLimit()) {
-        showNotification(
-            'warn',
-            'Previše pokušaja!',
-            'Poslali ste previše poruka u kratkom roku. Molimo pokušajte kasnije.'
-        )
-        return
-    }
-
     sharedStore.setLoading(true)
-
     formStore.contact.form = { ...form.value }
 
     try {
@@ -164,12 +151,16 @@ const submitForm = async () => {
             'Poruka uspešno poslata!',
             'Vaša poruka je uspešno poslata. Hvala Vam što koristite nextcomputers.rs!'
         )
-    } catch (error) {
-        showNotification(
-            'error',
-            'Greška pri slanju poruke!',
-            'Došlo je do problema pri slanju poruke. Molimo pokušajte kasnije.'
-        )
+    } catch (error: any) {
+        if (error.message.includes('Maximum 3 submissions per day')) {
+            showNotification('warn', 'Previše pokušaja!', 'Dozvoljeno je slanje 3 poruke dnevno.')
+        } else {
+            showNotification(
+                'error',
+                'Greška pri slanju poruke!',
+                'Došlo je do problema pri slanju poruke. Molimo pokušajte kasnije.'
+            )
+        }
     } finally {
         sharedStore.setLoading(false)
     }

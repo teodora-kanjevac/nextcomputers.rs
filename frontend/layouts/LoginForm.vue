@@ -1,6 +1,6 @@
 <template>
     <div class="min-h-screen flex flex-col md:justify-center justify-start items-center">
-        <div class="flex flex-row justify-center items-center max-w-screen-lg lg:p-0 px-5 pt-10 w-full gap-8">
+        <div class="flex flex-row justify-center items-center max-w-screen-lg lg:p-0 px-5 py-28 w-full gap-8">
             <div class="w-full sm:w-2/3 lg:w-1/2 flex flex-col gap-3">
                 <div>
                     <NuxtLink to="/" class="text-primary font-medium text-sm flex items-center hover:underline">
@@ -86,7 +86,7 @@
                             <div class="flex items-center justify-center">
                                 <button
                                     type="submit"
-                                    class="w-full sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md disabled:contrast-75 enabled:hover:bg-rose-800 transition duration-100"
+                                    class="w-full sm:w-2/5 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md disabled:contrast-75 enabled:hover:bg-rose-800 transition duration-100"
                                     :disabled="sharedStore.loading">
                                     <template v-if="sharedStore.loading">
                                         <SubmitionSpinner class="size-6 px-5" />

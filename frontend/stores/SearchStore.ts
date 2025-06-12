@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useSharedStore } from '~/stores/SharedStore'
 import { ProductCard } from '~/shared/classes/ProductCard'
 
@@ -22,7 +21,8 @@ export const useSearchStore = defineStore('search', {
             }
 
             try {
-                const { data } = await axios.get('/api/search', {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/search', {
                     params: {
                         q: this.query,
                         sortBy: sharedStore.sortBy,
@@ -71,7 +71,8 @@ export const useSearchStore = defineStore('search', {
                     return acc
                 }, {} as Record<string, string[]>)
 
-                const { data } = await axios.post(`/api/search/filteredProducts?q=${this.query}`, {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/search/filteredProducts?q=${this.query}`, {
                     filters: transformedFilters,
                     params: {
                         sortBy: sharedStore.sortBy,

@@ -1,12 +1,11 @@
 <template>
     <div>
-        <Toast position="bottom-right" />
         <NavBar />
         <div v-if="currentStep !== 0">
             <OrderStepper :current-step="currentStep" @update:currentStep="updateCurrentStep" />
         </div>
         <div>
-            <Spinner class="h-screen" v-if="sharedStore.loading" />
+            <Spinner class="min-h-screen" v-if="sharedStore.loading" />
             <div v-else-if="currentStep === 0 && !isCartEmpty">
                 <Cart :currentStep="currentStep" :steps="steps" @nextStep="nextStep" />
             </div>

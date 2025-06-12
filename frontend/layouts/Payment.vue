@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="py-3 h-screen">
+        <section class="py-3 min-h-screen">
             <form @submit.prevent="handleSubmit" class="mx-auto max-w-screen-xl px-4">
                 <div class="lg:flex lg:items-start lg:gap-8">
                     <div class="min-w-0 flex-1 rounded-lg border border-gray-200 bg-white p-6 shadow-sm sm:p-8 mb-5">

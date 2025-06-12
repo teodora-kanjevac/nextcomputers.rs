@@ -30,7 +30,9 @@
                                     Način plaćanja
                                 </h4>
                                 <div class="mt-6 text-base font-medium text-gray-800">
-                                    <li class="ps-2">{{ paymentMethod }}</li>
+                                    <ul class="list-disc ps-4">
+                                        <li class="ps-1">{{ paymentMethod }}</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -54,13 +56,13 @@
                             </button>
                             <p class="text-xs mx-1 text-justify">
                                 Klikom na ovo dugme potvrđujete da ste saglasni sa našom
-                                <a href="/politika-privatnosti" class="text-primary hover:underline">
+                                <NuxtLink to="/politika-privatnosti" class="text-primary hover:underline">
                                     Politikom privatnosti
-                                </a>
+                                </NuxtLink>
                                 i
-                                <a href="/uslovi-koriscenja" class="text-primary hover:underline">
+                                <NuxtLink to="/uslovi-koriscenja" class="text-primary hover:underline">
                                     Uslovima korišćenja
-                                </a>
+                                </NuxtLink>
                             </p>
                         </div>
                     </div>

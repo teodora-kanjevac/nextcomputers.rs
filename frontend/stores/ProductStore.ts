@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { Product } from '~/shared/classes/Product'
 import { ProductCard } from '~/shared/classes/ProductCard'
 import { useSharedStore } from './SharedStore'
@@ -13,7 +12,8 @@ export const useProductStore = defineStore('product', {
     actions: {
         async fetchShowcaseProducts() {
             try {
-                const { data } = await axios.get('/api/products/showcase')
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/products/showcase')
 
                 this.showcaseProductCards = data.map((product: any) => new ProductCard(product))
             } catch (error) {
@@ -32,7 +32,8 @@ export const useProductStore = defineStore('product', {
             }
 
             try {
-                const { data } = await axios.get('/api/products/ratings', {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/products/ratings', {
                     params: {
                         sortBy: sharedStore.sortBy,
                         order: sharedStore.order,
@@ -66,7 +67,8 @@ export const useProductStore = defineStore('product', {
             }
 
             try {
-                const { data } = await axios.get(`/api/products/ratings/${subcategoryId}`, {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/products/ratings/${subcategoryId}`, {
                     params: {
                         sortBy: sharedStore.sortBy,
                         order: sharedStore.order,
@@ -94,7 +96,8 @@ export const useProductStore = defineStore('product', {
             sharedStore.setLoading(true)
 
             try {
-                const { data } = await axios.get(`/api/products/${productId}`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/products/${productId}`)
 
                 this.product = new Product(data)
             } catch (error) {

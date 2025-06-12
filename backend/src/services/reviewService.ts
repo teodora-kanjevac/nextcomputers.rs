@@ -4,6 +4,8 @@ import jwt from 'jsonwebtoken'
 import { ReviewProductDTO } from '~/src/DTOs/ReviewProduct.dto'
 import { ReviewDTO } from '~/src/DTOs/Review.dto'
 import { ReviewSuggestionDTO } from '../DTOs/ReviewSuggestions.dto'
+import { fetchUserId } from '../utils/jwt/fetchUser'
+import { order_status } from '@prisma/client'
 
 export const fetchAllReviews = async (): Promise<Review[]> => {
     const reviews = await prisma.review.findMany()
@@ -43,11 +45,11 @@ export const fetchAllReviewsForProduct = async (productId: number): Promise<Revi
 }
 
 export const fetchAllReviewsFromUser = async (token: string): Promise<ReviewDTO[]> => {
-    const decoded = jwt.decode(token) as { id: string }
+    const userId = fetchUserId(token)
 
     const reviews = await prisma.review.findMany({
         where: {
-            user_id: decoded.id,
+            user_id: userId,
         },
         include: {
             product: {
@@ -67,30 +69,30 @@ export const fetchAllReviewsFromUser = async (token: string): Promise<ReviewDTO[
 }
 
 export const leaveReview = async (token: string, productId: number, reviewData: ReviewDTO): Promise<ReviewDTO> => {
-    const decoded = jwt.decode(token) as { id: string }
+    const userId = fetchUserId(token)
 
     const purchased = await prisma.orderdetails.findFirst({
         where: {
             product_id: productId,
             order: {
-                user_id: decoded.id,
+                user_id: userId,
             },
         },
     })
 
     if (!purchased) {
-        throw new Error(`User ${decoded.id} has not purchased product ${productId}`)
+        throw new Error(`User ${userId} has not purchased product ${productId}`)
     }
 
     const existingReview = await prisma.review.findFirst({
         where: {
-            user_id: decoded.id,
+            user_id: userId,
             product_id: productId,
         },
     })
 
     if (existingReview) {
-        throw new Error(`User ${decoded.id} has already reviewed product ${productId}`)
+        throw new Error(`User ${userId} has already reviewed product ${productId}`)
     }
 
     if (reviewData.rating < 1 || reviewData.rating > 5) {
@@ -99,7 +101,7 @@ export const leaveReview = async (token: string, productId: number, reviewData: 
 
     const review = await prisma.review.create({
         data: {
-            user_id: decoded.id,
+            user_id: userId,
             product_id: productId,
             rating: reviewData.rating,
             comment: reviewData.comment,
@@ -130,11 +132,11 @@ export const leaveReview = async (token: string, productId: number, reviewData: 
 }
 
 export const editUserReview = async (token: string, reviewId: string, reviewData: ReviewDTO): Promise<ReviewDTO> => {
-    const decoded = jwt.decode(token) as { id: string }
+    const userId = fetchUserId(token)
 
     const review = await prisma.review.update({
         where: {
-            user_id: decoded.id,
+            user_id: userId,
             review_id: reviewId,
         },
         data: {
@@ -170,47 +172,59 @@ export const removeUserReview = async (reviewId: string): Promise<Review> => {
 }
 
 export const getReviewEligibility = async (token: string, productId: number) => {
-    const decoded = jwt.decode(token) as { id: string }
+    const userId = fetchUserId(token)
 
     const [purchase, review] = await Promise.all([
         prisma.orderdetails.findFirst({
             where: {
                 product_id: productId,
                 order: {
-                    user_id: decoded.id,
+                    user_id: userId,
                 },
             },
-            select: { order_id: true },
+            select: {
+                order_id: true,
+                order: { select: { order_status: true } },
+            },
         }),
         prisma.review.findFirst({
             where: {
-                user_id: decoded.id,
+                user_id: userId,
                 product_id: productId,
             },
             select: { review_id: true },
         }),
     ])
 
+    const hasPurchased = !!purchase
+    const hasReviewed = !!review
+    const hasValidStatus = hasPurchased && ['DELIVERED', 'RETURNED'].includes(purchase?.order.order_status)
+    const canReview = hasValidStatus && !hasReviewed
+
     return {
-        hasPurchased: !!purchase,
-        hasReviewed: !!review,
-        canReview: !!purchase && !review,
+        hasPurchased,
+        hasReviewed,
+        hasValidStatus,
+        canReview,
     }
 }
 
 export const fetchReviewSuggestions = async (token: string): Promise<ReviewSuggestionDTO[]> => {
-    const decoded = jwt.decode(token) as { id: string }
+    const userId = fetchUserId(token)
 
     const suggestions = await prisma.orderdetails.findMany({
         where: {
             order: {
-                user_id: decoded.id,
+                user_id: userId,
+                order_status: {
+                    in: ['DELIVERED', 'RETURNED'],
+                },
             },
             product: {
                 NOT: {
                     review: {
                         some: {
-                            user_id: decoded.id,
+                            user_id: userId,
                         },
                     },
                 },
