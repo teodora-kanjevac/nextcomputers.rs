@@ -1,40 +1,58 @@
 .p-toast
-  @apply w-[400px] z-50
+  @apply w-[28rem] z-50 text-sm opacity-100
 
   .p-toast-message
-    @apply text-white border-2 rounded-lg
+    @apply border-2 rounded-lg
+  
+  .p-toast-message-text
+    @apply ms-2.5
 
   .p-toast-summary
-    @apply font-medium
+    @apply font-semibold
 
   .p-toast-detail
-    @apply text-sm
+    @apply text-gray-900 text-xs font-medium mt-1.5 leading-tight
 
   .p-toast-message-success
-    @apply bg-green-600 border-green-500
+    @apply bg-lime-100 border-lime-400 text-lime-600
+
+    .p-toast-message-icon,
+    .p-toast-icon-close
+      @apply text-lime-600
 
   .p-toast-message-info
-    @apply bg-sky-600 border-sky-400
+    @apply bg-blue-200 border-blue-400 text-blue-600
+
+    .p-toast-message-icon,
+    .p-toast-icon-close
+      @apply text-blue-600
 
   .p-toast-message-error
-    @apply bg-red-700 border-red-500
+    @apply bg-red-200 border-red-400 text-red-600
+
+    .p-toast-message-icon,
+    .p-toast-icon-close
+      @apply text-red-600
 
   .p-toast-message-warn
-    @apply bg-yellow-500 border-yellow-400
+    @apply bg-yellow-100 border-yellow-300 text-yellow-500
+
+    .p-toast-message-icon,
+    .p-toast-icon-close
+      @apply text-yellow-500
 
   .p-toast-message-icon
-    height: 1.5rem
-    @apply text-white
+    @apply size-[18px] shrink-0 mt-0.5
 
   .p-toast-icon-close
-    @apply text-white focus:outline-none focus:ring-0
+    @apply focus:outline-none focus:ring-0 size-4
 
   .p-toast-message-content
-    @apply p-4
+    @apply p-3
 
 @media (max-width: 640px)
   .p-toast
     width: 90%
 
   .p-toast-message-content
-    @apply p-3
+    @apply p-2
