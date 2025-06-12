@@ -50,6 +50,10 @@ export const getCheapestPrice = (
 export const calculateSalePrice = (price: number): number => {
     const getMarkupPercentage = (price: number): number => {
         switch (true) {
+            case price < 1500:
+                return 30
+            case price < 3000:
+                return 20
             case price < 10000:
                 return 10
             case price < 20000:
@@ -67,7 +71,8 @@ export const calculateSalePrice = (price: number): number => {
 
     const roundToNearestPricing = (salePrice: number): number => {
         const remainder = salePrice % 1000
-        return salePrice - remainder + (remainder < 490 ? 490 : 990)
+        const rounded = salePrice - remainder + (remainder < 490 ? 490 : 990)
+        return Math.max(rounded, 990)
     }
 
     const markupPercentage = getMarkupPercentage(price)
