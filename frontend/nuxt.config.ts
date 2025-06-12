@@ -16,13 +16,6 @@ export default defineNuxtConfig({
             ],
         },
     },
-    runtimeConfig: {
-        public: {
-            environment: process.env.NODE_ENV,
-            verifyBaseUrl: process.env.NUXT_PUBLIC_VERIFY_BASE_URL,
-            verifyDevUrl: process.env.NUXT_PUBLIC_VERIFY_DEV_URL,
-        },
-    },
     imports: {
         presets: [
             {
@@ -54,6 +47,7 @@ export default defineNuxtConfig({
         { src: '~/plugins/cartSetup.client.ts', mode: 'client' },
         '~/plugins/primevue.ts',
         '~/plugins/auth.ts',
+        '~/plugins/axios.ts',
     ],
     devtools: { enabled: true },
 })

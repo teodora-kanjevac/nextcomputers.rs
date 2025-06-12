@@ -28,7 +28,9 @@ export default defineNuxtPlugin(nuxtApp => {
                     sessionUpdatedCookie.value = 'true'
                 }
                 await cartStore.fetchCart()
-                await wishlistStore.fetchWishlist()
+                if (authStore.user.isVerified) {
+                    await wishlistStore.fetchWishlist()
+                }
                 return
             }
 

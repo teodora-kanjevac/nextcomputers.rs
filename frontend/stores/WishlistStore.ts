@@ -1,7 +1,5 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { Wishlist, WishlistItem } from '~/shared/classes/Wishlist'
-import { useAuthStore } from './AuthStore'
 
 export const useWishlistStore = defineStore('wishlist', {
     state: () => ({
@@ -12,7 +10,8 @@ export const useWishlistStore = defineStore('wishlist', {
     actions: {
         async createWishlist() {
             try {
-                const { data } = await axios.post(`/api/wishlist/create`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/wishlist/create`)
                 this.wishlist.id = data
                 return data
             } catch (error) {
@@ -21,7 +20,8 @@ export const useWishlistStore = defineStore('wishlist', {
         },
         async fetchWishlist() {
             try {
-                const { data } = await axios.get(`/api/wishlist/default`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/wishlist/default`)
                 this.wishlist = new Wishlist(data)
             } catch (error) {
                 console.error('Failed to fetch wishlist:', error)
@@ -29,7 +29,8 @@ export const useWishlistStore = defineStore('wishlist', {
         },
         async addToWishlist(productId: number) {
             try {
-                const { data } = await axios.post(`/api/wishlist/add-item/product`, {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/wishlist/add-item/product`, {
                     wishlistId: this.wishlist.id,
                     productId,
                 })
@@ -44,16 +45,28 @@ export const useWishlistStore = defineStore('wishlist', {
         },
         async removeFromWishlist(wishlistItemId: string) {
             try {
-                await axios.delete(`/api/wishlist/remove-item/${wishlistItemId}`)
+                const { $axios } = useNuxtApp()
+                await $axios.delete(`/api/wishlist/remove-item/${wishlistItemId}`)
 
                 this.wishlist.wishlistItems = this.wishlist.wishlistItems.filter(item => item.id !== wishlistItemId)
             } catch (error) {
                 console.error('Failed to delete from wishlist:', error)
             }
         },
+        async removeItemsFromWishlist(wishlistItemIds: string[]) {
+            try {
+                const { $axios } = useNuxtApp()
+                await $axios.delete('/api/wishlist/remove-items', {
+                    data: { wishlistItemIds },
+                })
+            } catch (error) {
+                console.error('Failed to delete from wishlist:', error)
+            }
+        },
         async clearWishlist() {
             try {
-                await axios.delete(`/api/wishlist/clear/${this.wishlist.id}`)
+                const { $axios } = useNuxtApp()
+                await $axios.delete(`/api/wishlist/clear/${this.wishlist.id}`)
 
                 this.wishlist.wishlistItems = []
             } catch (error) {
@@ -67,7 +80,8 @@ export const useWishlistStore = defineStore('wishlist', {
                     newPriority: index + 1,
                 }))
 
-                const { data } = await axios.put(`/api/wishlist/priority/${this.wishlist.id}`, {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.put(`/api/wishlist/priority/${this.wishlist.id}`, {
                     updatedList,
                 })
 

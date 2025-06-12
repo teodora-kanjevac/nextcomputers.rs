@@ -1,23 +1,35 @@
 import { Request, Response, NextFunction } from 'express'
 import { RateLimiterMemory } from 'rate-limiter-flexible'
+import { RATE_LIMIT_CONFIGS, RateLimitType } from '~/src/utils/rateLimitConfig'
 
-const limiter = new RateLimiterMemory({
-    points: 5,
-    duration: 60,
-    blockDuration: 300,
-})
+const limiters = new Map<RateLimitType, RateLimiterMemory>()
 
-export const loginRateLimitMiddleware = async (req: Request, res: Response, next: NextFunction) => {
-    const ip = req.ip || req.socket.remoteAddress || 'unknown'
+export const rateLimitMiddleware = (type: RateLimitType) => {
+    if (!limiters.has(type)) {
+        const config = RATE_LIMIT_CONFIGS[type]
+        limiters.set(
+            type,
+            new RateLimiterMemory({
+                points: config.points,
+                duration: config.duration,
+                blockDuration: config.blockDuration,
+            })
+        )
+    }
 
-    try {
-        await limiter.consume(ip)
-        next()
-    } catch (error: any) {
-        res.status(429).json({
-            success: false,
-            error: 'Too many attempts. Try again in 5 minutes.',
-        })
-        return
+    return async (req: Request, res: Response, next: NextFunction) => {
+        const ip = req.ip || req.socket.remoteAddress || 'unknown'
+        const limiter = limiters.get(type)!
+        const config = RATE_LIMIT_CONFIGS[type]
+
+        try {
+            await limiter.consume(ip)
+            next()
+        } catch {
+            res.status(429).json({
+                success: false,
+                error: config.errorMessage,
+            })
+        }
     }
 }

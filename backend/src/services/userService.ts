@@ -13,6 +13,40 @@ export const fetchUsers = async (): Promise<User[]> => {
     return user.map(user => new User(user))
 }
 
+export const checkUser = async (email: string): Promise<any> => {
+    const user = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+        select: {
+            email: true,
+        },
+    })
+
+    if (!user) {
+        return { success: false }
+    }
+
+    return { success: true }
+}
+
+export const findUserByEmail = async (email: string): Promise<any> => {
+    const user = await prisma.user.findUnique({
+        where: {
+            email,
+        },
+        select: {
+            user_id: true,
+            password_hash: true,
+        },
+    })
+
+    return {
+        id: user?.user_id,
+        passwordHash: user?.password_hash,
+    }
+}
+
 export const fetchMe = async (token: string): Promise<UserMeDTO> => {
     const userId = fetchUserId(token)
 
@@ -23,6 +57,7 @@ export const fetchMe = async (token: string): Promise<UserMeDTO> => {
         select: {
             user_id: true,
             email: true,
+            is_verified: true,
             cart: {
                 select: {
                     cart_id: true,

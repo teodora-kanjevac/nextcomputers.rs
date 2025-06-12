@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { useAuthStore } from './AuthStore'
 import { Review } from '~/shared/classes/Review'
 import type { ReviewData } from '~/shared/classes/ReviewData'
@@ -22,7 +21,8 @@ export const useReviewStore = defineStore('review', {
     actions: {
         async fetchReviewsForProduct(productId: number) {
             try {
-                const { data } = await axios.get(`/api/reviews/product/${productId}`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/reviews/product/${productId}`)
 
                 this.reviews = data.map((review: any) => new ReviewProduct(review))
             } catch (error) {
@@ -35,7 +35,8 @@ export const useReviewStore = defineStore('review', {
                 const userStore = useUserStore()
                 if (!authStore.isLoggedIn) return
 
-                const { data } = await axios.post(`/api/reviews/leave-review/${productId}`, reviewData)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/reviews/leave-review/${productId}`, reviewData)
 
                 this.review = new Review(data)
                 this.reviews.push(this.review)
@@ -53,7 +54,8 @@ export const useReviewStore = defineStore('review', {
                 const authStore = useAuthStore()
                 if (!authStore.isLoggedIn) return
 
-                const { data } = await axios.get(`/api/reviews/status/${productId}`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/reviews/status/${productId}`)
 
                 this.eligibility = data
             } catch (error) {
@@ -65,7 +67,8 @@ export const useReviewStore = defineStore('review', {
                 const authStore = useAuthStore()
                 if (!authStore.isLoggedIn) return
 
-                const { data } = await axios.get('/api/reviews/suggestions')
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/reviews/suggestions')
 
                 this.reviewSuggestions = data.map((suggestion: any) => new ReviewSuggestion(suggestion))
             } catch (error) {

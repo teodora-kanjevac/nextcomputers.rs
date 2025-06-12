@@ -33,7 +33,7 @@ const isInWishlistText = computed(() => (isInWishlist.value ? 'Ukloni sa liste Å
 const getWishlistItemId = () => wishlistStore.wishlist.wishlistItems.find(item => item.product.id === productId)?.id
 
 const toggleWishlist = async () => {
-    checkUser(authStore.isLoggedIn)
+    if (!checkUser(authStore.isLoggedIn)) return
     try {
         if (isInWishlist.value) {
             const wishlistItemId = getWishlistItemId()

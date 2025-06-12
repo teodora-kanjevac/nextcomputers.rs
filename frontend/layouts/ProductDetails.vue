@@ -178,7 +178,7 @@ const addToCart = async () => {
 }
 
 const toggleWishlist = async () => {
-    checkUser(authStore.isLoggedIn)
+    if (!checkUser(authStore.isLoggedIn)) return
     try {
         if (isInWishlist.value) {
             const wishlistItemId = getWishlistItemId()

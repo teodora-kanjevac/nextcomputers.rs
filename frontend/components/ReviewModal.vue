@@ -15,7 +15,7 @@
             content: 'p-0',
             header: 'hidden',
         }">
-        <div class="w-full max-w-xl h-full md:h-auto">
+        <div class="w-full max-w-xl max-h-screen overflow-y-auto">
             <div class="relative py-4 px-4 bg-white rounded-lg shadow sm:py-5 sm:px-5">
                 <div class="flex justify-between items-center pb-2 mb-4 rounded-t border-b">
                     <h3 class="text-lg font-semibold text-gray-900">Napiši recenziju</h3>
@@ -61,7 +61,7 @@ watch(visible, newVal => {
 })
 
 const handleReviewModalClick = () => {
-    checkUser(authStore.isLoggedIn)
+    if (!checkUser(authStore.isLoggedIn)) return
     if (!eligibility.value?.hasPurchased) {
         showNotification(
             'warn',
@@ -73,7 +73,7 @@ const handleReviewModalClick = () => {
     } else if (!eligibility.value.hasValidStatus) {
         showNotification(
             'warn',
-            'Još uvek ne možete oceniti ovaj proizvod!',
+            'Ne možete oceniti ovaj proizvod!',
             'Da bi ste mogli da ostavite recenziju, status vaše porudžbine mora biti "DOSTAVLJENO" ili "VRAĆENO".',
             6000
         )

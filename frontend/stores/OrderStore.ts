@@ -20,7 +20,8 @@ export const useOrderStore = defineStore('order', {
         },
         async fetchOrder(orderId: string) {
             try {
-                const { data } = await axios.get(`/api/order/${orderId}`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/order/${orderId}`)
                 this.order = new Order(data)
             } catch (error) {
                 console.error('Failed to fetch order:', error)
