@@ -8,7 +8,7 @@
                         <SeeAllCategoriesLink class="hidden sm:flex mt-2"/>
                     </div>
 
-                    <div class="grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
+                    <div class="grid gap-2 sm:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-6">
                         <template v-for="category in categories" :key="category.id">
                             <ShowcaseCategoryCard :category="category"/>
                         </template>

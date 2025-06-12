@@ -15,11 +15,11 @@
                         aria-controls="search"
                         :aria-expanded="isSearchOpen"
                         class="md:hidden rounded-lg text-sm px-2 transition-opacity duration-300 ease-in-out">
-                        <SearchIcon class="size-5 text-gray-300" />
+                        <SearchIcon class="size-5 text-gray-200" />
                     </button>
 
                     <div class="relative md:flex-1 flex md:hidden">
-                        <NuxtLink to="/korpa" class="flex gap-3 p-2 text-gray-100 rounded">
+                        <NuxtLink to="/korpa" class="flex gap-3 p-2 text-gray-200 rounded">
                             <CartWithBadge class="size-6" />
                         </NuxtLink>
                     </div>
@@ -34,7 +34,7 @@
                         aria-controls="navbar"
                         :aria-expanded="isNavbarOpen"
                         class="inline-flex items-center px-2 justify-center text-sm rounded-lg md:hidden transition-all duration-500 ease-in-out">
-                        <HamburgerIcon class="size-5 text-gray-300" />
+                        <HamburgerIcon class="size-5 text-gray-200" />
                     </button>
                 </div>
 

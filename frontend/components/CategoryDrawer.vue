@@ -14,7 +14,7 @@
 
         <div
             id="categoryDrawer"
-            class="fixed top-0 left-0 z-40 h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80"
+            class="fixed top-0 left-0 z-40 min-h-screen p-4 overflow-y-auto transition-transform -translate-x-full bg-white w-80"
             tabindex="-1"
             aria-labelledby="drawer-label">
             <h5 id="drawer-label" class="inline-flex items-center mb-4 text-lg font-semibold text-gray-800">

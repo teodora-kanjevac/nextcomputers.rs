@@ -1,8 +1,7 @@
 <template>
     <div>
-        <Toast position="bottom-right" />
         <NavBar />
-        <div v-if="pageLoading" class="min-h-screen flex flex-col items-center justify-center text-2xl">
+        <div v-if="pageLoading" class="h-screen flex flex-col items-center justify-center text-2xl">
             <Spinner class="size-10" />
         </div>
         <div v-else class="min-h-screen py-6 md:py-10">
@@ -27,11 +26,9 @@
 import NavBar from '~/layouts/NavBar.vue'
 import Footer from '~/layouts/Footer.vue'
 import AccountActionsSidebar from '~/layouts/AccountActionsSidebar.vue'
-import { useAuthStore } from '~/stores/AuthStore'
 
 const pageLoading = ref(true)
 const nuxtApp = useNuxtApp()
-const authStore = useAuthStore()
 
 onMounted(async () => {
     if (nuxtApp._authCheckInProgress) {
@@ -46,7 +43,6 @@ onMounted(async () => {
         }
         checkStatus()
     } else {
-        await authStore.getMe()
         pageLoading.value = false
     }
 })

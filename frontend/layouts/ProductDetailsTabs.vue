@@ -1,6 +1,6 @@
 <template>
     <div>
-        <client-only>
+        <ClientOnly>
             <ul
                 class="flex-wrap flex mx-auto gap-3 mb-2 text-sm sm:text-base font-medium text-gray-600"
                 id="default-tab"
@@ -75,11 +75,12 @@
                     <ReviewsTab :rating="product?.ratings" />
                 </div>
             </div>
-        </client-only>
+        </ClientOnly>
     </div>
 </template>
 
 <script setup lang="ts">
+import { ClientOnly } from '#components'
 import InfoIcon from '~/components/icons/InfoIcon.vue'
 import ListIcon from '~/components/icons/ListIcon.vue'
 import StarOutlinedIcon from '~/components/icons/StarOutlinedIcon.vue'

@@ -3,11 +3,11 @@
         <h2 class="font-semibold border-b pb-2 text-lg mb-4">Ocenite proizvode koje ste kupili</h2>
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 font-medium">
             <div class="flex-1">
-                <div v-if="suggestions.length === 0" class="text-center py-6 text-sm text-gray-500 italic">
+                <div v-if="suggestions.length === 0" class="text-center py-6 text-xs sm:text-sm text-gray-500 italic">
                     Trenutno nemate proizvode za ocenjivanje.
                 </div>
                 <div v-else class="space-y-3" v-auto-animate="{ duration: 200, easing: 'ease' }">
-                    <p class="text-sm text-gray-600 mb-5 sm:mb-7">
+                    <p class="text-xs sm:text-sm text-gray-600 mb-5 sm:mb-7">
                         Budite deo naše zajednice - podelite svoje utiske o proizvodima koje ste nedavno kupili. Vaše
                         povratne informacije mogu da pomognu drugima da donesu bolje odluke pri kupovini!
                     </p>
@@ -41,7 +41,7 @@
                                 :product="suggestion.product"
                                 @review-submitted="handleReviewSubmitted">
                                 <span
-                                    class="inline-flex items-center px-2 sm:px-3 py-1.5 font-medium text-xs sm:text-sm bg-primary-light hover:bg-rose-800 text-white rounded">
+                                    class="inline-flex items-center px-2.5 sm:px-3 py-2 sm:py-1.5 font-medium text-xs sm:text-sm bg-primary-light hover:bg-rose-800 text-white rounded">
                                     <PenIcon class="size-4 me-2" />
                                     Napiši recenziju
                                 </span>

@@ -13,12 +13,12 @@
                 <NuxtLink
                     to="/profil"
                     class="bg-green-700 hover:bg-green-800 text-white font-medium text-sm py-2 px-4 rounded inline-block transition-colors">
-                    Pregledajte profil
+                    Pregledaj profil
                 </NuxtLink>
                 <NuxtLink
                     to="/"
                     class="border border-green-600 text-green-600 hover:bg-green-200 font-medium text-sm py-2 px-4 rounded inline-block transition-colors">
-                    Vratite se na početnu
+                    Vrati se na početnu
                 </NuxtLink>
             </div>
         </div>

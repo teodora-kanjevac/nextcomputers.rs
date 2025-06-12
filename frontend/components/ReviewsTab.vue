@@ -13,7 +13,7 @@
                         </p>
                         <ReviewModal>
                             <span
-                                class="my-4 me-2 flex items-center rounded-md px-3 py-1.5 sm:py-2 text-sm font-medium text-white bg-primary-light hover:bg-rose-800 active:bg-primary">
+                                class="my-4 me-2 flex items-center rounded-md px-3 py-2 sm:py-2 text-sm font-medium text-white bg-primary-light hover:bg-rose-800 active:bg-primary">
                                 <PenIcon class="size-4 sm:size-5 me-2" />
                                 Napiši recenziju
                             </span>
@@ -37,8 +37,8 @@
                         </div>
                     </div>
                 </div>
-                <hr class="my-5 mx-auto border-gray-200" />
-                <div class="divide-y divide-gray-200 mb-2 sm:mb-0">
+                <hr class="mt-5 md:my-5 mx-auto border-gray-200" />
+                <div class="divide-y divide-gray-200">
                     <template v-if="filteredReviews.length > 0">
                         <Review v-for="userReview in paginatedReviews" :key="userReview.id" :review="userReview" />
                     </template>

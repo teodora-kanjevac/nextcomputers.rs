@@ -7,7 +7,7 @@
         :modal="false"
         :style="{ padding: 0 }"
         :pt="{
-            root: 'w-full max-w-lg rounded-lg overflow-hidden border-2 border-rose-400 m-3 lg:mx-10 lg:my-8 z-50',
+            root: 'w-full max-w-md rounded-lg overflow-hidden border-2 border-rose-400 m-3 lg:mx-10 lg:my-8 z-50',
             content: 'p-0',
             header: 'hidden',
         }">

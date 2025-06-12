@@ -4,7 +4,7 @@
         class="bg-gray-200 z-10 lg:w-1/4 xl:w-1/5 2xl:w-1/6"
         aria-label="Sidebar za filtriranje proizvoda">
         <div class="h-[150vh] p-4 overflow-y-auto tracking-wider hidden lg:block">
-            <client-only>
+            <ClientOnly>
                 <FilterCategoryTabs
                     v-model:active-tab="activeTab"
                     :aria-selected="activeTab === 'filter'"
@@ -32,7 +32,7 @@
                         <CategoryAccordion :categories="categories" />
                     </div>
                 </div>
-            </client-only>
+            </ClientOnly>
         </div>
     </aside>
 </template>

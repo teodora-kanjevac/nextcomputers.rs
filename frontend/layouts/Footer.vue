@@ -3,14 +3,15 @@
         <footer class="p-7 bg-gray-800 sm:p-10">
             <div class="mx-auto max-w-screen-xl">
                 <div class="md:flex md:justify-between">
-                    <div class="grid grid-cols-2 gap-6 gap-y-9 sm:gap-12 sm:grid-cols-3 lg:grid-cols-5">
-                        <FooterSection />
+                    <div class="grid grid-cols-2 gap-4 sm:gap-y-9 sm:gap-12 sm:grid-cols-3 lg:grid-cols-5">
+                        <FooterSectionSkeleton v-if="!footerSections" />
+                        <FooterSection v-else :footer-sections="footerSections" />
                     </div>
                 </div>
                 <hr class="my-6 border-gray-600 sm:mx-auto lg:my-10" />
                 <div class="sm:flex sm:items-center sm:justify-between">
                     <Logo class="hidden lg:flex text-gray-200 font-medium" />
-                    <span class="text-xs text-gray-300 flex justify-center gap-0.5 text-center">
+                    <span class="text-xs text-gray-300 flex justify-center gap-1 text-center">
                         Copyright © {{ new Date().getFullYear() }}
                         <NuxtLink to="/" class="hover:underline">nextcomputers.rs.</NuxtLink>
                         Sva prava zadržana.
@@ -24,7 +25,14 @@
     </div>
 </template>
 
-<script setup>
-import FooterSection from '~/components/FooterSection.vue'
-import Logo from '~/components/Logo.vue'
+<script setup lang="ts">
+import { getFooterSections } from '~/assets/static/footerLinks'
+import { useAuthStore } from '~/stores/AuthStore'
+
+const authStore = useAuthStore()
+const footerSections = ref()
+
+onMounted(async () => {
+    footerSections.value = getFooterSections(authStore.isLoggedIn)
+})
 </script>

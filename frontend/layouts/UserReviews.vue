@@ -6,10 +6,10 @@
                 v-if="reviews.length === 0"
                 class="text-gray-600 font-medium flex flex-col items-center justify-center">
                 <img
-                    class="max-w-md h-auto mb-8 mt-2"
+                    class="md:max-w-md h-auto mb-8 mt-2"
                     src="/assets/images/review-illustration.webp"
                     alt="illustration" />
-                <p class="font-medium italic text-base sm:text-lg mb-5 text-center px-4">
+                <p class="font-medium italic text-sm sm:text-base md:text-lg mb-5 text-center px-4">
                     Trenutno nemate recenzije.
                     <br />
                     Kada ostavite recenziju na proizvod, ona će se prikazati ovde.
@@ -121,7 +121,7 @@ const handleDeleteReview = async (reviewId: string) => {
         await userStore.deleteUserReview(reviewId)
         showNotification('success', 'Uspešno obrisana recenzija!', 'Vaša recenzija je uspešno obrisana.')
     } catch (error) {
-        showNotification('error', 'Greška prilikom brisanja recenzije!', 'Pokušajte ponovo kasnije.', 5000)
+        showNotification('error', 'Greška prilikom brisanja!', 'Pokušajte ponovo kasnije.', 5000)
     }
 }
 </script>

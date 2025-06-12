@@ -1,7 +1,7 @@
 <template>
     <div class="bg-white rounded-lg border px-4 sm:px-6 py-5 shadow-sm font-medium">
         <h2 class="font-semibold border-b pb-2 text-lg mb-5">Nedavne porudžbine</h2>
-        <div v-if="orders.length === 0" class="text-center py-6 text-sm text-gray-500 italic">
+        <div v-if="orders.length === 0" class="text-center py-6 text-xs sm:text-sm text-gray-500 italic">
             Trenutno nemate porudžbine.
             <NuxtLink to="proizvodi" class="text-primary underline">Krenite u kupovinu!</NuxtLink>
         </div>

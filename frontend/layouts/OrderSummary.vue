@@ -30,7 +30,9 @@
                                     Način plaćanja
                                 </h4>
                                 <div class="mt-6 text-base font-medium text-gray-800">
-                                    <li class="ps-2">{{ paymentMethod }}</li>
+                                    <ul class="list-disc ps-4">
+                                        <li class="ps-1">{{ paymentMethod }}</li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>

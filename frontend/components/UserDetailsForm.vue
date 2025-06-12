@@ -154,7 +154,6 @@ const changeUserDetails = async () => {
 }
 
 onMounted(async () => {
-    await authStore.getMe()
     await userStore.fetchUserInfo()
 
     form.value = {

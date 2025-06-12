@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="py-8 md:py-20" :class="{ 'h-screen': order.paymentMethod === 'CASH' }">
+        <section class="py-8 md:py-20" :class="{ 'min-h-screen': order.paymentMethod === 'CASH' }">
             <div class="mx-auto max-w-2xl px-4 2xl:px-0">
                 <h2 class="text-xl font-semibold text-gray-900 sm:text-2xl mb-4">Hvala Vam na kupovini!</h2>
                 <p class="text-gray-700 text-sm mb-3 mx-0.5 text-justify">
@@ -12,31 +12,35 @@
                 </p>
                 <div
                     class="space-y-4 sm:space-y-2 rounded-lg border border-gray-300 bg-gray-200 p-4 sm:p-6 mb-8 md:mb-10">
-                    <dl class="sm:flex items-center justify-between gap-4">
-                        <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Datum narudžbine</dt>
-                        <dd class="font-medium text-gray-900 sm:text-end">{{ order.orderDate }}</dd>
+                    <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                        <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">Datum narudžbine</dt>
+                        <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">{{ order.orderDate }}</dd>
                     </dl>
-                    <dl class="sm:flex items-center justify-between gap-4">
-                        <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Način plaćanja</dt>
-                        <dd class="font-medium text-gray-900 sm:text-end">
-                            {{ order.paymentMethodText }}
-                        </dd>
+
+                    <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                        <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">Način plaćanja</dt>
+                        <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">{{ order.paymentMethodText }}</dd>
                     </dl>
-                    <dl class="sm:flex items-center justify-between gap-4">
-                        <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Ime kupca</dt>
-                        <dd class="font-medium text-gray-900 sm:text-end">{{ order.form.fullname }}</dd>
+
+                    <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                        <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">Ime kupca</dt>
+                        <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">{{ order.form.fullname }}</dd>
                     </dl>
-                    <dl class="sm:flex items-center justify-between gap-4">
-                        <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Adresa kupca</dt>
-                        <dd class="font-medium text-gray-900 sm:text-end">{{ order.form.address }}</dd>
+
+                    <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                        <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">Adresa kupca</dt>
+                        <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">{{ order.form.address }}</dd>
                     </dl>
-                    <dl class="sm:flex items-center justify-between gap-4">
-                        <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Broj telefona</dt>
-                        <dd class="font-medium text-gray-900 sm:text-end">{{ order.form.phone }}</dd>
+
+                    <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                        <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">Broj telefona</dt>
+                        <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">{{ order.form.phone }}</dd>
                     </dl>
-                    <dl v-if="order.form.pib" class="sm:flex items-center justify-between gap-4">
-                        <dt class="font-normal mb-1 sm:mb-0 text-gray-700">PIB firme</dt>
-                        <dd class="font-medium text-gray-900 sm:text-end">{{ order.form.pib }}</dd>
+                    <dl
+                        v-if="order.form.pib"
+                        class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                        <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">PIB firme</dt>
+                        <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">{{ order.form.pib }}</dd>
                     </dl>
                 </div>
                 <div v-if="order.paymentMethod === 'ADVANCE'">
@@ -50,23 +54,30 @@
                     </p>
                     <div
                         class="space-y-4 sm:space-y-2 rounded-lg border border-gray-300 bg-gray-200 p-4 sm:p-6 mb-8 md:mb-10">
-                        <dl class="sm:flex items-center justify-between gap-4">
-                            <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Ime primaoca</dt>
-                            <dd class="font-medium text-gray-900 sm:text-end">
-                                NEMANJA STOJANOVIĆ PREDUZETNIK NIŠ (PALILULA)
+                        <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                            <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">Ime primaoca</dt>
+                            <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">
+                                NEMANJA STOJANOVIĆ PR TRGOVINA PREKO INTERNETA NEXTCOMPUTERS.RS NIŠ
                             </dd>
                         </dl>
-                        <dl class="sm:flex items-center justify-between gap-4">
-                            <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Račun za uplatu</dt>
-                            <dd class="font-medium text-gray-900 sm:text-end">265-4010310005681-78</dd>
+
+                        <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                            <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">Račun za uplatu</dt>
+                            <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">265-4010310005681-78</dd>
                         </dl>
-                        <dl class="sm:flex items-center justify-between gap-4">
-                            <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Svrha uplate</dt>
-                            <dd class="font-medium text-gray-900 sm:text-end">{{ order.orderId }}</dd>
+
+                        <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                            <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">Svrha uplate</dt>
+                            <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">
+                                {{ order.orderId }}
+                            </dd>
                         </dl>
-                        <dl class="sm:flex items-center justify-between gap-4">
-                            <dt class="font-normal mb-1 sm:mb-0 text-gray-700">Ukupno za uplatu</dt>
-                            <dd class="font-medium text-gray-900 sm:text-end">
+
+                        <dl class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                            <dt class="font-normal text-gray-700 sm:min-w-[140px] sm:flex-shrink-0">
+                                Ukupno za uplatu
+                            </dt>
+                            <dd class="font-medium text-gray-900 sm:text-end sm:flex-1">
                                 {{ formatPrice(order.prices.totalPrice) }} RSD
                             </dd>
                         </dl>

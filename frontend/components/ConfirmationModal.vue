@@ -15,7 +15,7 @@
             content: 'p-0',
             header: 'hidden',
         }">
-        <div class="h-full md:h-auto">
+        <div class="max-h-screen overflow-y-auto">
             <div class="relative py-4 px-4 bg-white rounded-lg shadow sm:py-5 sm:px-5">
                 <div class="flex flex-col items-center text-center mb-8">
                     <button
@@ -27,7 +27,7 @@
                     <div class="mb-4 p-3 rounded-full bg-red-100 text-red-600">
                         <TrashCanIcon class="size-9" />
                     </div>
-                    <p class="text-gray-700 font-medium mt-2 px-3">{{ message }}</p>
+                    <p class="text-gray-700 text-sm font-medium mt-2 px-3">{{ message }}</p>
                 </div>
 
                 <div class="flex justify-center gap-3">

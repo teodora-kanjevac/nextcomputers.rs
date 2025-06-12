@@ -1,5 +1,5 @@
 <template>
-    <div class="gap-3 sm:py-6 sm:flex sm:items-start">
+    <div class="gap-3 py-6 sm:flex sm:items-start">
         <div class="shrink-0 space-y-1 sm:w-48 md:w-52">
             <div class="flex items-center">
                 <UserStarRating :size="7" :rating="review.rating" class="-ms-1 mb-1" />

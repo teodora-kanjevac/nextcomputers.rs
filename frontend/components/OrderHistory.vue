@@ -2,8 +2,8 @@
     <div class="bg-white rounded-lg border px-4 sm:px-6 py-5 shadow-sm">
         <h2 class="font-semibold border-b pb-2 text-lg mb-5">Istorija kupovine</h2>
         <div v-if="orders.length === 0" class="text-gray-600 font-medium flex flex-col items-center justify-center">
-            <img class="max-w-md h-auto mb-6 mt-2" src="/assets/images/order-illustration.webp" alt="illustration" />
-            <p class="font-medium text-base sm:text-lg italic mb-5 text-center px-4">
+            <img class="md:max-w-md h-auto mb-6 mt-2" src="/assets/images/order-illustration.webp" alt="illustration" />
+            <p class="font-medium text-sm sm:text-base md:text-lg italic mb-5 text-center px-4">
                 Trenutno nemate porudžbine.
                 <br />
                 Kada napravite porudžbinu, ona će se prikazati ovde.

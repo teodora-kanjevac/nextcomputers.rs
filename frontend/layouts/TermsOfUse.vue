@@ -8,7 +8,7 @@
                 <div class="mb-6">
                     <h2 class="md:text-xl text-lg font-semibold mb-2">Pun naziv pravnog subjekta:</h2>
                     <p class="mb-4">
-                        NEMANJA STOJANOVIĆ PREDUZETNIK NIŠ (PALILULA), (u daljem tekstu
+                        NEMANJA STOJANOVIĆ PR TRGOVINA PREKO INTERNETA NEXTCOMPUTERS.RS NIŠ, (u daljem tekstu
                         <span class="font-semibold">NEXTCOMPUTERS.RS</span>)
                     </p>
                     <p class="mb-2">
@@ -41,7 +41,7 @@
                     <p class="mb-4">
                         Ovim Opštim uslovima korišćenja veb prodavnice NEXTCOMPUTERS.RS utvrđuju se uslovi pod kojima se
                         ostvaruje pravo na kupovinu i plaćanje proizvoda i usluga iz ponude Preduzeća Nemanja Stojanović
-                        Preduzetnik Niš (Palilula).
+                        PR Trgovina Preko Interneta nextcomputers.rs Niš.
                     </p>
                     <p class="mb-4">
                         Web shop omogućava punoletnim fizičkim i pravnim licima (u daljem tekstu:

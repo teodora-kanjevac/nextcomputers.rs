@@ -4,11 +4,12 @@ import {
     fetchWishlistByUserId,
     insertWishlist,
     fetchAllWishlists,
-    deleteProductFromWishlist,
+    deleteProductsFromWishlist,
     deleteWishlist,
     updateWishlistItemPriority,
     changeWishlistName,
     clearWishlist,
+    deleteProductFromWishlist,
 } from '~/src/services/wishlistService'
 
 export const createWishlist = async (req: Request, res: Response): Promise<void> => {
@@ -143,8 +144,29 @@ export const removeProductFromWishlist = async (req: Request, res: Response): Pr
             return
         }
 
-        const newItem = await deleteProductFromWishlist(wishlistItemId)
-        res.status(201).json(newItem)
+        const deletedItem = await deleteProductFromWishlist(wishlistItemId)
+        res.status(201).json(deletedItem)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const removeProductsFromWishlist = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const token = req.cookies.token
+        const { wishlistItemIds } = req.body
+
+        if (!token) {
+            res.status(401).json({ message: 'Unauthorized' })
+            return
+        }
+
+        const deletedItems = await deleteProductsFromWishlist(wishlistItemIds)
+        res.status(201).json(deletedItems)
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ error: error.message })

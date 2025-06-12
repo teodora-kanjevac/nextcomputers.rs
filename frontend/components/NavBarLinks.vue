@@ -16,7 +16,7 @@
                 <CartWithBadge class="size-7 mb-1" />
                 Vaša korpa
             </NuxtLink>
-            <template v-if="authStore.isLoggedIn">
+            <template v-if="isLoggedIn">
                 <NuxtLink
                     to="/profil"
                     class="py-2 px-2.5 text-gray-50 hover:text-gray-300 flex flex-col items-center"
@@ -45,8 +45,9 @@ import AccountIcon from '~/components/icons/AccountIcon.vue'
 import { useAuthStore } from '~/stores/AuthStore'
 
 const authStore = useAuthStore()
+const isLoggedIn = ref(false)
 
 onMounted(() => {
-    authStore.getMe()
+    isLoggedIn.value = authStore.isLoggedIn
 })
 </script>

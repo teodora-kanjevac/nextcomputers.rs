@@ -2,7 +2,7 @@
     <div class="flex flex-col min-h-screen">
         <div class="flex flex-1">
             <FilterCategorySidebar />
-            <div class="flex-1 px-5 lg:px-8 pt-8 pb-11 lg:py-11">
+            <div class="flex-1 px-5 lg:px-8 pt-5 pb-11 lg:py-11">
                 <h2 class="font-semibold text-xl sm:text-2xl ps-0.5 pb-2 sm:pb-4 border-b-2 border-gray-200">
                     Pregled proizvoda za pretragu: "{{ searchStore.query }}"
                 </h2>
@@ -15,11 +15,11 @@
                     <SortDropdown />
                 </div>
                 <div v-if="sharedStore.loading" class="text-center font-semibold text-xl text-gray-500 mt-20">
-                    <Spinner class="mt-32" />
+                    <Spinner class="my-32" />
                 </div>
                 <div
                     v-if="!sharedStore.loading && productCards.length === 0"
-                    class="text-center font-semibold text-xl text-gray-500 mt-32">
+                    class="text-center font-semibold text-xl text-gray-500 my-32">
                     Nema proizvoda za ovu pretragu.
                 </div>
                 <div

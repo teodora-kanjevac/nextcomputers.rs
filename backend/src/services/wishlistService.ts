@@ -138,10 +138,35 @@ export const deleteProductFromWishlist = async (wishlistItemId: string): Promise
         where: {
             wishlist_item_id: wishlistItemId,
         },
-        include: { wishlist: true, product: true },
+        include: {
+            product: true,
+        },
     })
 
     return new WishlistItemDTO(deletedItem)
+}
+
+export const deleteProductsFromWishlist = async (wishlistItemIds: string[]): Promise<WishlistItemDTO[]> => {
+    const itemsToDelete = await prisma.wishlistitem.findMany({
+        where: {
+            wishlist_item_id: {
+                in: wishlistItemIds,
+            },
+        },
+        include: {
+            product: true,
+        },
+    })
+
+    await prisma.wishlistitem.deleteMany({
+        where: {
+            wishlist_item_id: {
+                in: wishlistItemIds,
+            },
+        },
+    })
+
+    return itemsToDelete.map(item => new WishlistItemDTO(item))
 }
 
 export const clearWishlist = async (wishlistId: string): Promise<void> => {
