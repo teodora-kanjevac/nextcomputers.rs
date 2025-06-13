@@ -1,4 +1,4 @@
-import { Request, response, Response } from 'express'
+import { Request, Response } from 'express'
 import {
     registerUser,
     loginUser,
@@ -12,8 +12,8 @@ import jwt from 'jsonwebtoken'
 import crypto from 'crypto'
 import { getVerificationData, storeVerificationData } from '~/src/utils/verification/verification'
 import { sendEmailVerification, sendPasswordResetEmail } from '../services/mailService'
-import { ResetPasswordDataDTO } from '../DTOs/ResetPasswordData.dto'
-import { RegisterDataDTO } from '../DTOs/RegisterData.dto'
+import { ResetPasswordDataDTO } from '~/src/DTOs/ResetPasswordData.dto'
+import { RegisterDataDTO } from '~/src/DTOs/RegisterData.dto'
 
 export const register = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -92,7 +92,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
             sameSite: 'lax',
             expires: cookieExpiry,
         })
-
         res.cookie('refreshToken', refreshToken, {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',

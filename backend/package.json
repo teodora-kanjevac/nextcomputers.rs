@@ -13,10 +13,10 @@
   "license": "MIT",
   "description": "",
   "devDependencies": {
-    "@types/express": "^4.17.22",
+    "@types/express": "^4.17.23",
     "@types/html-to-text": "^9.0.4",
     "@types/jsonwebtoken": "^9.0.9",
-    "@types/node": "^20.17.57",
+    "@types/node": "^20.19.0",
     "prisma": "6.6.0",
     "resolve-tspaths": "^0.8.23",
     "ts-node": "^10.9.2",
