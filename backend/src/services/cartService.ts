@@ -41,6 +41,16 @@ export const fetchCartById = async (cartId: string): Promise<CartDTO> => {
     return new CartDTO(cart)
 }
 
+export const checkCartIfExists = async (cartId: string): Promise<boolean> => {
+    const cart = await prisma.cart.findUnique({
+        where: { cart_id: cartId },
+        select: {
+            cart_id: true,
+        },
+    })
+    return !!cart
+}
+
 export const addCartItem = async (cartId: string, productId: number): Promise<CartItemDTO> => {
     const product = await prisma.product.findUnique({
         where: {

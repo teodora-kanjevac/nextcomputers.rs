@@ -1,6 +1,7 @@
 import { Request, Response } from 'express'
 import {
     addCartItem,
+    checkCartIfExists,
     clearCart,
     createCart,
     fetchCartById,
@@ -60,6 +61,22 @@ export const updateLastVisitToCart = async (req: Request, res: Response): Promis
         }
 
         res.status(200).json(lastVisited)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const checkCart = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const cartId = req.params.cartId
+
+        const response = await checkCartIfExists(cartId)
+
+        res.status(200).json(response)
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ error: error.message })

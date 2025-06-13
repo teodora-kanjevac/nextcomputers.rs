@@ -28,6 +28,14 @@ export const useCartStore = defineStore('cart', {
                 console.error('Failed to fetch cart:', error)
             }
         },
+        async checkCart(cartId: string) {
+            try {
+                const { data } = await axios.get(`/api/cart/exists/${cartId}`)
+                return data
+            } catch (error) {
+                console.error('Failed to fetch cart:', error)
+            }
+        },
         async addToCart(productId: number) {
             try {
                 const { $axios } = useNuxtApp()

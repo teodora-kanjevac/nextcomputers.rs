@@ -1,6 +1,7 @@
 import { Router } from 'express'
 import {
     addItemToCart,
+    checkCart,
     createACart,
     emptyCart,
     getCartById,
@@ -20,6 +21,7 @@ router.put('/last-accessed', rateLimitMiddleware('API_POST_REQUESTS'), updateLas
 router.put('/update-quantity', rateLimitMiddleware('API_POST_REQUESTS'), updateQuantity)
 router.post('/add-item', rateLimitMiddleware('API_POST_REQUESTS'), addItemToCart)
 router.post('/create', rateLimitMiddleware('API_POST_REQUESTS'), createACart)
+router.get('/exists/:cartId', checkCart)
 router.get('/', rateLimitMiddleware('API_GET_REQUESTS'), getCartById)
 
 export default router

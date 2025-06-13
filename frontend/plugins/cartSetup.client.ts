@@ -46,6 +46,27 @@ export default defineNuxtPlugin(nuxtApp => {
             }
 
             try {
+                if (import.meta.client) {
+                    const localStorageCartId = localStorage.getItem('cart_id')
+                    if (localStorageCartId && !cartIdCookie.value) {
+                        try {
+                            const cartExists = await cartStore.checkCart(localStorageCartId)
+                            if (cartExists) {
+                                cartIdCookie.value = localStorageCartId
+                                localStorage.removeItem('cart_id')
+
+                                await cartStore.fetchCart()
+                                sessionUpdatedCookie.value = 'true'
+                                return
+                            } else {
+                                localStorage.removeItem('cart_id')
+                            }
+                        } catch (error) {
+                            console.error('Error verifying cart:', error)
+                        }
+                    }
+                }
+
                 await cartStore.createCart()
                 await cartStore.fetchCart()
 
