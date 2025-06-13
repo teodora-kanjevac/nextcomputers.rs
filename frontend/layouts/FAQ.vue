@@ -1,7 +1,7 @@
 <template>
     <div>
         <section class="py-8 md:py-16">
-            <div class="mx-auto max-w-screen-xl h-screen px-6 2xl:px-0">
+            <div class="mx-auto max-w-screen-xl min-h-screen px-6 2xl:px-0">
                 <h2 class="md:text-3xl text-2xl font-semibold pb-3 md:pb-4 border-b-2 border-gray-200 text-left">Često postavljena pitanja</h2>
                 <div class="grid pt-10 text-left lg:gap-16 md:gap-6 md:grid-cols-2 md:text-justify">
                     <div>
@@ -18,7 +18,7 @@
                                 Na koje načine mogu da platim?
                             </h3>
                             <p class="ms-1">
-                                NEXTCOMPUTERS.RS prihvata uplatu na račun (sa popustom od 1%) i kartično plaćanje.
+                                NEXTCOMPUTERS.RS prihvata uplatu na račun (sa popustom od 1%) i plaćanje gotovinom.
                             </p>
                         </div>
                         <div class="mb-10">

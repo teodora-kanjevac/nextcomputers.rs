@@ -1,7 +1,7 @@
 <template>
     <div class="flex items-center gap-2">
         <div class="flex items-center">
-            <Star v-for="index in 5" :key="index" :filled="index <= filledStars" :half="index === halfStar" />
+            <Star v-for="index in 5" :size="size" :key="index" :filled="index <= filledStars" :half="index === halfStar" />
         </div>
         <p class="text-sm font-medium text-gray-900">{{ roundDecimal(averageRating) }}</p>
         <p class="text-sm font-medium text-gray-600">({{ rating.totalReviews }})</p>
@@ -15,6 +15,7 @@ import type { RatingDTO } from '~/shared/types/RatingDTO'
 
 const { rating } = defineProps<{
     rating: RatingDTO
+    size: number
 }>()
 
 const averageRating = new Rating(rating).getAverageRating()

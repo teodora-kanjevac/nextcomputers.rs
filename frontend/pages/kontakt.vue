@@ -1,6 +1,5 @@
 <template>
     <div>
-        <Toast position="bottom-right" />
         <NavBar />
         <Contact />
         <Footer />

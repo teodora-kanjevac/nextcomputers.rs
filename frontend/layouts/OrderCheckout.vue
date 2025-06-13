@@ -1,6 +1,6 @@
 <template>
     <div>
-        <section class="pt-3 pb-8 sm:h-screen">
+        <section class="pt-3 pb-8 sm:min-h-screen">
             <form @submit.prevent="submitForm" class="mx-auto max-w-screen-xl px-4">
                 <div class="lg:flex lg:items-start sm:gap-4 xl:gap-8">
                     <div
@@ -103,9 +103,13 @@
 
 <script setup lang="ts">
 import { useFormValidation } from '~/composables/useFormValidation'
+import { useAuthStore } from '~/stores/AuthStore'
 import { useFormStore } from '~/stores/FormStore'
+import { useUserStore } from '~/stores/UserStore'
 
 const formStore = useFormStore()
+const authStore = useAuthStore()
+const userStore = useUserStore()
 
 const emit = defineEmits(['nextStep'])
 
@@ -118,7 +122,8 @@ const form = ref(formStore.checkout.form)
 const formSubmitted = ref(false)
 const shakeTrigger = ref(0)
 
-const { fullNameCheck, emailCheck, phoneCheck, addressCheck, cityCheck, zipcodeCheck, PIBCheck } = useFormValidation(form)
+const { fullNameCheck, emailCheck, phoneCheck, addressCheck, cityCheck, zipcodeCheck, PIBCheck } =
+    useFormValidation(form)
 
 const isFormInvalid = computed(() => {
     return !(
@@ -132,6 +137,11 @@ const isFormInvalid = computed(() => {
     )
 })
 
+const resetForm = () => {
+    formStore.resetCheckoutForm()
+    formSubmitted.value = false
+}
+
 const submitForm = () => {
     formSubmitted.value = true
     if (isFormInvalid.value) {
@@ -141,4 +151,49 @@ const submitForm = () => {
     formStore.checkout.form = form.value
     goToNextStep()
 }
+
+const shouldPopulateField = (currentValue: string, userValue: string | undefined): boolean => {
+    return currentValue === '' || currentValue === (userValue || '')
+}
+
+const populateUserData = async () => {
+    try {
+        if (!authStore.isLoggedIn || !userStore.user) return
+
+        const { user } = userStore
+
+        const userFullName = `${user.firstName} ${user.lastName}`
+        const userPhone = user.phone?.replace('+381', '').trim() || ''
+
+        const userDataUpdate = {
+            fullname: shouldPopulateField(form.value.fullname, userFullName) ? userFullName : form.value.fullname,
+            email: shouldPopulateField(form.value.email, user.email) ? user.email : form.value.email,
+            phone: shouldPopulateField(form.value.phone, userPhone) ? userPhone : form.value.phone,
+            address: shouldPopulateField(form.value.address, user.address) ? user.address || '' : form.value.address,
+            city: shouldPopulateField(form.value.city, user.city) ? user.city || '' : form.value.city,
+            zipcode: shouldPopulateField(form.value.zipcode, user.zipcode) ? user.zipcode || '' : form.value.zipcode,
+        }
+
+        form.value = { ...form.value, ...userDataUpdate }
+    } catch (error) {
+        console.error('Error fetching user data:', error)
+    }
+}
+
+const initializeForm = async () => {
+    const isFormEmpty = Object.values(form.value).every(val => val === '')
+    if (isFormEmpty) {
+        await populateUserData()
+    }
+}
+
+onMounted(async () => {
+    await userStore.fetchUserInfo()
+    initializeForm()
+})
+
+onBeforeRouteLeave(() => {
+    resetForm()
+    return true
+})
 </script>

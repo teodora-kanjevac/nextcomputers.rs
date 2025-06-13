@@ -3,6 +3,7 @@ export interface CartProductDTO {
     name: string
     ean: string
     price: number
+    available: boolean
     shippingPrice: number
     discountPrice?: number
     thumbnail: string

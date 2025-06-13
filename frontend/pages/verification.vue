@@ -1,6 +1,5 @@
 <template>
     <div class="min-h-screen">
-        <Toast position="bottom-right" />
         <VerificationNavBar />
         <div v-if="sharedStore.loading" class="fixed inset-0 flex flex-col items-center justify-center text-2xl">
             <Spinner class="size-10" />
@@ -18,8 +17,6 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '~/stores/AuthStore'
 import { useNotification } from '~/composables/useNotification'
 import { useSharedStore } from '~/stores/SharedStore'
@@ -36,8 +33,6 @@ const verificationSuccess = ref(false)
 const errorMessage = ref('')
 sharedStore.setLoading(true)
 
-const email = computed<string>(() => authStore.user?.email || '')
-
 onMounted(async () => {
     try {
         await authStore.getMe()
@@ -51,9 +46,6 @@ onMounted(async () => {
         const response = await authStore.verifyEmailToken(token)
         verificationSuccess.value = response.success
         errorMessage.value = response.message
-        if (response.success === true) {
-            await authStore.removePendingVerification(email.value)
-        }
     } catch (error) {
         showNotification(
             'error',

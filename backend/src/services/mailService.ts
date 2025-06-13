@@ -10,20 +10,22 @@ import { IPSOptionsDTO } from '~/src/DTOs/IPSOptions.dto'
 import { ContactDataDTO } from '~/src/DTOs/ContactData.dto'
 import { contactForm } from '~/src/mails/contactForm'
 import { contactTemplate } from '~/src/mails/templates/contactFormTemplate'
-import { registerForm } from '../mails/verificationEmail'
-import { resetPasswordForm } from '../mails/resetPassword'
-import { RegisterDataDTO } from '../DTOs/RegisterData.dto'
-import { verificationEmailTemplate } from '../mails/templates/verificationEmailTemplate'
+import { registerForm } from '~/src/mails/verificationEmail'
+import { resetPasswordForm } from '~/src/mails/resetPassword'
+import { RegisterDataDTO } from '~/src/DTOs/RegisterData.dto'
+import { verificationEmailTemplate } from '~/src/mails/templates/verificationEmailTemplate'
+import { reserPasswordTemplate } from '../mails/templates/resetPasswordTemplate'
+import { ResetPasswordDataDTO } from '../DTOs/ResetPasswordData.dto'
 
 dotenv.config()
 
 const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST as string,
-    port: Number(process.env.MAIL_PORT),
+    host: process.env.MAIL_HOST_TEST as string,
+    port: Number(process.env.MAIL_PORT_TEST),
     secure: false,
     auth: {
-        user: process.env.MAIL_USER as string,
-        pass: process.env.MAIL_PASS as string,
+        user: process.env.MAIL_USER_TEST as string,
+        pass: process.env.MAIL_PASS_TEST as string,
     },
 })
 
@@ -35,7 +37,7 @@ async function sendAMail(mailOptions: MailOptionsDTO): Promise<any> {
 export async function sendOrderConfirmationEmail(orderData: OrderDataDTO): Promise<any> {
     let qrAttachment: { filename: string; content: Buffer; contentType: string } | null = null
 
-    if (orderData.paymentMethod === 'advance') {
+    if (orderData.paymentMethod === 'ADVANCE') {
         const qrImage = await fetchQRCode(new IPSOptionsDTO(orderData))
         qrAttachment = {
             filename: 'uplata-qr-code.png',
@@ -96,16 +98,15 @@ export async function sendEmailVerification(registerData: RegisterDataDTO): Prom
     return mailInfo
 }
 
-export async function sendPasswordResetEmail(email: string): Promise<any> {
-    const link = ''
-    const formattedResetPassData = await resetPasswordForm(email, link)
+export async function sendPasswordResetEmail(resetPasswordData: ResetPasswordDataDTO): Promise<any> {
+    const formattedResetPassData = await resetPasswordForm(resetPasswordData)
 
-    const htmlContent = contactTemplate(formattedResetPassData)
+    const htmlContent = reserPasswordTemplate(formattedResetPassData)
 
     const emailOptions: MailOptionsDTO = {
         from: process.env.MAIL_FROM as string,
-        to: email,
-        subject: 'Resetovanje lozinke - nextcomputers.rs',
+        to: resetPasswordData.email,
+        subject: 'Promena lozinke - nextcomputers.rs',
         text: htmlToText(htmlContent),
         html: htmlContent,
     }

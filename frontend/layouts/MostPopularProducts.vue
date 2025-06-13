@@ -2,7 +2,7 @@
     <div class="flex flex-col min-h-screen">
         <div class="flex flex-1">
             <FilterCategorySidebar />
-            <div class="flex-1 px-5 lg:px-8 pt-8 pb-11 lg:py-11">
+            <div class="flex-1 px-5 lg:px-8 pt-5 pb-11 lg:py-11">
                 <h2 class="font-semibold text-xl sm:text-2xl uppercase ps-0.5 pb-2 sm:pb-4 border-b-2 border-gray-200">
                     Svi proizvodi
                 </h2>
@@ -15,7 +15,7 @@
                     <SortDropdown />
                 </div>
                 <div>
-                    <Spinner class="mt-32" v-if="!sharedStore.loading && productCards.length === 0" />
+                    <Spinner class="my-32" v-if="!sharedStore.loading && productCards.length === 0" />
                     <div
                         class="grid gap-3 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6">
                         <Product v-for="product in productCards" :key="product.id" :product="product" />

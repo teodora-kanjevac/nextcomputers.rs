@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { FilterCategory } from '~/shared/classes/Filter'
 import { ProductCard } from '~/shared/classes/ProductCard'
 import { useSharedStore } from './SharedStore'
@@ -23,7 +22,8 @@ export const useFilterStore = defineStore('filter', {
                     return acc
                 }, {} as Record<string, string[]>)
 
-                const { data } = await axios.post(`/api/filters/${id}`, {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/filters/${id}`, {
                     selectedFilters: transformedFilters,
                 })
                 this.categoryFilters = data.map((filter: any) => new FilterCategory(filter))
@@ -33,7 +33,8 @@ export const useFilterStore = defineStore('filter', {
         },
         async fetchSearchFilters(searchTerm: string) {
             try {
-                const { data } = await axios.get(`/api/filters/search/${searchTerm}`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/filters/search/${searchTerm}`)
 
                 this.categoryFilters = data.map((filter: any) => new FilterCategory(filter))
             } catch (error) {
@@ -62,7 +63,8 @@ export const useFilterStore = defineStore('filter', {
                     return acc
                 }, {} as Record<string, string[]>)
 
-                const { data } = await axios.post(`/api/filters/filteredProducts/${subcategoryId}`, {
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/filters/filteredProducts/${subcategoryId}`, {
                     filters: transformedFilters,
                     params: {
                         sortBy: sharedStore.sortBy,

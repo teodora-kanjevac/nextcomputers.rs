@@ -24,6 +24,6 @@ export interface IOrderDataDTO {
         phone: string
         pib: string
     }
-    paymentMethod: string
+    paymentMethod: 'CASH' | 'CARD' | 'ADVANCE'
     paymentMethodText: string
 }

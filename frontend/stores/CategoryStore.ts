@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
 import { Category, Subcategory } from '~/shared/classes/Category'
 
 export const useCategoryStore = defineStore('category', {
@@ -10,7 +9,8 @@ export const useCategoryStore = defineStore('category', {
     actions: {
         async fetchCategories() {
             try {
-                const { data } = await axios.get('/api/categories')
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get('/api/categories')
                 this.categories = data
             } catch (error) {
                 console.error('Failed to fetch categories:', error)
@@ -18,7 +18,8 @@ export const useCategoryStore = defineStore('category', {
         },
         async fetchSubcategoryById(subcategoryId: number) {
             try {
-                const { data } = await axios.get(`/api/subcategories/${subcategoryId}`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/subcategories/${subcategoryId}`)
                 this.subcategory = data
             } catch (error) {
                 console.error('Failed to fetch categories:', error)

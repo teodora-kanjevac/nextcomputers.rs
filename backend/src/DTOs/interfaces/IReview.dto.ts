@@ -1,7 +1,10 @@
+import { ProductCardDTO } from '~/src/DTOs/ProductCard.dto'
+
 export interface IReviewDTO {
-    id: number;
-    createdAt: Date;
-    user: string;
-    rating: number;
-    comment: string;
+    id: string
+    createdAt: Date
+    user: string
+    product: ProductCardDTO
+    rating: number
+    comment: string
 }

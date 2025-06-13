@@ -2,11 +2,14 @@ import { defineStore } from 'pinia'
 import axios from 'axios'
 import type { RegisterFormData } from '~/shared/classes/RegisterFormData'
 import type { LogInData } from '~/shared/classes/LogInData'
-import type { UserMe } from '~/shared/classes/UserMe'
+import { UserMe } from '~/shared/classes/UserMe'
+import { useCartStore } from './CartStore'
+import { useCartCookies } from '~/composables/useCartCookies'
+import type { ResetPasswordData } from '~/shared/classes/ResetPasswordData'
+import type { RegisterData } from '~/shared/classes/RegisterData'
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        loginUserData: {} as LogInData,
         user: null as UserMe | null,
         hydrated: false,
     }),
@@ -16,77 +19,157 @@ export const useAuthStore = defineStore('auth', {
     actions: {
         async registerUser(RegisterFormData: RegisterFormData) {
             try {
-                const { data } = await axios.post(`/api/auth/register`, RegisterFormData)
-                if (data.success === false) {
-                    throw new Error(data.error)
-                }
+                const { cartIdCookie, sessionUpdatedCookie } = useCartCookies()
+
+                const { data } = await axios.post(
+                    `/api/auth/register`,
+                    {
+                        ...RegisterFormData,
+                        cartId: cartIdCookie.value,
+                    },
+                    { validateStatus: status => status < 500 }
+                )
+
+                if (data.error) throw new Error(data.error)
+
+                this.user = new UserMe(data.newUser)
+
+                sessionUpdatedCookie.value = undefined
             } catch (error) {
                 throw error
             }
         },
         async loginUser(loginData: LogInData) {
             try {
-                const { data } = await axios.post(`/api/auth/login`, loginData)
-                if (data.success === false) {
-                    throw new Error(data.error)
-                }
-                this.user = data.user
+                const cartStore = useCartStore()
+                const { sessionUpdatedCookie } = useCartCookies()
+
+                const { data } = await axios.post(`/api/auth/login`, loginData, {
+                    validateStatus: status => status < 500,
+                })
+
+                if (data.error) throw new Error(data.error)
+
+                this.user = new UserMe(data.user)
+
+                await cartStore.updateLastAccessToCart()
+                await cartStore.fetchCart()
+                sessionUpdatedCookie.value = undefined
             } catch (error) {
                 throw error
             }
         },
         async logoutUser() {
             try {
+                const cartStore = useCartStore()
+                const { sessionUpdatedCookie, cartIdCookie } = useCartCookies()
+
                 await axios.post(`/api/auth/logout`)
                 this.user = null
+
+                cartIdCookie.value = undefined
+                await cartStore.createCart()
+
+                sessionUpdatedCookie.value = undefined
+
+                await cartStore.fetchCart()
             } catch (error) {
                 throw error
             }
         },
-        async generateEmailToken() {
+        async checkIfUserExists(email: string) {
             try {
-                const { data } = await axios.post(`/api/auth/generate-email`)
-                return data.token
+                const { data } = await axios.post(`/api/auth/check-user`, { email })
+
+                if (data.error) throw new Error(data.error)
+
+                return data
+            } catch (error) {
+                throw error
+            }
+        },
+        async generateEmailToken(registerData: RegisterData) {
+            try {
+                const { data } = await axios.post(`/api/auth/generate-email`, registerData)
+                return data
+            } catch (error) {
+                throw error
+            }
+        },
+        async generateResetPasswordToken(email: string) {
+            try {
+                const { data } = await axios.post(
+                    `/api/auth/generate-reset-pass`,
+                    { email },
+                    { validateStatus: status => status < 500 }
+                )
+
+                if (data.error) throw new Error(data.error)
+
+                return data
             } catch (error) {
                 throw error
             }
         },
         async verifyEmailToken(token: string) {
             try {
-                const { data } = await axios.put(`/api/auth/verify-email/${token}`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.put(`/api/auth/verify-email/${token}`)
                 return data
             } catch (error) {
                 throw error
             }
         },
-        async storePendingVerification(registerData: any) {
+        async verifyPassToken(token: string) {
             try {
-                await axios.post(`/api/auth/pending-verification/create`, registerData)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.post(`/api/auth/verify-pass/${token}`)
+                return data
             } catch (error) {
-                console.error('Error storing pending verification:', error)
+                throw error
+            }
+        },
+        async requestVerificationMail(email: string) {
+            try {
+                const { data } = await axios.post(
+                    `/api/auth/request-verify-email`,
+                    { email },
+                    { validateStatus: status => status < 500 }
+                )
+
+                if (data.error) throw new Error(data.error)
+
+                return data
+            } catch (error) {
+                throw error
+            }
+        },
+        async changePassword(token: string, resetPasswordData: ResetPasswordData) {
+            try {
+                const { data } = await axios.put(`/api/auth/change-pass`, {
+                    token,
+                    resetPasswordData,
+                })
+
+                if (data.success === false) throw new Error(data.error)
+
+                return data
+            } catch (error) {
                 throw error
             }
         },
         async getPendingVerification(email: string) {
             try {
-                const { data } = await axios.post(`/api/auth/pending-verification/get`, {
-                    email: email,
-                })
+                const { data } = await axios.post(`/api/auth/pending-verification/get`, { email })
                 return data
-            } catch (error) {
-                throw error
-            }
-        },
-        async removePendingVerification(email: string) {
-            try {
-                await axios.delete(`/api/auth/pending-verification/delete/${email}`)
             } catch (error) {
                 throw error
             }
         },
         async getMe() {
             try {
-                const { data } = await axios.get(`/api/auth/me`)
+                const { $axios } = useNuxtApp()
+                const { data } = await $axios.get(`/api/auth/me`)
                 this.user = data.user ? data.user : null
             } catch (error) {
                 throw error

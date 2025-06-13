@@ -21,7 +21,7 @@ export const useCheckoutStore = defineStore('checkout', {
         },
     }),
     actions: {
-        setPaymentMethod(method: string) {
+        setPaymentMethod(method: 'CASH' | 'CARD' | 'ADVANCE') {
             this.paymentMethod = method
         },
     },

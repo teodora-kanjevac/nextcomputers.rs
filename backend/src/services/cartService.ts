@@ -3,7 +3,7 @@ import { isNullObject } from '~/src/utils/ErrorHandling'
 import { CartDTO } from '~/src/DTOs/Cart.dto'
 import { CartItemDTO } from '~/src/DTOs/CartItem.dto'
 
-export const createCart = async (userId: string): Promise<string> => {
+export const createCart = async (userId: string | null): Promise<string> => {
     const cart = await prisma.cart.create({
         data: {
             user_id: userId,
@@ -13,11 +13,11 @@ export const createCart = async (userId: string): Promise<string> => {
     return cart.cart_id
 }
 
-export const updateLastSiteVisitCart = async (cartId: string, lastAccessedAt: Date): Promise<string> => {
+export const updateLastSiteVisitCart = async (cartId: string): Promise<string> => {
     const cart = await prisma.cart.update({
         where: { cart_id: cartId },
         data: {
-            last_accessed_at: lastAccessedAt,
+            last_accessed_at: new Date(),
         },
     })
 
@@ -41,21 +41,14 @@ export const fetchCartById = async (cartId: string): Promise<CartDTO> => {
     return new CartDTO(cart)
 }
 
-export const fetchCartByUserId = async (userId: string): Promise<CartDTO> => {
-    const cart = await prisma.cart.findFirst({
-        where: { user_id: userId },
-        include: {
-            cartitem: {
-                include: {
-                    product: true,
-                },
-            },
+export const checkCartIfExists = async (cartId: string): Promise<boolean> => {
+    const cart = await prisma.cart.findUnique({
+        where: { cart_id: cartId },
+        select: {
+            cart_id: true,
         },
     })
-
-    isNullObject('user', userId, cart)
-
-    return new CartDTO(cart)
+    return !!cart
 }
 
 export const addCartItem = async (cartId: string, productId: number): Promise<CartItemDTO> => {

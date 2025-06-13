@@ -1,5 +1,14 @@
 import { Request, Response } from 'express'
-import { fetchAllReviews, fetchAllReviewsForProduct, fetchAllReviewsFromUser, leaveReview } from '~/src/services/reviewService'
+import {
+    editUserReview,
+    fetchAllReviews,
+    fetchAllReviewsForProduct,
+    fetchAllReviewsFromUser,
+    fetchReviewSuggestions,
+    getReviewEligibility,
+    leaveReview,
+    removeUserReview,
+} from '~/src/services/reviewService'
 
 export const getReviews = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -13,14 +22,20 @@ export const getReviews = async (req: Request, res: Response): Promise<void> => 
 
 export const getReviewsFromUser = async (req: Request, res: Response): Promise<void> => {
     try {
-        const reviews = await fetchAllReviewsFromUser(req.params.userId)
+        const token = req.cookies.token
+        if (!token) {
+            res.status(400).json({ error: 'User is required' })
+            return
+        }
+
+        const reviews = await fetchAllReviewsFromUser(token)
 
         res.status(200).json(reviews)
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: error.message })
         } else {
-            res.status(500).json({ error: 'Unexpected error occurred' });
+            res.status(500).json({ error: 'Unexpected error occurred' })
         }
     }
 }
@@ -34,31 +49,114 @@ export const getReviewsForProduct = async (req: Request, res: Response): Promise
         res.status(200).json(reviews)
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: error.message })
         } else {
-            res.status(500).json({ error: 'Unexpected error occurred' });
+            res.status(500).json({ error: 'Unexpected error occurred' })
         }
     }
 }
 
 export const postReview = async (req: Request, res: Response): Promise<void> => {
     try {
-        const userId = req.user?.id
-        if (!userId) {
-            res.status(400).json({ error: 'User ID is required' });
-            return;
+        const token = req.cookies.token
+        if (!token) {
+            res.status(400).json({ error: 'User is required' })
+            return
         }
         const productId = parseInt(req.params.productId)
         const reviewData = req.body
 
-        const review = await leaveReview(userId, productId, reviewData)
+        const review = await leaveReview(token, productId, reviewData)
 
         res.status(201).json(review)
     } catch (error) {
         if (error instanceof Error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).json({ error: error.message })
         } else {
-            res.status(500).json({ error: 'Unexpected error occurred' });
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const editReview = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const token = req.cookies.token
+        if (!token) {
+            res.status(400).json({ error: 'User is required' })
+            return
+        }
+        const reviewId = req.params.reviewId
+        const reviewData = req.body
+
+        const review = await editUserReview(token, reviewId, reviewData)
+
+        res.status(201).json(review)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const deleteReview = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const token = req.cookies.token
+        if (!token) {
+            res.status(400).json({ error: 'User is required' })
+            return
+        }
+
+        const review = await removeUserReview(req.params.reviewId)
+
+        res.status(201).json(review)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const getReviewStatus = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const token = req.cookies.token
+        if (!token) {
+            res.status(400).json({ error: 'User is required' })
+            return
+        }
+        const productId = parseInt(req.params.productId)
+
+        const isEligible = await getReviewEligibility(token, productId)
+
+        res.status(201).json(isEligible)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const getReviewSuggestions = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const token = req.cookies.token
+        if (!token) {
+            res.status(400).json({ error: 'User is required' })
+            return
+        }
+
+        const suggestions = await fetchReviewSuggestions(token)
+
+        res.status(201).json(suggestions)
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
         }
     }
 }

@@ -2,8 +2,8 @@
     <div>
         <nav
             ref="navbarRef"
-            class="bg-gray-800 border-gray-200 top-0 left-0 w-full py-4 duration-300"
-            :class="{ 'md:py-1.5 fixed z-50 shadow-md': isScrolled && !isMobile }">
+            class="bg-gray-800 border-gray-200 top-0 left-0 w-full py-3.5 duration-300"
+            :class="{ 'md:py-1.5 fixed z-20 shadow-md': isScrolled && !isMobile }">
             <div
                 class="md:max-w-screen-2xl flex flex-wrap items-center justify-between md:justify-around mx-auto px-3 sm:px-4">
                 <Logo class="font-medium text-gray-100" />
@@ -14,12 +14,12 @@
                         @click="toggleSearchMenu"
                         aria-controls="search"
                         :aria-expanded="isSearchOpen"
-                        class="md:hidden rounded-lg text-sm px-2 me-1 transition-opacity duration-300 ease-in-out">
-                        <SearchIcon class="size-5 text-gray-300" />
+                        class="md:hidden rounded-lg text-sm px-2 transition-opacity duration-300 ease-in-out">
+                        <SearchIcon class="size-5 text-gray-200" />
                     </button>
 
                     <div class="relative md:flex-1 flex md:hidden">
-                        <NuxtLink to="/korpa" class="flex gap-3 p-2 text-gray-100 rounded">
+                        <NuxtLink to="/korpa" class="flex gap-3 p-2 text-gray-200 rounded">
                             <CartWithBadge class="size-6" />
                         </NuxtLink>
                     </div>
@@ -34,7 +34,7 @@
                         aria-controls="navbar"
                         :aria-expanded="isNavbarOpen"
                         class="inline-flex items-center px-2 justify-center text-sm rounded-lg md:hidden transition-all duration-500 ease-in-out">
-                        <HamburgerIcon class="size-5 text-gray-300" />
+                        <HamburgerIcon class="size-5 text-gray-200" />
                     </button>
                 </div>
 
@@ -45,7 +45,7 @@
 
                 <div
                     ref="searchMenu"
-                    class="items-center justify-between w-full md:w-auto h-[64px] md:flex md:order-1 overflow-hidden transition-all duration-500 ease-in-out"
+                    class="items-center justify-between w-full md:w-auto h-14 md:flex md:order-1 overflow-hidden transition-all duration-500 ease-in-out"
                     id="search">
                     <div class="relative mt-4 md:hidden">
                         <SearchBar />
@@ -64,7 +64,6 @@
 </template>
 
 <script setup lang="ts">
-import { useMediaQuery } from '@vueuse/core'
 import SearchIcon from '~/components/icons/SearchIcon.vue'
 import HamburgerIcon from '~/components/icons/HamburgerIcon.vue'
 import SearchBar from '~/components/SearchBar.vue'
@@ -79,15 +78,16 @@ const isSearchOpen = ref(false)
 const isNavbarOpen = ref(false)
 
 const authStore = useAuthStore()
-
-const isMobile = useMediaQuery('(max-width: 767px)')
-const { y } = useWindowScroll()
-
-const isVisible = computed(() => y.value > (navbarRef.value?.clientHeight ?? 50))
-const isScrolled = computed(() => y.value > 300)
+const { isScrolled, isVisible, shouldHideOnScroll, isMobile } = useScroll(navbarRef.value)
 
 const updateNavbarVisibility = (show: boolean, useTransition = true) => {
-    if (!navbarRef.value || isMobile.value) return
+    if (!navbarRef.value || isMobile.value || !shouldHideOnScroll.value) {
+        if (navbarRef.value) {
+            navbarRef.value.classList.remove('-translate-y-full')
+            navbarRef.value.classList.add('translate-y-0')
+        }
+        return
+    }
 
     navbarRef.value.classList.toggle('transition-all', useTransition)
     navbarRef.value.classList.toggle('transition-none', !useTransition)

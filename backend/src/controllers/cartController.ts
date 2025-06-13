@@ -1,21 +1,34 @@
 import { Request, Response } from 'express'
 import {
     addCartItem,
+    checkCartIfExists,
     clearCart,
     createCart,
     fetchCartById,
-    fetchCartByUserId,
     removeCartItem,
     removeUnavailableCartItems,
     updateCartItemQuantity,
     updateLastSiteVisitCart,
 } from '~/src/services/cartService'
+import { fetchUserId } from '~/src/utils/jwt/fetchUser'
 
 export const createACart = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { userId } = req.body
+        const token = req.cookies.token
+        let userId
+        if (!token) {
+            userId = null
+        } else {
+            userId = fetchUserId(token)
+        }
 
         const cartId = await createCart(userId)
+
+        res.cookie('cart_id', cartId, {
+            maxAge: 1000 * 60 * 60 * 24 * 10,
+            sameSite: 'lax',
+            secure: process.env.NODE_ENV === 'production',
+        })
 
         res.status(200).json(cartId)
     } catch (error) {
@@ -29,9 +42,23 @@ export const createACart = async (req: Request, res: Response): Promise<void> =>
 
 export const updateLastVisitToCart = async (req: Request, res: Response): Promise<void> => {
     try {
-        const { cartId, lastAccessedAt } = req.body
+        const cartId = req.cookies.cart_id as string
+        const token = req.cookies.token as string
 
-        const lastVisited = await updateLastSiteVisitCart(cartId, lastAccessedAt)
+        if (!cartId) {
+            res.status(400).json({ error: 'Missing cart ID in cookies' })
+            return
+        }
+
+        const lastVisited = await updateLastSiteVisitCart(cartId)
+
+        if (!token) {
+            res.cookie('cart_id', cartId, {
+                maxAge: 1000 * 60 * 60 * 24 * 10,
+                sameSite: 'lax',
+                secure: process.env.NODE_ENV === 'production',
+            })
+        }
 
         res.status(200).json(lastVisited)
     } catch (error) {
@@ -43,13 +70,13 @@ export const updateLastVisitToCart = async (req: Request, res: Response): Promis
     }
 }
 
-export const getCartById = async (req: Request, res: Response): Promise<void> => {
+export const checkCart = async (req: Request, res: Response): Promise<void> => {
     try {
-        const cartId = req.params.cartId as string
+        const cartId = req.params.cartId
 
-        const cart = await fetchCartById(cartId)
+        const response = await checkCartIfExists(cartId)
 
-        res.status(200).json(cart)
+        res.status(200).json(response)
     } catch (error) {
         if (error instanceof Error) {
             res.status(500).json({ error: error.message })
@@ -59,11 +86,16 @@ export const getCartById = async (req: Request, res: Response): Promise<void> =>
     }
 }
 
-export const getCartByUser = async (req: Request, res: Response): Promise<void> => {
+export const getCartById = async (req: Request, res: Response): Promise<void> => {
     try {
-        const userId = req.params.userId as string
+        const cartId = req.cookies.cart_id as string
 
-        const cart = await fetchCartByUserId(userId)
+        if (!cartId) {
+            res.status(400).json({ error: 'Missing cart ID in cookies' })
+            return
+        }
+
+        const cart = await fetchCartById(cartId)
 
         res.status(200).json(cart)
     } catch (error) {
@@ -83,11 +115,9 @@ export const addItemToCart = async (req: Request, res: Response): Promise<void> 
 
         res.status(200).json(cartItem)
     } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).json({ error: error.message })
-        } else {
-            res.status(500).json({ error: 'Unexpected error occurred' })
-        }
+        res.status(200).json({
+            error: error instanceof Error ? error.message : 'Adding to cart failed',
+        })
     }
 }
 

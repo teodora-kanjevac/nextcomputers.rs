@@ -9,4 +9,8 @@ import LoginForm from '~/layouts/LoginForm.vue'
 
 const { updateTitle } = usePageTitle()
 updateTitle('Prijava korisnika')
+
+definePageMeta({
+    middleware: ['login-guard'],
+})
 </script>

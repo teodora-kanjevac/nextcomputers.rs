@@ -1,6 +1,5 @@
 <template>
     <div>
-        <Toast position="bottom-right" />
         <NavBar />
         <Hero />
         <ShowcaseCategories />
@@ -31,8 +30,8 @@ onMounted(() => {
     nuxtApp.hook('cart:unavailableItems' as any, () => {
         showNotification(
             'warn',
-            'Proizvod obrisan!',
-            'Neki proizvodi iz vaše korpe su obrisani jer su postali nedostupni.',
+            'Proizvod više nije dostupan',
+            'Neki proizvodi iz vaše korpe više nisu dostupni, pa su uklonjeni. Hvala na razumevanju.',
             7000
         )
     })

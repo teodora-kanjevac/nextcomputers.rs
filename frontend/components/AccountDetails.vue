@@ -1,13 +1,13 @@
 <template>
-    <div class="bg-white rounded-lg border px-6 py-5 shadow-sm">
-        <div class="flex flex-col lg:flex-row justify-between gap-8">
-            <div class="flex-1 min-w-0">
+    <div class="bg-white rounded-lg border px-4 sm:px-6 py-5 shadow-sm">
+        <div class="grid gap-8 lg:grid-cols-[1fr_320px]">
+            <div>
                 <h2 class="font-semibold text-lg border-b pb-2 border-gray-200">Detalji o korisniku</h2>
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4 xl:gap-8 border-b border-gray-200 py-4">
                     <div class="space-y-4 break-words min-w-0">
                         <div>
                             <h3 class="text-sm font-semibold text-gray-500">Ime i prezime</h3>
-                            <p class="text-gray-700 mt-1 font-medium">{{ userFullName }}</p>
+                            <p class="text-gray-700 mt-1 font-medium">{{ userFullName || noData }}</p>
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold text-gray-500">Email adresa</h3>
@@ -15,7 +15,7 @@
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold text-gray-500">Broj telefona</h3>
-                            <p class="text-gray-700 mt-1 font-medium">{{ phoneNumber }}</p>
+                            <p class="text-gray-700 mt-1 font-medium">{{ phoneNumber || noData }}</p>
                         </div>
                     </div>
                     <div class="space-y-4 break-words min-w-0">
@@ -25,37 +25,32 @@
                         </div>
                         <div>
                             <h3 class="text-sm font-semibold text-gray-500">Grad i poštanski broj</h3>
-                            <p class="text-gray-700 mt-1 font-medium">{{ cityZipcode }}</p>
+                            <p class="text-gray-700 mt-1 font-medium">{{ cityZipcode || noData }}</p>
                         </div>
                     </div>
                 </div>
-                <button
-                    type="button"
-                    aria-label="Otvori formu za menjanje podataka"
-                    data-modal-target="changeUserDetails"
-                    data-modal-toggle="changeUserDetails"
-                    class="flex items-center w-full sm:w-auto mt-4 px-3 py-2 font-medium text-sm bg-primary-light hover:bg-rose-800 text-white rounded-md">
-                    <PenIcon class="size-5 me-2" />
-                    Izmeni podatke
-                </button>
-                <UserDetailsModal />
+                <UserDetailsModal>
+                    <span
+                        class="flex items-center w-auto mt-4 px-3 py-1.5 font-medium text-sm bg-primary-light hover:bg-rose-800 text-white rounded">
+                        <EditIcon class="size-4 me-1.5" />
+                        Izmeni podatke
+                    </span>
+                </UserDetailsModal>
             </div>
-            <div class="lg:w-80 lg:pl-6 border-t lg:border-t-0 lg:border-l pt-4 lg:pt-0 border-gray-200">
-                <div>
-                    <h2 class="font-semibold text-lg border-b pb-2 border-gray-200">Status profila</h2>
-                    <ProfileProgressBar v-if="user" :user="user" />
-                    <div class="space-y-3 mt-4 font-medium">
-                        <div class="flex items-center text-sm">
-                            <CheckMarkIcon class="size-5 text-green-500 me-2" />
-                            <span>Verifikovan email</span>
-                        </div>
-                        <div class="flex items-center text-sm">
-                            <CheckMarkIcon class="size-5 text-green-500 me-2" />
-                            <span>Dodat broj telefona</span>
-                        </div>
-                        <AddressCheck :address="user?.address" />
-                        <CityZipcodeCheck :city="user?.city" :zipcode="user?.zipcode" />
+            <div class="lg:pl-6 lg:border-l border-gray-200">
+                <h2 class="font-semibold text-lg border-b pb-2 border-gray-200">Status profila</h2>
+                <ProfileProgressBar v-if="user" :user="user" />
+                <div class="space-y-3 mt-4 font-medium">
+                    <div class="flex items-center text-sm">
+                        <CheckMarkIcon class="size-5 text-green-500 me-2" />
+                        <span>Verifikovan email</span>
                     </div>
+                    <div class="flex items-center text-sm">
+                        <CheckMarkIcon class="size-5 text-green-500 me-2" />
+                        <span>Dodat broj telefona</span>
+                    </div>
+                    <AddressCheck :address="user?.address" />
+                    <CityZipcodeCheck :city="user?.city" :zipcode="user?.zipcode" />
                 </div>
             </div>
         </div>
@@ -65,9 +60,9 @@
 <script setup lang="ts">
 import type { User } from '~/shared/classes/User'
 import CheckMarkIcon from './icons/CheckMarkIcon.vue'
-import PenIcon from './icons/PenIcon.vue'
 import { useUserStore } from '~/stores/UserStore'
 import { useAuthStore } from '~/stores/AuthStore'
+import EditIcon from './icons/EditIcon.vue'
 
 const authStore = useAuthStore()
 const userStore = useUserStore()
@@ -96,7 +91,6 @@ const phoneNumber = computed<string>(() => {
 })
 
 onMounted(async () => {
-    await authStore.getMe()
     await userStore.fetchUserInfo()
 })
 </script>

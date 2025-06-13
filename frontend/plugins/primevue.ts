@@ -1,9 +1,12 @@
 import PrimeVue from 'primevue/config'
 import ToastService from 'primevue/toastservice'
+import Tippy from '~/directives/tippy'
 
 export default defineNuxtPlugin(nuxtApp => {
-    if (!nuxtApp.vueApp.config.globalProperties.$primevue) {
-        nuxtApp.vueApp.use(PrimeVue)
-        nuxtApp.vueApp.use(ToastService)
+    const app = nuxtApp.vueApp
+    if (!app.config.globalProperties.$primevue) {
+        app.use(PrimeVue)
+        app.use(ToastService)
     }
+    app.directive('tippy', Tippy)
 })

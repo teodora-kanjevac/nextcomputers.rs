@@ -1,4 +1,4 @@
-import { RegisterDataDTO } from '../DTOs/RegisterData.dto'
+import { RegisterDataDTO } from '~/src/DTOs/RegisterData.dto'
 
 export const registerForm = async (registerData: RegisterDataDTO): Promise<any> => {
     return {

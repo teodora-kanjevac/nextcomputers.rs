@@ -1,22 +1,25 @@
 <template>
     <div class="relative">
-        <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-            <SearchIcon class="size-5 text-gray-700" />
+        <div class="absolute inset-y-0 start-0 flex items-center ps-4 md:ps-5 pointer-events-none">
+            <SearchIcon class="size-4 md:size-5 text-gray-700" />
         </div>
-        <div class="flex w-full h-12">
+        <div class="flex w-full" :class="{ 'h-11': isScrolled, 'h-10 md:h-12': !isScrolled }">
             <input
                 type="text"
                 v-model="searchTerm"
                 @keyup.enter="onSearch"
-                class="placeholder:italic placeholder:text-slate-400 block w-full ps-12 pr-12 text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-primary-light focus:border-primary-light"
+                class="placeholder:italic md:placeholder:text-base placeholder:text-sm md:text-base text-sm placeholder:text-slate-400 block w-full ps-11 md:ps-14 pr-12 text-gray-900 rounded-full border-none bg-gray-100 focus:ring-primary-light focus:border-primary-light"
                 placeholder="Pretraži proizvode..."
                 autocomplete="off" />
 
             <button
                 v-if="searchTerm.trim() !== ''"
                 @click="onSearch"
-                class="absolute inset-y-2 end-3 px-4 py-1 bg-primary-light text-white rounded-md transition duration-100 hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-light">
-                Pretraži
+                class="absolute inset-y-1 md:inset-y-1.5 end-1.5 px-3 md:px-4 text-sm font-semibold bg-primary-light text-white rounded-full transition duration-100 hover:bg-rose-800 focus:ring-primary-light">
+                <div class="flex justify-center items-center">
+                    <SearchIcon class="size-4 md:size-3.5 md:me-2" />
+                    <span class="hidden md:flex">Pretraži</span>
+                </div>
             </button>
         </div>
     </div>
@@ -34,10 +37,11 @@ const searchStore = useSearchStore()
 const filterStore = useFilterStore()
 const router = useRouter()
 const route = useRoute()
+const { isScrolled, isMobile } = useScroll()
 
 const onSearch = () => {
     if (!searchTerm.value.trim()) {
-        router.replace({ name: 'proizvodi' }).then(() => {
+        router.push({ name: 'proizvodi' }).then(() => {
             window.location.reload()
         })
     } else {
@@ -45,7 +49,7 @@ const onSearch = () => {
         searchStore.searchResults = []
         searchStore.selectedFilters = {}
         filterStore.selectedFilters = {}
-        router.replace({ name: 'proizvodi-pretraga', query: { q: searchTerm.value } }).then(() => {
+        router.push({ name: 'proizvodi-pretraga', query: { q: searchTerm.value } }).then(() => {
             window.location.reload()
         })
     }

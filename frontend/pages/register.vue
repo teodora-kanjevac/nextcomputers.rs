@@ -1,6 +1,5 @@
 <template>
     <div>
-        <Toast position="bottom-right" />
         <RegisterForm />
     </div>
 </template>
@@ -10,4 +9,8 @@ import RegisterForm from '~/layouts/RegisterForm.vue'
 
 const { updateTitle } = usePageTitle()
 updateTitle('Registracija korisnika')
+
+definePageMeta({
+    middleware: ['login-guard'],
+})
 </script>

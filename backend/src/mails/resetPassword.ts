@@ -1,6 +1,7 @@
-export const resetPasswordForm = async (email: string, link:string): Promise<any> => {
+import { ResetPasswordDataDTO } from '~/src/DTOs/ResetPasswordData.dto'
+
+export const resetPasswordForm = async (resetPasswordData: ResetPasswordDataDTO): Promise<any> => {
     return {
-        email: email,
-        link: link
+        resetPasswordLink: resetPasswordData.resetLink,
     }
 }

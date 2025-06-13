@@ -1,5 +1,4 @@
 import { IProductDetailsDTO } from '~/src/DTOs/interfaces/IProductDetails.dto'
-import { ReviewDTO } from '~/src/DTOs/Review.dto'
 import { ProductRatingDTO } from '~/src/DTOs/ProductRating.dto'
 import { calculateDiscountPercentage } from '~/src/utils/product/productPriceUtils'
 
@@ -19,7 +18,6 @@ export class ProductDetailsDTO implements IProductDetailsDTO {
     discountPercentage?: number
     available: boolean
     subcategoryId: number
-    reviews?: ReviewDTO[]
     ratings?: ProductRatingDTO
 
     constructor(product: any) {
@@ -38,7 +36,6 @@ export class ProductDetailsDTO implements IProductDetailsDTO {
         this.discountPercentage = calculateDiscountPercentage(this.salePrice, this.discountPrice)
         this.available = product.available
         this.subcategoryId = product.subcategory_id
-        this.reviews = product.review?.map((review: any) => new ReviewDTO(review))
         this.ratings = product.ratings
     }
 }

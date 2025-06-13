@@ -2,17 +2,17 @@
     <tr class="border-y border-gray-200 text-sm sm:text-base">
         <td class="py-4">
             <div class="flex items-center gap-4">
-                <a :href="`/proizvod/${cartItem.product.id}`" class="flex items-center w-10 h-10 shrink-0">
+                <NuxtLink :to="`/proizvod/${cartItem.product.id}`" class="flex items-center w-10 h-10 shrink-0">
                     <img
                         class="h-auto w-full max-h-full"
                         :src="cartItem.product.thumbnail"
                         :alt="cartItem.product.name" />
-                </a>
-                <a :href="`/proizvod/${cartItem.product.id}`">
+                </NuxtLink>
+                <NuxtLink :to="`/proizvod/${cartItem.product.id}`">
                     <p class="hover:underline max-w-md line-clamp-1">
                         {{ cartItem.product.name }}
                     </p>
-                </a>
+                </NuxtLink>
             </div>
         </td>
 

@@ -1,64 +1,76 @@
 import { useCartStore } from '~/stores/CartStore'
 import { deleteUnavailableItems } from '~/composables/useCart'
+import { useAuthStore } from '~/stores/AuthStore'
+import { useCartCookies } from '~/composables/useCartCookies'
+import { useWishlistStore } from '~/stores/WishlistStore'
 
 export default defineNuxtPlugin(nuxtApp => {
     nuxtApp.hook('app:mounted', async () => {
         const cartStore = useCartStore()
-        const cartKey = 'cart_id'
-        const expirationKey = 'cart_expiration'
-        const lastAccessedKey = 'last_accessed_at'
-        const sessionKey = 'session_updated'
-        const retentionPeriod = 10
-        const now = new Date()
+        const wishlistStore = useWishlistStore()
+        const authStore = useAuthStore()
+
+        await authStore.getMe()
+
+        const { cartIdCookie, sessionUpdatedCookie } = useCartCookies()
 
         const initializeCart = async () => {
-            const cartId = localStorage.getItem(cartKey)
-            const expirationDate = localStorage.getItem(expirationKey)
-            const userId = localStorage.getItem('user_id')
-            const sessionUpdated = sessionStorage.getItem(sessionKey)
+            const sessionUpdated = sessionUpdatedCookie.value
 
-            if (cartId && expirationDate) {
-                const expiration = new Date(expirationDate)
+            if (authStore.isLoggedIn && authStore.user) {
+                const userCartId = authStore.user.cartId
+                if (!sessionUpdated) {
+                    cartIdCookie.value = userCartId
 
-                if (now >= expiration) {
-                    localStorage.removeItem(cartKey)
-                    localStorage.removeItem(lastAccessedKey)
-                    localStorage.removeItem(expirationKey)
-                    sessionStorage.removeItem(sessionKey)
-                } else {
-                    if (!sessionUpdated) {
-                        await cartStore.updateLastAccessToCart(cartId, now)
+                    await cartStore.updateLastAccessToCart()
+                    await deleteUnavailableItems(userCartId)
 
-                        const updatedExpiration = new Date()
-                        updatedExpiration.setUTCDate(updatedExpiration.getUTCDate() + retentionPeriod)
-
-                        localStorage.setItem(lastAccessedKey, now.toISOString())
-                        localStorage.setItem(expirationKey, updatedExpiration.toISOString())
-                        sessionStorage.setItem(sessionKey, 'true')
-
-                        await deleteUnavailableItems(cartId)
-                    }
-
-                    await cartStore.fetchCart(cartId)
-
-                    return
+                    sessionUpdatedCookie.value = 'true'
                 }
+                await cartStore.fetchCart()
+                if (authStore.user.isVerified) {
+                    await wishlistStore.fetchWishlist()
+                }
+                return
+            }
+
+            if (cartIdCookie.value) {
+                if (!sessionUpdated) {
+                    await cartStore.updateLastAccessToCart()
+                    await deleteUnavailableItems(cartIdCookie.value)
+
+                    sessionUpdatedCookie.value = 'true'
+                }
+                await cartStore.fetchCart()
+                return
             }
 
             try {
-                const userParam = userId || null
-                const newCartId = await cartStore.createCart(userParam)
+                if (import.meta.client) {
+                    const localStorageCartId = localStorage.getItem('cart_id')
+                    if (localStorageCartId && !cartIdCookie.value) {
+                        try {
+                            const cartExists = await cartStore.checkCart(localStorageCartId)
+                            if (cartExists) {
+                                cartIdCookie.value = localStorageCartId
+                                localStorage.removeItem('cart_id')
 
-                const newExpiration = new Date()
-                newExpiration.setUTCDate(newExpiration.getUTCDate() + retentionPeriod)
+                                await cartStore.fetchCart()
+                                sessionUpdatedCookie.value = 'true'
+                                return
+                            } else {
+                                localStorage.removeItem('cart_id')
+                            }
+                        } catch (error) {
+                            console.error('Error verifying cart:', error)
+                        }
+                    }
+                }
 
-                localStorage.setItem(cartKey, newCartId)
-                localStorage.setItem(lastAccessedKey, now.toISOString())
-                localStorage.setItem(expirationKey, newExpiration.toISOString())
-                sessionStorage.setItem(sessionKey, 'true')
+                await cartStore.createCart()
+                await cartStore.fetchCart()
 
-                await cartStore.updateLastAccessToCart(newCartId, now)
-                await cartStore.fetchCart(newCartId)
+                sessionUpdatedCookie.value = 'true'
             } catch (error) {
                 console.error('Error creating cart:', error)
             }

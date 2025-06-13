@@ -1,5 +1,10 @@
 import { Request, Response } from 'express'
-import { sendOrderConfirmationEmail, sendContactEmail, sendEmailVerification } from '~/src/services/mailService'
+import {
+    sendOrderConfirmationEmail,
+    sendContactEmail,
+    sendEmailVerification,
+    sendPasswordResetEmail,
+} from '~/src/services/mailService'
 
 export const orderConfirmationMail = async (req: Request, res: Response): Promise<void> => {
     try {
@@ -38,6 +43,22 @@ export const registerMail = async (req: Request, res: Response): Promise<void> =
         const registerData = req.body
 
         const mailInfo = await sendEmailVerification(registerData)
+
+        res.status(200).json({ success: true, messageId: mailInfo.messageId })
+    } catch (error) {
+        if (error instanceof Error) {
+            res.status(500).json({ success: false, error: error.message })
+        } else {
+            res.status(500).json({ error: 'Unexpected error occurred' })
+        }
+    }
+}
+
+export const resetPasswordMail = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const resetPasswordData = req.body
+
+        const mailInfo = await sendPasswordResetEmail(resetPasswordData)
 
         res.status(200).json({ success: true, messageId: mailInfo.messageId })
     } catch (error) {

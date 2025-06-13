@@ -2,7 +2,7 @@
     <button
         type="button"
         @click="addToCart"
-        class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light hover:bg-rose-800 active:bg-primary"
+        class="inline-flex self-end rounded-lg p-2.5 text-gray-100 bg-primary-light enabled:hover:bg-rose-800 enabled:active:bg-primary disabled:bg-gray-200 disabled:text-gray-500"
         aria-label="Dodaj u korpu">
         <AddToCartIcon class="size-6" />
     </button>
@@ -25,7 +25,7 @@ const addToCart = async () => {
         await cartStore.addToCart(productId)
         showNotification('success', 'Proizvod dodat u korpu!', 'Ovaj proizvod je uspešno dodat u korpu.', 4000)
     } catch (error: any) {
-        if (error.response && error.response.data.error.includes('Insufficient stock')) {
+        if (error.message.includes('Insufficient stock')) {
             showNotification('warn', 'Nema dovoljno proizvoda na stanju!', 'Količina koju ste tražili nije dostupna.')
         } else {
             showNotification(

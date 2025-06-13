@@ -10,7 +10,6 @@
 </template>
 
 <script setup lang="ts">
-import { NuxtLink } from '#components';
 import type { DefineComponent } from 'vue'
 
 defineProps<{

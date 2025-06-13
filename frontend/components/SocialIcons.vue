@@ -6,13 +6,11 @@
             :href="icon.link"
             target="_blank"
             rel="noopener noreferrer">
-            <component
-                :is="icon.componentIcon"
-                class="size-5 sm:size-6 text-gray-300 hover:text-primary-dark" />
+            <component :is="icon.componentIcon" class="size-5 sm:size-6 text-gray-300 hover:text-gray-400" />
         </a>
     </div>
 </template>
 
 <script setup lang="ts">
-import { socialIcons } from '~/assets/static/footerLinks';
+import { socialIcons } from '~/assets/static/footerLinks'
 </script>

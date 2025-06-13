@@ -20,11 +20,11 @@
                             {{ truncateName(product.name) }}
                         </span>
                     </NuxtLink>
-                    <AddToFavoritesTooltip :productId="product.id" />
+                    <AddToWishlistButton :productId="product.id" />
                 </div>
             </div>
 
-            <StarRating :rating="product.ratings" class="mt-2" />
+            <StarRating :size="5" :rating="product.ratings" class="mt-2" />
 
             <div class="mt-3 flex items-center text-gray-600 gap-1.5">
                 <TruckDeliveryIcon class="size-5" />
@@ -37,7 +37,7 @@
                     :discountPrice="product.discountPrice"
                     :discount-percentage="product.discountPercentage" />
 
-                <AddToCartButton :product-id="product.id" :disabled="!product.available" />
+                <AddToCartButton :product-id="product.id" />
             </div>
         </div>
     </div>
@@ -47,7 +47,6 @@
 import { useClamping, truncateName } from '~/composables/useClamping'
 import TruckDeliveryIcon from './icons/TruckDeliveryIcon.vue'
 import type { ProductCardDTO } from '~/shared/types/ProductCardDTO'
-import { NuxtLink } from '#components';
 
 const { product } = defineProps<{
     product: ProductCardDTO

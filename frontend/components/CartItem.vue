@@ -2,7 +2,7 @@
     <div class="rounded-lg border border-gray-200 bg-white p-4 shadow-sm md:px-6">
         <div class="space-y-4 md:flex md:items-center md:justify-between md:gap-6 md:space-y-0">
             <NuxtLink :to="`/proizvod/${cartItem.product.id}`" class="shrink-0 md:order-1">
-                <img class="size-24" :src="cartItem.product.thumbnail" :alt="cartItem.product.name" />
+                <img class="size-24 object-contain" :src="cartItem.product.thumbnail" :alt="cartItem.product.name" />
             </NuxtLink>
 
             <div class="w-full min-w-0 flex-1 space-y-3 md:order-2 md:max-w-md">

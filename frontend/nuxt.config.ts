@@ -16,13 +16,6 @@ export default defineNuxtConfig({
             ],
         },
     },
-    runtimeConfig: {
-        public: {
-            environment: process.env.NODE_ENV,
-            verifyBaseUrl: process.env.NUXT_PUBLIC_VERIFY_BASE_URL,
-            verifyDevUrl: process.env.NUXT_PUBLIC_VERIFY_DEV_URL,
-        },
-    },
     imports: {
         presets: [
             {
@@ -34,9 +27,11 @@ export default defineNuxtConfig({
     compatibilityDate: '2024-07-22',
     css: [
         '~/assets/css/base.sass',
-        '~/assets/css/toast.sass',
         'primevue/resources/themes/saga-blue/theme.css',
         'primevue/resources/primevue.min.css',
+        '~/assets/css/toast.sass',
+        '~/assets/css/paginator.sass',
+        '~/assets/css/tooltip.sass',
     ],
     vite: {
         resolve: {
@@ -45,13 +40,14 @@ export default defineNuxtConfig({
             },
         },
     },
-    modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image', '@vueuse/nuxt'],
+    modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxt/image', '@vueuse/nuxt', '@formkit/auto-animate'],
     plugins: [
         { src: '~/plugins/flowbite-init.js', mode: 'client' },
         '~/plugins/routeInfo.ts',
         { src: '~/plugins/cartSetup.client.ts', mode: 'client' },
         '~/plugins/primevue.ts',
         '~/plugins/auth.ts',
+        '~/plugins/axios.ts',
     ],
     devtools: { enabled: true },
 })

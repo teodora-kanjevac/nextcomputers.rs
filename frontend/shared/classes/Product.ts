@@ -1,7 +1,6 @@
 import { Specifications } from './Specifications'
 import { Declaration } from './Declaration'
 import { Rating } from './Rating'
-import { Review } from './Review'
 import { Image } from './Image'
 
 export class Product {
@@ -19,7 +18,6 @@ export class Product {
     public specifications: Specifications
     public declaration: Declaration
     public ratings: Rating
-    public reviews: Review[]
 
     constructor(product: any) {
         this.id = product.id
@@ -36,6 +34,5 @@ export class Product {
         this.specifications = new Specifications(product.specification)
         this.declaration = new Declaration(product)
         this.ratings = new Rating(product.ratings)
-        this.reviews = product.reviews.map((review: any) => new Review(review))
     }
 }

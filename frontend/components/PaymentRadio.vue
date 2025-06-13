@@ -3,7 +3,7 @@
         <input
             id="advancePayment"
             type="radio"
-            value="advance"
+            value="ADVANCE"
             v-model="selectedPaymentMethod"
             name="advancePayment"
             class="size-4 text-primary-light bg-gray-100 border-gray-300 no-focus-ring" />
@@ -15,7 +15,7 @@
         <input
             id="cashPayment"
             type="radio"
-            value="cash"
+            value="CASH"
             v-model="selectedPaymentMethod"
             name="cashPayment"
             class="size-4 text-primary-light bg-gray-100 border-gray-300 no-focus-ring" />

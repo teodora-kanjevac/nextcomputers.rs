@@ -149,7 +149,7 @@
                             <div class="flex items-center justify-center">
                                 <button
                                     type="submit"
-                                    class="w-full sm:w-1/2 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md disabled:contrast-75 enabled:hover:bg-rose-800 transition duration-100"
+                                    class="w-full sm:w-2/5 flex items-center justify-center bg-primary-light text-white font-semibold py-2 rounded-md disabled:contrast-75 enabled:hover:bg-rose-800 transition duration-100"
                                     :disabled="sharedStore.loading">
                                     <template v-if="sharedStore.loading">
                                         <SubmitionSpinner class="size-6 px-5" />
@@ -175,6 +175,7 @@ import PersonAddIcon from '~/components/icons/PersonAddIcon.vue'
 import { useFormValidation } from '~/composables/useFormValidation'
 import { useNotification } from '~/composables/useNotification'
 import { RegisterData } from '~/shared/classes/RegisterData'
+import type { RegisterDataDTO } from '~/shared/types/RegisterDataDTO'
 import { useAuthStore } from '~/stores/AuthStore'
 import { useFormStore } from '~/stores/FormStore'
 import { useMailStore } from '~/stores/MailStore'
@@ -182,7 +183,6 @@ import { useSharedStore } from '~/stores/SharedStore'
 
 const illustrationSrc = '/assets/images/shop-illustration.webp'
 
-const runtimeConfig = useRuntimeConfig()
 const formStore = useFormStore()
 const authStore = useAuthStore()
 const mailStore = useMailStore()
@@ -241,40 +241,32 @@ const submitForm = async () => {
             phone: `+381 ${form.value.phone.replace(/^0/, '')}`,
         }
 
-        await authStore.registerUser(formStore.register.form)
+        const response = await authStore.checkIfUserExists(formStore.register.form.email)
 
-        const token = await authStore.generateEmailToken()
+        if (!response.success) {
+            await authStore.registerUser(formStore.register.form)
 
-        const link =
-            runtimeConfig.public.environment === 'production'
-                ? `${runtimeConfig.public.verifyBaseUrl}${token}`
-                : `${runtimeConfig.public.verifyDevUrl}${token}`
+            const registerData: RegisterDataDTO = {
+                fullname: `${formStore.register.form.firstName} ${formStore.register.form.lastName}`,
+                email: formStore.register.form.email,
+            }
 
-        const registerData: RegisterData = {
-            fullname: `${form.value.firstName} ${form.value.lastName}`,
-            email: form.value.email,
-            link: link,
+            await authStore.generateEmailToken(registerData)
+        } else {
+            throw new Error('Email already in use')
         }
 
-        await authStore.storePendingVerification({
-            fullname: registerData.fullname,
-            email: registerData.email,
-            token: token,
-        })
-
-        await mailStore.sendVerificationMail(registerData)
         resetForm()
 
         await authStore.getMe()
-        useRouter()
-            .replace('/profil')
-            .then(() => {
-                window.location.reload()
-            })
+        await navigateTo('/profil')
+        window.location.reload()
     } catch (error: any) {
         if (error.message.includes('Email already in use')) {
             registerError.value = true
             shakeTriggerInvalidEmail.value++
+        } else if (error.message.includes('Maximum 5 registrations')) {
+            showNotification('warn', 'Previše pokušaja!', 'Dozvoljeno je registrovanje 5 naloga dnevno.')
         } else {
             showNotification(
                 'error',

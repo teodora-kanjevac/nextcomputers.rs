@@ -1,6 +1,5 @@
 <template>
     <div class="min-h-screen">
-        <Toast position="bottom-right" />
         <VerificationNavBar />
         <EmailVerification />
     </div>
